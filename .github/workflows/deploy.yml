@@ -6,6 +6,10 @@ on:
     paths:
       - "packages/labs-index/**"
       - "packages/lab-orbital-mechanics/**"
+      - "packages/carbon-reduction-plan/**"
+      - "packages/equation-scanner/**"
+      - "packages/contrast-lab/**"
+      - "packages/wildfire-story-lab/**"
       - "pnpm-workspace.yaml"
       - "package.json"
       - "pnpm-lock.yaml"
@@ -20,6 +24,10 @@ on:
           - all
           - labs-index
           - lab-orbital-mechanics
+          - carbon-reduction-plan
+          - equation-scanner
+          - contrast-lab
+          - wildfire-story-lab
         default: all
 
 permissions:
@@ -50,24 +58,61 @@ jobs:
               - 'package.json'
               - 'pnpm-lock.yaml'
               - '.github/workflows/deploy.yml'
+            carbon-reduction-plan:
+              - 'packages/carbon-reduction-plan/**'
+              - 'pnpm-workspace.yaml'
+              - 'package.json'
+              - 'pnpm-lock.yaml'
+              - '.github/workflows/deploy.yml'
+            equation-scanner:
+              - 'packages/equation-scanner/**'
+              - 'pnpm-workspace.yaml'
+              - 'package.json'
+              - 'pnpm-lock.yaml'
+              - '.github/workflows/deploy.yml'
+            contrast-lab:
+              - 'packages/contrast-lab/**'
+              - 'pnpm-workspace.yaml'
+              - 'package.json'
+              - 'pnpm-lock.yaml'
+              - '.github/workflows/deploy.yml'
+            wildfire-story-lab:
+              - 'packages/wildfire-story-lab/**'
+              - 'pnpm-workspace.yaml'
+              - 'package.json'
+              - 'pnpm-lock.yaml'
+              - '.github/workflows/deploy.yml'
 
       - name: Resolve package list
         id: resolve
+        shell: bash
         env:
           EVENT_NAME: ${{ github.event_name }}
           DISPATCH_PACKAGE: ${{ inputs.package }}
           CHANGED_LABS_INDEX: ${{ steps.filter.outputs.labs-index }}
           CHANGED_ORBITAL: ${{ steps.filter.outputs.lab-orbital-mechanics }}
+          CHANGED_CARBON: ${{ steps.filter.outputs.carbon-reduction-plan }}
+          CHANGED_EQUATION: ${{ steps.filter.outputs.equation-scanner }}
+          CHANGED_CONTRAST: ${{ steps.filter.outputs.contrast-lab }}
+          CHANGED_WILDFIRE: ${{ steps.filter.outputs.wildfire-story-lab }}
         run: |
-          if [ "$EVENT_NAME" = "workflow_dispatch" ] && [ -n "$DISPATCH_PACKAGE" ] && [ "$DISPATCH_PACKAGE" != "all" ]; then
-            packages="[\"$DISPATCH_PACKAGE\"]"
-          elif [ "$EVENT_NAME" = "workflow_dispatch" ]; then
-            packages='["labs-index","lab-orbital-mechanics"]'
+          packages='[]'
+
+          if [ "$EVENT_NAME" = "workflow_dispatch" ]; then
+            if [ -n "$DISPATCH_PACKAGE" ] && [ "$DISPATCH_PACKAGE" != "all" ]; then
+              packages="[\"$DISPATCH_PACKAGE\"]"
+            else
+              packages='["labs-index","lab-orbital-mechanics","carbon-reduction-plan","equation-scanner","contrast-lab","wildfire-story-lab"]'
+            fi
           else
-            packages='[]'
             [ "$CHANGED_LABS_INDEX" = "true" ] && packages=$(echo "$packages" | jq -c '. + ["labs-index"]')
             [ "$CHANGED_ORBITAL" = "true" ] && packages=$(echo "$packages" | jq -c '. + ["lab-orbital-mechanics"]')
+            [ "$CHANGED_CARBON" = "true" ] && packages=$(echo "$packages" | jq -c '. + ["carbon-reduction-plan"]')
+            [ "$CHANGED_EQUATION" = "true" ] && packages=$(echo "$packages" | jq -c '. + ["equation-scanner"]')
+            [ "$CHANGED_CONTRAST" = "true" ] && packages=$(echo "$packages" | jq -c '. + ["contrast-lab"]')
+            [ "$CHANGED_WILDFIRE" = "true" ] && packages=$(echo "$packages" | jq -c '. + ["wildfire-story-lab"]')
           fi
+
           echo "packages=$packages" >> "$GITHUB_OUTPUT"
 
   deploy:
