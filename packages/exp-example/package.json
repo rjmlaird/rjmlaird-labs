@@ -1,19 +1,22 @@
 {
-  "name": "exp-example",
-  "private": true,
-  "version": "0.1.0",
+  "name": "labs-orbital-mechanics",
+  "version": "1.0.0",
+  "description": "N-body gravitational simulation — an interactive physics lab for labs.rjmlaird.co.uk",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview"
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
   },
   "dependencies": {
-    "react": "^18.3.0",
-    "react-dom": "^18.3.0"
+    "astro": "^4.15.0"
   },
   "devDependencies": {
-    "@vitejs/plugin-react": "^4.3.0",
-    "vite": "^5.4.0"
+    "@astrojs/tailwind": "^5.1.0",
+    "tailwindcss": "^3.4.10",
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.4.47"
   }
 }
