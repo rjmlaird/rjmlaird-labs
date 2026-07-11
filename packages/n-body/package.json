@@ -1,5 +1,5 @@
 {
-  "name": "labs-orbital-mechanics",
+  "name": "n-body",
   "version": "1.0.0",
   "description": "N-body gravitational simulation — an interactive physics lab for labs.rjmlaird.co.uk",
   "type": "module",

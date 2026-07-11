@@ -1,11 +1,11 @@
 [
   {
-    "slug": "exp-example",
+    "slug": "n-body",
     "title": "N-Body Orbital Sandbox",
     "description": "A minimal N-body gravity simulation used as the starter template for new experiments.",
     "status": "active",
     "tech": ["React", "Vite", "Canvas API"],
-    "demoUrl": "https://exp-example.labs.rjmlaird.co.uk",
+    "demoUrl": "https://n-body.labs.rjmlaird.co.uk",
     "repoUrl": "https://github.com/greenorbitspace/labs/tree/main/packages/exp-example",
     "updated": "2026-07-11"
   },
