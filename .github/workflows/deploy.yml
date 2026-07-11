@@ -1,85 +1,98 @@
-name: Deploy labs-index
+# .github/workflows/deploy.yml
+name: Deploy labs
 
 on:
   push:
     branches: [main]
     paths:
       - "packages/labs-index/**"
-      - "pnpm-workspace.yaml"
-      - "package.json"
-      - "pnpm-lock.yaml"
-      - ".github/workflows/deploy.yml"
-  workflow_dispatch:
-
-permissions:
-  contents: read
-
-jobs:
-  deploy:
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: pnpm/action-setup@v4
-        with:
-          version: 9.7.0
-          run_install: false
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 24
-          cache: pnpm
-
-      - run: pnpm install --frozen-lockfile
-
-      - run: pnpm --filter labs-index run build
-
-      - name: Deploy with Wrangler
-        env:
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-        run: npx wrangler pages deploy packages/labs-index/dist --project-name labs-index
-
-name: Deploy lab-orbital-mechanics
-
-on:
-  push:
-    branches: [main]
-    paths:
       - "packages/lab-orbital-mechanics/**"
       - "pnpm-workspace.yaml"
       - "package.json"
       - "pnpm-lock.yaml"
       - ".github/workflows/deploy.yml"
   workflow_dispatch:
+    inputs:
+      package:
+        description: "Package to deploy (all = every lab)"
+        required: false
+        type: choice
+        options:
+          - all
+          - labs-index
+          - lab-orbital-mechanics
+        default: all
 
 permissions:
   contents: read
 
 jobs:
-  deploy:
+  changes:
     runs-on: ubuntu-latest
-
+    outputs:
+      packages: ${{ steps.resolve.outputs.packages }}
     steps:
       - uses: actions/checkout@v4
 
+      - uses: dorny/paths-filter@v3
+        id: filter
+        if: github.event_name == 'push'
+        with:
+          filters: |
+            labs-index:
+              - 'packages/labs-index/**'
+              - 'pnpm-workspace.yaml'
+              - 'package.json'
+              - 'pnpm-lock.yaml'
+              - '.github/workflows/deploy.yml'
+            lab-orbital-mechanics:
+              - 'packages/lab-orbital-mechanics/**'
+              - 'pnpm-workspace.yaml'
+              - 'package.json'
+              - 'pnpm-lock.yaml'
+              - '.github/workflows/deploy.yml'
+
+      - name: Resolve package list
+        id: resolve
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          DISPATCH_PACKAGE: ${{ inputs.package }}
+          CHANGED_LABS_INDEX: ${{ steps.filter.outputs.labs-index }}
+          CHANGED_ORBITAL: ${{ steps.filter.outputs.lab-orbital-mechanics }}
+        run: |
+          if [ "$EVENT_NAME" = "workflow_dispatch" ] && [ -n "$DISPATCH_PACKAGE" ] && [ "$DISPATCH_PACKAGE" != "all" ]; then
+            packages="[\"$DISPATCH_PACKAGE\"]"
+          elif [ "$EVENT_NAME" = "workflow_dispatch" ]; then
+            packages='["labs-index","lab-orbital-mechanics"]'
+          else
+            packages="[]"
+            [ "$CHANGED_LABS_INDEX" = "true" ] && packages=$(echo "$packages" | jq -c '. + ["labs-index"]')
+            [ "$CHANGED_ORBITAL" = "true" ] && packages=$(echo "$packages" | jq -c '. + ["lab-orbital-mechanics"]')
+          fi
+          echo "packages=$packages" >> "$GITHUB_OUTPUT"
+
+  deploy:
+    needs: changes
+    if: needs.changes.outputs.packages != '[]'
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        package: ${{ fromJson(needs.changes.outputs.packages) }}
+    steps:
+      - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
         with:
           version: 9.7.0
           run_install: false
-
       - uses: actions/setup-node@v4
         with:
           node-version: 24
           cache: pnpm
-
       - run: pnpm install --frozen-lockfile
-
-      - run: pnpm --filter lab-orbital-mechanics run build
-
+      - run: pnpm --filter ${{ matrix.package }} run build
       - name: Deploy with Wrangler
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-        run: npx wrangler pages deploy packages/labs-index/dist --project-name lab-orbital-mechanics
+        run: npx wrangler pages deploy packages/${{ matrix.package }}/dist --project-name ${{ matrix.package }}
