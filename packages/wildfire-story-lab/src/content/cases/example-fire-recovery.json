@@ -1,0 +1,28 @@
+{
+  "slug": "example-fire-recovery",
+  "title": "Example Fire Recovery",
+  "region": "California, USA",
+  "beforeDate": "2026-05-10",
+  "afterDate": "2026-06-01",
+  "sensor": "Landsat 8",
+  "burnMetric": "RdNBR",
+  "severity": "Mixed moderate and high severity",
+  "areaAffected": "Approx. 18,500 acres",
+  "notes": "Good example of patchy severity and early regrowth after the fire season.",
+  "beforeCogUrl": "https://data.example.org/cogs/example-before.tif",
+  "afterCogUrl": "https://data.example.org/cogs/example-after.tif",
+  "beforeBounds": {
+    "southWest": [37.55, -122.85],
+    "northEast": [37.82, -122.25]
+  },
+  "afterBounds": {
+    "southWest": [37.52, -122.8],
+    "northEast": [37.8, -122.2]
+  },
+  "rasterCrs": "EPSG:4326",
+  "rendering": {
+    "bidx": 1,
+    "colormapName": "magma",
+    "rescale": [0, 2000]
+  }
+}

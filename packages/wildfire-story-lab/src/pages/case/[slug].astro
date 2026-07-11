@@ -1,0 +1,64 @@
+---
+import { getCollection, render } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import CaseSidebar from '../../components/CaseSidebar.astro';
+import MetadataCards from '../../components/MetadataCards';
+import StoryMap from '../../components/StoryMap';
+import Legend from '../../components/Legend';
+
+export async function getStaticPaths() {
+  const cases = await getCollection('cases');
+  return cases.map((entry) => ({ params: { slug: entry.data.slug }, props: { entry } }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+const data = entry.data;
+const titilerBaseUrl = import.meta.env.PUBLIC_TITILER_URL ?? '';
+---
+
+<Layout title={`${data.title} • Wildfire Story Lab`}>
+  <div class="page">
+    <CaseSidebar currentSlug={data.slug} />
+    <main class="content">
+      <section class="card pad">
+        <span class="pill">Case study</span>
+        <h1>{data.title}</h1>
+        <p>{data.region}</p>
+      </section>
+
+      <div class="card pad" style="display:grid; gap:16px;">
+        <StoryMap
+          client:load
+          title={data.title}
+          region={data.region}
+          beforeCogUrl={data.beforeCogUrl}
+          afterCogUrl={data.afterCogUrl}
+          beforeBounds={data.beforeBounds}
+          afterBounds={data.afterBounds}
+          titilerBaseUrl={titilerBaseUrl}
+          rendering={data.rendering}
+          rasterCrs={data.rasterCrs}
+        />
+
+        <Legend
+          client:load
+          titilerBaseUrl={titilerBaseUrl}
+          cogUrl={data.afterCogUrl}
+          rendering={data.rendering}
+          title="Burn severity"
+        />
+      </div>
+
+      <section class="card pad">
+        <MetadataCards data={data} />
+      </section>
+
+      <section class="card pad">
+        <article>
+          <Content />
+        </article>
+      </section>
+    </main>
+  </div>
+</Layout>

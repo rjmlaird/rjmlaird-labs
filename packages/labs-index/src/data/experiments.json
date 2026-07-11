@@ -1,6 +1,6 @@
 [
   {
-    "slug": "exp-example",
+    "slug": "n-body",
     "title": "N-Body Orbital Sandbox",
     "description": "A minimal N-body gravity simulation used as the starter template for new experiments.",
     "status": "active",
@@ -10,7 +10,35 @@
       "Canvas API"
     ],
     "demoUrl": "https://n-body.labs.rjmlaird.co.uk",
-    "repoUrl": "https://github.com/greenorbitspace/labs/tree/main/packages/lab-orbital-mechanics",
+    "repoUrl": "https://github.com/rjmlaird/rjmlaird-labs/tree/main/packages/lab-orbital-mechanics",
+    "updated": "2026-07-11"
+  },
+  {
+    "slug": "carbon-reduction-plan",
+    "title": "Carbon Reducation Plan",
+    "description": "A minimal N-body gravity simulation used as the starter template for new experiments.",
+    "status": "active",
+    "tech": [
+      "React",
+      "Vite",
+      "Canvas API"
+    ],
+    "demoUrl": "https://crp.labs.rjmlaird.co.uk",
+    "repoUrl": "https://github.com/rjmlaird/rjmlaird-labs/tree/main/packages/carbon-reduction-plan",
+    "updated": "2026-07-11"
+  },
+  {
+    "slug": "wildfire-story-lab",
+    "title": "Wildfire Story Lab",
+    "description": "A minimal N-body gravity simulation used as the starter template for new experiments.",
+    "status": "active",
+    "tech": [
+      "React",
+      "Vite",
+      "Canvas API"
+    ],
+    "demoUrl": "https://wildfires.labs.rjmlaird.co.uk",
+    "repoUrl": "https://github.com/rjmlaird/rjmlaird-labs/tree/main/packages/wildfire-story-lab",
     "updated": "2026-07-11"
   },
   {
@@ -23,7 +51,7 @@
       "Vite"
     ],
     "demoUrl": "https://contrast.labs.rjmlaird.co.uk",
-    "repoUrl": "https://github.com/greenorbitspace/labs/tree/main/packages/contrast-lab",
+    "repoUrl": "https://github.com/rjmlaird/rjmlaird-labs/tree/main/packages/contrast-lab",
     "updated": "2026-07-11"
   },
   {
@@ -35,12 +63,12 @@
       "Astro"
     ],
     "demoUrl": "https://component-sandbox.labs.rjmlaird.co.uk",
-    "repoUrl": "https://github.com/greenorbitspace/labs/tree/main/packages/component-sandbox",
+    "repoUrl": "https://github.com/rjmlaird/rjmlaird-labs/tree/main/packages/component-sandbox",
     "updated": "2026-07-11"
   },
   {
-    "slug": "climate-visualizer",
-    "title": "Climate Visualizer",
+    "slug": "climate-visualiser",
+    "title": "Climate Visualiser",
     "description": "Temperature anomaly chart with plain-English annotations — a science-communication showcase piece.",
     "status": "planned",
     "tech": [
@@ -48,8 +76,8 @@
       "Vite",
       "Recharts"
     ],
-    "demoUrl": "https://climate-visualizer.labs.rjmlaird.co.uk",
-    "repoUrl": "https://github.com/greenorbitspace/labs/tree/main/packages/climate-visualizer",
+    "demoUrl": "https://climate-visualiser.labs.rjmlaird.co.uk",
+    "repoUrl": "https://github.com/rjmlaird/rjmlaird-labs/tree/main/packages/climate-visualizer",
     "updated": "2026-07-11"
   }
 ]

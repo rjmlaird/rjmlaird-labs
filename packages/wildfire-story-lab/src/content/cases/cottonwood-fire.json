@@ -1,0 +1,29 @@
+{
+  "slug": "cottonwood-fire",
+  "title": "Cottonwood Fire",
+  "region": "Utah, USA",
+  "beforeDate": "2026-06-20",
+  "afterDate": "2026-07-05",
+  "sensor": "Sentinel-2 MSI",
+  "burnMetric": "dNBR",
+  "severity": "High severity patches visible",
+  "areaAffected": "Approx. 96,000 acres",
+  "notes": "Post-fire scene shows a strong burn scar and scattered surviving vegetation.",
+  "beforeCogUrl": "https://data.example.org/cogs/cottonwood-before.tif",
+  "afterCogUrl": "https://data.example.org/cogs/cottonwood-after.tif",
+  "beforeBounds": {
+    "southWest": [34.15, -118.95],
+    "northEast": [34.35, -118.55]
+  },
+  "afterBounds": {
+    "southWest": [34.12, -118.92],
+    "northEast": [34.32, -118.5]
+  },
+  "rasterCrs": "EPSG:3857",
+  "rendering": {
+    "bidx": 1,
+    "colormapName": "viridis",
+    "colorFormula": "gamma rg 1.2",
+    "rescale": [0, 3000]
+  }
+}
