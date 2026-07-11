@@ -1,0 +1,19 @@
+{
+  "name": "rjmlaird-labs",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Monorepo for labs.rjmlaird.co.uk — the experiment catalog and individual lab projects.",
+  "scripts": {
+    "dev:index": "pnpm --filter labs-index dev",
+    "build:index": "pnpm --filter labs-index build",
+    "dev:exp-example": "pnpm --filter exp-example dev",
+    "build:exp-example": "pnpm --filter exp-example build",
+    "build:all": "pnpm -r build",
+    "new:experiment": "node scripts/new-experiment.mjs"
+  },
+  "engines": {
+    "node": ">=20.0.0",
+    "pnpm": ">=9.0.0"
+  },
+  "packageManager": "pnpm@9.7.0"
+}

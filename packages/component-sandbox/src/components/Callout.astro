@@ -1,0 +1,29 @@
+---
+interface Props {
+  tone?: "info" | "warning";
+}
+const { tone = "info" } = Astro.props;
+---
+<div class={`callout callout-${tone}`}>
+  <slot />
+</div>
+
+<style>
+  .callout {
+    border-radius: 10px;
+    padding: 0.9rem 1.1rem;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    border-left: 3px solid;
+  }
+  .callout-info {
+    background: rgba(0, 194, 168, 0.08);
+    border-color: #00c2a8;
+    color: #eef2f6;
+  }
+  .callout-warning {
+    background: rgba(245, 166, 35, 0.08);
+    border-color: #f5a623;
+    color: #eef2f6;
+  }
+</style>
