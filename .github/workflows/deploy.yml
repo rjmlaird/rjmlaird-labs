@@ -94,7 +94,7 @@ jobs:
       - run: pnpm install --frozen-lockfile
 
       - name: Build package
-        run: pnpm --filter ${{ matrix.package }} run build
+        run: pnpm --filter ./packages/${{ matrix.package }} run build
 
       - name: Verify output
         run: test -d packages/${{ matrix.package }}/dist
