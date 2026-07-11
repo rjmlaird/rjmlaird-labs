@@ -1,4 +1,3 @@
-# .github/workflows/deploy.yml
 name: Deploy labs
 
 on:
@@ -65,7 +64,7 @@ jobs:
           elif [ "$EVENT_NAME" = "workflow_dispatch" ]; then
             packages='["labs-index","lab-orbital-mechanics"]'
           else
-            packages="[]"
+            packages='[]'
             [ "$CHANGED_LABS_INDEX" = "true" ] && packages=$(echo "$packages" | jq -c '. + ["labs-index"]')
             [ "$CHANGED_ORBITAL" = "true" ] && packages=$(echo "$packages" | jq -c '. + ["lab-orbital-mechanics"]')
           fi
