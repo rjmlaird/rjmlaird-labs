@@ -2,8 +2,7 @@ name: Deploy labs-index
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
     paths:
       - "packages/labs-index/**"
       - "pnpm-workspace.yaml"
@@ -12,40 +11,30 @@ on:
       - ".github/workflows/deploy.yml"
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      deployments: write
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@v4
         with:
           version: 9.7.0
-          run_install: false
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24
           cache: pnpm
 
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+      - run: pnpm install --frozen-lockfile
 
-      - name: Build labs-index
-        run: pnpm --filter labs-index run build
+      - run: pnpm --filter labs-index run build
 
-      - name: Deploy to Cloudflare Pages
-        uses: cloudflare/pages-action@v1
+      - uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          projectName: labs-index
-          directory: packages/labs-index/dist
-          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+          command: pages deploy packages/labs-index/dist --project-name=labs-index
