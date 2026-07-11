@@ -22,7 +22,7 @@
       "React",
       "Vite"
     ],
-    "demoUrl": "https://contrast-lab.labs.rjmlaird.co.uk",
+    "demoUrl": "https://contrast.labs.rjmlaird.co.uk",
     "repoUrl": "https://github.com/greenorbitspace/labs/tree/main/packages/contrast-lab",
     "updated": "2026-07-11"
   },
@@ -50,19 +50,6 @@
     ],
     "demoUrl": "https://climate-visualizer.labs.rjmlaird.co.uk",
     "repoUrl": "https://github.com/greenorbitspace/labs/tree/main/packages/climate-visualizer",
-    "updated": "2026-07-11"
-  },
-  {
-    "slug": "my-new-exp",
-    "title": "my-new-exp",
-    "description": "New experiment — update this description.",
-    "status": "planned",
-    "tech": [
-      "React",
-      "Vite"
-    ],
-    "demoUrl": "https://my-new-exp.labs.rjmlaird.co.uk",
-    "repoUrl": "https://github.com/greenorbitspace/labs/tree/main/packages/my-new-exp",
     "updated": "2026-07-11"
   }
 ]

@@ -1,0 +1,9 @@
+---
+import Layout from '../layouts/Layout.astro';
+import ContrastChecker from '../components/ContrastChecker';
+import '../styles/global.css';
+---
+
+<Layout title="Contrast Lab" description="WCAG 2.x colour contrast checker">
+  <ContrastChecker client:load />
+</Layout>
