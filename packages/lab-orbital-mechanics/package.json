@@ -1,0 +1,22 @@
+{
+  "name": "labs-orbital-mechanics",
+  "version": "1.0.0",
+  "description": "N-body gravitational simulation — an interactive physics lab for labs.rjmlaird.co.uk",
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "astro": "^4.15.0"
+  },
+  "devDependencies": {
+    "@astrojs/tailwind": "^5.1.0",
+    "tailwindcss": "^3.4.10",
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.4.47"
+  }
+}

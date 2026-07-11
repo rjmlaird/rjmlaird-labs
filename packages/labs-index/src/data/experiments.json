@@ -1,11 +1,15 @@
 [
   {
-    "slug": "n-body",
+    "slug": "exp-example",
     "title": "N-Body Orbital Sandbox",
     "description": "A minimal N-body gravity simulation used as the starter template for new experiments.",
     "status": "active",
-    "tech": ["React", "Vite", "Canvas API"],
-    "demoUrl": "https://n-body.labs.rjmlaird.co.uk",
+    "tech": [
+      "React",
+      "Vite",
+      "Canvas API"
+    ],
+    "demoUrl": "https://exp-example.labs.rjmlaird.co.uk",
     "repoUrl": "https://github.com/greenorbitspace/labs/tree/main/packages/exp-example",
     "updated": "2026-07-11"
   },
@@ -14,7 +18,10 @@
     "title": "Contrast Lab",
     "description": "WCAG 2.x colour contrast checker — pick a foreground/background pair and see the ratio, plus AA/AAA pass or fail.",
     "status": "active",
-    "tech": ["React", "Vite"],
+    "tech": [
+      "React",
+      "Vite"
+    ],
     "demoUrl": "https://contrast-lab.labs.rjmlaird.co.uk",
     "repoUrl": "https://github.com/greenorbitspace/labs/tree/main/packages/contrast-lab",
     "updated": "2026-07-11"
@@ -24,7 +31,9 @@
     "title": "Component Sandbox",
     "description": "A live gallery of the Astro UI blocks used across rjmlaird.co.uk, each rendered with its source snippet underneath.",
     "status": "active",
-    "tech": ["Astro"],
+    "tech": [
+      "Astro"
+    ],
     "demoUrl": "https://component-sandbox.labs.rjmlaird.co.uk",
     "repoUrl": "https://github.com/greenorbitspace/labs/tree/main/packages/component-sandbox",
     "updated": "2026-07-11"
@@ -34,9 +43,39 @@
     "title": "Climate Visualizer",
     "description": "Temperature anomaly chart with plain-English annotations — a science-communication showcase piece.",
     "status": "planned",
-    "tech": ["React", "Vite", "Recharts"],
+    "tech": [
+      "React",
+      "Vite",
+      "Recharts"
+    ],
     "demoUrl": "https://climate-visualizer.labs.rjmlaird.co.uk",
     "repoUrl": "https://github.com/greenorbitspace/labs/tree/main/packages/climate-visualizer",
+    "updated": "2026-07-11"
+  },
+  {
+    "slug": "my-new-exp",
+    "title": "my-new-exp",
+    "description": "New experiment — update this description.",
+    "status": "planned",
+    "tech": [
+      "React",
+      "Vite"
+    ],
+    "demoUrl": "https://my-new-exp.labs.rjmlaird.co.uk",
+    "repoUrl": "https://github.com/greenorbitspace/labs/tree/main/packages/my-new-exp",
+    "updated": "2026-07-11"
+  },
+  {
+    "slug": "lab-orbital-mechanics",
+    "title": "lab-orbital-mechanics",
+    "description": "New experiment — update this description.",
+    "status": "planned",
+    "tech": [
+      "React",
+      "Vite"
+    ],
+    "demoUrl": "https://lab-orbital-mechanics.labs.rjmlaird.co.uk",
+    "repoUrl": "https://github.com/greenorbitspace/labs/tree/main/packages/lab-orbital-mechanics",
     "updated": "2026-07-11"
   }
 ]
