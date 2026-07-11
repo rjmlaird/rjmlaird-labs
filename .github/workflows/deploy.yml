@@ -35,6 +35,9 @@ jobs:
       - run: pnpm --filter labs-index run build
 
       - name: Deploy with Wrangler
-        env:
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-        run: npx wrangler pages deploy packages/labs-index/dist --project-name labs-index
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy packages/labs-index/dist --project-name labs-index
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
