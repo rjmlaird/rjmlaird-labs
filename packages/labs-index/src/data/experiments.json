@@ -9,8 +9,8 @@
       "Vite",
       "Canvas API"
     ],
-    "demoUrl": "https://exp-example.labs.rjmlaird.co.uk",
-    "repoUrl": "https://github.com/greenorbitspace/labs/tree/main/packages/exp-example",
+    "demoUrl": "https://n-body.labs.rjmlaird.co.uk",
+    "repoUrl": "https://github.com/greenorbitspace/labs/tree/main/packages/lab-orbital-mechanics",
     "updated": "2026-07-11"
   },
   {
@@ -63,19 +63,6 @@
     ],
     "demoUrl": "https://my-new-exp.labs.rjmlaird.co.uk",
     "repoUrl": "https://github.com/greenorbitspace/labs/tree/main/packages/my-new-exp",
-    "updated": "2026-07-11"
-  },
-  {
-    "slug": "lab-orbital-mechanics",
-    "title": "lab-orbital-mechanics",
-    "description": "New experiment — update this description.",
-    "status": "planned",
-    "tech": [
-      "React",
-      "Vite"
-    ],
-    "demoUrl": "https://lab-orbital-mechanics.labs.rjmlaird.co.uk",
-    "repoUrl": "https://github.com/greenorbitspace/labs/tree/main/packages/lab-orbital-mechanics",
     "updated": "2026-07-11"
   }
 ]
