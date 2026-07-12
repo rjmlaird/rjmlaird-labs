@@ -36,20 +36,24 @@ export default function MetadataCards({ data }: { data: CaseData }) {
         }
         .meta-card {
           padding: 14px;
-          border-radius: 14px;
-          background: #0d1622;
-          border: 1px solid #24364a;
+          border-radius: var(--radius-md, 14px);
+          background: var(--bg-inset, #0a1119);
+          border: 1px solid var(--line, #1c2a38);
           display: grid;
           gap: 6px;
         }
         .meta-card span {
-          color: #9eb2c9;
-          font-size: 0.88rem;
+          color: var(--ink-faint, #6d8091);
+          font-size: 0.78rem;
+          text-transform: uppercase;
+          letter-spacing: 0.03em;
         }
         .meta-card strong {
-          color: #eef5ff;
+          color: var(--ink, #eef3f6);
           font-size: 1rem;
           line-height: 1.3;
+          font-family: var(--font-display), serif;
+          font-weight: 500;
         }
       `}</style>
     </div>

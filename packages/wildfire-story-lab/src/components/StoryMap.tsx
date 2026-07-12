@@ -199,11 +199,12 @@ export default function StoryMap({
   return (
     <section className="card pad" style={{ position: 'relative' }}>
       <div className="map-header">
-        <span className="pill">TiTiler synced view</span>
         <div>
+          <span className="pill">Synced compare view</span>
           <h2 style={{ margin: '10px 0 6px' }}>{title}</h2>
           <p>{region}</p>
         </div>
+        {titilerBaseUrl ? <p className="map-hint">Drag the divider to compare<br />Hover for the exact pixel value</p> : null}
       </div>
 
       {!titilerBaseUrl ? (

@@ -9,8 +9,8 @@ const sorted = [...cases].sort((a, b) => a.data.title.localeCompare(b.data.title
 <aside class="sidebar card pad">
   <div class="sidebar-head">
     <span class="pill">Case studies</span>
-    <h2>Navigation</h2>
-    <p>Browse wildfire case studies.</p>
+    <h2>Browse fires</h2>
+    <p>Before-and-after satellite pairs, from ignition to early recovery.</p>
   </div>
 
   <nav aria-label="Case study navigation" class="sidebar-nav">
@@ -23,29 +23,32 @@ const sorted = [...cases].sort((a, b) => a.data.title.localeCompare(b.data.title
           aria-current={active ? 'page' : undefined}
         >
           <strong>{entry.data.title}</strong>
-          <span>{entry.data.region}</span>
+          <span>{entry.data.region} · {entry.data.sensor}</span>
         </a>
       );
     })}
   </nav>
 
   <style>
-    .sidebar-head { display: grid; gap: 10px; margin-bottom: 14px; }
-    .sidebar-head h2 { margin: 0; font-size: 1.1rem; }
-    .sidebar-head p { margin: 0; color: #9eb2c9; }
-    .sidebar-nav { display: grid; gap: 10px; }
+    .sidebar-head { display: grid; gap: 10px; margin-bottom: 16px; }
+    .sidebar-head h2 { margin: 0; font-size: 1.15rem; }
+    .sidebar-head p { margin: 0; color: var(--ink-faint); font-size: 0.9rem; }
+    .sidebar-nav { display: grid; gap: 8px; }
     .sidebar-link {
       display: grid;
       gap: 4px;
       padding: 12px 14px;
-      border-radius: 12px;
-      background: #0d1622;
-      border: 1px solid #24364a;
-      color: #e8eef7;
+      border-radius: var(--radius-md);
+      background: var(--bg-inset);
+      border: 1px solid var(--line);
+      color: var(--ink);
       text-decoration: none;
+      transition: border-color 0.15s ease, background 0.15s ease;
     }
-    .sidebar-link span { color: #9eb2c9; font-size: 0.9rem; }
-    .sidebar-link.active { border-color: #5f8cc0; background: #122338; }
+    .sidebar-link:hover { border-color: var(--orbit); }
+    .sidebar-link span { color: var(--ink-faint); font-size: 0.85rem; }
+    .sidebar-link.active { border-color: var(--orbit); background: var(--orbit-dim); }
+    .sidebar-link.active span { color: var(--ink-soft); }
     @media (min-width: 900px) { .sidebar { position: sticky; top: 16px; } }
   </style>
 </aside>

@@ -1,0 +1,8 @@
+---
+import Layout from '../layouts/Layout.astro';
+import GlobalTempChart from '../components/GlobalTempChart';
+---
+
+<Layout title="Climate Visualiser">
+  <GlobalTempChart client:only="react" />
+</Layout>

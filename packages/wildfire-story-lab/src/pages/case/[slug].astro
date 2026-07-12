@@ -1,5 +1,5 @@
 ---
-import { getCollection, render } from 'astro:content';
+import { getCollection } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
 import CaseSidebar from '../../components/CaseSidebar.astro';
 import MetadataCards from '../../components/MetadataCards';
@@ -12,19 +12,38 @@ export async function getStaticPaths() {
 }
 
 const { entry } = Astro.props;
-const { Content } = await render(entry);
 const data = entry.data;
 const titilerBaseUrl = import.meta.env.PUBLIC_TITILER_URL ?? '';
+
+const before = new Date(data.beforeDate);
+const after = new Date(data.afterDate);
+const dayGap = Math.round((after.getTime() - before.getTime()) / 86_400_000);
+const dateFormatter = new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
 ---
 
-<Layout title={`${data.title} • Wildfire Story Lab`}>
+<Layout title={`${data.title} • Wildfire Story Lab`} description={data.notes}>
   <div class="page">
     <CaseSidebar currentSlug={data.slug} />
     <main class="content">
-      <section class="card pad">
+      <section class="card pad case-lead">
         <span class="pill">Case study</span>
         <h1>{data.title}</h1>
-        <p>{data.region}</p>
+        <p class="region">{data.region}</p>
+        <p class="notes">{data.notes}</p>
+        <div class="change-strip">
+          <div>
+            <span>Imaged</span>
+            <strong>{dateFormatter.format(before)}</strong>
+          </div>
+          <div class="arrow" aria-hidden="true">→</div>
+          <div>
+            <span>Imaged</span>
+            <strong>{dateFormatter.format(after)}</strong>
+          </div>
+          <div class="gap">
+            <span>{dayGap} day{dayGap === 1 ? '' : 's'} between scenes</span>
+          </div>
+        </div>
       </section>
 
       <div class="card pad" style="display:grid; gap:16px;">
@@ -46,19 +65,40 @@ const titilerBaseUrl = import.meta.env.PUBLIC_TITILER_URL ?? '';
           titilerBaseUrl={titilerBaseUrl}
           cogUrl={data.afterCogUrl}
           rendering={data.rendering}
-          title="Burn severity"
+          title={`${data.burnMetric} · burn severity`}
         />
       </div>
 
       <section class="card pad">
+        <h2>At a glance</h2>
         <MetadataCards data={data} />
-      </section>
-
-      <section class="card pad">
-        <article>
-          <Content />
-        </article>
       </section>
     </main>
   </div>
+
+  <style>
+    .case-lead .region { margin-top: -2px; font-size: 1.05rem; }
+    .case-lead .notes { margin-top: 14px; max-width: 62ch; }
+    .change-strip {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 14px;
+      margin-top: 20px;
+      padding-top: 18px;
+      border-top: 1px solid var(--line-soft);
+    }
+    .change-strip > div:not(.arrow) { display: grid; gap: 2px; }
+    .change-strip span { font-size: 0.78rem; color: var(--ink-faint); text-transform: uppercase; letter-spacing: 0.04em; }
+    .change-strip strong { font-family: var(--font-display); font-size: 1.05rem; }
+    .change-strip .arrow { color: var(--orbit); font-size: 1.1rem; }
+    .change-strip .gap {
+      margin-left: auto;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: var(--bg-inset);
+      border: 1px solid var(--line);
+    }
+    .change-strip .gap span { text-transform: none; letter-spacing: normal; }
+  </style>
 </Layout>

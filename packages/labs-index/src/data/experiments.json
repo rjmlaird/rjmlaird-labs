@@ -4,7 +4,11 @@
     "title": "N-Body Orbital Sandbox",
     "description": "A minimal browser-based gravity simulator for exploring orbital motion and prototyping new interactive experiments.",
     "status": "active",
-    "tech": ["React", "Vite", "Canvas API"],
+    "tech": [
+      "React",
+      "Vite",
+      "Canvas API"
+    ],
     "demoUrl": "https://n-body.labs.rjmlaird.co.uk",
     "repoUrl": "https://github.com/rjmlaird/rjmlaird-labs/tree/main/packages/lab-orbital-mechanics",
     "updated": "2026-07-11"
@@ -14,7 +18,11 @@
     "title": "Carbon Reduction Plan",
     "description": "A focused web project for presenting carbon reduction information in a simple, maintainable interface.",
     "status": "active",
-    "tech": ["React", "Vite", "Canvas API"],
+    "tech": [
+      "React",
+      "Vite",
+      "Canvas API"
+    ],
     "demoUrl": "https://crp.labs.rjmlaird.co.uk",
     "repoUrl": "https://github.com/rjmlaird/rjmlaird-labs/tree/main/packages/carbon-reduction-plan",
     "updated": "2026-07-11"
@@ -24,7 +32,11 @@
     "title": "Wildfire Story Lab",
     "description": "An experimental storytelling tool for exploring how climate and wildfire narratives can be communicated interactively.",
     "status": "planned",
-    "tech": ["React", "Vite", "Canvas API"],
+    "tech": [
+      "React",
+      "Vite",
+      "Canvas API"
+    ],
     "demoUrl": "https://wildfires.labs.rjmlaird.co.uk",
     "repoUrl": "https://github.com/rjmlaird/rjmlaird-labs/tree/main/packages/wildfire-story-lab",
     "updated": "2026-07-11"
@@ -34,7 +46,10 @@
     "title": "Contrast Lab",
     "description": "A WCAG 2.x colour contrast checker for testing foreground and background pairs against AA and AAA accessibility thresholds.",
     "status": "active",
-    "tech": ["React", "Vite"],
+    "tech": [
+      "React",
+      "Vite"
+    ],
     "demoUrl": "https://contrast.labs.rjmlaird.co.uk",
     "repoUrl": "https://github.com/rjmlaird/rjmlaird-labs/tree/main/packages/contrast-lab",
     "updated": "2026-07-11"
@@ -44,7 +59,9 @@
     "title": "Component Sandbox",
     "description": "A live gallery of the Astro UI blocks used across rjmlaird.co.uk, each rendered with its source snippet underneath.",
     "status": "planned",
-    "tech": ["Astro"],
+    "tech": [
+      "Astro"
+    ],
     "demoUrl": "https://component-sandbox.labs.rjmlaird.co.uk",
     "repoUrl": "https://github.com/rjmlaird/rjmlaird-labs/tree/main/packages/component-sandbox",
     "updated": "2026-07-11"
@@ -54,9 +71,26 @@
     "title": "Climate Visualiser",
     "description": "A science-communication project that turns temperature anomaly data into a readable chart with plain-English annotations.",
     "status": "planned",
-    "tech": ["React", "Vite", "Recharts"],
+    "tech": [
+      "React",
+      "Vite",
+      "Recharts"
+    ],
     "demoUrl": "https://climate-visualiser.labs.rjmlaird.co.uk",
     "repoUrl": "https://github.com/rjmlaird/rjmlaird-labs/tree/main/packages/climate-visualizer",
     "updated": "2026-07-11"
+  },
+  {
+    "slug": "climate-visualiser",
+    "title": "climate-visualiser",
+    "description": "New experiment — update this description.",
+    "status": "planned",
+    "tech": [
+      "React",
+      "Vite"
+    ],
+    "demoUrl": "https://climate-visualiser.labs.rjmlaird.co.uk",
+    "repoUrl": "https://github.com/greenorbitspace/labs/tree/main/packages/climate-visualiser",
+    "updated": "2026-07-12"
   }
 ]

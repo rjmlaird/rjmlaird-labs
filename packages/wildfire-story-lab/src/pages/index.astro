@@ -1,16 +1,61 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import CaseSidebar from '../components/CaseSidebar.astro';
+import { getCollection } from 'astro:content';
+
+const cases = await getCollection('cases');
+const caseCount = cases.length;
 ---
-<Layout title="Wildfire Story Lab">
+<Layout title="Wildfire Story Lab — before and after satellite storytelling">
   <div class="page">
     <CaseSidebar />
     <main class="content">
+      <section class="card pad hero">
+        <span class="pill">Satellite storytelling</span>
+        <h1>What the burn scar tells us, before it fades.</h1>
+        <p class="lede">
+          Cloud-optimised satellite imagery, synced side by side, so the story of a wildfire
+          — and its recovery — can be read at a glance rather than buried in a dataset.
+        </p>
+        <div class="hero-meta">
+          <div>
+            <strong>{caseCount}</strong>
+            <span>case{caseCount === 1 ? '' : 's'} mapped</span>
+          </div>
+          <div>
+            <strong>dNBR · RdNBR</strong>
+            <span>burn severity metrics</span>
+          </div>
+          <div>
+            <strong>COG + TiTiler</strong>
+            <span>tile pipeline</span>
+          </div>
+        </div>
+      </section>
+
       <section class="card pad">
-        <span class="pill">Wildfire case studies</span>
-        <h1>Satellite before and after</h1>
-        <p>Explore COG-backed compare views, legends, and exact-value tooltips.</p>
+        <h2>How to read a case</h2>
+        <p>
+          Each case pairs a before and after Sentinel-2 or Landsat scene through a synced compare
+          slider. Drag to reveal the change, hover the map for an exact pixel value, and use the
+          legend to see where severity sits between minimum and maximum for that scene.
+        </p>
       </section>
     </main>
   </div>
+
+  <style>
+    .hero .lede { margin-top: 6px; max-width: 56ch; }
+    .hero-meta {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 12px;
+      margin-top: 22px;
+      padding-top: 18px;
+      border-top: 1px solid var(--line-soft);
+    }
+    .hero-meta div { display: grid; gap: 2px; }
+    .hero-meta strong { font-family: var(--font-display); font-size: 1.15rem; }
+    .hero-meta span { font-size: 0.82rem; color: var(--ink-faint); }
+  </style>
 </Layout>
