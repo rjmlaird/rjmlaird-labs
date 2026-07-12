@@ -23,7 +23,7 @@
     "slug": "wildfire-story-lab",
     "title": "Wildfire Story Lab",
     "description": "An experimental storytelling tool for exploring how climate and wildfire narratives can be communicated interactively.",
-    "status": "pre-launch",
+    "status": "planned",
     "tech": ["React", "Vite", "Canvas API"],
     "demoUrl": "https://wildfires.labs.rjmlaird.co.uk",
     "repoUrl": "https://github.com/rjmlaird/rjmlaird-labs/tree/main/packages/wildfire-story-lab",
