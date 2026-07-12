@@ -1,47 +1,43 @@
 ---
 import '../styles/global.css';
-
-type Props = {
-  title?: string;
-  description?: string;
-};
+import '../styles/dashboard.css';
+import '../styles/ramp.css';
 
 const {
-  title = 'Ryan Laird Labs',
-  description = 'Interactive graph experiments.',
+  title = 'Mechanics Lab',
+  description = 'Explore motion, energy, friction, mass, momentum, and acceleration on a simple ramp.',
 } = Astro.props;
 ---
 
-<!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
-    <meta name="theme-color" content="#0b0f1a" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
     <title>{title}</title>
-    <link rel="icon" href="/favicon.svg" />
-    <slot name="head" />
   </head>
   <body>
-    <div class="site-shell">
-      <header class="site-header">
-        <div class="wrap site-header__inner">
-          <a class="brand" href="/">Ryan Laird</a>
+    <div class="dashboard-shell">
+      <header class="dashboard__header">
+        <div class="wrap dashboard__header-inner">
+          <div class="dashboard__title">
+            <h1>{title}</h1>
+          </div>
         </div>
       </header>
 
-      <main class="site-main">
-        <div class="wrap">
+      <main class="dashboard__main">
+        <div class="wrap dashboard__main-inner">
           <slot />
         </div>
       </main>
-
-      <footer class="site-footer">
-        <div class="wrap site-footer__inner">
-          <p>Interactive graph experiments.</p>
-        </div>
-      </footer>
     </div>
   </body>
 </html>

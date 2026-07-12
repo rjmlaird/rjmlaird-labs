@@ -1,21 +1,29 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import MechanicsLab from '../components/MechanicsLab';
 ---
 
-<Layout
-  title="Mechanics Lab"
-  description="Explore motion, energy, friction, mass, momentum, and acceleration on a simple ramp."
->
+<Layout title="Mechanics Lab">
   <main class="page">
     <header class="hero">
       <p class="eyebrow">Labs</p>
-      <h1>Mechanics Lab</h1>
+      <h1>Mechanics Experiments</h1>
       <p class="lede">
-        Explore motion, energy, friction, mass, momentum, and acceleration on a simple ramp.
+        Explore motion, energy, friction, mass, momentum..
       </p>
     </header>
 
-    <MechanicsLab client:only="react" />
+    <section class="page-notes">
+      <div class="card">
+        <p class="card__eyebrow">Start here</p>
+        <h3 class="card__title">Choose a mechanics experiment</h3>
+        <p class="card__description">
+          Use the ramp simulation for motion and forces, or open the Newton’s cradle demo for momentum transfer.
+        </p>
+        <div class="button-row">
+          <a class="btn btn--primary" href="/ramp">Open ramp</a>
+          <a class="btn btn--secondary" href="/newtonscradle">Open Newton&apos;s cradle</a>
+        </div>
+      </div>
+    </section>
   </main>
 </Layout>

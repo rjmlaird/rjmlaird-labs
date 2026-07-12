@@ -1,0 +1,46 @@
+---
+import '../styles/global.css';
+
+type Props = {
+  title?: string;
+  description?: string;
+};
+
+const {
+  title = 'Mechanics Lab',
+  description = 'An interactive classical mechanics lab: forces, friction, drag, collisions, and energy conservation on an incline.',
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#0b0f1a" />
+    <title>{title}</title>
+    <link rel="icon" href="/favicon.svg" />
+    <slot name="head" />
+  </head>
+  <body>
+    <div class="dashboard-shell">
+      <header class="dashboard__header">
+        <div class="wrap dashboard__header-inner">
+          <div class="dashboard__title">
+            <p class="eyebrow">Labs</p>
+            <h1>{title}</h1>
+          </div>
+
+          <p class="dashboard__summary">{description}</p>
+        </div>
+      </header>
+
+      <main class="dashboard__main">
+        <div class="wrap dashboard__main-inner">
+          <slot />
+        </div>
+      </main>
+    </div>
+  </body>
+</html>

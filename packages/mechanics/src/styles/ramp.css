@@ -1,0 +1,355 @@
+.mech-dashboard {
+  width: 100%;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: minmax(240px, 280px) minmax(0, 1fr) minmax(240px, 300px);
+  gap: 0.75rem;
+  align-items: stretch;
+  overflow: hidden;
+}
+
+.mech-panel {
+  min-width: 0;
+  min-height: 0;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: linear-gradient(180deg, rgba(18, 24, 38, 0.95), rgba(11, 15, 26, 0.98));
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.mech-panel__header {
+  padding: 0.8rem 0.9rem 0.55rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.mech-panel__header h2 {
+  margin: 0;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--teal);
+}
+
+.mech-panel__header p {
+  margin: 0.2rem 0 0;
+  color: var(--text-lo);
+  font-size: 0.82rem;
+}
+
+.mech-panel__body {
+  min-height: 0;
+}
+
+.mech-panel__body--scroll {
+  overflow: auto;
+  padding: 0.85rem;
+}
+
+.mech-panel__body--chart {
+  overflow: hidden;
+  padding: 0.85rem;
+}
+
+.mech-lab-grid {
+  width: 100%;
+  min-width: 0;
+  display: grid;
+  grid-template-columns: minmax(240px, 280px) minmax(0, 1fr) minmax(240px, 300px);
+  gap: var(--section-gap);
+  align-items: start;
+  align-content: start;
+}
+
+.mech-lab-grid .controls {
+  max-height: 760px;
+  overflow: auto;
+}
+
+.controls {
+  display: grid;
+  gap: 0.8rem;
+}
+
+.controls label {
+  display: grid;
+  gap: 0.35rem;
+  font-weight: 600;
+}
+
+.controls select,
+.controls textarea,
+.mech-lab-grid select {
+  width: 100%;
+  min-height: 44px;
+  padding: 0.75rem 0.85rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.02);
+  color: var(--text-hi);
+}
+
+.controls textarea {
+  min-height: 240px;
+  resize: vertical;
+}
+
+.button-row {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.button-row button {
+  flex: 1;
+  padding: 0.55rem 0.75rem;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+}
+
+.callout {
+  margin: 0.15rem 0;
+  padding: 0.75rem 0.9rem;
+  border: 1px solid rgba(0, 194, 168, 0.25);
+  border-radius: 14px;
+  background: rgba(0, 194, 168, 0.08);
+  color: var(--text-lo);
+  font-size: 0.88rem;
+}
+
+.callout-lock {
+  background: rgba(245, 166, 35, 0.1);
+  border-color: rgba(245, 166, 35, 0.3);
+}
+
+.chart-panel {
+  height: 100%;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.chart-panel > div {
+  flex: 1;
+  min-height: 0;
+}
+
+.chart-placeholder {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  border-radius: 14px;
+  border: 1px dashed var(--border);
+  display: grid;
+  place-items: center;
+  color: var(--text-lo);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.chart-panel__topbar,
+.chart-panel__footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  color: var(--text-lo);
+  font-size: 0.82rem;
+}
+
+.chart-panel__topbar strong {
+  display: block;
+  margin-bottom: 0.15rem;
+  color: var(--text-hi);
+}
+
+.chart-stage {
+  min-height: 0;
+  overflow: hidden;
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  background:
+    radial-gradient(circle at top left, rgba(0, 194, 168, 0.08), transparent 35%),
+    rgba(255, 255, 255, 0.02);
+}
+
+.chart-stage svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.value-list {
+  display: grid;
+  gap: 0.35rem;
+  margin: 0 0 0.75rem;
+}
+
+.value-list div {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.25rem 0;
+  border-bottom: 1px dashed var(--border);
+}
+
+.value-list dt {
+  color: var(--text-lo);
+}
+
+.value-list dd {
+  margin: 0;
+  color: var(--text-hi);
+}
+
+.formula-list {
+  list-style: none;
+  display: grid;
+  gap: 0.35rem;
+  margin: 0.75rem 0 0;
+  padding: 0;
+  font-size: 0.88rem;
+}
+
+.formula-list li {
+  color: var(--text-lo);
+}
+
+.formula-list strong {
+  color: var(--text-hi);
+}
+
+.hint {
+  margin-top: 0.7rem;
+  color: var(--text-lo);
+  font-size: 0.88rem;
+  line-height: 1.45;
+}
+
+.notes-toggle {
+  margin-top: 0.75rem;
+  padding: 0.65rem 0.8rem;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.notes-toggle summary {
+  cursor: pointer;
+  color: var(--text-hi);
+  font-weight: 600;
+}
+
+.checkbox-row {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center;
+  gap: 0.55rem;
+  min-width: 0;
+}
+
+.checkbox-row input[type="checkbox"] {
+  width: 1.05rem;
+  height: 1.05rem;
+  flex: 0 0 auto;
+}
+
+.vector-legend,
+.chart-legend {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem 0.8rem;
+  margin: 0.65rem 0 0;
+  padding: 0;
+  min-width: 0;
+  color: var(--text-lo);
+  font-size: 0.8rem;
+}
+
+.vector-legend li,
+.chart-legend li {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  min-width: 0;
+}
+
+.swatch {
+  display: inline-block;
+  width: 0.7rem;
+  height: 0.7rem;
+  border-radius: 3px;
+  flex: 0 0 auto;
+}
+
+.page-notes {
+  margin-top: 0.25rem;
+}
+
+.page-notes > * {
+  max-width: 78ch;
+}
+
+.mech-panel--info {
+  min-height: 0;
+}
+
+@media (max-width: 1100px) {
+  .mech-dashboard,
+  .mech-lab-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 900px) {
+  .chart-panel {
+    min-height: 420px;
+  }
+
+  .chart-panel > div {
+    min-height: 380px;
+  }
+
+  .mech-lab-grid .controls {
+    max-height: none;
+    overflow: visible;
+  }
+}
+
+@media (max-width: 760px) {
+  .mech-panel {
+    border-radius: 16px;
+  }
+
+  .mech-panel__body--scroll,
+  .mech-panel__body--chart {
+    padding: 0.8rem;
+  }
+
+  .chart-panel {
+    min-height: 380px;
+  }
+
+  .chart-panel > div {
+    min-height: 340px;
+  }
+
+  .button-row {
+    flex-direction: column;
+  }
+
+  .vector-legend,
+  .chart-legend {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.45rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .controls textarea {
+    min-height: 170px;
+  }
+}

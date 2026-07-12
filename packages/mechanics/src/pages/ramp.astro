@@ -1,0 +1,18 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Ramp from '../components/Ramp';
+---
+
+<Layout title="Mechanics Lab">
+  <main class="page">
+    <header class="hero">
+      <p class="eyebrow">Labs</p>
+      <h1>Ramp</h1>
+      <p class="lede">
+        Explore motion, energy, friction, mass, momentum, and acceleration on a simple ramp.
+      </p>
+    </header>
+
+    <Ramp client:only="react" />
+  </main>
+</Layout>
