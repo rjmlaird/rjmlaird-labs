@@ -77,20 +77,7 @@
       "Recharts"
     ],
     "demoUrl": "https://climate-visualiser.labs.rjmlaird.co.uk",
-    "repoUrl": "https://github.com/rjmlaird/rjmlaird-labs/tree/main/packages/climate-visualizer",
+    "repoUrl": "https://github.com/rjmlaird/rjmlaird-labs/tree/main/packages/climate-visualiser",
     "updated": "2026-07-11"
-  },
-  {
-    "slug": "climate-visualiser",
-    "title": "climate-visualiser",
-    "description": "New experiment — update this description.",
-    "status": "planned",
-    "tech": [
-      "React",
-      "Vite"
-    ],
-    "demoUrl": "https://climate-visualiser.labs.rjmlaird.co.uk",
-    "repoUrl": "https://github.com/greenorbitspace/labs/tree/main/packages/climate-visualiser",
-    "updated": "2026-07-12"
   }
 ]
