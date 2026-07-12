@@ -2,27 +2,19 @@
   {
     "slug": "n-body",
     "title": "N-Body Orbital Sandbox",
-    "description": "A minimal N-body gravity simulation used as the starter template for new experiments.",
+    "description": "A minimal browser-based gravity simulator for exploring orbital motion and prototyping new interactive experiments.",
     "status": "active",
-    "tech": [
-      "React",
-      "Vite",
-      "Canvas API"
-    ],
+    "tech": ["React", "Vite", "Canvas API"],
     "demoUrl": "https://n-body.labs.rjmlaird.co.uk",
     "repoUrl": "https://github.com/rjmlaird/rjmlaird-labs/tree/main/packages/lab-orbital-mechanics",
     "updated": "2026-07-11"
   },
   {
     "slug": "carbon-reduction-plan",
-    "title": "Carbon Reducation Plan",
-    "description": "A minimal N-body gravity simulation used as the starter template for new experiments.",
+    "title": "Carbon Reduction Plan",
+    "description": "A focused web project for presenting carbon reduction information in a simple, maintainable interface.",
     "status": "active",
-    "tech": [
-      "React",
-      "Vite",
-      "Canvas API"
-    ],
+    "tech": ["React", "Vite", "Canvas API"],
     "demoUrl": "https://crp.labs.rjmlaird.co.uk",
     "repoUrl": "https://github.com/rjmlaird/rjmlaird-labs/tree/main/packages/carbon-reduction-plan",
     "updated": "2026-07-11"
@@ -30,13 +22,9 @@
   {
     "slug": "wildfire-story-lab",
     "title": "Wildfire Story Lab",
-    "description": "A minimal N-body gravity simulation used as the starter template for new experiments.",
-    "status": "active",
-    "tech": [
-      "React",
-      "Vite",
-      "Canvas API"
-    ],
+    "description": "An experimental storytelling tool for exploring how climate and wildfire narratives can be communicated interactively.",
+    "status": "pre-launch",
+    "tech": ["React", "Vite", "Canvas API"],
     "demoUrl": "https://wildfires.labs.rjmlaird.co.uk",
     "repoUrl": "https://github.com/rjmlaird/rjmlaird-labs/tree/main/packages/wildfire-story-lab",
     "updated": "2026-07-11"
@@ -44,12 +32,9 @@
   {
     "slug": "contrast-lab",
     "title": "Contrast Lab",
-    "description": "WCAG 2.x colour contrast checker — pick a foreground/background pair and see the ratio, plus AA/AAA pass or fail.",
+    "description": "A WCAG 2.x colour contrast checker for testing foreground and background pairs against AA and AAA accessibility thresholds.",
     "status": "active",
-    "tech": [
-      "React",
-      "Vite"
-    ],
+    "tech": ["React", "Vite"],
     "demoUrl": "https://contrast.labs.rjmlaird.co.uk",
     "repoUrl": "https://github.com/rjmlaird/rjmlaird-labs/tree/main/packages/contrast-lab",
     "updated": "2026-07-11"
@@ -58,10 +43,8 @@
     "slug": "component-sandbox",
     "title": "Component Sandbox",
     "description": "A live gallery of the Astro UI blocks used across rjmlaird.co.uk, each rendered with its source snippet underneath.",
-    "status": "active",
-    "tech": [
-      "Astro"
-    ],
+    "status": "planned",
+    "tech": ["Astro"],
     "demoUrl": "https://component-sandbox.labs.rjmlaird.co.uk",
     "repoUrl": "https://github.com/rjmlaird/rjmlaird-labs/tree/main/packages/component-sandbox",
     "updated": "2026-07-11"
@@ -69,13 +52,9 @@
   {
     "slug": "climate-visualiser",
     "title": "Climate Visualiser",
-    "description": "Temperature anomaly chart with plain-English annotations — a science-communication showcase piece.",
+    "description": "A science-communication project that turns temperature anomaly data into a readable chart with plain-English annotations.",
     "status": "planned",
-    "tech": [
-      "React",
-      "Vite",
-      "Recharts"
-    ],
+    "tech": ["React", "Vite", "Recharts"],
     "demoUrl": "https://climate-visualiser.labs.rjmlaird.co.uk",
     "repoUrl": "https://github.com/rjmlaird/rjmlaird-labs/tree/main/packages/climate-visualizer",
     "updated": "2026-07-11"
