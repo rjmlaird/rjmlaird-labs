@@ -90,7 +90,7 @@
       "Vite"
     ],
     "demoUrl": "https://mechanics.labs.rjmlaird.co.uk",
-    "repoUrl": "https://github.com/greenorbitspace/labs/tree/main/packages/mechanics",
+    "repoUrl": "https://github.com/rjmlaird/rjmlaird-labs/tree/main/packages/mechanics",
     "updated": "2026-07-12"
   },
   {
@@ -103,7 +103,7 @@
       "Vite"
     ],
     "demoUrl": "https://graphs.labs.rjmlaird.co.uk",
-    "repoUrl": "https://github.com/greenorbitspace/labs/tree/main/packages/graphs",
+    "repoUrl": "https://github.com/rjmlaird/rjmlaird-labs/tree/main/packages/graphs",
     "updated": "2026-07-12"
   }
 ]
