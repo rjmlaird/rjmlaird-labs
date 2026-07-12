@@ -1,5 +1,4 @@
-import { useMemo, useRef, useState } from 'react';
-import { useEffect } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import p5 from 'p5';
 import {
   Block,
@@ -54,9 +53,9 @@ export default function MechanicsLab({ initialRampAngle = 28 }: Props) {
       const resetBlocks = () => {
         blocks.length = 0;
         for (let i = 0; i < blocksCount; i++) {
-          const b = createBlock(nextId++, cfg.rampX + 10 - i * 34, cfg.rampY - 10 - i * 16);
-          b.mass = mass;
-          blocks.push(b);
+          const block = createBlock(nextId++, cfg.rampX + 10 - i * 34, cfg.rampY - 10 - i * 16);
+          block.mass = mass;
+          blocks.push(block);
         }
       };
 
@@ -70,15 +69,16 @@ export default function MechanicsLab({ initialRampAngle = 28 }: Props) {
         cfg.friction = friction;
         cfg.rampAngle = (rampAngle * Math.PI) / 180;
 
-        s.background(250);
-        s.stroke(60);
-        s.fill(245);
+        s.background(11, 15, 26);
+        s.stroke(148, 163, 184);
+        s.strokeWeight(2);
 
         s.line(cfg.rampX, cfg.rampY, cfg.rampX + cfg.rampLength, cfg.groundY);
-        s.rect(60, cfg.groundY, 780, 8);
-
         s.noStroke();
-        s.fill(220);
+        s.fill(18, 24, 38);
+        s.rect(60, cfg.groundY, 780, 8, 4);
+
+        s.fill(238, 242, 246);
         s.textSize(14);
         s.text(`Gravity: ${gravity.toFixed(1)} m/s²`, 20, 24);
         s.text(`Friction: ${friction.toFixed(2)}`, 20, 44);
@@ -124,7 +124,7 @@ export default function MechanicsLab({ initialRampAngle = 28 }: Props) {
   }, []);
 
   useEffect(() => {
-    const p = p5Ref.current as p5 & { resetLab?: () => void } | null;
+    const p = p5Ref.current as (p5 & { resetLab?: () => void }) | null;
     p?.resetLab?.();
   }, [blocksCount, mass]);
 
@@ -141,44 +141,83 @@ export default function MechanicsLab({ initialRampAngle = 28 }: Props) {
   );
 
   return (
-    <div className="mech-lab">
-      <div className="controls">
+    <section className="graph-lab mech-lab">
+      <aside className="controls">
         <label>
           Mass
-          <input type="range" min="1" max="20" step="0.5" value={mass} onChange={(e) => setMass(Number(e.target.value))} />
+          <input
+            type="range"
+            min="1"
+            max="20"
+            step="0.5"
+            value={mass}
+            onChange={(e) => setMass(Number(e.target.value))}
+          />
           <span>{mass.toFixed(1)} kg</span>
         </label>
 
         <label>
           Gravity
-          <input type="range" min="0" max="20" step="0.1" value={gravity} onChange={(e) => setGravity(Number(e.target.value))} />
+          <input
+            type="range"
+            min="0"
+            max="20"
+            step="0.1"
+            value={gravity}
+            onChange={(e) => setGravity(Number(e.target.value))}
+          />
           <span>{gravity.toFixed(1)} m/s²</span>
         </label>
 
         <label>
           Friction
-          <input type="range" min="0" max="1" step="0.01" value={friction} onChange={(e) => setFriction(Number(e.target.value))} />
+          <input
+            type="range"
+            min="0"
+            max="1"
+            step="0.01"
+            value={friction}
+            onChange={(e) => setFriction(Number(e.target.value))}
+          />
           <span>{friction.toFixed(2)}</span>
         </label>
 
         <label>
           Ramp angle
-          <input type="range" min="5" max="45" step="1" value={rampAngle} onChange={(e) => setRampAngle(Number(e.target.value))} />
+          <input
+            type="range"
+            min="5"
+            max="45"
+            step="1"
+            value={rampAngle}
+            onChange={(e) => setRampAngle(Number(e.target.value))}
+          />
           <span>{rampAngle.toFixed(0)}°</span>
         </label>
 
         <label>
           Blocks
-          <input type="range" min="1" max="5" step="1" value={blocksCount} onChange={(e) => setBlocksCount(Number(e.target.value))} />
+          <input
+            type="range"
+            min="1"
+            max="5"
+            step="1"
+            value={blocksCount}
+            onChange={(e) => setBlocksCount(Number(e.target.value))}
+          />
           <span>{blocksCount}</span>
         </label>
 
-        <button type="button" onClick={() => setBlocksCount((n) => Math.min(5, n + 1))}>Add block</button>
+        <button type="button" onClick={() => setBlocksCount((n) => Math.min(5, n + 1))}>
+          Add block
+        </button>
+      </aside>
+
+      <div className="chart-panel">
+        <div ref={containerRef} />
       </div>
 
-      <div className="canvas-wrap" ref={containerRef} />
-
-      <aside className="stats">
+      <aside className="controls">
         <h2>Live values</h2>
         <dl>
           {metrics.map(([label, value]) => (
@@ -189,6 +228,6 @@ export default function MechanicsLab({ initialRampAngle = 28 }: Props) {
           ))}
         </dl>
       </aside>
-    </div>
+    </section>
   );
 }

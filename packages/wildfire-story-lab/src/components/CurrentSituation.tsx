@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 type EffisRecord = {
   id: number | string | null;
@@ -25,44 +25,100 @@ type State =
   | { status: 'error'; message: string }
   | { status: 'ready'; data: EffisResponse };
 
-const dateFormatter = new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
-const numberFormatter = new Intl.NumberFormat('en-GB', { maximumFractionDigits: 0 });
+const dateFormatter = new Intl.DateTimeFormat('en-GB', {
+  day: 'numeric',
+  month: 'short',
+  year: 'numeric',
+});
+
+const numberFormatter = new Intl.NumberFormat('en-GB', {
+  maximumFractionDigits: 0,
+});
 
 export default function CurrentSituation({ apiUrl = '/api/effis-current' }: { apiUrl?: string }) {
   const [state, setState] = useState<State>({ status: 'loading' });
 
-  const load = async () => {
+  const load = useCallback(async () => {
     setState({ status: 'loading' });
+
     try {
-      const res = await fetch(`${apiUrl}?limit=150`);
-      const body = await res.json();
-      if (!res.ok || body?.error) throw new Error(body?.error ?? `Request failed (${res.status})`);
-      setState({ status: 'ready', data: body });
+      const res = await fetch(`${apiUrl}?limit=150`, {
+        headers: {
+          Accept: 'application/json',
+        },
+      });
+
+      const contentType = res.headers.get('content-type') ?? '';
+      const text = await res.text();
+
+      if (!res.ok) {
+        throw new Error(`Request failed (${res.status})`);
+      }
+
+      if (!contentType.includes('application/json')) {
+        throw new Error('Live data returned HTML instead of JSON');
+      }
+
+      const body = JSON.parse(text) as Partial<EffisResponse> & { error?: string };
+
+      if (body?.error) {
+        throw new Error(body.error);
+      }
+
+      if (
+        !body ||
+        typeof body !== 'object' ||
+        !Array.isArray(body.records) ||
+        typeof body.count !== 'number'
+      ) {
+        throw new Error('Unexpected data shape');
+      }
+
+      setState({
+        status: 'ready',
+        data: {
+          source: typeof body.source === 'string' ? body.source : 'EFFIS',
+          fetchedAt: typeof body.fetchedAt === 'string' ? body.fetchedAt : new Date().toISOString(),
+          count: body.count,
+          records: body.records,
+        },
+      });
     } catch (err) {
-      setState({ status: 'error', message: err instanceof Error ? err.message : 'Unknown error' });
+      setState({
+        status: 'error',
+        message: err instanceof Error ? err.message : 'Unknown error',
+      });
     }
-  };
+  }, [apiUrl]);
 
   useEffect(() => {
-    load();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [apiUrl]);
+    void load();
+  }, [load]);
 
   const stats = useMemo(() => {
     if (state.status !== 'ready') return null;
-    const records = state.data.records;
 
+    const records = state.data.records;
     const totalArea = records.reduce((sum, r) => sum + (r.areaHa ?? 0), 0);
 
     const byCountry = new Map<string, { name: string; area: number; count: number }>();
+
     for (const r of records) {
       const key = r.country ?? r.countryName ?? 'Unknown';
-      const entry = byCountry.get(key) ?? { name: r.countryName ?? r.country ?? 'Unknown', area: 0, count: 0 };
+      const entry = byCountry.get(key) ?? {
+        name: r.countryName ?? r.country ?? 'Unknown',
+        area: 0,
+        count: 0,
+      };
+
       entry.area += r.areaHa ?? 0;
       entry.count += 1;
       byCountry.set(key, entry);
     }
-    const topCountries = [...byCountry.values()].sort((a, b) => b.area - a.area).slice(0, 8);
+
+    const topCountries = [...byCountry.values()]
+      .sort((a, b) => b.area - a.area)
+      .slice(0, 8);
 
     const mostRecent = records
       .map((r) => r.fireDate)
@@ -70,7 +126,12 @@ export default function CurrentSituation({ apiUrl = '/api/effis-current' }: { ap
       .sort()
       .at(-1);
 
-    return { totalArea, topCountries, mostRecent, countryCount: byCountry.size };
+    return {
+      totalArea,
+      topCountries,
+      mostRecent,
+      countryCount: byCountry.size,
+    };
   }, [state]);
 
   return (
@@ -84,7 +145,8 @@ export default function CurrentSituation({ apiUrl = '/api/effis-current' }: { ap
             European Forest Fire Information System (EFFIS), part of the Copernicus Emergency Management Service.
           </p>
         </div>
-        <button className="refresh-btn" onClick={load} disabled={state.status === 'loading'}>
+
+        <button className="refresh-btn" onClick={() => void load()} disabled={state.status === 'loading'}>
           {state.status === 'loading' ? 'Refreshing…' : 'Refresh'}
         </button>
       </div>
@@ -96,7 +158,11 @@ export default function CurrentSituation({ apiUrl = '/api/effis-current' }: { ap
           <p>
             Live data isn&apos;t available right now ({state.message}). You can check the current situation
             directly on the{' '}
-            <a href="https://forest-fire.emergency.copernicus.eu/apps/effis.csv" target="_blank" rel="noopener">
+            <a
+              href="https://forest-fire.emergency.copernicus.eu/apps/effis_current_situation/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               EFFIS Current Situation Viewer ↗
             </a>
             .
@@ -111,14 +177,17 @@ export default function CurrentSituation({ apiUrl = '/api/effis-current' }: { ap
               <span>Burnt-area records</span>
               <strong>{numberFormatter.format(state.data.count)}</strong>
             </div>
+
             <div className="stat">
               <span>Total area mapped</span>
               <strong>{numberFormatter.format(stats.totalArea)} ha</strong>
             </div>
+
             <div className="stat">
               <span>Countries reporting</span>
               <strong>{stats.countryCount}</strong>
             </div>
+
             <div className="stat">
               <span>Most recent event</span>
               <strong>{stats.mostRecent ? dateFormatter.format(new Date(stats.mostRecent)) : '—'}</strong>
@@ -126,7 +195,9 @@ export default function CurrentSituation({ apiUrl = '/api/effis-current' }: { ap
           </div>
 
           {state.data.count === 0 && (
-            <p className="hint">No burnt areas currently mapped in the returned window — that&apos;s good news.</p>
+            <p className="hint">
+              No burnt areas currently mapped in the returned window — that&apos;s good news.
+            </p>
           )}
 
           {stats.topCountries.length > 0 && (
@@ -134,6 +205,7 @@ export default function CurrentSituation({ apiUrl = '/api/effis-current' }: { ap
               <h3>Burnt area by country (mapped records shown)</h3>
               {stats.topCountries.map((c) => {
                 const pct = stats.totalArea ? (c.area / stats.totalArea) * 100 : 0;
+
                 return (
                   <div className="country-row" key={c.name}>
                     <span className="country-name">{c.name}</span>
@@ -179,7 +251,7 @@ export default function CurrentSituation({ apiUrl = '/api/effis-current' }: { ap
 
           <p className="attribution">
             Source:{' '}
-            <a href="https://effis.jrc.ec.europa.eu/" target="_blank" rel="noopener">
+            <a href="https://effis.jrc.ec.europa.eu/" target="_blank" rel="noopener noreferrer">
               EFFIS
             </a>
             , Copernicus Emergency Management Service (European Commission Joint Research Centre). Fetched{' '}
@@ -189,7 +261,7 @@ export default function CurrentSituation({ apiUrl = '/api/effis-current' }: { ap
             <a
               href="https://forest-fire.emergency.copernicus.eu/about-effis/data-license"
               target="_blank"
-              rel="noopener"
+              rel="noopener noreferrer"
             >
               data licence
             </a>
@@ -236,24 +308,81 @@ export default function CurrentSituation({ apiUrl = '/api/effis-current' }: { ap
           display: grid;
           gap: 6px;
         }
-        .stat span { color: var(--ink-faint); font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.03em; }
-        .stat strong { font-family: var(--font-display); font-size: 1.3rem; }
+        .stat span {
+          color: var(--ink-faint);
+          font-size: 0.78rem;
+          text-transform: uppercase;
+          letter-spacing: 0.03em;
+        }
+        .stat strong {
+          font-family: var(--font-display);
+          font-size: 1.3rem;
+        }
 
         .country-bars { margin: 22px 0; }
-        .country-bars h3, .table-wrap h3 { font-size: 1rem; margin: 0 0 12px; color: var(--ink-soft); font-weight: 600; }
-        .country-row { display: grid; grid-template-columns: 120px 1fr auto; align-items: center; gap: 10px; margin-bottom: 8px; font-size: 0.85rem; }
+        .country-bars h3,
+        .table-wrap h3 {
+          font-size: 1rem;
+          margin: 0 0 12px;
+          color: var(--ink-soft);
+          font-weight: 600;
+        }
+        .country-row {
+          display: grid;
+          grid-template-columns: 120px 1fr auto;
+          align-items: center;
+          gap: 10px;
+          margin-bottom: 8px;
+          font-size: 0.85rem;
+        }
         .country-name { color: var(--ink-soft); }
-        .bar-track { height: 10px; border-radius: 999px; background: var(--bg-inset); border: 1px solid var(--line); overflow: hidden; }
-        .bar-fill { height: 100%; background: linear-gradient(90deg, var(--ember), var(--orbit)); }
-        .country-value { color: var(--ink-faint); font-variant-numeric: tabular-nums; white-space: nowrap; }
+        .bar-track {
+          height: 10px;
+          border-radius: 999px;
+          background: var(--bg-inset);
+          border: 1px solid var(--line);
+          overflow: hidden;
+        }
+        .bar-fill {
+          height: 100%;
+          background: linear-gradient(90deg, var(--ember), var(--orbit));
+        }
+        .country-value {
+          color: var(--ink-faint);
+          font-variant-numeric: tabular-nums;
+          white-space: nowrap;
+        }
 
-        .table-wrap { margin-top: 26px; overflow-x: auto; }
-        table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
-        th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line-soft); white-space: nowrap; }
-        th { color: var(--ink-faint); text-transform: uppercase; font-size: 0.72rem; letter-spacing: 0.03em; font-weight: 600; }
+        .table-wrap {
+          margin-top: 26px;
+          overflow-x: auto;
+        }
+        table {
+          width: 100%;
+          border-collapse: collapse;
+          font-size: 0.85rem;
+        }
+        th,
+        td {
+          text-align: left;
+          padding: 8px 10px;
+          border-bottom: 1px solid var(--line-soft);
+          white-space: nowrap;
+        }
+        th {
+          color: var(--ink-faint);
+          text-transform: uppercase;
+          font-size: 0.72rem;
+          letter-spacing: 0.03em;
+          font-weight: 600;
+        }
         td.num { font-variant-numeric: tabular-nums; }
 
-        .attribution { margin-top: 18px; font-size: 0.78rem; color: var(--ink-faint); }
+        .attribution {
+          margin-top: 18px;
+          font-size: 0.78rem;
+          color: var(--ink-faint);
+        }
         .attribution a { color: var(--ink-soft); }
       `}</style>
     </section>
