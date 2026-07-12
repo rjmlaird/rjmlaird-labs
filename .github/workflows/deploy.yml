@@ -10,6 +10,7 @@ on:
       - "packages/equation-scanner/**"
       - "packages/contrast-lab/**"
       - "packages/wildfire-story-lab/**"
+      - "packages/climate-visualiser/**"
       - "pnpm-workspace.yaml"
       - "package.json"
       - "pnpm-lock.yaml"
@@ -28,6 +29,7 @@ on:
           - equation-scanner
           - contrast-lab
           - wildfire-story-lab
+          - climate-visualiser
         default: all
 
 permissions:
@@ -82,6 +84,12 @@ jobs:
               - 'package.json'
               - 'pnpm-lock.yaml'
               - '.github/workflows/deploy.yml'
+            climate-visualiser:
+              - 'packages/climate-visualiser/**'
+              - 'pnpm-workspace.yaml'
+              - 'package.json'
+              - 'pnpm-lock.yaml'
+              - '.github/workflows/deploy.yml'
 
       - name: Resolve package list
         id: resolve
@@ -95,6 +103,7 @@ jobs:
           CHANGED_EQUATION: ${{ steps.filter.outputs.equation-scanner }}
           CHANGED_CONTRAST: ${{ steps.filter.outputs.contrast-lab }}
           CHANGED_WILDFIRE: ${{ steps.filter.outputs.wildfire-story-lab }}
+          CHANGED_CLIMATE: ${{ steps.filter.outputs.climate-visualiser }}
         run: |
           packages='[]'
 
@@ -102,7 +111,7 @@ jobs:
             if [ -n "$DISPATCH_PACKAGE" ] && [ "$DISPATCH_PACKAGE" != "all" ]; then
               packages="[\"$DISPATCH_PACKAGE\"]"
             else
-              packages='["labs-index","lab-orbital-mechanics","carbon-reduction-plan","equation-scanner","contrast-lab","wildfire-story-lab"]'
+              packages='["labs-index","lab-orbital-mechanics","carbon-reduction-plan","equation-scanner","contrast-lab","wildfire-story-lab","climate-visualiser"]'
             fi
           else
             [ "$CHANGED_LABS_INDEX" = "true" ] && packages=$(echo "$packages" | jq -c '. + ["labs-index"]')
@@ -111,6 +120,7 @@ jobs:
             [ "$CHANGED_EQUATION" = "true" ] && packages=$(echo "$packages" | jq -c '. + ["equation-scanner"]')
             [ "$CHANGED_CONTRAST" = "true" ] && packages=$(echo "$packages" | jq -c '. + ["contrast-lab"]')
             [ "$CHANGED_WILDFIRE" = "true" ] && packages=$(echo "$packages" | jq -c '. + ["wildfire-story-lab"]')
+            [ "$CHANGED_CLIMATE" = "true" ] && packages=$(echo "$packages" | jq -c '. + ["climate-visualiser"]')
           fi
 
           echo "packages=$packages" >> "$GITHUB_OUTPUT"
