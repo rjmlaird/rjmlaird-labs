@@ -1,0 +1,25 @@
+---
+import Layout from '../layouts/Layout.astro';
+import GraphLab from '../components/GraphLab';
+---
+
+<Layout
+  title="Ryan Laird Labs"
+  description="Interactive graph tools and experimental visualisations."
+>
+  <section class="hero">
+    <p class="eyebrow">Labs</p>
+    <h1>Interactive graph experiments</h1>
+    <p class="lede">
+      A focused space for visualising data, testing ideas, and exploring charts in a clean, dark interface.
+    </p>
+  </section>
+
+  <section class="card-grid">
+      <p>
+        Paste JSON or CSV, switch chart types, and inspect your data with an interactive ApexCharts view.
+      </p>
+  </section>
+
+   <GraphLab client:only="react" />
+</Layout>

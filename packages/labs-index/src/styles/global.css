@@ -48,6 +48,28 @@ a {
   padding: 0 1.5rem;
 }
 
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+button {
+  border: 1px solid var(--border);
+  background: linear-gradient(180deg, rgba(18, 24, 38, 0.95), rgba(11, 15, 26, 0.95));
+  color: var(--text-hi);
+}
+
+button:hover {
+  border-color: rgba(0, 194, 168, 0.35);
+}
+
+::selection {
+  background: rgba(0, 194, 168, 0.25);
+  color: var(--text-hi);
+}
+
 @media (prefers-reduced-motion: reduce) {
   * {
     animation: none !important;
