@@ -6,6 +6,8 @@ on:
     paths:
       - "packages/labs-index/**"
       - "packages/lab-orbital-mechanics/**"
+      - "packages/graphs/**"
+      - "packages/mechanics/**"
       - "packages/carbon-reduction-plan/**"
       - "packages/equation-scanner/**"
       - "packages/contrast-lab/**"
@@ -25,6 +27,8 @@ on:
           - all
           - labs-index
           - lab-orbital-mechanics
+          - graphs
+          - mechanics
           - carbon-reduction-plan
           - equation-scanner
           - contrast-lab
@@ -56,6 +60,18 @@ jobs:
               - '.github/workflows/deploy.yml'
             lab-orbital-mechanics:
               - 'packages/lab-orbital-mechanics/**'
+              - 'pnpm-workspace.yaml'
+              - 'package.json'
+              - 'pnpm-lock.yaml'
+              - '.github/workflows/deploy.yml'
+            graphs:
+              - 'packages/graphs/**'
+              - 'pnpm-workspace.yaml'
+              - 'package.json'
+              - 'pnpm-lock.yaml'
+              - '.github/workflows/deploy.yml'
+            mechanics:
+              - 'packages/mechanics/**'
               - 'pnpm-workspace.yaml'
               - 'package.json'
               - 'pnpm-lock.yaml'
@@ -99,6 +115,8 @@ jobs:
           DISPATCH_PACKAGE: ${{ inputs.package }}
           CHANGED_LABS_INDEX: ${{ steps.filter.outputs.labs-index }}
           CHANGED_ORBITAL: ${{ steps.filter.outputs.lab-orbital-mechanics }}
+          CHANGED_GRAPHS: ${{ steps.filter.outputs.graphs }}
+          CHANGED_MECHANICS: ${{ steps.filter.outputs.mechanics }}
           CHANGED_CARBON: ${{ steps.filter.outputs.carbon-reduction-plan }}
           CHANGED_EQUATION: ${{ steps.filter.outputs.equation-scanner }}
           CHANGED_CONTRAST: ${{ steps.filter.outputs.contrast-lab }}
@@ -111,11 +129,13 @@ jobs:
             if [ -n "$DISPATCH_PACKAGE" ] && [ "$DISPATCH_PACKAGE" != "all" ]; then
               packages="[\"$DISPATCH_PACKAGE\"]"
             else
-              packages='["labs-index","lab-orbital-mechanics","carbon-reduction-plan","equation-scanner","contrast-lab","wildfire-story-lab","climate-visualiser"]'
+              packages='["labs-index","lab-orbital-mechanics","graphs","mechanics","carbon-reduction-plan","equation-scanner","contrast-lab","wildfire-story-lab","climate-visualiser"]'
             fi
           else
             [ "$CHANGED_LABS_INDEX" = "true" ] && packages=$(echo "$packages" | jq -c '. + ["labs-index"]')
             [ "$CHANGED_ORBITAL" = "true" ] && packages=$(echo "$packages" | jq -c '. + ["lab-orbital-mechanics"]')
+            [ "$CHANGED_GRAPHS" = "true" ] && packages=$(echo "$packages" | jq -c '. + ["graphs"]')
+            [ "$CHANGED_MECHANICS" = "true" ] && packages=$(echo "$packages" | jq -c '. + ["mechanics"]')
             [ "$CHANGED_CARBON" = "true" ] && packages=$(echo "$packages" | jq -c '. + ["carbon-reduction-plan"]')
             [ "$CHANGED_EQUATION" = "true" ] && packages=$(echo "$packages" | jq -c '. + ["equation-scanner"]')
             [ "$CHANGED_CONTRAST" = "true" ] && packages=$(echo "$packages" | jq -c '. + ["contrast-lab"]')
