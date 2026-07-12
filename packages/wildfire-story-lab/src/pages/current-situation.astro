@@ -1,0 +1,30 @@
+---
+import Layout from '../layouts/Layout.astro';
+import CaseSidebar from '../components/CaseSidebar.astro';
+import CurrentSituation from '../components/CurrentSituation';
+---
+<Layout
+  title="Current wildfire situation — Wildfire Story Lab"
+  description="Live burnt-area data from Copernicus EFFIS, alongside the Wildfire Story Lab's before/after satellite case studies."
+>
+  <div class="page">
+    <CaseSidebar />
+    <main class="content">
+      <section class="card pad hero">
+        <span class="pill">Copernicus EFFIS</span>
+        <h1>What's burning right now.</h1>
+        <p class="lede">
+          The case studies show how a fire resolves over weeks. This page adds the near real-time
+          picture — recently mapped burnt areas from the European Forest Fire Information System,
+          refreshed from the Copernicus Emergency Management Service.
+        </p>
+      </section>
+
+      <CurrentSituation client:load />
+    </main>
+  </div>
+
+  <style>
+    .hero .lede { margin-top: 6px; max-width: 60ch; }
+  </style>
+</Layout>

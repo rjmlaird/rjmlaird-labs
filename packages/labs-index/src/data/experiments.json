@@ -81,8 +81,8 @@
     "updated": "2026-07-11"
   },
   {
-    "slug": "mechanics",
-    "title": "mechanics",
+    "slug": "echanics",
+    "title": "Mechanics",
     "description": "New experiment — update this description.",
     "status": "planned",
     "tech": [
@@ -95,7 +95,7 @@
   },
   {
     "slug": "graphs",
-    "title": "graphs",
+    "title": "Graphs",
     "description": "New experiment — update this description.",
     "status": "planned",
     "tech": [

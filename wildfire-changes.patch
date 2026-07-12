@@ -1,0 +1,61 @@
+diff --git a/packages/wildfire-story-lab/src/layouts/Layout.astro b/packages/wildfire-story-lab/src/layouts/Layout.astro
+index b4d1ee8b..e7fcfc0e 100644
+--- a/packages/wildfire-story-lab/src/layouts/Layout.astro
++++ b/packages/wildfire-story-lab/src/layouts/Layout.astro
+@@ -241,7 +241,8 @@ const { title, description = 'Before-and-after satellite storytelling for wildfi
+           <span>An RJML Labs experiment</span>
+         </span>
+       </a>
+-      <nav class="site-nav" aria-label="External links">
++      <nav class="site-nav" aria-label="Site navigation">
++        <a href="/current-situation">Current situation</a>
+         <a href="https://rjmlaird.co.uk" target="_blank" rel="noopener">rjmlaird.co.uk</a>
+         <a href="https://labs.rjmlaird.co.uk" target="_blank" rel="noopener">labs ↗</a>
+       </nav>
+diff --git a/packages/wildfire-story-lab/src/pages/index.astro b/packages/wildfire-story-lab/src/pages/index.astro
+index 07cfc42d..03708c2d 100644
+--- a/packages/wildfire-story-lab/src/pages/index.astro
++++ b/packages/wildfire-story-lab/src/pages/index.astro
+@@ -41,6 +41,18 @@ const caseCount = cases.length;
+           legend to see where severity sits between minimum and maximum for that scene.
+         </p>
+       </section>
++
++      <section class="card pad current-situation-teaser">
++        <div>
++          <span class="pill ember">Live · Copernicus EFFIS</span>
++          <h2 style="margin: 10px 0 6px;">Beyond the case studies: what's burning today</h2>
++          <p>
++            These case studies are hand-picked stories. For the live picture across Europe, the Middle
++            East and North Africa, see recently mapped burnt areas straight from Copernicus EFFIS.
++          </p>
++        </div>
++        <a class="teaser-link" href="/current-situation">View current situation →</a>
++      </section>
+     </main>
+   </div>
+ 
+@@ -57,5 +69,23 @@ const caseCount = cases.length;
+     .hero-meta div { display: grid; gap: 2px; }
+     .hero-meta strong { font-family: var(--font-display); font-size: 1.15rem; }
+     .hero-meta span { font-size: 0.82rem; color: var(--ink-faint); }
++
++    .current-situation-teaser {
++      display: flex;
++      flex-wrap: wrap;
++      align-items: center;
++      justify-content: space-between;
++      gap: 16px;
++    }
++    .current-situation-teaser p { max-width: 52ch; }
++    .teaser-link {
++      flex: none;
++      text-decoration: none;
++      color: var(--orbit);
++      font-weight: 600;
++      font-size: 0.9rem;
++      white-space: nowrap;
++    }
++    .teaser-link:hover { text-decoration: underline; }
+   </style>
+ </Layout>
