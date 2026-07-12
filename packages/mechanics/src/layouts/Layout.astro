@@ -2,10 +2,12 @@
 import '../styles/global.css';
 import '../styles/dashboard.css';
 import '../styles/ramp.css';
+import ExperimentNav from '../components/shared/ExperimentNav.astro';
 
 const {
   title = 'Mechanics Lab',
   description = 'Explore motion, energy, friction, mass, momentum, and acceleration on a simple ramp.',
+  current = 'index',
 } = Astro.props;
 ---
 
@@ -30,6 +32,7 @@ const {
           <div class="dashboard__title">
             <h1>{title}</h1>
           </div>
+          <ExperimentNav current={current} />
         </div>
       </header>
 

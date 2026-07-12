@@ -1,0 +1,23 @@
+---
+import Layout from '../layouts/Layout.astro';
+import StoppingDistance from '../components/stopping-distance/StoppingDistance';
+---
+
+<Layout
+  title="Stopping Distances"
+  description="Reaction distance plus SUVAT-derived braking distance, across speeds and road conditions."
+  current="stoppingdistance"
+>
+  <main class="page">
+    <header class="hero">
+      <p class="eyebrow">Labs</p>
+      <h1>Stopping Distances</h1>
+      <p class="lede">
+        The classic driving-physics question: how far does a car travel between noticing a hazard and coming to a
+        stop, and how much of that is down to you versus the road?
+      </p>
+    </header>
+
+    <StoppingDistance client:only="react" />
+  </main>
+</Layout>

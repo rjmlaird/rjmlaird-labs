@@ -13,6 +13,7 @@ export type Block = {
   v: number;
   size: number;
   color?: string;
+  locked?: boolean;
 };
 
 export type Ramp = {

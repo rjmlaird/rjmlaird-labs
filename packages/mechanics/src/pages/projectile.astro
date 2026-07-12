@@ -1,0 +1,23 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Projectile from '../components/Projectile';
+---
+
+<Layout
+  title="Projectile Motion"
+  description="Launch speed, angle, and height, with per-axis SUVAT and energy conservation."
+  current="projectile"
+>
+  <main class="page">
+    <header class="hero">
+      <p class="eyebrow">Labs</p>
+      <h1>Projectile Motion</h1>
+      <p class="lede">
+        Horizontal and vertical motion are independent — change the launch speed, angle, or height and watch each
+        axis obey its own SUVAT equation.
+      </p>
+    </header>
+
+    <Projectile client:only="react" />
+  </main>
+</Layout>

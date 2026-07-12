@@ -1,16 +1,14 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import useAnimationFrame from '../hooks/useAnimationFrame';
 import { computeMetrics, ensureInBounds, stepSimulation } from '../lib/ramp/physics';
 import { getPreset, presets } from '../lib/ramp/presets';
-import type {
-  MotionMode,
-  Scenario,
-  SimulationConfig,
-  SimulationFrame,
-  SimulationMetrics,
-  ReadoutItem,
-  Block,
-} from '../lib/ramp/types';
+import Panel from './shared/Panel';
+import PresetPicker from './shared/PresetPicker';
+import SimControls from './shared/SimControls';
+import SuvatPanel from './shared/SuvatPanel';
+import ConservationPanel from './shared/ConservationPanel';
+import { formatValue } from '../lib/utils/format';
+import type { Block, MotionMode, Scenario, SimulationConfig, SimulationFrame, SimulationMetrics } from '../lib/ramp/types';
 
 type LabState = {
   config: SimulationConfig;
@@ -18,23 +16,6 @@ type LabState = {
   mode: MotionMode;
   metrics: SimulationMetrics;
 };
-
-function formatValue(value: number, digits = 2): string {
-  return Number.isFinite(value) ? value.toFixed(digits) : '—';
-}
-
-function buildReadouts(metrics: SimulationMetrics): ReadoutItem[] {
-  return [
-    { label: 'Acceleration', value: `${formatValue(metrics.acceleration)} m/s²` },
-    { label: 'Normal force', value: `${formatValue(metrics.normalForce)} N` },
-    { label: 'Friction force', value: `${formatValue(metrics.frictionForce)} N` },
-    { label: 'Drag force', value: `${formatValue(metrics.dragForce)} N` },
-    { label: 'Momentum', value: `${formatValue(metrics.momentum)} kg·m/s` },
-    { label: 'Kinetic energy', value: `${formatValue(metrics.kineticEnergy)} J` },
-    { label: 'Potential energy', value: `${formatValue(metrics.potentialEnergy)} J` },
-    { label: 'Energy lost', value: `${formatValue(metrics.energyLost)} J` },
-  ];
-}
 
 function getBlockPositions(blocks: Block[], rampLength: number, width: number, topY: number, leftX: number) {
   return blocks.map((block) => {
@@ -48,124 +29,116 @@ function getBlockPositions(blocks: Block[], rampLength: number, width: number, t
 export default function Ramp() {
   const [scenario, setScenario] = useState<Scenario>('frictionless');
   const [running, setRunning] = useState(false);
+  const [timeScale, setTimeScale] = useState(1);
 
   const currentPreset = useMemo(() => getPreset(scenario), [scenario]);
+  const initialMetricsRef = useRef<SimulationMetrics>(computeMetrics(currentPreset.config, currentPreset.config.blocks));
+  const dissipatedRef = useRef(0);
 
   const [state, setState] = useState<LabState>(() => {
     const config = currentPreset.config;
-    return {
-      config,
-      time: 0,
-      mode: 'idle',
-      metrics: computeMetrics(config, config.blocks),
-    };
+    const metrics = computeMetrics(config, config.blocks);
+    initialMetricsRef.current = metrics;
+    return { config, time: 0, mode: 'idle', metrics };
   });
 
   useEffect(() => {
     const config = currentPreset.config;
-    setState({
-      config,
-      time: 0,
-      mode: 'idle',
-      metrics: computeMetrics(config, config.blocks),
-    });
+    const metrics = computeMetrics(config, config.blocks);
+    initialMetricsRef.current = metrics;
+    dissipatedRef.current = 0;
+    setState({ config, time: 0, mode: 'idle', metrics });
     setRunning(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentPreset]);
 
-  useAnimationFrame(
-    (_, deltaSeconds) => {
-      setState((prev) => {
-        const frame: SimulationFrame = {
-          time: prev.time,
-          config: prev.config,
-          metrics: prev.metrics,
-          blocks: prev.config.blocks,
-          mode: prev.mode,
-        };
+  useAnimationFrame((_, deltaSeconds) => {
+    setState((prev) => {
+      const frame: SimulationFrame = {
+        time: prev.time,
+        config: prev.config,
+        metrics: prev.metrics,
+        blocks: prev.config.blocks,
+        mode: prev.mode,
+      };
 
-        const next = stepSimulation(frame, deltaSeconds);
-        const boundedBlocks = ensureInBounds(next.blocks, next.config.ramp.length);
+      const dt = deltaSeconds * timeScale;
+      const next = stepSimulation(frame, dt);
+      const boundedBlocks = ensureInBounds(next.blocks, next.config.ramp.length);
+      const metrics = computeMetrics(next.config, boundedBlocks);
+      dissipatedRef.current += metrics.energyLost * dt;
 
-        return {
-          config: {
-            ...next.config,
-            blocks: boundedBlocks,
-          },
-          time: next.time,
-          mode: 'running',
-          metrics: computeMetrics(next.config, boundedBlocks),
-        };
-      });
-    },
-    running,
-  );
-
-  const readouts = useMemo(() => buildReadouts(state.metrics), [state.metrics]);
+      return {
+        config: { ...next.config, blocks: boundedBlocks },
+        time: next.time,
+        mode: 'running',
+        metrics,
+      };
+    });
+  }, running);
 
   function handleReset() {
     const preset = getPreset(scenario);
+    const metrics = computeMetrics(preset.config, preset.config.blocks);
+    initialMetricsRef.current = metrics;
+    dissipatedRef.current = 0;
     setRunning(false);
-    setState({
-      config: preset.config,
-      time: 0,
-      mode: 'idle',
-      metrics: computeMetrics(preset.config, preset.config.blocks),
-    });
+    setState({ config: preset.config, time: 0, mode: 'idle', metrics });
   }
 
-  function handleTogglePlay() {
+  function handleToggleRun() {
     setRunning((prev) => !prev);
     setState((prev) => ({ ...prev, mode: !running ? 'running' : 'idle' }));
   }
 
+  function handleStep() {
+    setRunning(false);
+    setState((prev) => {
+      const frame: SimulationFrame = {
+        time: prev.time,
+        config: prev.config,
+        metrics: prev.metrics,
+        blocks: prev.config.blocks,
+        mode: 'paused',
+      };
+      const next = stepSimulation(frame, 1 / 60);
+      const boundedBlocks = ensureInBounds(next.blocks, next.config.ramp.length);
+      return {
+        config: { ...next.config, blocks: boundedBlocks },
+        time: next.time,
+        mode: 'paused',
+        metrics: computeMetrics(next.config, boundedBlocks),
+      };
+    });
+  }
+
   const ramp = state.config.ramp;
   const blocks = getBlockPositions(state.config.blocks, ramp.length, 360, 250, 60);
+  const lead = state.config.blocks[0];
+  const initialLead = currentPreset.config.blocks[0];
+  const angleRad = (ramp.angle * Math.PI) / 180;
+  const initialMetrics = initialMetricsRef.current;
 
   return (
     <section className="mech-dashboard" aria-label="Ramp dashboard">
-      <aside className="mech-panel" aria-label="Controls">
-        <div className="mech-panel__header">
-          <h2>Controls</h2>
-          <p>Choose a preset and control the motion.</p>
-        </div>
+      <Panel title="Controls" subtitle="Choose a preset and control the motion.">
+        <div className="controls">
+          <PresetPicker value={scenario} onChange={(id) => setScenario(id as Scenario)} presets={presets} />
 
-        <div className="mech-panel__body mech-panel__body--scroll">
-          <div className="controls">
-            <label>
-              Scenario
-              <select value={scenario} onChange={(e) => setScenario(e.target.value as Scenario)}>
-                {presets.map((preset) => (
-                  <option key={preset.id} value={preset.id}>
-                    {preset.label}
-                  </option>
-                ))}
-              </select>
-            </label>
+          <SimControls
+            running={running}
+            onToggleRun={handleToggleRun}
+            onReset={handleReset}
+            onStep={handleStep}
+            timeScale={timeScale}
+            onTimeScaleChange={setTimeScale}
+          />
 
-            <label>
-              Preset description
-              <textarea value={currentPreset.description} readOnly />
-            </label>
-
-            <div className="button-row">
-              <button type="button" onClick={handleTogglePlay}>
-                {running ? 'Pause' : 'Run'}
-              </button>
-              <button type="button" onClick={handleReset}>
-                Reset
-              </button>
-            </div>
-
-            <div className="callout">
-              {running ? 'Simulation running.' : 'Ready to run. Select a preset to begin.'}
-            </div>
-
-            <div className="callout callout-lock">
-              Current mode: <strong>{state.mode}</strong>
-            </div>
+          <div className="callout callout-lock">
+            Current mode: <strong>{state.mode}</strong>
           </div>
         </div>
-      </aside>
+      </Panel>
 
       <section className="mech-panel" aria-label="Ramp simulation">
         <div className="mech-panel__header">
@@ -211,7 +184,7 @@ export default function Ramp() {
                 Ramp length: {formatValue(ramp.length, 1)} m
               </text>
               <text x="68" y="298" fill="#9aa5b1" fontSize="12">
-                Angle: {formatValue(ramp.angle, 0)}°
+                Angle: {formatValue(ramp.angle, 0)}&deg;
               </text>
 
               {blocks.map((block) => (
@@ -232,43 +205,66 @@ export default function Ramp() {
               ))}
             </svg>
           </div>
+          {lead?.locked && (
+            <p className="callout callout-lock">
+              🔒 Static friction is holding this block still — it won&apos;t move until gravity along the slope
+              exceeds the maximum static friction force.
+            </p>
+          )}
         </div>
       </section>
 
-      <aside className="mech-panel" aria-label="Values and notes">
-        <div className="mech-panel__header">
-          <h2>Values</h2>
-          <p>Readouts and equations.</p>
-        </div>
+      <Panel title="Values" subtitle="Readouts, SUVAT, and conservation checks.">
+        <dl className="value-list">
+          <div>
+            <dt>Acceleration</dt>
+            <dd>{formatValue(state.metrics.acceleration)} m/s²</dd>
+          </div>
+          <div>
+            <dt>Normal force</dt>
+            <dd>{formatValue(state.metrics.normalForce)} N</dd>
+          </div>
+          <div>
+            <dt>Friction force</dt>
+            <dd>{formatValue(state.metrics.frictionForce)} N</dd>
+          </div>
+          <div>
+            <dt>Drag force</dt>
+            <dd>{formatValue(state.metrics.dragForce)} N</dd>
+          </div>
+        </dl>
 
-        <div className="mech-panel__body mech-panel__body--scroll">
-          <dl className="value-list">
-            {readouts.map((item) => (
-              <div key={item.label}>
-                <dt>{item.label}</dt>
-                <dd>{item.value}</dd>
-              </div>
-            ))}
-          </dl>
+        {lead && (
+          <SuvatPanel
+            values={{
+              u: initialLead?.v ?? 0,
+              v: lead.v,
+              a: state.metrics.acceleration,
+              s: lead.x - (initialLead?.x ?? 0),
+              t: state.time,
+            }}
+          />
+        )}
 
-          <ul className="formula-list">
-            <li>
-              <strong>Force:</strong> \\(F = ma\\)
-            </li>
-            <li>
-              <strong>Momentum:</strong> \\(p = mv\\)
-            </li>
-            <li>
-              <strong>Kinetic energy:</strong> \\(E\_k = \\frac{1}{2}mv^2\\)
-            </li>
-            <li>
-              <strong>Potential energy:</strong> \\(E\_p = mgh\\)
-            </li>
-          </ul>
+        <ConservationPanel
+          energy={{
+            kinetic: state.metrics.kineticEnergy,
+            potential: state.metrics.potentialEnergy,
+            dissipated: dissipatedRef.current,
+            initialTotal: initialMetrics.kineticEnergy + initialMetrics.potentialEnergy,
+          }}
+          momentum={
+            state.config.blocks.length > 1
+              ? { before: initialMetrics.momentum, after: state.metrics.momentum }
+              : undefined
+          }
+        />
 
-          <div className="hint">{currentPreset.notes ?? 'Select a preset to explore the model.'}</div>
-        </div>
-      </aside>
+        <p className="hint">{currentPreset.notes ?? 'Select a preset to explore the model.'}</p>
+        <p className="hint">
+          Ramp angle in radians: {formatValue(angleRad, 3)} &middot; used directly in every force calculation above.
+        </p>
+      </Panel>
     </section>
   );
 }

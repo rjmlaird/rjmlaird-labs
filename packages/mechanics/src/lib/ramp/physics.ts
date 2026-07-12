@@ -69,19 +69,34 @@ export function stepSimulation(frame: SimulationFrame, dt = 1 / 60): SimulationF
   const { config } = frame;
   const ramp = config.ramp;
   const angleRad = (ramp.angle * Math.PI) / 180;
+  const drag = config.drag ?? 0;
 
-  let blocks = frame.blocks.map((block) => {
-    const gravityAlong = ramp.gravity * Math.sin(angleRad);
-    const normal = block.mass * ramp.gravity * Math.cos(angleRad);
-    const friction = ramp.friction * normal;
-    const drag = (config.drag ?? 0) * block.v * Math.abs(block.v);
+  let blocks: Block[] = frame.blocks.map((block) => {
+    const gravityAlong = ramp.gravity * Math.sin(angleRad); // m/s^2, mass-independent
+    const normal = block.mass * ramp.gravity * Math.cos(angleRad); // N
+    const maxStaticForce = ramp.friction * normal; // N — treats the single friction slider as mu_s too
+
+    // Static friction: a block at rest stays at rest unless gravity's pull
+    // along the slope (mg sinθ) exceeds the maximum static friction force.
+    if (Math.abs(block.v) < 1e-3 && Math.abs(gravityAlong * block.mass) <= maxStaticForce) {
+      return { ...block, v: 0, locked: true };
+    }
+
+    const dir = Math.abs(block.v) < 1e-3 ? Math.sign(gravityAlong) || 1 : Math.sign(block.v);
+    const frictionForce = ramp.friction * normal * dir; // opposes the direction of motion
+    const dragForce = drag * block.v * Math.abs(block.v); // already opposes v automatically
     const net =
-      gravityAlong - friction / Math.max(block.mass, 0.0001) - drag / Math.max(block.mass, 0.0001);
+      gravityAlong - frictionForce / Math.max(block.mass, 0.0001) - dragForce / Math.max(block.mass, 0.0001);
 
-    const nextV = block.v + net * dt;
-    const nextX = block.x + nextV * dt;
+    let nextV = block.v + net * dt;
+    // Friction/drag can brake a block to a stop but shouldn't fling it
+    // backwards on their own within a single step.
+    if (Math.sign(nextV) !== 0 && Math.sign(nextV) !== dir && Math.abs(block.v) > 1e-3) {
+      nextV = 0;
+    }
+    const nextX = block.x + ((block.v + nextV) / 2) * dt; // trapezoidal integration
 
-    return { ...block, v: nextV, x: nextX };
+    return { ...block, v: nextV, x: nextX, locked: false };
   });
 
   if (config.collisionMode && config.collisionMode !== 'none') {

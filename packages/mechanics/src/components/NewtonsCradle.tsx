@@ -1,109 +1,72 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from 'react';
+import Panel from './shared/Panel';
+import PresetPicker from './shared/PresetPicker';
+import SimControls from './shared/SimControls';
+import ConservationPanel from './shared/ConservationPanel';
+import Katex from './shared/Katex';
+import { cradlePresets, getCradlePreset } from '../lib/newtons-cradle/presets';
+import { computeCradleMetrics, heightOf, stepCradle, tangentialSpeed, xPositionOf } from '../lib/newtons-cradle/physics';
+import type { CradleFrame, CradleScenario } from '../lib/newtons-cradle/types';
 
-type Bob = {
-  theta: number;
-  omega: number;
-  x: number;
-  y: number;
-  vx: number;
-  vy: number;
-};
+const PX_PER_M = 220;
+const PIVOT_Y = 46;
 
-type Props = {
-  count?: number;
-  length?: number;
-  radius?: number;
-  gravity?: number;
-  restitution?: number;
-  damping?: number;
-  initialPull?: number;
-  background?: string;
-};
+function cloneFrame(preset: ReturnType<typeof getCradlePreset>): CradleFrame {
+  return {
+    time: 0,
+    pendulums: preset.pendulums.map((p) => ({ ...p })),
+    config: { ...preset.config },
+  };
+}
 
-const clamp = (v: number, min: number, max: number) => Math.max(min, Math.min(max, v));
-
-export default function NewtonsCradleDemo({
-  count = 5,
-  length = 180,
-  radius = 18,
-  gravity = 1400,
-  restitution = 0.995,
-  damping = 0.0015,
-  initialPull = 0.9,
-  background = "#0b1020",
-}: Props) {
+export default function NewtonsCradle() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const frameRef = useRef<CradleFrame>(cloneFrame(getCradlePreset('one-in')));
+  const initialMetricsRef = useRef(computeCradleMetrics(frameRef.current.pendulums, frameRef.current.config.gravity));
   const rafRef = useRef<number | null>(null);
   const lastTsRef = useRef<number | null>(null);
   const runningRef = useRef(true);
+  const timeScaleRef = useRef(1);
 
+  const [presetId, setPresetId] = useState<CradleScenario>('one-in');
+  const [restitution, setRestitution] = useState(1);
+  const [pullAngle, setPullAngle] = useState(0.6);
   const [running, setRunning] = useState(true);
-  const [releaseN, setReleaseN] = useState(1);
-  const [pull, setPull] = useState(initialPull);
-  const [readout, setReadout] = useState({ p: 0, ke: 0 });
+  const [timeScale, setTimeScale] = useState(1);
+  const [readout, setReadout] = useState(() => computeCradleMetrics(frameRef.current.pendulums, frameRef.current.config.gravity));
 
-  const config = useMemo(
-    () => ({ count, length, radius, gravity, restitution, damping, background }),
-    [count, length, radius, gravity, restitution, damping, background]
-  );
+  runningRef.current = running;
+  timeScaleRef.current = timeScale;
 
-  const stateRef = useRef<Bob[]>([]);
+  const preset = useMemo(() => getCradlePreset(presetId), [presetId]);
 
-  const makeState = (n = releaseN) => {
-    const arr: Bob[] = [];
-    for (let i = 0; i < config.count; i++) {
-      arr.push({
-        theta: i < n ? -pull : 0,
-        omega: 0,
-        x: 0,
-        y: 0,
-        vx: 0,
-        vy: 0,
-      });
-    }
-    return arr;
-  };
-
-  const reset = (n = releaseN) => {
-    stateRef.current = makeState(n);
-    lastTsRef.current = null;
-    setReadout({ p: 0, ke: 0 });
+  const resetSim = () => {
+    const next = cloneFrame(preset);
+    next.config.restitution = restitution;
+    const pulledCount = presetId === 'two-in' ? 2 : 1;
+    next.pendulums = next.pendulums.map((p, i) =>
+      i < pulledCount ? { ...p, theta: -pullAngle, omega: 0 } : { ...p, theta: 0, omega: 0 }
+    );
+    frameRef.current = next;
+    const metrics = computeCradleMetrics(next.pendulums, next.config.gravity);
+    initialMetricsRef.current = metrics;
+    setReadout(metrics);
   };
 
   useEffect(() => {
-    reset(releaseN);
-  }, [config.count]); // eslint-disable-line react-hooks/exhaustive-deps
+    setRestitution(preset.config.restitution);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [presetId]);
 
   useEffect(() => {
-    runningRef.current = running;
-  }, [running]);
-
-  const getPivots = (w: number) => {
-    const totalWidth = config.count * config.radius * 2 + (config.count - 1) * 6;
-    const startX = (w - totalWidth) / 2 + config.radius;
-    const pivotY = 70;
-
-    return Array.from({ length: config.count }, (_, i) => ({
-      x: startX + i * (config.radius * 2 + 6),
-      y: pivotY,
-    }));
-  };
-
-  const computeBobPositions = (arr: Bob[], w: number) => {
-    const pivots = getPivots(w);
-    for (let i = 0; i < arr.length; i++) {
-      const bob = arr[i];
-      const p = pivots[i];
-      bob.x = p.x + config.length * Math.sin(bob.theta);
-      bob.y = p.y + config.length * Math.cos(bob.theta);
-    }
-    return pivots;
-  };
+    resetSim();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [presetId, restitution, pullAngle]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    const ctx = canvas.getContext("2d");
+    const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
     const resize = () => {
@@ -113,118 +76,70 @@ export default function NewtonsCradleDemo({
       canvas.height = Math.floor(rect.height * dpr);
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     };
-
     resize();
-    window.addEventListener("resize", resize);
+    window.addEventListener('resize', resize);
 
     const draw = () => {
       const w = canvas.clientWidth;
       const h = canvas.clientHeight;
       ctx.clearRect(0, 0, w, h);
-      ctx.fillStyle = config.background;
+      ctx.fillStyle = '#0b0f1a';
       ctx.fillRect(0, 0, w, h);
 
-      const arr = stateRef.current;
-      const pivots = computeBobPositions(arr, w);
+      const frame = frameRef.current;
+      const centerX = w / 2;
 
-      for (let i = 0; i < arr.length; i++) {
-        const bob = arr[i];
-        const p = pivots[i];
+      ctx.strokeStyle = 'rgba(238,242,246,0.16)';
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(centerX - 200, PIVOT_Y - 8);
+      ctx.lineTo(centerX + 200, PIVOT_Y - 8);
+      ctx.stroke();
 
-        ctx.strokeStyle = "#7dd3fc";
-        ctx.lineWidth = 2;
+      for (const p of frame.pendulums) {
+        const pivotX = centerX + p.restX * PX_PER_M;
+        const ballX = pivotX + p.length * Math.sin(p.theta) * PX_PER_M;
+        const ballY = PIVOT_Y + p.length * Math.cos(p.theta) * PX_PER_M;
+        const radiusPx = frame.config.ballRadius * PX_PER_M;
+
+        ctx.strokeStyle = 'rgba(238,242,246,0.3)';
+        ctx.lineWidth = 1.5;
         ctx.beginPath();
-        ctx.moveTo(p.x, p.y);
-        ctx.lineTo(bob.x, bob.y);
+        ctx.moveTo(pivotX, PIVOT_Y);
+        ctx.lineTo(ballX, ballY);
         ctx.stroke();
 
         ctx.beginPath();
-        ctx.arc(bob.x, bob.y, config.radius, 0, Math.PI * 2);
-        ctx.fillStyle = Math.abs(bob.omega) > 0.001 ? "#38bdf8" : "#e2e8f0";
+        ctx.arc(ballX, ballY, radiusPx, 0, Math.PI * 2);
+        ctx.fillStyle = p.color ?? '#00c2a8';
         ctx.fill();
-        ctx.strokeStyle = "#1f2937";
+        ctx.strokeStyle = 'rgba(11,15,26,0.6)';
+        ctx.lineWidth = 2;
         ctx.stroke();
+
+        ctx.fillStyle = '#0b0f1a';
+        ctx.font = '600 11px Inter, system-ui, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText(`${p.mass.toFixed(1)}kg`, ballX, ballY + 4);
       }
-
-      ctx.fillStyle = "#cbd5e1";
-      ctx.font = "14px system-ui, sans-serif";
-      ctx.fillText("Newton's cradle", 16, 22);
-      ctx.fillText(`p = ${readout.p.toFixed(2)}   K = ${readout.ke.toFixed(2)}`, 16, 42);
-      ctx.fillText(`release = ${releaseN}   pull = ${pull.toFixed(2)} rad`, 16, 62);
-      ctx.fillText(`e = ${config.restitution.toFixed(3)}   damping = ${config.damping.toFixed(4)}`, 16, 82);
-
-      ctx.fillStyle = "#94a3b8";
-      ctx.font = "12px ui-monospace, SFMono-Regular, monospace";
-      ctx.fillText("p = Σmv   K = Σ½mv²", 16, h - 18);
+      ctx.textAlign = 'left';
     };
 
     const step = (ts: number) => {
       if (lastTsRef.current == null) lastTsRef.current = ts;
-      const dt = Math.min(0.02, (ts - lastTsRef.current) / 1000);
+      const dtReal = Math.min(0.033, (ts - lastTsRef.current) / 1000);
       lastTsRef.current = ts;
 
       if (runningRef.current) {
-        const arr = stateRef.current;
-        computeBobPositions(arr, canvas.clientWidth);
-
+        const dt = dtReal * timeScaleRef.current;
         const substeps = 4;
-        const hdt = dt / substeps;
-
-        for (let s = 0; s < substeps; s++) {
-          for (const bob of arr) {
-            const a =
-              -(config.gravity / config.length) * Math.sin(bob.theta) -
-              config.damping * bob.omega;
-            bob.omega += a * hdt;
-            bob.theta += bob.omega * hdt;
-          }
-
-          for (let i = 0; i < arr.length - 1; i++) {
-            const left = arr[i];
-            const right = arr[i + 1];
-
-            const dx = right.x - left.x;
-            const minDx = config.radius * 2;
-
-            if (Math.abs(dx) < minDx && left.vx > right.vx) {
-              const m1 = 1;
-              const m2 = 1;
-              const v1 = left.vx;
-              const v2 = right.vx;
-
-              const v1p =
-                ((m1 - m2) / (m1 + m2)) * v1 +
-                ((2 * m2) / (m1 + m2)) * v2;
-              const v2p =
-                ((2 * m1) / (m1 + m2)) * v1 +
-                ((m2 - m1) / (m1 + m2)) * v2;
-
-              left.vx = v1p * config.restitution;
-              right.vx = v2p * config.restitution;
-
-              left.omega = left.vx / config.length;
-              right.omega = right.vx / config.length;
-
-              const overlap = minDx - Math.abs(dx);
-              const shift = overlap / 2 + 0.01;
-              left.theta -= Math.sign(dx) * shift / config.length;
-              right.theta += Math.sign(dx) * shift / config.length;
-            }
-          }
-
-          for (const bob of arr) {
-            bob.vx = config.length * bob.omega * Math.cos(bob.theta);
-            bob.vy = -config.length * bob.omega * Math.sin(bob.theta);
-          }
+        let frame = frameRef.current;
+        for (let i = 0; i < substeps; i++) {
+          frame = stepCradle(frame, dt / substeps);
         }
-
-        let p = 0;
-        let ke = 0;
-        for (const bob of arr) {
-          p += bob.vx;
-          ke += 0.5 * (bob.vx * bob.vx + bob.vy * bob.vy);
-        }
-        setReadout({ p, ke });
+        frameRef.current = frame;
+        const metrics = computeCradleMetrics(frame.pendulums, frame.config.gravity);
+        setReadout(metrics);
       }
 
       draw();
@@ -232,95 +147,100 @@ export default function NewtonsCradleDemo({
     };
 
     rafRef.current = requestAnimationFrame(step);
-
     return () => {
-      window.removeEventListener("resize", resize);
+      window.removeEventListener('resize', resize);
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
+      lastTsRef.current = null;
     };
-  }, [config, pull, releaseN]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  const onReset = () => reset(releaseN);
-
-  const onRelease = () => {
-    stateRef.current = makeState(releaseN);
-    setRunning(true);
-    runningRef.current = true;
-    lastTsRef.current = null;
+  const stepOnce = () => {
+    setRunning(false);
+    frameRef.current = stepCradle(frameRef.current, 1 / 60);
+    setReadout(computeCradleMetrics(frameRef.current.pendulums, frameRef.current.config.gravity));
   };
 
+  const initial = initialMetricsRef.current;
+
   return (
-    <div
-      style={{
-        display: "grid",
-        gap: 16,
-        gridTemplateColumns: "1fr 280px",
-        alignItems: "start",
-        color: "#e2e8f0",
-        background: "#0f172a",
-        padding: 16,
-        borderRadius: 16,
-      }}
-    >
-      <canvas
-        ref={canvasRef}
-        style={{
-          width: "100%",
-          height: 420,
-          borderRadius: 12,
-          background: config.background,
-        }}
-      />
+    <section className="mech-dashboard" aria-label="Newton's cradle dashboard">
+      <Panel title="Controls" subtitle="Choose a scenario and set it swinging.">
+        <div className="controls">
+          <PresetPicker value={presetId} onChange={(id) => setPresetId(id as CradleScenario)} presets={cradlePresets} />
 
-      <div style={{ display: "grid", gap: 12 }}>
-        <div style={{ fontSize: 20, fontWeight: 700 }}>Newton's cradle</div>
+          <label>
+            Pull-back angle
+            <input type="range" min="0.2" max="1.1" step="0.01" value={pullAngle} onChange={(e) => setPullAngle(Number(e.target.value))} />
+            <span>
+              {pullAngle.toFixed(2)} rad ({((pullAngle * 180) / Math.PI).toFixed(0)}°)
+            </span>
+          </label>
 
-        <label style={{ display: "grid", gap: 6 }}>
-          Release balls: {releaseN}
-          <input
-            type="range"
-            min={1}
-            max={Math.max(1, Math.min(3, config.count))}
-            value={releaseN}
-            onChange={(e) => setReleaseN(Number(e.target.value))}
+          <label>
+            Restitution (e)
+            <input type="range" min="0.3" max="1" step="0.01" value={restitution} onChange={(e) => setRestitution(Number(e.target.value))} />
+            <span>
+              {restitution.toFixed(2)} ({restitution >= 0.995 ? 'elastic' : 'lossy'})
+            </span>
+          </label>
+
+          <SimControls
+            running={running}
+            onToggleRun={() => setRunning((r) => !r)}
+            onReset={resetSim}
+            onStep={stepOnce}
+            timeScale={timeScale}
+            onTimeScaleChange={setTimeScale}
           />
-        </label>
 
-        <label style={{ display: "grid", gap: 6 }}>
-          Pull angle: {pull.toFixed(2)} rad
-          <input
-            type="range"
-            min={0.2}
-            max={1.2}
-            step={0.01}
-            value={pull}
-            onChange={(e) => setPull(Number(e.target.value))}
-          />
-        </label>
-
-        <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-          <button onClick={() => setRunning((v) => !v)}>
-            {running ? "Pause" : "Play"}
-          </button>
-          <button onClick={onReset}>Reset</button>
-          <button onClick={onRelease}>Release</button>
+          {preset.notes && <p className="callout">{preset.notes}</p>}
         </div>
+      </Panel>
 
-        <div
-          style={{
-            fontFamily: "ui-monospace, SFMono-Regular, monospace",
-            fontSize: 13,
-            lineHeight: 1.5,
-            padding: 12,
-            borderRadius: 12,
-            background: "#111827",
+      <section className="mech-panel" aria-label="Cradle simulation">
+        <div className="mech-panel__header">
+          <h2>Newton&apos;s Cradle</h2>
+          <p>Each ball is a real pendulum, not a canned animation.</p>
+        </div>
+        <div className="mech-panel__body mech-panel__body--chart">
+          <div className="chart-panel">
+            <canvas ref={canvasRef} className="chart-stage" style={{ width: '100%', height: '100%' }} />
+          </div>
+        </div>
+      </section>
+
+      <Panel title="Values" subtitle="Momentum, energy, and the collision rule.">
+        <ConservationPanel
+          momentum={{ before: initial.momentum, after: readout.momentum }}
+          energy={{
+            kinetic: readout.kineticEnergy,
+            potential: readout.potentialEnergy,
+            dissipated: initial.totalEnergy - readout.totalEnergy > 0 ? initial.totalEnergy - readout.totalEnergy : 0,
+            initialTotal: initial.totalEnergy,
           }}
-        >
-          <div>p = Σmv</div>
-          <div>K = Σ½mv²</div>
-          <div>v1' = ((m1 - m2)/(m1 + m2))v1 + (2m2/(m1 + m2))v2</div>
-          <div>v2' = (2m1/(m1 + m2))v1 + ((m2 - m1)/(m1 + m2))v2</div>
-        </div>
-      </div>
-    </div>
+        />
+
+        <section className="equation-card" aria-label="Collision rule">
+          <div className="equation-card__header">
+            <h3>The collision rule</h3>
+            <p>The same 1D restitution formula used throughout this lab &mdash; only the geometry (a swing instead of a ramp) changes.</p>
+          </div>
+          <Katex math="v_1' = \dfrac{(m_1 - e m_2)v_1 + (1+e)m_2 v_2}{m_1 + m_2}" display />
+          <Katex math="v_2' = \dfrac{(m_2 - e m_1)v_2 + (1+e)m_1 v_1}{m_1 + m_2}" display />
+          <p className="hint">
+            e = 1 conserves kinetic energy exactly (elastic); e &lt; 1 conserves momentum but loses kinetic energy to sound and
+            deformation at each click.
+          </p>
+        </section>
+
+        <p className="hint">
+          Not shown here: SUVAT. A pendulum&apos;s acceleration changes continuously with its angle, so the constant-acceleration
+          equations don&apos;t apply &mdash; energy and momentum conservation are the right tools instead.
+        </p>
+      </Panel>
+    </section>
   );
 }
+
+export { tangentialSpeed, xPositionOf, heightOf };

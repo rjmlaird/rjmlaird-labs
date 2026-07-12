@@ -1,29 +1,44 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import Card from '../components/ui/Card.astro';
 ---
 
-<Layout title="Mechanics Lab">
+<Layout title="Mechanics Lab" current="index">
   <main class="page">
     <header class="hero">
       <p class="eyebrow">Labs</p>
       <h1>Mechanics Experiments</h1>
       <p class="lede">
-        Explore motion, energy, friction, mass, momentum..
+        Four interactive classical-mechanics experiments, all built on the same physics engine: SUVAT equations,
+        conservation of energy, and conservation of momentum, worked out live with the numbers you choose.
       </p>
     </header>
 
-    <section class="page-notes">
-      <div class="card">
-        <p class="card__eyebrow">Start here</p>
-        <h3 class="card__title">Choose a mechanics experiment</h3>
-        <p class="card__description">
-          Use the ramp simulation for motion and forces, or open the Newton’s cradle demo for momentum transfer.
-        </p>
-        <div class="button-row">
-          <a class="btn btn--primary" href="/ramp">Open ramp</a>
-          <a class="btn btn--secondary" href="/newtonscradle">Open Newton&apos;s cradle</a>
-        </div>
-      </div>
+    <section class="page-notes card-grid">
+      <Card
+        eyebrow="Forces & friction"
+        title="Ramp"
+        href="/ramp"
+        description="Static vs. kinetic friction, air resistance, and block-on-block collisions on an incline."
+      />
+      <Card
+        eyebrow="Collisions"
+        title="Newton's Cradle"
+        href="/newtonscradle"
+        description="Real pendulum physics — pull back one or two balls and watch momentum and energy transfer through the row."
+      />
+      <Card
+        eyebrow="Kinematics"
+        title="Projectile Motion"
+        href="/projectile"
+        description="Launch speed, angle, and height, with independent horizontal and vertical SUVAT equations."
+      />
+      <Card
+        eyebrow="Real-world physics"
+        title="Stopping Distances"
+        href="/stoppingdistance"
+        description="Reaction distance plus SUVAT-derived braking distance, across speeds and road conditions."
+      />
     </section>
   </main>
 </Layout>

@@ -1,84 +1,83 @@
-import type { Scenario, SimulationConfig } from './types';
+import type { CradleConfig, CradleScenario, Pendulum } from './types';
 
-export type Preset = {
-  id: Scenario;
+export type CradlePreset = {
+  id: CradleScenario;
   label: string;
   description: string;
   notes?: string;
-  config: SimulationConfig;
+  config: CradleConfig;
+  pendulums: Pendulum[];
 };
 
-export const presets: Preset[] = [
+const LENGTH = 1.2; // m, shared string length
+const RADIUS = 0.18; // m, ball radius (so centres are 0.36 m apart when touching)
+const SLOT = (i: number, n: number) => (i - (n - 1) / 2) * (2 * RADIUS);
+
+function makeRow(n: number, masses: number[], colors: string[]): Pendulum[] {
+  return Array.from({ length: n }, (_, i) => ({
+    id: `ball-${i + 1}`,
+    mass: masses[i] ?? masses[masses.length - 1],
+    length: LENGTH,
+    theta: 0,
+    omega: 0,
+    restX: SLOT(i, n),
+    color: colors[i % colors.length],
+  }));
+}
+
+const PALETTE = ['#00c2a8', '#f5a623', '#60a5fa', '#f87171', '#a78bfa'];
+
+export const cradlePresets: CradlePreset[] = [
   {
-    id: 'frictionless',
-    label: 'Frictionless',
-    description: 'A clean ramp with no friction, ideal for showing pure acceleration down the slope.',
-    notes: 'This preset isolates gravity along the incline and keeps losses minimal.',
-    config: {
-      ramp: { length: 8, angle: 18, friction: 0, gravity: 9.81 },
-      blocks: [{ id: 'block-1', mass: 2, x: 0.5, v: 0, size: 0.6, color: '#00c2a8' }],
-      collisionMode: 'none',
-      restitution: 0.9,
-      drag: 0,
-    },
+    id: 'one-in',
+    label: 'One ball in',
+    description: 'Pull one ball back and release — momentum and energy pass through the row so only the last ball flies out.',
+    notes: 'With equal masses and elastic collisions, the middle balls barely move: each collision hands the full momentum and kinetic energy on to the next ball.',
+    config: { gravity: 9.81, restitution: 1, ballRadius: RADIUS },
+    pendulums: (() => {
+      const row = makeRow(5, [1, 1, 1, 1, 1], PALETTE);
+      row[0] = { ...row[0], theta: -0.6 };
+      return row;
+    })(),
   },
   {
-    id: 'friction',
-    label: 'Moderate friction',
-    description: 'Adds a little resistance so motion slows and energy loss becomes visible.',
-    notes: 'Use this to compare acceleration against frictional losses.',
-    config: {
-      ramp: { length: 8, angle: 18, friction: 0.18, gravity: 9.81 },
-      blocks: [{ id: 'block-1', mass: 2, x: 0.5, v: 0, size: 0.6, color: '#f5a623' }],
-      collisionMode: 'none',
-      restitution: 0.85,
-      drag: 0.01,
-    },
+    id: 'two-in',
+    label: 'Two balls in',
+    description: 'Pull back two balls together — two balls fly out the far side at (nearly) the same speed they arrived with.',
+    config: { gravity: 9.81, restitution: 1, ballRadius: RADIUS },
+    pendulums: (() => {
+      const row = makeRow(5, [1, 1, 1, 1, 1], PALETTE);
+      row[0] = { ...row[0], theta: -0.6 };
+      row[1] = { ...row[1], theta: -0.6 };
+      return row;
+    })(),
   },
   {
-    id: 'high-friction',
-    label: 'High friction',
-    description: 'Shows how strong friction can nearly stop motion on the ramp.',
-    notes: 'When friction is high enough, the block may settle rather than accelerate continuously.',
-    config: {
-      ramp: { length: 8, angle: 18, friction: 0.42, gravity: 9.81 },
-      blocks: [{ id: 'block-1', mass: 2.2, x: 0.5, v: 0, size: 0.6, color: '#ff8a4c' }],
-      collisionMode: 'none',
-      restitution: 0.8,
-      drag: 0.02,
-    },
+    id: 'unequal-mass',
+    label: 'Unequal masses',
+    description: 'Swing a heavier ball into a row of lighter ones — momentum still balances, but it can no longer all leave as a single ball at the same speed.',
+    notes: 'Compare the momentum and energy panels before and after: momentum is always conserved, but a mass mismatch means kinetic energy and momentum cannot both be carried away by a single equal-mass ball, so the outgoing motion looks different from the classic case.',
+    config: { gravity: 9.81, restitution: 1, ballRadius: RADIUS },
+    pendulums: (() => {
+      const row = makeRow(5, [2.4, 1, 1, 1, 1], PALETTE);
+      row[0] = { ...row[0], theta: -0.6 };
+      return row;
+    })(),
   },
   {
-    id: 'incline',
-    label: 'Steeper incline',
-    description: 'A steeper angle increases the downslope force and speeds up the block.',
-    notes: 'Angle is the main variable here; compare the acceleration with other presets.',
-    config: {
-      ramp: { length: 8, angle: 30, friction: 0.12, gravity: 9.81 },
-      blocks: [{ id: 'block-1', mass: 1.8, x: 0.5, v: 0, size: 0.6, color: '#52d68a' }],
-      collisionMode: 'none',
-      restitution: 0.85,
-      drag: 0.01,
-    },
-  },
-  {
-    id: 'collision',
-    label: 'Two-block collision',
-    description: 'Two blocks moving on the ramp demonstrate collision behavior and momentum transfer.',
-    notes: 'This preset is useful for showing how mass and restitution affect the result.',
-    config: {
-      ramp: { length: 8, angle: 18, friction: 0.08, gravity: 9.81 },
-      blocks: [
-        { id: 'block-1', mass: 2, x: 0.5, v: 1.5, size: 0.6, color: '#00c2a8' },
-        { id: 'block-2', mass: 1.4, x: 3.2, v: 0, size: 0.5, color: '#f5a623' },
-      ],
-      collisionMode: 'bounce',
-      restitution: 0.88,
-      drag: 0.01,
-    },
+    id: 'inelastic',
+    label: 'Inelastic collisions',
+    description: 'The same one-ball swing, but with lossy collisions — momentum is still conserved, energy is not.',
+    notes: 'Watch the energy panel: kinetic + potential energy visibly drops after each collision, while the momentum check still balances.',
+    config: { gravity: 9.81, restitution: 0.6, ballRadius: RADIUS },
+    pendulums: (() => {
+      const row = makeRow(5, [1, 1, 1, 1, 1], PALETTE);
+      row[0] = { ...row[0], theta: -0.6 };
+      return row;
+    })(),
   },
 ];
 
-export function getPreset(id: Scenario): Preset {
-  return presets.find((preset) => preset.id === id) ?? presets[0];
+export function getCradlePreset(id: CradleScenario): CradlePreset {
+  return cradlePresets.find((p) => p.id === id) ?? cradlePresets[0];
 }

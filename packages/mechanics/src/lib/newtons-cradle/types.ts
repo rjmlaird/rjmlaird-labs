@@ -1,50 +1,30 @@
-export type MotionMode = 'idle' | 'running' | 'paused';
-export type Scenario = 'frictionless' | 'friction' | 'high-friction' | 'incline' | 'collision';
-
-export type ReadoutItem = {
-  label: string;
-  value: string;
-};
-
-export type Block = {
+export type Pendulum = {
   id: string;
-  mass: number;
-  x: number;
-  v: number;
-  size: number;
+  mass: number; // kg
+  length: number; // m, string/rod length (shared by all pendulums on a real cradle)
+  theta: number; // rad, angle from vertical (positive = displaced toward the "swing-out" side)
+  omega: number; // rad/s, angular velocity
+  restX: number; // m, this ball's slot position along the row when hanging at theta = 0
   color?: string;
 };
 
-export type Ramp = {
-  length: number;
-  angle: number;
-  friction: number;
-  gravity: number;
+export type CradleConfig = {
+  gravity: number; // m/s^2
+  restitution: number; // 0 = perfectly inelastic, 1 = perfectly elastic (ball-to-ball)
+  ballRadius: number; // m, for contact detection between neighbouring balls
 };
 
-export type SimulationConfig = {
-  ramp: Ramp;
-  blocks: Block[];
-  restitution?: number;
-  drag?: number;
-  collisionMode?: 'none' | 'bounce' | 'merge';
+export type CradleMetrics = {
+  momentum: number; // kg*m/s, sum of m_i * (L_i * omega_i) — exact tangential momentum
+  kineticEnergy: number; // J
+  potentialEnergy: number; // J, relative to each pendulum's lowest point
+  totalEnergy: number; // J
 };
 
-export type SimulationMetrics = {
-  acceleration: number;
-  normalForce: number;
-  frictionForce: number;
-  dragForce: number;
-  momentum: number;
-  kineticEnergy: number;
-  potentialEnergy: number;
-  energyLost: number;
-};
-
-export type SimulationFrame = {
+export type CradleFrame = {
   time: number;
-  config: SimulationConfig;
-  metrics: SimulationMetrics;
-  blocks: Block[];
-  mode: MotionMode;
+  pendulums: Pendulum[];
+  config: CradleConfig;
 };
+
+export type CradleScenario = 'one-in' | 'two-in' | 'unequal-mass' | 'inelastic';

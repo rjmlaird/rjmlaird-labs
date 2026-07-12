@@ -1,0 +1,29 @@
+---
+export interface Props {
+  current: 'index' | 'ramp' | 'newtonscradle' | 'projectile' | 'stoppingdistance';
+}
+
+const { current } = Astro.props;
+
+const items = [
+  { id: 'ramp', href: '/ramp', label: 'Ramp' },
+  { id: 'newtonscradle', href: '/newtonscradle', label: "Newton's Cradle" },
+  { id: 'projectile', href: '/projectile', label: 'Projectile' },
+  { id: 'stoppingdistance', href: '/stoppingdistance', label: 'Stopping Distances' },
+] as const;
+---
+
+<nav class="experiment-nav" aria-label="Mechanics experiments">
+  <a href="/" class:list={['experiment-nav__home', current === 'index' && 'is-active']}>
+    All experiments
+  </a>
+  <div class="experiment-nav__tabs">
+    {
+      items.map((item) => (
+        <a href={item.href} class:list={['experiment-nav__tab', current === item.id && 'is-active']}>
+          {item.label}
+        </a>
+      ))
+    }
+  </div>
+</nav>

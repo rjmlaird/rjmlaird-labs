@@ -1,98 +1,85 @@
-import type { Block, SimulationConfig, SimulationFrame, SimulationMetrics } from './types';
+import type { CradleConfig, CradleFrame, CradleMetrics, Pendulum } from './types';
 
-function clamp(value: number, min: number, max: number): number {
-  return Math.max(min, Math.min(max, value));
+/**
+ * A Newton's cradle ball is, between collisions, just a simple pendulum:
+ * theta'' = -(g/L) sin(theta). We integrate the *full* nonlinear pendulum
+ * equation (not the small-angle approximation) since a cradle is often
+ * pulled back far enough that sin(theta) ~ theta stops being accurate.
+ *
+ * Collisions between neighbouring balls are resolved using their exact
+ * tangential speed L*omega (which is purely horizontal at the bottom of the
+ * swing, where contact happens) via the same 1D restitution formula used
+ * for the ramp -- the physics is identical, only the geometry differs.
+ */
+
+export function tangentialSpeed(p: Pendulum): number {
+  return p.length * p.omega;
 }
 
-export function ensureInBounds(blocks: Block[], rampLength: number): Block[] {
-  return blocks.map((block) => ({ ...block, x: clamp(block.x, 0, rampLength) }));
+export function xPositionOf(p: Pendulum): number {
+  return p.restX + p.length * Math.sin(p.theta);
 }
 
-export function applyCollisionMode(blocks: Block[], restitution = 0.85): Block[] {
-  if (blocks.length < 2) return blocks;
-
-  const sorted = [...blocks].sort((a, b) => a.x - b.x);
-  const [a, b] = sorted;
-
-  const aRight = a.x + a.size / 2;
-  const bLeft = b.x - b.size / 2;
-
-  if (aRight < bLeft) return blocks;
-
-  const totalMass = a.mass + b.mass;
-  const nextV1 =
-    ((a.mass - restitution * b.mass) * a.v + (1 + restitution) * b.mass * b.v) / totalMass;
-  const nextV2 =
-    ((b.mass - restitution * a.mass) * b.v + (1 + restitution) * a.mass * a.v) / totalMass;
-
-  return blocks.map((block) => {
-    if (block.id === a.id) return { ...block, v: nextV1, x: b.x - a.size / 2 - 0.001 };
-    if (block.id === b.id) return { ...block, v: nextV2, x: a.x + b.size / 2 + 0.001 };
-    return block;
-  });
+export function heightOf(p: Pendulum): number {
+  return p.length * (1 - Math.cos(p.theta));
 }
 
-export function computeMetrics(config: SimulationConfig, blocks: Block[]): SimulationMetrics {
-  const ramp = config.ramp;
-  const avgMass = blocks.reduce((sum, b) => sum + b.mass, 0) / Math.max(blocks.length, 1);
-  const avgSpeed = blocks.reduce((sum, b) => sum + Math.abs(b.v), 0) / Math.max(blocks.length, 1);
-  const angleRad = (ramp.angle * Math.PI) / 180;
-
-  const gravityAlong = ramp.gravity * Math.sin(angleRad);
-  const normalForce = avgMass * ramp.gravity * Math.cos(angleRad);
-  const frictionForce = ramp.friction * normalForce;
-  const dragForce = (config.drag ?? 0) * avgSpeed * avgSpeed;
-  const acceleration =
-    gravityAlong - frictionForce / Math.max(avgMass, 0.0001) - dragForce / Math.max(avgMass, 0.0001);
-
-  const momentum = blocks.reduce((sum, b) => sum + b.mass * b.v, 0);
-  const kineticEnergy = blocks.reduce((sum, b) => sum + 0.5 * b.mass * b.v * b.v, 0);
-  const potentialEnergy = blocks.reduce(
-    (sum, b) => sum + b.mass * ramp.gravity * (ramp.length - b.x) * Math.sin(angleRad),
-    0,
-  );
-  const energyLost = Math.max(0, frictionForce * avgSpeed + dragForce * avgSpeed);
-
-  return {
-    acceleration,
-    normalForce,
-    frictionForce,
-    dragForce,
-    momentum,
-    kineticEnergy,
-    potentialEnergy,
-    energyLost,
-  };
+export function stepPendulum(p: Pendulum, dt: number, gravity: number): Pendulum {
+  const alpha = -(gravity / p.length) * Math.sin(p.theta);
+  const omega = p.omega + alpha * dt;
+  const theta = p.theta + omega * dt;
+  return { ...p, theta, omega };
 }
 
-export function stepSimulation(frame: SimulationFrame, dt = 1 / 60): SimulationFrame {
-  const { config } = frame;
-  const ramp = config.ramp;
-  const angleRad = (ramp.angle * Math.PI) / 180;
+function clampToUnit(v: number) {
+  return Math.max(-1, Math.min(1, v));
+}
 
-  let blocks = frame.blocks.map((block) => {
-    const gravityAlong = ramp.gravity * Math.sin(angleRad);
-    const normal = block.mass * ramp.gravity * Math.cos(angleRad);
-    const friction = ramp.friction * normal;
-    const drag = (config.drag ?? 0) * block.v * Math.abs(block.v);
-    const net =
-      gravityAlong - friction / Math.max(block.mass, 0.0001) - drag / Math.max(block.mass, 0.0001);
+/** Resolve contact between neighbouring balls (fixed left-to-right order along the rack). */
+export function resolveCradleCollisions(pendulums: Pendulum[], config: CradleConfig): Pendulum[] {
+  const balls = [...pendulums];
+  for (let i = 0; i < balls.length - 1; i++) {
+    const A = balls[i];
+    const B = balls[i + 1];
+    const gap = xPositionOf(B) - xPositionOf(A) - 2 * config.ballRadius;
+    const vA = tangentialSpeed(A);
+    const vB = tangentialSpeed(B);
 
-    const nextV = block.v + net * dt;
-    const nextX = block.x + nextV * dt;
+    if (gap <= 0 && vA > vB) {
+      const { mass: m1 } = A;
+      const { mass: m2 } = B;
+      const e = config.restitution;
+      const v1p = ((m1 - e * m2) * vA + (1 + e) * m2 * vB) / (m1 + m2);
+      const v2p = ((m2 - e * m1) * vB + (1 + e) * m1 * vA) / (m1 + m2);
 
-    return { ...block, v: nextV, x: nextX };
-  });
+      const overlap = -gap;
+      const nextA = { ...A, omega: v1p / A.length };
+      const nextB = { ...B, omega: v2p / B.length };
+      nextA.theta = Math.asin(clampToUnit((xPositionOf(A) - overlap / 2 - A.restX) / A.length));
+      nextB.theta = Math.asin(clampToUnit((xPositionOf(B) + overlap / 2 - B.restX) / B.length));
 
-  if (config.collisionMode && config.collisionMode !== 'none') {
-    blocks = applyCollisionMode(blocks, config.restitution ?? 0.85);
+      balls[i] = nextA;
+      balls[i + 1] = nextB;
+    }
   }
+  return balls;
+}
 
-  blocks = ensureInBounds(blocks, ramp.length);
+export function stepCradle(frame: CradleFrame, dt = 1 / 60): CradleFrame {
+  const stepped = frame.pendulums.map((p) => stepPendulum(p, dt, frame.config.gravity));
+  const resolved = resolveCradleCollisions(stepped, frame.config);
+  return { ...frame, time: frame.time + dt, pendulums: resolved };
+}
 
-  return {
-    ...frame,
-    time: frame.time + dt,
-    blocks,
-  };
+export function computeCradleMetrics(pendulums: Pendulum[], gravity: number): CradleMetrics {
+  let momentum = 0;
+  let kineticEnergy = 0;
+  let potentialEnergy = 0;
+  for (const p of pendulums) {
+    const v = tangentialSpeed(p);
+    momentum += p.mass * v;
+    kineticEnergy += 0.5 * p.mass * v * v;
+    potentialEnergy += p.mass * gravity * heightOf(p);
+  }
+  return { momentum, kineticEnergy, potentialEnergy, totalEnergy: kineticEnergy + potentialEnergy };
 }
