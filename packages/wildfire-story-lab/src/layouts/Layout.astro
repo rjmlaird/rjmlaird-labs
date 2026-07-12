@@ -1,236 +1,16 @@
 ---
+import '../styles/global.css';
+
 const { title, description = 'Before-and-after satellite storytelling for wildfire recovery, built by Ryan Laird.' } = Astro.props;
 ---
+
 <html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
     <title>{title}</title>
-    <style>
-      :root {
-        color-scheme: dark;
-
-        /* Ryan Laird / RJML palette — dark space field, orbit-green signature accent */
-        --bg: #080d13;
-        --bg-raised: #0e161f;
-        --bg-inset: #0a1119;
-        --line: #1c2a38;
-        --line-soft: #16212c;
-
-        --ink: #eef3f6;
-        --ink-soft: #9fb0bd;
-        --ink-faint: #6d8091;
-
-        --orbit: #52d68a;
-        --orbit-dim: #234437;
-        --orbit-ink: #08120d;
-
-        --ember: #ff8a4c;
-        --ember-dim: #3c2216;
-
-        --font-display: 'Fraunces', 'Iowan Old Style', ui-serif, Georgia, serif;
-        --font-body: 'Inter', system-ui, -apple-system, sans-serif;
-
-        --radius-lg: 20px;
-        --radius-md: 14px;
-        --radius-sm: 9px;
-      }
-
-      * { box-sizing: border-box; }
-
-      html { scrollbar-color: var(--line) var(--bg); }
-
-      body {
-        margin: 0;
-        font-family: var(--font-body);
-        background:
-          radial-gradient(1100px 520px at 12% -10%, #10241c 0%, transparent 60%),
-          radial-gradient(900px 480px at 100% 0%, #1a1330 0%, transparent 55%),
-          var(--bg);
-        color: var(--ink);
-      }
-
-      a { color: inherit; }
-
-      h1, h2, h3 { font-family: var(--font-display); font-weight: 500; letter-spacing: -0.01em; }
-
-      /* site chrome */
-      .site-header {
-        max-width: 1280px;
-        margin: 0 auto;
-        padding: 22px 24px 0;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 16px;
-      }
-      .brand {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        text-decoration: none;
-        color: var(--ink);
-      }
-      .brand-mark {
-        width: 32px; height: 32px;
-        border-radius: 50%;
-        background: conic-gradient(from 200deg, var(--orbit), #1f8f5c 40%, transparent 65%);
-        border: 1px solid var(--line);
-        flex: none;
-      }
-      .brand-text { display: grid; line-height: 1.15; }
-      .brand-text strong { font-family: var(--font-display); font-size: 1rem; font-weight: 500; }
-      .brand-text span { font-size: 0.72rem; color: var(--ink-faint); text-transform: uppercase; letter-spacing: 0.08em; }
-      .site-nav { display: flex; align-items: center; gap: 18px; font-size: 0.9rem; color: var(--ink-soft); }
-      .site-nav a { text-decoration: none; }
-      .site-nav a:hover { color: var(--orbit); }
-
-      .shell {
-        max-width: 1280px;
-        margin: 0 auto;
-        padding: 24px;
-      }
-      .page {
-        display: grid;
-        grid-template-columns: 1fr;
-        gap: 16px;
-        align-items: start;
-      }
-      .content { display: grid; gap: 16px; }
-
-      .card {
-        background: var(--bg-raised);
-        border: 1px solid var(--line);
-        border-radius: var(--radius-lg);
-        overflow: hidden;
-      }
-      .pad { padding: 20px; }
-
-      .pill {
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        padding: 6px 12px;
-        border-radius: 999px;
-        background: var(--orbit-dim);
-        color: var(--orbit);
-        font-size: 0.78rem;
-        font-weight: 600;
-        letter-spacing: 0.02em;
-        text-transform: uppercase;
-      }
-      .pill.ember { background: var(--ember-dim); color: var(--ember); }
-
-      h1 {
-        margin: 10px 0 8px;
-        font-size: clamp(2rem, 4vw, 3.4rem);
-        line-height: 1.05;
-      }
-      p {
-        margin: 0;
-        line-height: 1.65;
-        color: var(--ink-soft);
-      }
-
-      /* map header + compare panel, referenced by StoryMap.tsx */
-      .map-header {
-        display: flex;
-        flex-wrap: wrap;
-        align-items: flex-end;
-        justify-content: space-between;
-        gap: 16px;
-        margin-bottom: 16px;
-      }
-      .map-header h2 { font-size: 1.5rem; }
-      .map-hint {
-        font-size: 0.82rem;
-        color: var(--ink-faint);
-        text-align: right;
-      }
-
-      /* legend, referenced by Legend.tsx */
-      .legend { position: relative; }
-      .bar {
-        display: flex;
-        height: 34px;
-        border-radius: var(--radius-sm);
-        overflow: hidden;
-        border: 1px solid var(--line);
-      }
-      .segment {
-        flex: 1;
-        border: none;
-        cursor: pointer;
-        transition: transform 0.15s ease, filter 0.15s ease;
-      }
-      .segment:hover, .segment:focus-visible {
-        transform: scaleY(1.08);
-        filter: brightness(1.12);
-        outline: none;
-      }
-      .legend-row {
-        display: flex;
-        justify-content: space-between;
-        margin-top: 10px;
-        font-size: 0.82rem;
-        color: var(--ink-faint);
-        font-variant-numeric: tabular-nums;
-      }
-      .legend .tooltip {
-        position: absolute;
-        top: -8px;
-        right: 0;
-        transform: translateY(-100%);
-        display: flex;
-        gap: 8px;
-        align-items: baseline;
-        padding: 6px 10px;
-        border-radius: 10px;
-        background: var(--bg-inset);
-        border: 1px solid var(--line);
-        font-size: 0.82rem;
-        white-space: nowrap;
-      }
-      .legend .tooltip strong { color: var(--ink); }
-      .legend .tooltip span { color: var(--ink-faint); }
-
-      .pixel-tooltip {
-        position: fixed;
-        z-index: 50;
-        pointer-events: none;
-        padding: 8px 10px;
-        border-radius: 10px;
-        background: rgba(8, 13, 19, 0.95);
-        border: 1px solid var(--line);
-        color: var(--ink);
-        box-shadow: 0 12px 24px rgba(0,0,0,.35);
-        font-size: 0.88rem;
-      }
-
-      .site-footer {
-        max-width: 1280px;
-        margin: 24px auto 0;
-        padding: 20px 24px 40px;
-        display: flex;
-        flex-wrap: wrap;
-        gap: 10px 20px;
-        justify-content: space-between;
-        color: var(--ink-faint);
-        font-size: 0.85rem;
-        border-top: 1px solid var(--line-soft);
-      }
-      .site-footer a { text-decoration: none; color: var(--ink-soft); }
-      .site-footer a:hover { color: var(--orbit); }
-
-      @media (min-width: 900px) {
-        .page { grid-template-columns: 280px minmax(0, 1fr); gap: 24px; }
-      }
-    </style>
   </head>
   <body>
     <header class="site-header">
@@ -247,9 +27,11 @@ const { title, description = 'Before-and-after satellite storytelling for wildfi
         <a href="https://labs.rjmlaird.co.uk" target="_blank" rel="noopener">labs ↗</a>
       </nav>
     </header>
+
     <div class="shell">
       <slot />
     </div>
+
     <footer class="site-footer">
       <span>Satellite imagery via COG + TiTiler · dNBR / RdNBR burn severity analysis.</span>
       <span>
