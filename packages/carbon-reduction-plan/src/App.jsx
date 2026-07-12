@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from "react";
-import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, ReferenceLine } from "recharts";
+import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, ReferenceLine, PieChart, Pie, Cell } from "recharts";
 import { Plus, Trash2, Download, FileText, LayoutDashboard, Leaf } from "lucide-react";
 
 // ---- UK conversion factors (illustrative, approximate DEFRA-style kg CO2e per unit) ----
@@ -19,6 +19,22 @@ const FACTORS = {
   ],
 };
 const ALL_CATS = { ...Object.fromEntries(FACTORS[1].map(f => [f.key, { ...f, scope: 1 }])), ...Object.fromEntries(FACTORS[2].map(f => [f.key, { ...f, scope: 2 }])) };
+
+// Plain-language definitions shown to viewers alongside the breakdown calculation
+const SCOPE_INFO = {
+  1: {
+    label: "Scope 1",
+    title: "Direct emissions",
+    description: "Emissions from sources the organisation owns or controls directly — for example, burning fuel in a fleet of vehicles that aren't electrically powered, or gas heating at owned sites.",
+    color: "#28402E",
+  },
+  2: {
+    label: "Scope 2",
+    title: "Indirect energy emissions",
+    description: "Emissions caused indirectly, from the production of energy the organisation purchases and uses — for example, the emissions released generating the electricity used in its buildings.",
+    color: "#8FBF8F",
+  },
+};
 
 const uid = () => Math.random().toString(36).slice(2, 10);
 const thisYear = new Date().getFullYear();
@@ -218,6 +234,8 @@ function Dashboard(props) {
         </ResponsiveContainer>
       </Card>
 
+      <ScopeBreakdownCard byYear={byYear} />
+
       <Card>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
           <div style={{ fontWeight: 700, fontSize: 14 }}>Activity data log</div>
@@ -262,6 +280,77 @@ function Dashboard(props) {
         </div>
       </Card>
     </div>
+  );
+}
+
+function ScopeBreakdownCard({ byYear }) {
+  const years = byYear.map(y => y.year);
+  const [selectedYear, setSelectedYear] = useState(years[years.length - 1] ?? null);
+  const activeYear = years.includes(selectedYear) ? selectedYear : years[years.length - 1];
+  const row = byYear.find(y => y.year === activeYear) || { scope1: 0, scope2: 0, total: 0 };
+  const pct1 = row.total ? (row.scope1 / row.total) * 100 : 0;
+  const pct2 = row.total ? (row.scope2 / row.total) * 100 : 0;
+  const pieData = [
+    { name: SCOPE_INFO[1].label, value: row.scope1 },
+    { name: SCOPE_INFO[2].label, value: row.scope2 },
+  ];
+  const hasData = row.total > 0;
+
+  return (
+    <Card style={{ marginBottom: 20 }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10, flexWrap: "wrap", gap: 8 }}>
+        <div style={{ fontWeight: 700, fontSize: 14 }}>Scope 1 &amp; Scope 2 breakdown calculation</div>
+        {years.length > 0 && (
+          <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+            <Label>Year</Label>
+            <select value={activeYear ?? ""} onChange={e => setSelectedYear(Number(e.target.value))} style={{ ...cellInput, width: "auto" }}>
+              {years.map(y => <option key={y} value={y}>{y}</option>)}
+            </select>
+          </div>
+        )}
+      </div>
+
+      <div style={{ display: "grid", gridTemplateColumns: "minmax(200px, 280px) 1fr", gap: 20, alignItems: "center" }}>
+        <div style={{ position: "relative" }}>
+          <ResponsiveContainer width="100%" height={200}>
+            <PieChart>
+              <Pie data={pieData} dataKey="value" nameKey="name" innerRadius={58} outerRadius={88} paddingAngle={pieData.some(d => d.value > 0) ? 3 : 0} startAngle={90} endAngle={-270}>
+                {pieData.map((d, i) => <Cell key={d.name} fill={i === 0 ? SCOPE_INFO[1].color : SCOPE_INFO[2].color} />)}
+              </Pie>
+              <Tooltip formatter={(v) => `${fmt(v)} tCO2e`} />
+            </PieChart>
+          </ResponsiveContainer>
+          <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", textAlign: "center", pointerEvents: "none" }}>
+            <div style={{ fontSize: 20, fontWeight: 700 }} className="mono">{fmt(row.total)}</div>
+            <div style={{ fontSize: 10, color: "#6B7A66", textTransform: "uppercase", letterSpacing: 0.4 }}>tCO2e total</div>
+          </div>
+        </div>
+
+        <div>
+          {!hasData && (
+            <div style={{ fontSize: 13, color: "#6B7A66", marginBottom: 10 }}>Add activity data below for {activeYear ?? "a reporting year"} to see the Scope 1 / Scope 2 breakdown.</div>
+          )}
+          {[1, 2].map(scope => {
+            const info = SCOPE_INFO[scope];
+            const value = scope === 1 ? row.scope1 : row.scope2;
+            const pct = scope === 1 ? pct1 : pct2;
+            return (
+              <div key={scope} style={{ display: "flex", gap: 10, marginBottom: 12, alignItems: "flex-start" }}>
+                <div style={{ width: 12, height: 12, borderRadius: 3, background: info.color, marginTop: 3, flexShrink: 0 }} />
+                <div>
+                  <div style={{ fontSize: 13, fontWeight: 700 }}>
+                    {info.label} — {info.title}
+                    <span className="mono" style={{ fontWeight: 700, marginLeft: 8, color: "#16241B" }}>{fmt(value)} tCO2e</span>
+                    <span style={{ fontWeight: 600, marginLeft: 6, color: "#6B7A66" }}>({fmt(pct, 0)}%)</span>
+                  </div>
+                  <div style={{ fontSize: 12.5, color: "#4A5A45", lineHeight: 1.5, marginTop: 2 }}>{info.description}</div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </Card>
   );
 }
 
@@ -310,12 +399,16 @@ function PlanDocument({ orgName, baselineYear, targetPct, planPeriodYears, suppl
 
         <Section title="2. Baseline emissions footprint">
           <p>Baseline year: <strong>{baselineYear}</strong>. Baseline emissions were calculated using activity data for owned/controlled facilities and vehicles (Scope 1) and purchased electricity and heat (Scope 2).</p>
+          <ul style={{ paddingLeft: 20, margin: "6px 0 14px", lineHeight: 1.6 }}>
+            <li><strong>Scope 1 — direct emissions:</strong> {SCOPE_INFO[1].description}</li>
+            <li><strong>Scope 2 — indirect energy emissions:</strong> {SCOPE_INFO[2].description}</li>
+          </ul>
           <table style={tableStyle}>
-            <thead><tr><th style={th}>Emissions category</th><th style={th}>tCO2e</th></tr></thead>
+            <thead><tr><th style={th}>Emissions category</th><th style={th}>tCO2e</th><th style={th}>% of baseline</th></tr></thead>
             <tbody>
-              <tr><td style={td}>Scope 1</td><td style={td} className="mono">{fmt(baseline.scope1)}</td></tr>
-              <tr><td style={td}>Scope 2</td><td style={td} className="mono">{fmt(baseline.scope2)}</td></tr>
-              <tr style={{ fontWeight: 700 }}><td style={td}>Total</td><td style={td} className="mono">{fmt(baseline.total)}</td></tr>
+              <tr><td style={td}>Scope 1</td><td style={td} className="mono">{fmt(baseline.scope1)}</td><td style={td} className="mono">{fmt(baseline.total ? (baseline.scope1 / baseline.total) * 100 : 0, 0)}%</td></tr>
+              <tr><td style={td}>Scope 2</td><td style={td} className="mono">{fmt(baseline.scope2)}</td><td style={td} className="mono">{fmt(baseline.total ? (baseline.scope2 / baseline.total) * 100 : 0, 0)}%</td></tr>
+              <tr style={{ fontWeight: 700 }}><td style={td}>Total</td><td style={td} className="mono">{fmt(baseline.total)}</td><td style={td} className="mono">100%</td></tr>
             </tbody>
           </table>
         </Section>
@@ -323,7 +416,7 @@ function PlanDocument({ orgName, baselineYear, targetPct, planPeriodYears, suppl
         <Section title="3. Current emissions reporting">
           <p>Emissions have been re-assessed annually since the baseline year, as set out in Table 1 below.</p>
           <table style={tableStyle}>
-            <thead><tr><th style={th}>Reporting year</th><th style={th}>Scope 1 (tCO2e)</th><th style={th}>Scope 2 (tCO2e)</th><th style={th}>Total (tCO2e)</th></tr></thead>
+            <thead><tr><th style={th}>Reporting year</th><th style={th}>Scope 1 (tCO2e)</th><th style={th}>Scope 2 (tCO2e)</th><th style={th}>Total (tCO2e)</th><th style={th}>Scope 1 / Scope 2 split</th></tr></thead>
             <tbody>
               {byYear.map(y => (
                 <tr key={y.year}>
@@ -331,6 +424,7 @@ function PlanDocument({ orgName, baselineYear, targetPct, planPeriodYears, suppl
                   <td style={td} className="mono">{fmt(y.scope1)}</td>
                   <td style={td} className="mono">{fmt(y.scope2)}</td>
                   <td style={td} className="mono"><b>{fmt(y.total)}</b></td>
+                  <td style={td} className="mono">{fmt(y.total ? (y.scope1 / y.total) * 100 : 0, 0)}% / {fmt(y.total ? (y.scope2 / y.total) * 100 : 0, 0)}%</td>
                 </tr>
               ))}
             </tbody>
