@@ -1,0 +1,114 @@
+title,body,labels,milestone
+"Create a reusable experiment framework","Define a shared experiment contract for inputs, outputs, derived values, presets, and explanations.
+Separate simulation logic from UI rendering.
+Standardise how each lab exposes parameters, equations, and live results.
+Add a registry so new experiments can be added without changing core routing.
+Acceptance criteria: a new experiment can be added with minimal boilerplate and consistent page behaviour.","type:feature,epic:platform","Foundation complete"
+"Build shared UI components","Create reusable sliders, numeric inputs, toggles, buttons, and unit labels.
+Add a formula panel and live value cards.
+Add graphing hooks for time series and derived values.
+Ensure components work across desktop and mobile.
+Acceptance criteria: all experiments can use the same control and display components.","type:feature,epic:platform","Foundation complete"
+"Add URL state and shareable presets","Encode experiment settings in the URL.
+Support predefined scenarios and randomised starting states.
+Add reset, copy link, and preset selection controls.
+Acceptance criteria: every experiment can be reopened with the same state from a link.","type:feature,epic:platform","Foundation complete"
+"Improve accessibility and keyboard support","Add labels, ARIA support, and focus states.
+Support keyboard-only interaction for all controls.
+Add reduced-motion handling where animation is used.
+Add text summaries of key results for screen readers.
+Acceptance criteria: core labs are usable without a mouse and are accessible to assistive tech.","type:feature,accessibility","Foundation complete"
+"Add automated calculation tests","Create unit tests for equations and derived outputs.
+Cover invalid inputs, edge cases, and rounding behaviour.
+Add snapshot tests for key explanation panels if useful.
+Acceptance criteria: core physics calculations are protected by test coverage.","type:test,epic:platform","Foundation complete"
+"Add refraction and Snell's law lab","Build an interactive boundary between two media.
+Allow refractive indices and incident angle to be changed.
+Show refracted ray, normal line, and computed angles live.
+Add total internal reflection behaviour when applicable.
+Acceptance criteria: users can explore refraction and critical angle visually and numerically.","type:feature,epic:optics","Optics suite live"
+"Add thin lens and image formation lab","Support converging and diverging lenses.
+Allow object distance, focal length, and object height to be changed.
+Show image position, magnification, and orientation live.
+Add principal ray visualisation and object/image labels.
+Acceptance criteria: image formation follows the lens equation and updates in real time.","type:feature,epic:optics","Optics suite live"
+"Add mirror lab","Support plane, concave, and convex mirror modes.
+Calculate image position and size from object position.
+Show reflected rays and image type clearly.
+Acceptance criteria: mirror behaviour is understandable and consistent across modes.","type:feature,epic:optics","Optics suite live"
+"Add prism and dispersion lab","Build a prism refraction model with wavelength-dependent refractive index.
+Show spectral separation across visible wavelengths.
+Add a white-light input mode and monochromatic mode.
+Acceptance criteria: users can see dispersion as a function of wavelength.","type:feature,epic:optics","Optics suite live"
+"Add interference and diffraction lab","Implement double-slit and single-slit modes.
+Allow wavelength, slit spacing, slit width, and screen distance to be adjusted.
+Show fringe spacing and intensity distribution.
+Acceptance criteria: users can connect parameters to interference and diffraction patterns.","type:feature,epic:optics","Optics suite live"
+"Add Coulomb field visualiser","Render electric field vectors around one or more point charges.
+Allow charge magnitude and sign to be changed.
+Show force direction and field strength numerically.
+Acceptance criteria: users can explore field structure around charges.","type:feature,epic:electricity","Electricity suite live"
+"Add potential and equipotential lab","Visualise scalar potential on a grid or contour map.
+Link potential values to field direction.
+Support multiple charges and simple configurations.
+Acceptance criteria: users can compare field and potential views.","type:feature,epic:electricity","Electricity suite live"
+"Add Ohm's law circuit lab","Build a simple circuit with adjustable voltage and resistance.
+Show current, voltage drop, and power live.
+Add series and parallel resistor modes.
+Acceptance criteria: users can calculate and observe Ohm's law in a clear circuit view.","type:feature,epic:electricity","Electricity suite live"
+"Add capacitor charging lab","Model RC charging and discharging curves.
+Show time constant and stored energy.
+Allow resistance and capacitance to be adjusted.
+Acceptance criteria: users can explore transient behaviour and time constants.","type:feature,epic:electricity","Electricity suite live"
+"Add resistor network lab","Support series and parallel resistor combinations.
+Calculate equivalent resistance and branch currents.
+Display the circuit diagram and simplified equivalent model.
+Acceptance criteria: users can solve and visualise multi-resistor networks.","type:feature,epic:electricity","Electricity suite live"
+"Add magnetic field visualiser","Render fields around straight wires, loops, and solenoids.
+Allow current direction and magnitude to be changed.
+Show field direction and relative strength with clear vectors or lines.
+Acceptance criteria: users can compare magnetic field patterns for different current geometries.","type:feature,epic:magnetism","Magnetism suite live"
+"Add moving charge in magnetic field lab","Model force on a charged particle in a uniform magnetic field.
+Allow charge sign, velocity, and field strength to be changed.
+Show curved trajectories and radius of motion.
+Acceptance criteria: users can see how magnetic force changes particle motion.","type:feature,epic:magnetism","Magnetism suite live"
+"Add motor effect lab","Model force on a current-carrying wire in a magnetic field.
+Allow field direction, current direction, and wire orientation to be changed.
+Show force direction with vector overlays.
+Acceptance criteria: users can predict and verify the direction of force.","type:feature,epic:magnetism","Magnetism suite live"
+"Add electromagnetic induction lab","Model changing magnetic flux and induced emf.
+Support moving magnet, moving coil, and changing current scenarios.
+Show flux, emf, and current direction live.
+Acceptance criteria: users can connect flux change to induced voltage.","type:feature,epic:magnetism","Magnetism suite live"
+"Add guided learning mode","Create step-by-step prompts for each lab.
+Add prediction prompts before values are changed.
+Include hints and short explanations for key results.
+Acceptance criteria: each lab supports both free exploration and guided learning.","type:feature,epic:learning","Learning platform v1"
+"Add worked examples","Create a worked example section for each experiment.
+Show the same equation path used by the simulator.
+Keep examples concise and consistent.
+Acceptance criteria: users can compare a manual calculation to the live model.","type:feature,epic:learning","Learning platform v1"
+"Add misconception notes","Document common errors and misunderstandings for each topic.
+Link misconceptions to the relevant control or graph.
+Add short corrective explanations.
+Acceptance criteria: each lab includes at least one teaching note on common pitfalls.","type:documentation,epic:learning","Learning platform v1"
+"Add curriculum navigation","Group labs by topic and difficulty.
+Add next experiment and related links.
+Create an overview page for the full physics series.
+Acceptance criteria: users can move through the platform as a sequence of lessons.","type:feature,epic:learning","Learning platform v1"
+"Define experiment metadata schema","Add fields for title, topic, subtopic, learning goals, equations, parameters, and presets.
+Store metadata in a format that can drive pages and listings.
+Include accessibility and prerequisite notes.
+Acceptance criteria: every lab can be described with the same structured schema.","type:feature,epic:content","Learning platform v1"
+"Add documentation and authoring guide","Document how to create a new experiment.
+Explain naming conventions, file structure, and contribution rules.
+Add guidance for equations, units, and content tone.
+Acceptance criteria: a new contributor can add a lab without guessing conventions.","type:documentation,epic:content","Learning platform v1"
+"Add analytics and usage tracking","Track which labs are opened, used, and shared.
+Measure which controls are most interacted with.
+Use the data to prioritise future experiments.
+Acceptance criteria: usage data can inform roadmap decisions.","type:feature,epic:ops","Learning platform v1"
+"Add quality assurance checklist","Verify maths, layout, accessibility, and responsive behaviour.
+Test each new lab against the same release checklist.
+Record known limitations and future improvements.
+Acceptance criteria: every release follows the same review process.","type:process,epic:ops","Learning platform v1"
