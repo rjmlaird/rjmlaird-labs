@@ -105,5 +105,19 @@
     "demoUrl": "https://graphs.labs.rjmlaird.co.uk",
     "repoUrl": "https://github.com/rjmlaird/rjmlaird-labs/tree/main/packages/graphs",
     "updated": "2026-07-12"
+  },
+  {
+    "slug": "satellites",
+    "title": "satellites",
+    "description": "Satellite plots.",
+    "status": "active",
+    "tech": [
+      "Astro",
+      "Vite",
+      "Leaflet"
+    ],
+    "demoUrl": "https://satellites.labs.rjmlaird.co.uk",
+    "repoUrl": "https://github.com/greenorbitspace/labs/tree/main/packages/satellites",
+    "updated": "2026-07-21"
   }
 ]
