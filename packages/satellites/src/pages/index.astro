@@ -1,0 +1,107 @@
+---
+import Layout from '../layouts/Layout.astro';
+import '../styles/global.css';
+import '../scripts/satellite-ground-track';
+---
+
+<Layout title="Satellite Ground Track — labs.rjmlaird.co.uk">
+  <div id="app">
+    <header>
+      <div class="header-top">
+        <div>
+          <div class="crumb">
+            <a href="https://labs.rjmlaird.co.uk" target="_blank" rel="noopener">rjmlaird.co.uk / labs</a> / groundtrack
+          </div>
+          <div class="h-title">Satellite Ground Track</div>
+          <div class="h-tagline">
+            Live SGP4 propagation of Celestrak's GP catalog, cross-referenced against SATCAT and coloured by operational status.
+          </div>
+        </div>
+        <div class="status-cluster">
+          <span class="badge wait" id="statusBadge"><span class="bdot"></span><span id="statusBadgeText">pre-launch</span></span>
+          <span class="clock" id="clock">--:--:--Z</span>
+        </div>
+      </div>
+
+      <div class="stat-bar">
+        <div class="stat">
+          <span class="lbl">Catalog</span>
+          <select id="groupSelect" title="Celestrak GP group">
+            <option value="active">Active Payloads</option>
+            <option value="stations">Space Stations</option>
+            <option value="visual">Visual / Brightest</option>
+            <option value="gps-ops">GPS Operational</option>
+            <option value="starlink">Starlink</option>
+            <option value="oneweb">OneWeb</option>
+            <option value="weather">Weather</option>
+            <option value="science">Science</option>
+            <option value="geo">Geostationary</option>
+            <option value="last-30-days">Last 30 Days Launched</option>
+          </select>
+        </div>
+        <div class="stat"><span class="lbl">Tracked</span><span class="val" id="statCount">–</span></div>
+        <div class="stat"><span class="lbl">Shown</span><span class="val" id="statShown">–</span></div>
+        <div class="stat"><span class="lbl">Updated</span><span class="val" id="statUpdated">–</span></div>
+        <div class="grow"></div>
+        <div class="view-toggle" id="viewToggle">
+          <button class="vt-btn active" data-view="2d">2D Map</button>
+          <button class="vt-btn" data-view="3d">3D Globe</button>
+        </div>
+        <button id="reloadBtn">↻ Reload data</button>
+      </div>
+    </header>
+
+    <div class="main">
+      <div class="map-wrap">
+        <canvas id="map"></canvas>
+        <canvas id="globe" style="display:none;"></canvas>
+        <div class="globe-hint" id="globeHint">drag to rotate · scroll to zoom</div>
+        <div id="tooltip"></div>
+
+        <div id="satCard">
+          <div class="card-top">
+            <div class="card-name" id="cardName">—</div>
+            <button class="card-close" id="cardClose">✕</button>
+          </div>
+          <div class="card-status" id="cardStatus"></div>
+          <div class="card-body" id="cardBody"></div>
+        </div>
+
+        <div class="overlay" id="overlay">
+          <div class="ring"></div>
+          <div class="msg" id="overlayMsg">
+            Acquiring signal — fetching GP element sets and SATCAT records from Celestrak…
+          </div>
+        </div>
+      </div>
+
+      <aside class="sidebar">
+        <div class="section-head" id="searchHead"><span class="st">Search</span><span class="car">▾</span></div>
+        <div class="section-body" id="searchBody">
+          <input type="text" id="searchInput" placeholder="Name or NORAD ID…">
+          <div class="result-count" id="resultCount"></div>
+          <div id="resultsList"></div>
+        </div>
+
+        <hr class="sep">
+
+        <div class="section-head" id="legendHead"><span class="st">Legend &amp; status filter</span><span class="car">▾</span></div>
+        <div class="section-body" id="legendBody">
+          <div class="legend-filter-actions">
+            <button id="selectAllBtn">All</button>
+            <button id="selectNoneBtn">None</button>
+          </div>
+          <div id="legendList"></div>
+        </div>
+
+        <hr class="sep">
+        <a class="back-link" href="https://labs.rjmlaird.co.uk" target="_blank" rel="noopener">← labs.rjmlaird.co.uk</a>
+      </aside>
+    </div>
+
+    <footer>
+      <span>Data: <a href="https://celestrak.org/NORAD/elements/index.php?FORMAT=tle" target="_blank" rel="noopener">Celestrak GP/TLE</a> &amp; <a href="https://celestrak.org/pub/satcat.csv" target="_blank" rel="noopener">SATCAT</a>. Positions from client-side SGP4 propagation (satellite.js).</span>
+      <span>groundtrack · rjmlaird-labs</span>
+    </footer>
+  </div>
+</Layout>

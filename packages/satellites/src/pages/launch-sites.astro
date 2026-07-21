@@ -1,0 +1,41 @@
+---
+import Layout from '../layouts/Layout.astro';
+import '../styles/global.css';
+---
+
+<Layout title="Global Launch Sites">
+  <div id="app">
+    <header>
+      <div class="header-top">
+        <div>
+          <div class="crumb">
+            <a href="https://labs.rjmlaird.co.uk" target="_blank" rel="noopener">rjmlaird.co.uk labs</a> / launch sites
+          </div>
+          <div class="h-title">Global Launch Sites</div>
+          <div class="h-tagline">Launch site locations plotted on a Leaflet map from JSON data.</div>
+        </div>
+        <div class="status-cluster">
+          <span class="badge live"><span class="bdot"></span><span>loaded</span></span>
+        </div>
+      </div>
+    </header>
+
+    <div class="main">
+      <div class="map-wrap">
+        <div id="map"></div>
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<script type="module">
+  import { initLaunchSitesMap } from '../scripts/launch-sites-map';
+
+  if (typeof window !== 'undefined') {
+    window.addEventListener('DOMContentLoaded', () => {
+      initLaunchSitesMap().catch((err) => {
+        console.error('Error loading launch sites:', err);
+      });
+    });
+  }
+</script>
