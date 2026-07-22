@@ -11,5 +11,8 @@
   },
   "dependencies": {
     "astro": "^4.15.0"
+  },
+  "allowScripts": {
+    "@cloudflare/workerd-darwin-arm64": true
   }
 }
