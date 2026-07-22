@@ -1,0 +1,37 @@
+---
+interface Props {
+  crumb: string;
+  title: string;
+  tagline: string;
+  active: 'groundtrack' | 'launch-sites' | 'launch-stats';
+}
+
+const { crumb, title, tagline, active } = Astro.props;
+
+const NAV = [
+  { key: 'groundtrack', href: '/', label: 'Ground Track' },
+  { key: 'launch-sites', href: '/launch-sites', label: 'Launch Sites' },
+  { key: 'launch-stats', href: '/launch-stats', label: 'Launch Stats' },
+] as const;
+---
+
+<header>
+  <div class="header-top">
+    <div>
+      <div class="crumb">
+        <a href="https://labs.rjmlaird.co.uk" target="_blank" rel="noopener">rjmlaird.co.uk / labs</a> / {crumb}
+      </div>
+      <div class="h-title">{title}</div>
+      <div class="h-tagline">{tagline}</div>
+    </div>
+    <div class="status-cluster">
+      <slot name="status" />
+      <nav class="page-nav">
+        {NAV.map((item) => (
+          <a href={item.href} class={item.key === active ? 'active' : ''}>{item.label}</a>
+        ))}
+      </nav>
+    </div>
+  </div>
+  <slot name="stat-bar" />
+</header>
