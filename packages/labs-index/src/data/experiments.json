@@ -119,5 +119,70 @@
     "demoUrl": "https://satellites.labs.rjmlaird.co.uk",
     "repoUrl": "https://github.com/greenorbitspace/labs/tree/main/packages/satellites",
     "updated": "2026-07-21"
+  },
+  {
+    "slug": "drought",
+    "title": "drought",
+    "description": "New experiment — update this description.",
+    "status": "planned",
+    "tech": [
+      "React",
+      "Vite"
+    ],
+    "demoUrl": "https://drought.labs.rjmlaird.co.uk",
+    "repoUrl": "https://github.com/greenorbitspace/labs/tree/main/packages/drought",
+    "updated": "2026-07-26"
+  },
+  {
+    "slug": "tintwistle",
+    "title": "tintwistle",
+    "description": "New experiment — update this description.",
+    "status": "planned",
+    "tech": [
+      "React",
+      "Vite"
+    ],
+    "demoUrl": "https://tintwistle.labs.rjmlaird.co.uk",
+    "repoUrl": "https://github.com/greenorbitspace/labs/tree/main/packages/tintwistle",
+    "updated": "2026-07-26"
+  },
+  {
+    "slug": "biodiversity",
+    "title": "biodiversity",
+    "description": "New experiment — update this description.",
+    "status": "planned",
+    "tech": [
+      "React",
+      "Vite"
+    ],
+    "demoUrl": "https://biodiversity.labs.rjmlaird.co.uk",
+    "repoUrl": "https://github.com/greenorbitspace/labs/tree/main/packages/biodiversity",
+    "updated": "2026-07-26"
+  },
+  {
+    "slug": "sewage",
+    "title": "sewage",
+    "description": "New experiment — update this description.",
+    "status": "planned",
+    "tech": [
+      "React",
+      "Vite"
+    ],
+    "demoUrl": "https://sewage.labs.rjmlaird.co.uk",
+    "repoUrl": "https://github.com/greenorbitspace/labs/tree/main/packages/sewage",
+    "updated": "2026-07-26"
+  },
+  {
+    "slug": "astro",
+    "title": "astro",
+    "description": "New experiment — update this description.",
+    "status": "planned",
+    "tech": [
+      "React",
+      "Vite"
+    ],
+    "demoUrl": "https://astro.labs.rjmlaird.co.uk",
+    "repoUrl": "https://github.com/greenorbitspace/labs/tree/main/packages/astro",
+    "updated": "2026-07-26"
   }
 ]
