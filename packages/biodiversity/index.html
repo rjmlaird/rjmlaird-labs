@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Leicestershire Biodiversity &amp; Habitat Health Monitor</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css"/>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
+<style>
+  :root{
+    --bg:#0a0f0c; --panel:#111a14; --panel-2:#16211a; --line:#243228;
+    --ash:#cfd6d0; --ash-dim:#7e9088;
+    --leaf:#5fb87a; --leaf-dim:#3c8a58;
+    --water:#4fa8c9; --water-dim:#2f7691;
+    --soil:#a9834f;
+    --alert:#c1443b; --warning:#d9a441; --ok:#5c9c6e;
+    --radius:3px;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;height:100%;background:var(--bg);color:var(--ash);font-family:'IBM Plex Sans',sans-serif;}
+  ::-webkit-scrollbar{width:8px;height:8px;}
+  ::-webkit-scrollbar-thumb{background:#243228;border-radius:4px;}
+  ::-webkit-scrollbar-track{background:transparent;}
+
+  .app{display:grid;grid-template-rows:auto 1fr;height:100vh;}
+
+  header{
+    display:flex;align-items:center;gap:16px;padding:10px 18px;flex-wrap:wrap;
+    background:linear-gradient(180deg,#111a14,#0d130f);border-bottom:1px solid var(--line);
+    font-family:'IBM Plex Mono',monospace;
+  }
+  .brand{display:flex;align-items:center;gap:10px;margin-right:6px;}
+  .brand .dot{width:9px;height:9px;border-radius:50%;background:var(--leaf);box-shadow:0 0 8px 2px rgba(95,184,122,.6);animation:pulse 2.4s infinite;}
+  @keyframes pulse{0%,100%{opacity:1;}50%{opacity:.35;}}
+  .brand b{font-family:'IBM Plex Sans',sans-serif;font-weight:700;font-size:15px;color:#fff;}
+  .brand span{font-size:11px;color:var(--ash-dim);}
+  .spacer{flex:1;}
+  .btn{
+    font-family:'IBM Plex Mono',monospace;font-size:11.5px;background:var(--panel-2);color:var(--ash);
+    border:1px solid var(--line);padding:8px 12px;border-radius:var(--radius);cursor:pointer;white-space:nowrap;
+  }
+  .btn:hover{border-color:var(--ash-dim);color:#fff;}
+  .btn.primary{background:var(--leaf);border-color:var(--leaf);color:#06170c;font-weight:600;}
+  .btn.primary:hover{background:#72c98c;}
+  .btn.small{padding:5px 8px;font-size:11px;}
+
+  .main{display:grid;grid-template-columns:1fr 390px;min-height:0;}
+  .mapwrap{position:relative;min-height:0;}
+  #map{position:absolute;inset:0;background:#0a0f0c;}
+
+  .layerbar{
+    position:absolute;top:12px;left:50%;transform:translateX(-50%);z-index:460;
+    display:flex;gap:6px;background:rgba(10,15,12,.88);border:1px solid var(--line);
+    padding:6px;border-radius:var(--radius);flex-wrap:wrap;justify-content:center;max-width:82%;
+  }
+  .chip{
+    font-family:'IBM Plex Mono',monospace;font-size:10.5px;padding:5px 9px;border-radius:2px;
+    border:1px solid var(--line);color:var(--ash-dim);cursor:pointer;user-select:none;background:transparent;
+    display:flex;align-items:center;gap:5px;
+  }
+  .chip .sw{width:8px;height:8px;border-radius:2px;flex:none;}
+  .chip.on{color:#fff;border-color:var(--ash-dim);background:var(--panel-2);}
+  .chip .spin-sm{display:inline-block;width:8px;height:8px;border:1.5px solid var(--ash-dim);border-top-color:var(--leaf);border-radius:50%;animation:sp .7s linear infinite;}
+  @keyframes sp{to{transform:rotate(360deg);}}
+
+  .ndvi-controls{
+    position:absolute;bottom:12px;left:50%;transform:translateX(-50%);z-index:460;
+    display:flex;gap:8px;align-items:center;background:rgba(10,15,12,.88);border:1px solid var(--line);
+    padding:7px 10px;border-radius:var(--radius);font-family:'IBM Plex Mono',monospace;font-size:11.5px;
+  }
+  .ndvi-controls input[type=range]{width:140px;}
+
+  .legendbox{
+    position:absolute;top:12px;right:12px;z-index:460;background:rgba(10,15,12,.9);
+    border:1px solid var(--line);border-radius:var(--radius);padding:9px 10px;max-width:210px;font-size:11px;
+  }
+  .legendbox .row{display:flex;align-items:center;gap:7px;margin:3px 0;}
+  .legendbox .sw{width:11px;height:11px;border-radius:2px;flex:none;}
+
+  .panel{background:var(--panel);border-left:1px solid var(--line);overflow-y:auto;padding:16px 16px 60px;}
+  .panel h2{font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--ash-dim);margin:22px 0 10px;font-weight:600;}
+  .panel h2:first-child{margin-top:0;}
+  .note{font-size:11px;color:var(--ash-dim);line-height:1.5;margin-top:6px;}
+  a{color:var(--water);}
+
+  .stationsearch{display:flex;gap:6px;}
+  .stationsearch input{flex:1;background:var(--panel-2);border:1px solid var(--line);color:var(--ash);
+    font-family:'IBM Plex Mono',monospace;font-size:12px;padding:7px 8px;border-radius:var(--radius);}
+
+  .card{background:var(--panel-2);border:1px solid var(--line);border-radius:var(--radius);padding:9px 10px;margin-top:8px;}
+  .card .nm{font-size:12.5px;color:#fff;font-weight:600;}
+  .card .rv{font-size:10.5px;color:var(--ash-dim);margin-top:1px;}
+  .card .val{font-family:'IBM Plex Mono',monospace;font-size:16px;margin-top:5px;}
+  .rangebar{height:6px;background:#0e1710;border-radius:3px;margin-top:6px;position:relative;overflow:visible;}
+  .rangebar .band{position:absolute;top:0;bottom:0;background:rgba(79,168,201,.28);border-radius:3px;}
+  .rangebar .marker{position:absolute;top:-3px;width:2px;height:12px;background:#fff;}
+  .status-pill{display:inline-block;font-size:9.5px;text-transform:uppercase;letter-spacing:.05em;
+    padding:2px 6px;border-radius:2px;margin-top:6px;font-family:'IBM Plex Mono',monospace;}
+  .status-pill.low{background:rgba(193,68,59,.18);color:#e08880;}
+  .status-pill.normal{background:rgba(92,156,110,.18);color:#8fce9f;}
+  .status-pill.high{background:rgba(79,168,201,.18);color:#8fd3ea;}
+  .status-pill.unknown{background:rgba(126,144,136,.18);color:var(--ash-dim);}
+  .determinand-row{display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px dashed var(--line);font-size:11px;}
+  .determinand-row:last-child{border-bottom:none;}
+  .determinand-row .v{font-family:'IBM Plex Mono',monospace;color:#fff;}
+
+  .footer-credit{font-size:10px;color:var(--ash-dim);text-align:center;margin-top:26px;line-height:1.7;}
+  .toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:#16211a;border:1px solid var(--leaf);
+    color:#fff;padding:9px 16px;border-radius:var(--radius);font-family:'IBM Plex Mono',monospace;font-size:12px;
+    z-index:1000;opacity:0;pointer-events:none;transition:opacity .25s;max-width:440px;text-align:center;}
+  .toast.show{opacity:1;}
+  .spin{display:inline-block;width:11px;height:11px;border:2px solid var(--ash-dim);border-top-color:var(--leaf);
+    border-radius:50%;animation:sp .7s linear infinite;vertical-align:-1px;}
+
+  @media (max-width:900px){ .main{grid-template-columns:1fr;} .panel{border-left:none;border-top:1px solid var(--line);} }
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <div class="brand">
+      <span class="dot"></span>
+      <div><b>LEICESTERSHIRE BIODIVERSITY MONITOR</b><br><span>Satellite vegetation health + designated habitats + river &amp; water quality</span></div>
+    </div>
+    <div class="spacer"></div>
+    <button class="btn" id="loadHabitatsBtn">Load habitat layers for this view</button>
+    <button class="btn primary" id="findWaterBtn">Find river &amp; water stations near map centre</button>
+  </header>
+
+  <div class="main">
+    <div class="mapwrap">
+      <div id="map"></div>
+
+      <div class="layerbar" id="layerbar"></div>
+
+      <div class="ndvi-controls">
+        <span>Vegetation health (NDVI) opacity</span>
+        <input type="range" id="ndviOpacity" min="0" max="100" value="65">
+        <span id="ndviOpacityVal">65%</span>
+      </div>
+
+      <div class="legendbox" id="legendbox" style="display:none;"></div>
+    </div>
+
+    <div class="panel">
+      <h2>Layers loaded</h2>
+      <div id="layerStatus" class="note">Nothing loaded yet — pan/zoom to Leicestershire and click "Load habitat layers for this view".</div>
+
+      <h2>River &amp; water health</h2>
+      <div class="stationsearch">
+        <input type="text" id="townInput" placeholder="Town, e.g. Leicester, Loughborough, Market Harborough">
+        <button class="btn small" id="townSearchBtn">Search</button>
+      </div>
+      <div class="note">Or use "Find river &amp; water stations near map centre" above — pulls live Environment Agency river-level and water-quality data within ~15 km.</div>
+      <div id="waterResults"></div>
+
+      <div class="footer-credit">
+        Vegetation health: NDVI, Copernicus Global Land Service (VITO) — <a href="https://land.copernicus.eu/global/" target="_blank">land.copernicus.eu/global</a><br>
+        Habitat designations: © Natural England / Defra, Open Government Licence — National Nature Reserves, Local Nature Reserves,
+        Sites of Special Scientific Interest, Ancient Woodland Inventory<br>
+        River &amp; water data: Environment Agency real-time hydrology &amp; Water Quality Archive (WIMS), Open Government Licence v3.0<br>
+        Basemap: © CARTO, © OpenStreetMap contributors<br>
+        Built for reuse across teaching sessions — pan anywhere in England; defaults to Leicester &amp; Leicestershire.
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ================= MAP ================= */
+const LEICS_BOUNDS = { west:-1.55, south:52.35, east:-0.55, north:52.85 };
+const map = L.map('map', {zoomControl:true}).fitBounds([
+  [LEICS_BOUNDS.south, LEICS_BOUNDS.west], [LEICS_BOUNDS.north, LEICS_BOUNDS.east]
+]);
+L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+  maxZoom: 18, attribution: '&copy; <a href="https://carto.com/">CARTO</a> &copy; OpenStreetMap contributors'
+}).addTo(map);
+
+function toast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  clearTimeout(window._toastT);
+  window._toastT = setTimeout(()=>t.classList.remove('show'), 3800);
+}
+
+/* ================= NDVI — Copernicus Global Land Service (VITO), no key ================= */
+const NDVI_BASE = 'https://globalland.vito.be/wmts';
+const NDVI_LAYER = 'clms_global_ndvi_1km_v2_10daily';
+let ndviLayer = L.tileLayer.wms(NDVI_BASE, {
+  layers: NDVI_LAYER, format:'image/png', transparent:true, version:'1.1.1',
+  opacity:0.65, attribution:'NDVI: Copernicus Global Land Service (VITO)'
+});
+let ndviOn = false;
+
+document.getElementById('ndviOpacity').addEventListener('input', e=>{
+  const v = e.target.value;
+  document.getElementById('ndviOpacityVal').textContent = v+'%';
+  ndviLayer.setOpacity(v/100);
+});
+
+/* ================= HABITAT / DESIGNATION LAYERS — Natural England / Defra, no key ================= */
+const HABITAT_LAYERS = [
+  {key:'nnr', name:'National Nature Reserves', color:'#5fb87a',
+   url:'https://services.arcgis.com/JJzESW51TqeY9uat/arcgis/rest/services/National_Nature_Reserves_England/FeatureServer/0/query',
+   nameField:['NNR_NAME','name','NAME']},
+  {key:'lnr', name:'Local Nature Reserves', color:'#8fd3ea',
+   url:'https://environment.data.gov.uk/arcgis/rest/services/NE/LocalNatureReservesEngland/FeatureServer/0/query',
+   nameField:['lnr_name','LNR_NAME','name','NAME']},
+  {key:'sssi', name:'SSSIs', color:'#d9a441',
+   url:'https://environment.data.gov.uk/arcgis/rest/services/NE/SitesOfSpecialScientificInterestEngland/FeatureServer/0/query',
+   nameField:['SSSI_NAME','sssi_name','name','NAME'], bestEffort:true},
+  {key:'awi', name:'Ancient woodland', color:'#2f7d43',
+   url:'https://services.arcgis.com/JJzESW51TqeY9uat/arcgis/rest/services/Ancient_Woodland_England/FeatureServer/0/query',
+   nameField:['NAME','THEME1','name']},
+];
+let habitatOn = {nnr:true, lnr:true, sssi:true, awi:true};
+let habitatLeafletLayers = {};
+let habitatLoadedOnce = {};
+
+function buildLayerBar(){
+  const bar = document.getElementById('layerbar');
+  // NDVI chip
+  const ndviChip = document.createElement('div');
+  ndviChip.className = 'chip';
+  ndviChip.innerHTML = `<span class="sw" style="background:#c9a227;"></span>NDVI vegetation health`;
+  ndviChip.addEventListener('click', ()=>{
+    ndviOn = !ndviOn;
+    ndviChip.classList.toggle('on', ndviOn);
+    if (ndviOn){ ndviLayer.addTo(map); } else { map.removeLayer(ndviLayer); }
+    updateLegend();
+  });
+  bar.appendChild(ndviChip);
+
+  HABITAT_LAYERS.forEach(def=>{
+    const chip = document.createElement('div');
+    chip.className = 'chip on';
+    chip.dataset.key = def.key;
+    chip.innerHTML = `<span class="sw" style="background:${def.color}"></span>${def.name}`;
+    chip.addEventListener('click', ()=>{
+      habitatOn[def.key] = !habitatOn[def.key];
+      chip.classList.toggle('on', habitatOn[def.key]);
+      if (habitatOn[def.key]){
+        if (habitatLeafletLayers[def.key]) habitatLeafletLayers[def.key].addTo(map);
+        else loadHabitatLayer(def);
+      } else {
+        if (habitatLeafletLayers[def.key]) map.removeLayer(habitatLeafletLayers[def.key]);
+      }
+      updateLegend();
+    });
+    bar.appendChild(chip);
+  });
+}
+buildLayerBar();
+updateLegend();
+
+function updateLegend(){
+  const box = document.getElementById('legendbox');
+  const rows = [];
+  if (ndviOn) rows.push({label:'NDVI: darker green = denser/healthier vegetation (10-daily, 1km)', color:'#3c8a2f', isNdvi:true});
+  HABITAT_LAYERS.forEach(def=>{ if (habitatOn[def.key]) rows.push({label:def.name, color:def.color}); });
+  if (!rows.length){ box.style.display='none'; return; }
+  box.style.display = 'block';
+  box.innerHTML = rows.map(r=>`<div class="row"><span class="sw" style="background:${r.color}"></span>${r.label}</div>`).join('');
+}
+
+async function loadHabitatLayer(def){
+  const chip = document.querySelector(`.chip[data-key="${def.key}"]`);
+  const origHtml = chip.innerHTML;
+  chip.innerHTML = `<span class="spin-sm"></span>${def.name}`;
+  const b = map.getBounds();
+  const bbox = [b.getWest(), b.getSouth(), b.getEast(), b.getNorth()].join(',');
+  const url = `${def.url}?where=1%3D1&outFields=*&geometry=${encodeURIComponent(bbox)}&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects&outSR=4326&f=geojson`;
+  try{
+    const resp = await fetch(url);
+    if (!resp.ok) throw new Error('HTTP '+resp.status);
+    const gj = await resp.json();
+    if (gj.error) throw new Error(gj.error.message || 'service error');
+    const ly = L.geoJSON(gj, {
+      style:{color:def.color, weight:1.4, fillColor:def.color, fillOpacity:0.28},
+      onEachFeature:(f, layer)=>{
+        const props = f.properties || {};
+        let name = 'Unnamed site';
+        for (const nf of def.nameField){ if (props[nf]){ name = props[nf]; break; } }
+        const extra = Object.entries(props).filter(([k,v])=>v && String(v).length<60).slice(0,4)
+          .map(([k,v])=>`<div style="font-size:10.5px;color:#9aa8a0;">${k}: ${v}</div>`).join('');
+        layer.bindPopup(`<b>${name}</b><div style="font-size:10.5px;color:#556;margin-top:3px;">${def.name}</div>${extra}`);
+      }
+    });
+    habitatLeafletLayers[def.key] = ly;
+    if (habitatOn[def.key]) ly.addTo(map);
+    habitatLoadedOnce[def.key] = true;
+    chip.innerHTML = origHtml;
+    updateLayerStatus();
+  }catch(err){
+    console.error(def.key, err);
+    chip.innerHTML = origHtml;
+    habitatOn[def.key] = false;
+    chip.classList.remove('on');
+    toast(`${def.name}: live layer unavailable right now${def.bestEffort? ' (endpoint not officially confirmed for this layer)':''}.`);
+    updateLayerStatus();
+  }
+}
+
+function updateLayerStatus(){
+  const el = document.getElementById('layerStatus');
+  const lines = HABITAT_LAYERS.map(def=>{
+    const state = habitatLoadedOnce[def.key] ? (habitatOn[def.key]?'loaded, shown':'loaded, hidden') : 'not loaded';
+    return `${def.name}: ${state}`;
+  });
+  el.innerHTML = lines.join('<br>');
+}
+updateLayerStatus();
+
+document.getElementById('loadHabitatsBtn').addEventListener('click', ()=>{
+  HABITAT_LAYERS.forEach(def=>{
+    habitatOn[def.key] = true;
+    document.querySelector(`.chip[data-key="${def.key}"]`).classList.add('on');
+    loadHabitatLayer(def);
+  });
+  updateLegend();
+});
+
+/* ================= RIVER LEVEL — Environment Agency flood-monitoring (live, no key) ================= */
+const EA_BASE = 'https://environment.data.gov.uk/flood-monitoring';
+const EA_WQ_BASE = 'https://environment.data.gov.uk/water-quality';
+let stationMarkers = [];
+function clearStationMarkers(){ stationMarkers.forEach(m=>map.removeLayer(m)); stationMarkers = []; }
+
+function statusFromRange(value, low, high){
+  if (value==null || low==null || high==null) return 'unknown';
+  if (value < low) return 'low';
+  if (value > high) return 'high';
+  return 'normal';
+}
+
+async function fetchLevelStations(lat, lon, dist){
+  const url = `${EA_BASE}/id/stations?lat=${lat}&long=${lon}&dist=${dist}&parameter=level&_view=full&status=Active&_limit=5`;
+  const resp = await fetch(url);
+  const data = await resp.json();
+  return (data.items||[]).map(st=>{
+    const measure = (st.measures||[])[0];
+    const reading = measure && measure.latestReading ? measure.latestReading.value : null;
+    const scale = st.stageScale || {};
+    return {
+      kind:'level', name: st.label, river: st.riverName, town: st.town,
+      paramLabel: 'River level', value: reading, unit: measure ? measure.unitName : '',
+      low: scale.typicalRangeLow, high: scale.typicalRangeHigh,
+      status: statusFromRange(reading, scale.typicalRangeLow, scale.typicalRangeHigh),
+      lat: st.lat, lon: st.long,
+    };
+  });
+}
+
+/* ================= WATER QUALITY — EA Water Quality Archive (WIMS), best-effort ================= */
+async function fetchWaterQuality(lat, lon, dist){
+  try{
+    const url = `${EA_WQ_BASE}/id/sampling-point?lat=${lat}&long=${lon}&dist=${dist}&_limit=4`;
+    const resp = await fetch(url);
+    if (!resp.ok) throw new Error('HTTP '+resp.status);
+    const data = await resp.json();
+    const points = data.items || [];
+    const out = [];
+    for (const p of points.slice(0,4)){
+      const notation = p.notation || (p['@id']||'').split('/').pop();
+      let determinands = [];
+      try{
+        const mUrl = `${EA_WQ_BASE}/data/measurement?samplingPoint=${encodeURIComponent(notation)}&_sorted&_limit=8`;
+        const mResp = await fetch(mUrl);
+        if (mResp.ok){
+          const mData = await mResp.json();
+          determinands = (mData.items||[]).map(m=>({
+            label: m.determinand && m.determinand.label,
+            value: m.result, unit: m.determinand && m.determinand.unit && m.determinand.unit.label,
+            date: m.sampleDateTime,
+          })).filter(d=>d.label);
+        }
+      }catch(e){}
+      out.push({
+        kind:'quality', name: p.label || p.notation, lat: p.lat, lon: p.long,
+        determinands,
+      });
+    }
+    return out;
+  }catch(err){
+    console.error('water quality fetch failed', err);
+    return {error:true};
+  }
+}
+
+function levelCardHtml(s){
+  const pillClass = s.status;
+  const pillText = {low:'Below typical range', normal:'Within typical range', high:'Above typical range', unknown:'No typical range on file'}[s.status];
+  let rangeHtml = '';
+  if (s.low!=null && s.high!=null && s.value!=null){
+    const lo = Math.min(s.low, s.value); const hi = Math.max(s.high, s.value);
+    const span = (hi-lo)||1;
+    const bandLeft = ((s.low-lo)/span*100), bandWidth=((s.high-s.low)/span*100), markerLeft=((s.value-lo)/span*100);
+    rangeHtml = `<div class="rangebar"><div class="band" style="left:${bandLeft}%;width:${bandWidth}%;"></div><div class="marker" style="left:${markerLeft}%;"></div></div>`;
+  }
+  return `<div class="card">
+    <div class="nm">${s.name}</div>
+    <div class="rv">${s.river||''} ${s.town? '· '+s.town:''} · ${s.paramLabel}</div>
+    <div class="val">${s.value!=null? s.value.toFixed(2):'—'} <span style="font-size:11px;color:var(--ash-dim);">${s.unit||''}</span></div>
+    ${rangeHtml}
+    <div class="status-pill ${pillClass}">${pillText}</div>
+  </div>`;
+}
+
+function qualityCardHtml(s){
+  const rows = s.determinands.slice(0,6).map(d=>
+    `<div class="determinand-row"><span>${d.label}</span><span class="v">${d.value!=null?d.value:'—'} ${d.unit||''}</span></div>`
+  ).join('');
+  const dateNote = s.determinands[0] && s.determinands[0].date ? `<div class="note">Most recent sample: ${new Date(s.determinands[0].date).toLocaleDateString('en-GB')}</div>` : '';
+  return `<div class="card">
+    <div class="nm">${s.name}</div>
+    <div class="rv">Water Quality Archive sampling point</div>
+    ${rows || '<div class="note">No recent determinand readings returned for this point.</div>'}
+    ${dateNote}
+  </div>`;
+}
+
+async function findWaterNear(lat, lon, label){
+  const container = document.getElementById('waterResults');
+  container.innerHTML = `<div class="note"><span class="spin"></span> searching live EA river-level and water-quality data…</div>`;
+  clearStationMarkers();
+  try{
+    const [levels, quality] = await Promise.all([
+      fetchLevelStations(lat, lon, 15).catch(()=>[]),
+      fetchWaterQuality(lat, lon, 15),
+    ]);
+    container.innerHTML = `<div class="note" style="margin-top:0;">${label}</div>`;
+    levels.forEach(s=>{
+      container.insertAdjacentHTML('beforeend', levelCardHtml(s));
+      if (s.lat && s.lon){
+        const colorFor = {low:'#c1443b', normal:'#5c9c6e', high:'#4fa8c9', unknown:'#7f8c84'};
+        const m = L.circleMarker([s.lat, s.lon], {radius:6, color:'#0a0f0c', weight:1.5, fillColor:colorFor[s.status], fillOpacity:0.9})
+          .addTo(map).bindTooltip(`${s.name}: ${s.value!=null?s.value.toFixed(2):'—'} ${s.unit||''}`);
+        stationMarkers.push(m);
+      }
+    });
+    if (quality && quality.error){
+      container.insertAdjacentHTML('beforeend', `<div class="card"><div class="note">Water Quality Archive lookup failed (network/CORS, or the endpoint shape has changed since this tool was built). Browse it directly at <a href="https://environment.data.gov.uk/water-quality/view/landing" target="_blank">environment.data.gov.uk/water-quality</a>.</div></div>`);
+    } else {
+      (quality||[]).forEach(s=>{
+        container.insertAdjacentHTML('beforeend', qualityCardHtml(s));
+        if (s.lat && s.lon){
+          const m = L.circleMarker([s.lat, s.lon], {radius:5, color:'#0a0f0c', weight:1.5, fillColor:'#8fd3ea', fillOpacity:0.85})
+            .addTo(map).bindTooltip(`${s.name} (water quality)`);
+          stationMarkers.push(m);
+        }
+      });
+      if (quality && !quality.length){
+        container.insertAdjacentHTML('beforeend', `<div class="note">No water-quality sampling points returned within range.</div>`);
+      }
+    }
+    if (!levels.length && (!quality || quality.error || !quality.length)){
+      container.insertAdjacentHTML('beforeend', `<div class="note">No EA stations found nearby — try zooming to a spot closer to a named river (River Soar, River Wreake, River Welland cover most of Leicestershire).</div>`);
+    }
+  }catch(err){
+    container.innerHTML = `<div class="note">Could not reach the Environment Agency APIs right now. Try again, or visit <a href="https://check-for-flooding.service.gov.uk/" target="_blank">check-for-flooding.service.gov.uk</a> directly.</div>`;
+    console.error(err);
+  }
+}
+
+document.getElementById('findWaterBtn').addEventListener('click', ()=>{
+  const c = map.getCenter();
+  findWaterNear(c.lat, c.lng, `Stations within 15 km of map centre (${c.lat.toFixed(3)}, ${c.lng.toFixed(3)})`);
+});
+
+document.getElementById('townSearchBtn').addEventListener('click', async ()=>{
+  const town = document.getElementById('townInput').value.trim();
+  if (!town) return;
+  document.getElementById('waterResults').innerHTML = `<div class="note"><span class="spin"></span> searching…</div>`;
+  try{
+    const resp = await fetch(`${EA_BASE}/id/stations?town=${encodeURIComponent(town)}&parameter=level&_view=full&_limit=6`);
+    const data = await resp.json();
+    if (data.items && data.items.length){
+      const first = data.items[0];
+      if (first.lat && first.long) map.setView([first.lat, first.long], 11);
+    } else {
+      toast(`No exact EA town match for "${town}" — try a nearby larger town, or use the map-centre search instead.`);
+    }
+    const c = map.getCenter();
+    await findWaterNear(c.lat, c.lng, `Stations near "${town}"`);
+  }catch(err){
+    document.getElementById('waterResults').innerHTML = `<div class="note">Search failed — check the town name matches an EA station record (e.g. "Leicester", "Loughborough").</div>`;
+  }
+});
+</script>
+</body>
+</html>

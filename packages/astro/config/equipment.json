@@ -1,0 +1,34 @@
+{
+  "equipment": [
+    {
+      "name": "8-inch Dobsonian",
+      "scope_focal_length_mm": 1200,
+      "scope_aperture_mm": 203,
+      "eyepiece_focal_length_mm": 25,
+      "eyepiece_afov_deg": 68,
+      "eyepieces": [
+        { "name": "25mm wide-field", "focal_length_mm": 25, "afov_deg": 68 },
+        { "name": "10mm planetary", "focal_length_mm": 10, "afov_deg": 60 },
+        { "name": "32mm finder", "focal_length_mm": 32, "afov_deg": 50 }
+      ]
+    },
+    {
+      "name": "80mm ED refractor",
+      "scope_focal_length_mm": 480,
+      "scope_aperture_mm": 80,
+      "eyepiece_focal_length_mm": 20,
+      "eyepiece_afov_deg": 65,
+      "eyepieces": [
+        { "name": "20mm wide-field", "focal_length_mm": 20, "afov_deg": 65 },
+        { "name": "6mm planetary", "focal_length_mm": 6, "afov_deg": 60 }
+      ]
+    },
+    {
+      "name": "DSLR + 200mm lens",
+      "scope_focal_length_mm": 200,
+      "scope_aperture_mm": 50,
+      "eyepiece_focal_length_mm": 200,
+      "eyepiece_afov_deg": 10
+    }
+  ]
+}

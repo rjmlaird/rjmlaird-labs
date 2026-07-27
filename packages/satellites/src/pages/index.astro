@@ -1,29 +1,22 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
 import '../styles/global.css';
-import '../scripts/satellite-ground-track';
 ---
 
 <Layout title="Satellite Ground Track — labs.rjmlaird.co.uk">
   <div id="app">
-    <header>
-      <div class="header-top">
-        <div>
-          <div class="crumb">
-            <a href="https://labs.rjmlaird.co.uk" target="_blank" rel="noopener">rjmlaird.co.uk / labs</a> / groundtrack
-          </div>
-          <div class="h-title">Satellite Ground Track</div>
-          <div class="h-tagline">
-            Live SGP4 propagation of Celestrak's GP catalog, cross-referenced against SATCAT and coloured by operational status.
-          </div>
-        </div>
-        <div class="status-cluster">
-          <span class="badge wait" id="statusBadge"><span class="bdot"></span><span id="statusBadgeText">pre-launch</span></span>
-          <span class="clock" id="clock">--:--:--Z</span>
-        </div>
-      </div>
-
-      <div class="stat-bar">
+    <Header
+      crumb="groundtrack"
+      title="Satellite Ground Track"
+      tagline="Live SGP4 propagation of Celestrak's GP catalog, cross-referenced against SATCAT and coloured by operational status."
+      active="groundtrack"
+    >
+      <span slot="status">
+        <span class="badge wait" id="statusBadge"><span class="bdot"></span><span id="statusBadgeText">pre-launch</span></span>
+        <span class="clock" id="clock">--:--:--Z</span>
+      </span>
+      <div slot="stat-bar" class="stat-bar">
         <div class="stat">
           <span class="lbl">Catalog</span>
           <select id="groupSelect" title="Celestrak GP group">
@@ -49,7 +42,7 @@ import '../scripts/satellite-ground-track';
         </div>
         <button id="reloadBtn">↻ Reload data</button>
       </div>
-    </header>
+    </Header>
 
     <div class="main">
       <div class="map-wrap">
@@ -105,3 +98,8 @@ import '../scripts/satellite-ground-track';
     </footer>
   </div>
 </Layout>
+
+<script>
+  import '../scripts/satellite-ground-track';
+</script>
+

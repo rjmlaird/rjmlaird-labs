@@ -1,0 +1,9 @@
+{
+"type": "FeatureCollection",
+"name": "EMSR897_AOI01_DEL_PRODUCT_imageFootprintA_v1",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{ "type": "Feature", "properties": { "obj_type": "Image Footprint", "or_src_id": 1 }, "geometry": { "type": "Polygon", "coordinates": [ [ [ -1.31966413, 54.13637743 ], [ -1.35843504, 53.14985989 ], [ -3.00029913, 53.16117354 ], [ -3.0003062, 54.1481041 ], [ -1.31966413, 54.13637743 ] ] ] } },
+{ "type": "Feature", "properties": { "obj_type": "Image Footprint", "or_src_id": 2 }, "geometry": { "type": "Polygon", "coordinates": [ [ [ -1.75792006, 53.57155373 ], [ -1.75791269, 53.5711869 ], [ -1.75847729, 53.44912563 ], [ -1.75852806, 53.44800428 ], [ -1.96381489, 53.38421413 ], [ -2.12330511, 53.38087505 ], [ -2.12329901, 53.53909645 ], [ -2.12326536, 53.540725 ], [ -2.12326923, 53.57208189 ], [ -1.75938754, 53.57156896 ], [ -1.75792006, 53.57155373 ] ] ] } }
+]
+}

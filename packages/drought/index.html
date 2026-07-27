@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UK Drought Risk Monitor</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css"/>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
+<style>
+  :root{
+    --bg:#0b0f0e; --panel:#121815; --panel-2:#171f1b; --line:#243029;
+    --ash:#cdd3ce; --ash-dim:#7f8c84;
+    --amber:#d9a441; --amber-dim:#a97a24;
+    --water:#4fa8c9; --water-dim:#2f7691;
+    --alert:#c1443b; --warning:#d9a441; --watch:#d9c341; --ok:#5c9c6e;
+    --radius:3px;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;height:100%;background:var(--bg);color:var(--ash);font-family:'IBM Plex Sans',sans-serif;}
+  ::-webkit-scrollbar{width:8px;height:8px;}
+  ::-webkit-scrollbar-thumb{background:#243029;border-radius:4px;}
+  ::-webkit-scrollbar-track{background:transparent;}
+
+  .app{display:grid;grid-template-rows:auto 1fr;height:100vh;}
+
+  header{
+    display:flex;align-items:center;gap:16px;padding:10px 18px;flex-wrap:wrap;
+    background:linear-gradient(180deg,#121815,#0d120f);border-bottom:1px solid var(--line);
+    font-family:'IBM Plex Mono',monospace;
+  }
+  .brand{display:flex;align-items:center;gap:10px;margin-right:6px;}
+  .brand .dot{width:9px;height:9px;border-radius:50%;background:var(--amber);box-shadow:0 0 8px 2px rgba(217,164,65,.6);animation:pulse 2.4s infinite;}
+  @keyframes pulse{0%,100%{opacity:1;}50%{opacity:.35;}}
+  .brand b{font-family:'IBM Plex Sans',sans-serif;font-weight:700;font-size:15px;color:#fff;}
+  .brand span{font-size:11px;color:var(--ash-dim);}
+
+  .field{display:flex;flex-direction:column;gap:2px;}
+  .field label{font-size:9px;text-transform:uppercase;letter-spacing:.09em;color:var(--ash-dim);}
+  .field input, .field select{
+    background:var(--panel-2);border:1px solid var(--line);color:var(--ash);
+    font-family:'IBM Plex Mono',monospace;font-size:12px;padding:5px 7px;border-radius:var(--radius);min-width:112px;
+  }
+  .spacer{flex:1;}
+  .btn{
+    font-family:'IBM Plex Mono',monospace;font-size:11.5px;background:var(--panel-2);color:var(--ash);
+    border:1px solid var(--line);padding:8px 12px;border-radius:var(--radius);cursor:pointer;white-space:nowrap;
+  }
+  .btn:hover{border-color:var(--ash-dim);color:#fff;}
+  .btn.primary{background:var(--amber);border-color:var(--amber);color:#1a1204;font-weight:600;}
+  .btn.primary:hover{background:#e8b458;}
+  .btn.small{padding:5px 8px;font-size:11px;}
+
+  .main{display:grid;grid-template-columns:1fr 380px;min-height:0;}
+  .mapwrap{position:relative;min-height:0;}
+  #map{position:absolute;inset:0;background:#0b0f0e;}
+
+  .layerbar{
+    position:absolute;top:12px;left:50%;transform:translateX(-50%);z-index:460;
+    display:flex;gap:6px;background:rgba(11,15,14,.88);border:1px solid var(--line);
+    padding:6px;border-radius:var(--radius);flex-wrap:wrap;justify-content:center;max-width:80%;
+  }
+  .chip{
+    font-family:'IBM Plex Mono',monospace;font-size:10.5px;padding:5px 9px;border-radius:2px;
+    border:1px solid var(--line);color:var(--ash-dim);cursor:pointer;user-select:none;background:transparent;
+  }
+  .chip.on{color:#fff;border-color:var(--amber);background:rgba(217,164,65,.12);}
+
+  .timebar{
+    position:absolute;bottom:12px;left:50%;transform:translateX(-50%);z-index:460;
+    display:flex;gap:8px;align-items:center;background:rgba(11,15,14,.88);border:1px solid var(--line);
+    padding:7px 10px;border-radius:var(--radius);font-family:'IBM Plex Mono',monospace;font-size:11.5px;
+  }
+  .timebar input[type=date]{background:var(--panel-2);border:1px solid var(--line);color:var(--ash);padding:4px 6px;border-radius:2px;font-family:'IBM Plex Mono',monospace;font-size:11.5px;}
+
+  .legendbox{
+    position:absolute;top:12px;right:12px;z-index:460;background:rgba(11,15,14,.9);
+    border:1px solid var(--line);border-radius:var(--radius);padding:8px;max-width:200px;text-align:center;
+  }
+  .legendbox img{max-width:100%;display:block;}
+  .legendbox .cap{font-size:9.5px;color:var(--ash-dim);margin-top:5px;font-family:'IBM Plex Mono',monospace;}
+
+  .querybox{
+    position:absolute;z-index:470;background:rgba(11,15,14,.96);border:1px solid var(--amber);
+    border-radius:var(--radius);padding:10px 12px;font-family:'IBM Plex Mono',monospace;font-size:11.5px;
+    max-width:230px;display:none;
+  }
+  .querybox b{color:#fff;font-size:12.5px;}
+  .querybox .close{position:absolute;top:4px;right:7px;cursor:pointer;color:var(--ash-dim);}
+
+  .panel{background:var(--panel);border-left:1px solid var(--line);overflow-y:auto;padding:16px 16px 60px;}
+  .panel h2{font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--ash-dim);margin:22px 0 10px;font-weight:600;}
+  .panel h2:first-child{margin-top:0;}
+  .note{font-size:11px;color:var(--ash-dim);line-height:1.5;margin-top:6px;}
+  a{color:var(--water);}
+
+  .stationsearch{display:flex;gap:6px;}
+  .stationsearch input{flex:1;background:var(--panel-2);border:1px solid var(--line);color:var(--ash);
+    font-family:'IBM Plex Mono',monospace;font-size:12px;padding:7px 8px;border-radius:var(--radius);}
+
+  .station-card{background:var(--panel-2);border:1px solid var(--line);border-radius:var(--radius);padding:9px 10px;margin-top:8px;}
+  .station-card .nm{font-size:12.5px;color:#fff;font-weight:600;}
+  .station-card .rv{font-size:10.5px;color:var(--ash-dim);margin-top:1px;}
+  .station-card .val{font-family:'IBM Plex Mono',monospace;font-size:16px;margin-top:5px;}
+  .rangebar{height:6px;background:#0e1412;border-radius:3px;margin-top:6px;position:relative;overflow:visible;}
+  .rangebar .band{position:absolute;top:0;bottom:0;background:rgba(79,168,201,.28);border-radius:3px;}
+  .rangebar .marker{position:absolute;top:-3px;width:2px;height:12px;background:#fff;}
+  .status-pill{display:inline-block;font-size:9.5px;text-transform:uppercase;letter-spacing:.05em;
+    padding:2px 6px;border-radius:2px;margin-top:6px;font-family:'IBM Plex Mono',monospace;}
+  .status-pill.low{background:rgba(193,68,59,.18);color:#e08880;}
+  .status-pill.normal{background:rgba(92,156,110,.18);color:#8fce9f;}
+  .status-pill.high{background:rgba(79,168,201,.18);color:#8fd3ea;}
+  .status-pill.unknown{background:rgba(127,140,132,.18);color:var(--ash-dim);}
+
+  .reservoir-row{display:grid;grid-template-columns:1fr 70px 90px auto;gap:6px;margin-top:6px;align-items:center;}
+  .reservoir-row input{background:var(--panel-2);border:1px solid var(--line);color:var(--ash);
+    font-family:'IBM Plex Mono',monospace;font-size:11.5px;padding:5px 6px;border-radius:2px;width:100%;}
+  .reservoir-row .del{cursor:pointer;color:var(--ash-dim);font-size:13px;}
+  .reservoir-row .del:hover{color:var(--alert);}
+  .resbar{height:5px;background:#0e1412;border-radius:3px;margin-top:3px;grid-column:1/-1;overflow:hidden;}
+  .resbar .fill{height:100%;}
+
+  .footer-credit{font-size:10px;color:var(--ash-dim);text-align:center;margin-top:26px;line-height:1.7;}
+  .toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:#171f1b;border:1px solid var(--amber);
+    color:#fff;padding:9px 16px;border-radius:var(--radius);font-family:'IBM Plex Mono',monospace;font-size:12px;
+    z-index:1000;opacity:0;pointer-events:none;transition:opacity .25s;max-width:420px;text-align:center;}
+  .toast.show{opacity:1;}
+  .spin{display:inline-block;width:11px;height:11px;border:2px solid var(--ash-dim);border-top-color:var(--amber);
+    border-radius:50%;animation:sp .7s linear infinite;vertical-align:-1px;}
+  @keyframes sp{to{transform:rotate(360deg);}}
+
+  @media (max-width:880px){ .main{grid-template-columns:1fr;} .panel{border-left:none;border-top:1px solid var(--line);} }
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <div class="brand">
+      <span class="dot"></span>
+      <div><b>UK DROUGHT RISK MONITOR</b><br><span>Live Copernicus EDO drought indicators + EA/SEPA hydrology · England, Scotland, Wales, NI</span></div>
+    </div>
+    <div class="spacer"></div>
+    <button class="btn" id="findStationsBtn">Find UK stations near map centre</button>
+    <button class="btn primary" id="latestBtn">Jump to latest indicator date</button>
+  </header>
+
+  <div class="main">
+    <div class="mapwrap">
+      <div id="map"></div>
+
+      <div class="layerbar" id="layerbar"></div>
+
+      <div class="timebar">
+        <span>As of</span>
+        <input type="date" id="cfgDate">
+        <button class="btn small" id="stepBack">◀ 10d</button>
+        <button class="btn small" id="stepFwd">10d ▶</button>
+        <span id="layerNote" style="color:var(--ash-dim);"></span>
+      </div>
+
+      <div class="legendbox" id="legendbox" style="display:none;">
+        <img id="legendImg" alt="legend">
+        <div class="cap" id="legendCap"></div>
+      </div>
+
+      <div class="querybox" id="querybox">
+        <span class="close" id="queryClose">✕</span>
+        <div id="queryContent"></div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>Drought indicator</h2>
+      <div class="note" id="indicatorInfo">
+        Select a layer above. Indicators marked <b>queryable</b> can be clicked on the map for the value at that point
+        (via the live Copernicus WMS GetFeatureInfo request) — others are visual-only.
+      </div>
+
+      <h2>River &amp; rainfall stations — England &amp; Scotland (live)</h2>
+      <div class="stationsearch">
+        <input type="text" id="townInput" placeholder="English town name (exact), e.g. York">
+        <button class="btn small" id="townSearchBtn">Search</button>
+      </div>
+      <div class="note">Town search matches English (EA) station records. For Scotland, pan/zoom the map there and use "Find UK stations near map centre" — it queries EA and SEPA live in parallel within ~20–25 km. Wales (NRW) and Northern Ireland (DfI Rivers) don't offer a no-key, embeddable live feed, so those show as links to the official viewers instead — see the note below each.</div>
+      <div id="stationResults"></div>
+
+      <h2>Reservoir stocks (manual entry)</h2>
+      <div class="note">
+        No open, live UK reservoir-stock API exists — the Environment Agency publishes these monthly as PDF/CSV
+        in the <a href="https://www.gov.uk/government/publications/water-situation-national-monthly-reports-for-england-2026" target="_blank">Water Situation national monthly report</a>.
+        Enter the latest figures here each month to keep the chart current.
+      </div>
+      <div id="reservoirRows"></div>
+      <button class="btn small" id="addReservoirRow" style="margin-top:8px;">+ Add region</button>
+
+      <div class="footer-credit">
+        Drought indicators: © European Commission / Joint Research Centre, Copernicus European &amp; Global Drought
+        Observatories (EDO/GDO) — <a href="https://drought.emergency.copernicus.eu" target="_blank">drought.emergency.copernicus.eu</a><br>
+        Hydrology data: Environment Agency (England) real-time flood-monitoring &amp; hydrology APIs, and SEPA (Scotland)
+        Time Series Data Service — both Open Government Licence v3.0<br>
+        Wales (Natural Resources Wales) and Northern Ireland (DfI Rivers) link to their official viewers — see README<br>
+        Basemap: © CARTO, © OpenStreetMap contributors<br>
+        Built for reuse across teaching sessions — swap the date, indicator, or stations freely.
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ================= MAP ================= */
+const map = L.map('map', {zoomControl:true}).setView([54.6, -3.5], 6);
+L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+  maxZoom: 18, attribution: '&copy; <a href="https://carto.com/">CARTO</a> &copy; OpenStreetMap contributors'
+}).addTo(map);
+
+/* ================= WMS DROUGHT LAYERS (live Copernicus EDO) ================= */
+const WMS_BASE = 'https://drought.emergency.copernicus.eu/api/wms';
+const LAYERS = [
+  {key:'cdiad', name:'Combined Drought Indicator', queryable:false, step:10,
+   desc:'CDI v4 — integrates rainfall (SPI), soil moisture and vegetation (fAPAR) anomalies into Watch/Warning/Alert classes for agricultural drought.'},
+  {key:'spaST', name:'SPI — short term', queryable:true, step:10, timescale:'01', timescaleOptions:['01','03'],
+   desc:'Standardised Precipitation Index (ERA5). Negative = drier than the 1981–2010 reference period for that location and time of year. Click the map for the value.'},
+  {key:'spaLT', name:'SPI — long term', queryable:true, step:'month', timescale:'06', timescaleOptions:['06','12','24','48'],
+   desc:'Standardised Precipitation Index (ERA5, long accumulation) — reflects reduced reservoir/groundwater recharge rather than short-term dryness. Click the map for the value.'},
+  {key:'smand', name:'Soil moisture anomaly', queryable:false, step:10,
+   desc:'Ensemble soil-moisture anomaly (LISFLOOD root-zone + MODIS land-surface temperature + ESA CCI), standardised vs. 2001–2016 baseline.'},
+  {key:'lfinx_300_lgs', name:'Low-flow index', queryable:false, step:10,
+   desc:'Low-Flow Index — river-flow drought severity from the LISFLOOD hydrological model.'},
+  {key:'rdria', name:'Drought impact risk (agriculture)', queryable:true, step:10,
+   desc:'Risk of Drought Impact for Agriculture — combines hazard, exposure and vulnerability. Click the map for the value.'},
+];
+let activeLayer = null;
+let wmsLeafletLayer = null;
+let useLatest = true; // per Copernicus docs: if TIME is omitted, the server returns its latest available date
+
+function fmtWmsDate(d){ return d.toISOString().slice(0,10); }
+
+function buildWms(layerDef){
+  const opts = {
+    layers: layerDef.key,
+    format: 'image/png',
+    transparent: true,
+    version: '1.1.1',
+    opacity: 0.72,
+    attribution: 'Copernicus EDO/GDO, EC-JRC'
+  };
+  if (!useLatest){
+    opts.time = fmtWmsDate(new Date(document.getElementById('cfgDate').value+'T00:00:00Z'));
+  }
+  if (layerDef.timescale){
+    opts.selected_timescale = layerDef.timescale;
+  }
+  return L.tileLayer.wms(WMS_BASE, opts);
+}
+
+function setActiveLayer(key){
+  const def = LAYERS.find(l=>l.key===key);
+  if (!def) return;
+  if (wmsLeafletLayer) map.removeLayer(wmsLeafletLayer);
+  wmsLeafletLayer = buildWms(def);
+  wmsLeafletLayer.addTo(map);
+  activeLayer = def;
+  document.querySelectorAll('#layerbar .chip').forEach(c=>c.classList.toggle('on', c.dataset.key===key));
+  document.getElementById('legendbox').style.display = 'block';
+  document.getElementById('legendImg').src = `${WMS_BASE}?version=1.1.1&service=WMS&request=GetLegendGraphic&layer=${encodeURIComponent(def.key)}&format=image/png&STYLE=default`;
+  document.getElementById('legendCap').textContent = def.name;
+  document.getElementById('indicatorInfo').innerHTML = `<b style="color:#fff">${def.name}</b>${def.queryable? ' — <span style="color:var(--amber)">queryable, click the map</span>':' — visual layer only'}<br><br>${def.desc}`;
+  document.getElementById('layerNote').textContent = (useLatest? 'latest available date · ' : '') + (def.step==='month' ? '(monthly layer)' : '(10-day / dekadal layer)');
+  renderTimescaleControl(def);
+}
+
+function renderTimescaleControl(def){
+  let el = document.getElementById('timescaleSelect');
+  if (el) el.remove();
+  if (!def.timescaleOptions) return;
+  el = document.createElement('select');
+  el.id = 'timescaleSelect';
+  el.style.cssText = "background:var(--panel-2);border:1px solid var(--line);color:var(--ash);font-family:'IBM Plex Mono',monospace;font-size:11px;padding:3px 5px;border-radius:2px;";
+  def.timescaleOptions.forEach(v=>{
+    const o = document.createElement('option');
+    o.value = v; o.textContent = 'SPI-'+parseInt(v,10);
+    if (v===def.timescale) o.selected = true;
+    el.appendChild(o);
+  });
+  el.addEventListener('change', ()=>{ def.timescale = el.value; setActiveLayer(def.key); });
+  document.querySelector('.timebar').appendChild(el);
+}
+
+function buildLayerBar(){
+  const bar = document.getElementById('layerbar');
+  LAYERS.forEach(def=>{
+    const chip = document.createElement('div');
+    chip.className = 'chip';
+    chip.dataset.key = def.key;
+    chip.textContent = def.name;
+    chip.addEventListener('click', ()=>setActiveLayer(def.key));
+    bar.appendChild(chip);
+  });
+}
+buildLayerBar();
+
+/* date control */
+const dateInput = document.getElementById('cfgDate');
+const today = new Date();
+dateInput.value = today.toISOString().slice(0,10);
+function refreshCurrentLayerDate(){
+  if (!activeLayer) return;
+  setActiveLayer(activeLayer.key);
+}
+document.getElementById('stepBack').addEventListener('click', ()=>{
+  useLatest = false;
+  const d = new Date(dateInput.value+'T00:00:00Z'); d.setUTCDate(d.getUTCDate()-10);
+  dateInput.value = d.toISOString().slice(0,10); refreshCurrentLayerDate();
+});
+document.getElementById('stepFwd').addEventListener('click', ()=>{
+  useLatest = false;
+  const d = new Date(dateInput.value+'T00:00:00Z'); d.setUTCDate(d.getUTCDate()+10);
+  dateInput.value = d.toISOString().slice(0,10); refreshCurrentLayerDate();
+});
+dateInput.addEventListener('change', ()=>{ useLatest = false; refreshCurrentLayerDate(); });
+document.getElementById('latestBtn').addEventListener('click', ()=>{
+  useLatest = true;
+  dateInput.value = new Date().toISOString().slice(0,10);
+  refreshCurrentLayerDate();
+  toast('Showing the most recent date each layer has available (TIME omitted, per Copernicus EDO docs)');
+});
+
+setActiveLayer('cdiad');
+
+/* ================= GetFeatureInfo click query ================= */
+const querybox = document.getElementById('querybox');
+document.getElementById('queryClose').addEventListener('click', ()=>querybox.style.display='none');
+
+map.on('click', async (e)=>{
+  if (!activeLayer || !activeLayer.queryable){
+    return;
+  }
+  const size = map.getSize();
+  const point = map.latLngToContainerPoint(e.latlng, map.getZoom());
+  const bounds = map.getBounds();
+  const bbox = [bounds.getWest(), bounds.getSouth(), bounds.getEast(), bounds.getNorth()].join(',');
+  const timescaleParam = activeLayer.timescale ? `&SELECTED_TIMESCALE=${activeLayer.timescale}` : '';
+  const timeParam = useLatest ? '' : `&TIME=${fmtWmsDate(new Date(dateInput.value+'T00:00:00Z'))}`;
+  const url = `${WMS_BASE}?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetFeatureInfo&LAYERS=${activeLayer.key}&QUERY_LAYERS=${activeLayer.key}`+
+    `&STYLES=&BBOX=${bbox}&SRS=EPSG:4326&WIDTH=${size.x}&HEIGHT=${size.y}&X=${Math.round(point.x)}&Y=${Math.round(point.y)}`+
+    `&INFO_FORMAT=text/plain&FEATURE_COUNT=1${timeParam}${timescaleParam}`;
+
+  const containerPt = map.latLngToContainerPoint(e.latlng);
+  querybox.style.left = (containerPt.x+14)+'px';
+  querybox.style.top = (containerPt.y+14)+'px';
+  document.getElementById('queryContent').innerHTML = `<b>${activeLayer.name}</b><br><span class="spin"></span> querying…`;
+  querybox.style.display = 'block';
+
+  try{
+    const resp = await fetch(url);
+    const text = await resp.text();
+    let display = text.trim();
+    // try to pull a numeric value out of typical GeoServer text/plain output
+    const m = text.match(/value[_\s]*=\s*([\-\d.]+)/i) || text.match(/GRAY_INDEX\s*=\s*([\-\d.]+)/i);
+    if (m) display = `Value: <b>${m[1]}</b>`;
+    else if (/no features|no result/i.test(text)) display = 'No data at this point/date (outside coverage, over sea, or missing dekad).';
+    else if (!text || text.length < 2) display = 'No data returned.';
+    const whenLabel = useLatest ? 'latest available date' : fmtWmsDate(new Date(dateInput.value+'T00:00:00Z'));
+    document.getElementById('queryContent').innerHTML =
+      `<b>${activeLayer.name}</b><br>${whenLabel}<br><br>${display}`;
+  }catch(err){
+    document.getElementById('queryContent').innerHTML =
+      `<b>${activeLayer.name}</b><br><br>Could not reach the live query endpoint (network/CORS). `+
+      `<a href="https://drought.emergency.copernicus.eu/" target="_blank">Open the EDO viewer</a> to inspect this point manually.`;
+  }
+});
+
+/* ================= EA STATIONS (England) ================= */
+const EA_BASE = 'https://environment.data.gov.uk/flood-monitoring';
+let stationMarkers = [];
+
+function clearStationMarkers(){ stationMarkers.forEach(m=>map.removeLayer(m)); stationMarkers = []; }
+
+function haversineKm(lat1, lon1, lat2, lon2){
+  const R = 6371;
+  const dLat = (lat2-lat1)*Math.PI/180, dLon = (lon2-lon1)*Math.PI/180;
+  const a = Math.sin(dLat/2)**2 + Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLon/2)**2;
+  return 2*R*Math.asin(Math.sqrt(a));
+}
+
+function statusFromRange(value, low, high){
+  if (value==null || low==null || high==null) return 'unknown';
+  if (value < low) return 'low';
+  if (value > high) return 'high';
+  return 'normal';
+}
+
+function stationCardHtml(s){
+  const pillClass = s.status;
+  const pillText = {low:'Below typical range', normal:'Within typical range', high:'Above typical range', unknown:'No typical range on file'}[s.status];
+  let rangeHtml = '';
+  if (s.low!=null && s.high!=null && s.value!=null){
+    const lo = Math.min(s.low, s.value, s.scaleMin ?? s.low);
+    const hi = Math.max(s.high, s.value, s.scaleMax ?? s.high);
+    const span = (hi-lo)||1;
+    const bandLeft = ((s.low-lo)/span*100);
+    const bandWidth = ((s.high-s.low)/span*100);
+    const markerLeft = ((s.value-lo)/span*100);
+    rangeHtml = `<div class="rangebar">
+      <div class="band" style="left:${bandLeft}%;width:${bandWidth}%;"></div>
+      <div class="marker" style="left:${markerLeft}%;"></div>
+    </div>`;
+  }
+  const sourceBadge = s.source ? `<span style="float:right;font-size:9px;color:var(--ash-dim);border:1px solid var(--line);padding:1px 5px;border-radius:2px;">${s.source}</span>` : '';
+  return `<div class="station-card">
+    <div class="nm">${s.name}${sourceBadge}</div>
+    <div class="rv">${s.river||''} ${s.town? '· '+s.town:''} · ${s.paramLabel}</div>
+    <div class="val">${s.value!=null? s.value.toFixed(2):'—'} <span style="font-size:11px;color:var(--ash-dim);">${s.unit||''}</span></div>
+    ${rangeHtml}
+    <div class="status-pill ${pillClass}">${pillText}</div>
+  </div>`;
+}
+
+function linkCardHtml(c){
+  return `<div class="station-card">
+    <div class="nm">${c.label}<span style="float:right;font-size:9px;color:var(--ash-dim);border:1px solid var(--line);padding:1px 5px;border-radius:2px;">${c.source}</span></div>
+    <div class="note" style="margin-top:4px;">${c.note}</div>
+    <a class="btn small" style="display:inline-block;margin-top:8px;text-decoration:none;" href="${c.url}" target="_blank">Open official viewer ↗</a>
+  </div>`;
+}
+
+async function fetchLevelStations(lat, lon, dist){
+  const url = `${EA_BASE}/id/stations?lat=${lat}&long=${lon}&dist=${dist}&parameter=level&_view=full&status=Active&_limit=6`;
+  const resp = await fetch(url);
+  const data = await resp.json();
+  return (data.items||[]).map(st=>{
+    const measure = (st.measures||[])[0];
+    const reading = measure && measure.latestReading ? measure.latestReading.value : null;
+    const scale = st.stageScale || {};
+    return {
+      name: st.label, river: st.riverName, town: st.town,
+      paramLabel: 'River level',
+      value: reading, unit: measure ? measure.unitName : '',
+      low: scale.typicalRangeLow, high: scale.typicalRangeHigh,
+      scaleMin: scale.minOnRecord ? scale.minOnRecord.value : null,
+      scaleMax: scale.maxOnRecord ? scale.maxOnRecord.value : null,
+      status: statusFromRange(reading, scale.typicalRangeLow, scale.typicalRangeHigh),
+      lat: st.lat, lon: st.long, source:'EA',
+    };
+  });
+}
+
+async function fetchRainfallStations(lat, lon, dist){
+  const url = `${EA_BASE}/id/stations?lat=${lat}&long=${lon}&dist=${dist}&parameter=rainfall&_limit=4`;
+  const resp = await fetch(url);
+  const data = await resp.json();
+  const out = [];
+  for (const st of (data.items||[]).slice(0,4)){
+    let total24 = null;
+    try{
+      const rref = st.stationReference;
+      const rr = await fetch(`${EA_BASE}/id/stations/${rref}/readings?_sorted&_limit=96`);
+      const rd = await rr.json();
+      const vals = (rd.items||[]).map(r=>r.value).filter(v=>typeof v==='number');
+      if (vals.length) total24 = vals.reduce((a,b)=>a+b,0);
+    }catch(e){}
+    out.push({
+      name: st.label, town: st.town, paramLabel: 'Rainfall, last 24h',
+      value: total24, unit: 'mm', low:null, high:null, status:'unknown',
+      lat: st.lat, lon: st.long, source:'EA',
+    });
+  }
+  return out;
+}
+
+/* ================= SEPA STATIONS (Scotland) — live KiWIS API, no key ================= */
+const SEPA_BASE = 'https://timeseries.sepa.org.uk/KiWIS/KiWIS';
+let sepaStationCache = null; // fetched once, filtered client-side per search
+
+async function loadSepaStationList(){
+  if (sepaStationCache) return sepaStationCache;
+  // stationgroup_id=615437 = SEPA's "current level stations with single-value statistics" group
+  const params = new URLSearchParams({
+    service:'kisters', type:'queryServices', datasource:'0', request:'getStationList',
+    stationgroup_id:'615437', format:'json',
+    returnfields:'station_no,station_name,station_id,ts_id,station_latitude,station_longitude,river_name,ca_sta',
+    ca_sta_returnfields:'sepa_minimum_level,sepa_maximum_level,sepa_median_annual_maximum_level,sepa_median_annual_minimum_level',
+  });
+  const resp = await fetch(`${SEPA_BASE}?${params.toString()}`);
+  const rows = await resp.json();
+  // KiWIS returns [headerRow, ...dataRows] as arrays, or an object with a 'type':'error' on failure
+  if (!Array.isArray(rows) || rows.length < 2) { sepaStationCache = []; return sepaStationCache; }
+  const header = rows[0];
+  const idx = name => header.indexOf(name);
+  sepaStationCache = rows.slice(1).map(r=>({
+    name: r[idx('station_name')],
+    stationNo: r[idx('station_no')],
+    tsId: r[idx('ts_id')],
+    lat: parseFloat(r[idx('station_latitude')]),
+    lon: parseFloat(r[idx('station_longitude')]),
+    river: r[idx('river_name')],
+    low: parseFloat(r[idx('sepa_median_annual_minimum_level')]) || null,
+    high: parseFloat(r[idx('sepa_median_annual_maximum_level')]) || null,
+  })).filter(s=>!isNaN(s.lat) && !isNaN(s.lon));
+  return sepaStationCache;
+}
+
+async function fetchSepaLatestValue(tsId){
+  const params = new URLSearchParams({
+    service:'kisters', type:'queryServices', datasource:'0', request:'getTimeseriesValues',
+    ts_id:String(tsId), period:'P1D', returnfields:'Timestamp,Value', format:'json',
+  });
+  const resp = await fetch(`${SEPA_BASE}?${params.toString()}`);
+  const data = await resp.json();
+  const block = data && data[0] && data[0].data;
+  if (!block || !block.length) return null;
+  return block[block.length-1][1]; // [timestamp, value]
+}
+
+async function fetchLevelStationsSepa(lat, lon, dist){
+  try{
+    const all = await loadSepaStationList();
+    const nearby = all
+      .map(s=>({...s, distKm: haversineKm(lat, lon, s.lat, s.lon)}))
+      .filter(s=>s.distKm <= dist)
+      .sort((a,b)=>a.distKm-b.distKm)
+      .slice(0, 4);
+    const results = [];
+    for (const s of nearby){
+      let value = null;
+      try{ value = await fetchSepaLatestValue(s.tsId); }catch(e){}
+      results.push({
+        name: s.name, river: s.river, town:'',
+        paramLabel: 'River level (SEPA, median annual range)',
+        value: value!=null? parseFloat(value): null, unit:'m',
+        low: s.low, high: s.high,
+        status: statusFromRange(value!=null? parseFloat(value): null, s.low, s.high),
+        lat: s.lat, lon: s.lon, source:'SEPA',
+      });
+    }
+    return results;
+  }catch(err){
+    console.error('SEPA fetch failed', err);
+    return [];
+  }
+}
+
+/* ================= WALES (NRW) & NORTHERN IRELAND (DfI Rivers) ================= */
+// Neither publishes a no-key, cross-origin-friendly live JSON feed we can call directly from a
+// static page: NRW's API requires a free personal subscription key, and DfI Rivers has no public
+// API at all (viewer only). Rather than guess at endpoints, these are honest links to the
+// official live viewers — see the README for how to wire in an NRW key if you have one.
+function nationalLinkCards(lat, lon){
+  return [
+    {kind:'link', label:'Natural Resources Wales — live river levels', source:'NRW',
+     url:'https://rivers-and-seas.naturalresources.wales/',
+     note:'No-key live feed not wired in here — NRW\u2019s API needs a free personal subscription key. Opens their official viewer.'},
+    {kind:'link', label:'DfI Rivers (Northern Ireland) — water level network', source:'DfI',
+     url:'https://www.infrastructure-ni.gov.uk/articles/dfi-rivers-water-level-network',
+     note:'DfI Rivers doesn\u2019t publish a public API — this opens their official hydrometric viewer.'},
+  ];
+}
+
+function renderStationResults(levelStations, rainStations, linkCards, contextLabel){
+  const container = document.getElementById('stationResults');
+  container.innerHTML = `<div class="note" style="margin-top:8px;">${contextLabel}</div>`;
+  clearStationMarkers();
+  const colorFor = {low:'#c1443b', normal:'#5c9c6e', high:'#4fa8c9', unknown:'#7f8c84'};
+
+  [...levelStations, ...rainStations].forEach(s=>{
+    container.insertAdjacentHTML('beforeend', stationCardHtml(s));
+    if (s.lat && s.lon){
+      const m = L.circleMarker([s.lat, s.lon], {
+        radius:6, color:'#0b0f0e', weight:1.5, fillColor: colorFor[s.status]||colorFor.unknown, fillOpacity:0.9
+      }).addTo(map).bindTooltip(`[${s.source}] ${s.name}: ${s.value!=null? s.value.toFixed(2):'—'} ${s.unit||''}`);
+      stationMarkers.push(m);
+    }
+  });
+  if (!levelStations.length && !rainStations.length){
+    container.insertAdjacentHTML('beforeend', `<div class="note">No active England (EA) or Scotland (SEPA) stations found live within range.</div>`);
+  }
+  (linkCards||[]).forEach(c=>container.insertAdjacentHTML('beforeend', linkCardHtml(c)));
+}
+
+async function findStationsNear(lat, lon, label){
+  document.getElementById('stationResults').innerHTML = `<div class="note"><span class="spin"></span> searching live EA + SEPA stations…</div>`;
+  try{
+    const [levelsEA, rainsEA, levelsSepa] = await Promise.all([
+      fetchLevelStations(lat, lon, 20).catch(()=>[]),
+      fetchRainfallStations(lat, lon, 20).catch(()=>[]),
+      fetchLevelStationsSepa(lat, lon, 25).catch(()=>[]),
+    ]);
+    const links = nationalLinkCards(lat, lon);
+    renderStationResults([...levelsEA, ...levelsSepa], rainsEA, links, label);
+  }catch(err){
+    document.getElementById('stationResults').innerHTML = `<div class="note">Could not reach the hydrology APIs right now (network/CORS). Try again, or visit <a href="https://check-for-flooding.service.gov.uk/" target="_blank">check-for-flooding.service.gov.uk</a> (England) or <a href="https://waterlevels.sepa.org.uk/" target="_blank">waterlevels.sepa.org.uk</a> (Scotland) directly.</div>`;
+    console.error(err);
+  }
+}
+
+document.getElementById('findStationsBtn').addEventListener('click', ()=>{
+  const c = map.getCenter();
+  findStationsNear(c.lat, c.lng, `Stations within 20 km of map centre (${c.lat.toFixed(2)}, ${c.lng.toFixed(2)})`);
+});
+
+document.getElementById('townSearchBtn').addEventListener('click', async ()=>{
+  const town = document.getElementById('townInput').value.trim();
+  if (!town) return;
+  document.getElementById('stationResults').innerHTML = `<div class="note"><span class="spin"></span> searching…</div>`;
+  try{
+    const resp = await fetch(`${EA_BASE}/id/stations?town=${encodeURIComponent(town)}&parameter=level&_view=full&_limit=6`);
+    const data = await resp.json();
+    if (data.items && data.items.length){
+      const first = data.items[0];
+      if (first.lat && first.long) map.setView([first.lat, first.long], 10);
+    } else {
+      toast(`No EA (English) town match for "${town}" — for Scotland try panning the map there and using "Find stations near map centre" instead.`);
+    }
+    const c = map.getCenter();
+    await findStationsNear(c.lat, c.lng, `Stations near "${town}"`);
+  }catch(err){
+    document.getElementById('stationResults').innerHTML = `<div class="note">Search failed — check the town name matches EA's station records exactly (e.g. "York", "Shrewsbury"). This lookup only matches English town names; for Scotland, pan the map there instead.</div>`;
+  }
+});
+
+/* ================= RESERVOIR MANUAL ENTRY ================= */
+const DEFAULT_REGIONS = [
+  {name:'Yorkshire', pct:''}, {name:'North West', pct:''}, {name:'Anglian', pct:''},
+  {name:'Thames', pct:''}, {name:'Severn Trent', pct:''}, {name:'Wessex', pct:''}, {name:'South West', pct:''},
+];
+function reservoirRowHtml(region, pct){
+  const p = parseFloat(pct);
+  const color = isNaN(p) ? '#3a4a41' : (p<50 ? '#c1443b' : p<70 ? '#d9a441' : '#5c9c6e');
+  const width = isNaN(p) ? 0 : Math.max(0,Math.min(100,p));
+  return `<div class="reservoir-row" data-row>
+    <input type="text" class="r-name" value="${region}" placeholder="Region / reservoir group">
+    <input type="number" class="r-pct" value="${pct}" placeholder="% full" min="0" max="120">
+    <span style="font-size:10px;color:var(--ash-dim);">% of capacity</span>
+    <span class="del">✕</span>
+    <div class="resbar"><div class="fill" style="width:${width}%;background:${color};"></div></div>
+  </div>`;
+}
+function renderReservoirRows(){
+  const c = document.getElementById('reservoirRows');
+  c.innerHTML = DEFAULT_REGIONS.map(r=>reservoirRowHtml(r.name, r.pct)).join('');
+  attachReservoirHandlers();
+}
+function attachReservoirHandlers(){
+  document.querySelectorAll('#reservoirRows [data-row]').forEach((row, i)=>{
+    row.querySelector('.del').addEventListener('click', ()=>{ DEFAULT_REGIONS.splice(i,1); renderReservoirRows(); });
+    row.querySelector('.r-name').addEventListener('input', e=>{ DEFAULT_REGIONS[i].name = e.target.value; });
+    row.querySelector('.r-pct').addEventListener('input', e=>{
+      DEFAULT_REGIONS[i].pct = e.target.value;
+      const p = parseFloat(e.target.value);
+      const bar = row.querySelector('.resbar .fill');
+      const color = isNaN(p) ? '#3a4a41' : (p<50 ? '#c1443b' : p<70 ? '#d9a441' : '#5c9c6e');
+      bar.style.width = (isNaN(p)?0:Math.max(0,Math.min(100,p)))+'%';
+      bar.style.background = color;
+    });
+  });
+}
+document.getElementById('addReservoirRow').addEventListener('click', ()=>{
+  DEFAULT_REGIONS.push({name:'', pct:''});
+  renderReservoirRows();
+});
+renderReservoirRows();
+
+/* ================= TOAST ================= */
+function toast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  clearTimeout(window._toastT);
+  window._toastT = setTimeout(()=>t.classList.remove('show'), 3600);
+}
+</script>
+</body>
+</html>

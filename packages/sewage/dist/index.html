@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Leicestershire Storm Overflow &amp; Sewage Monitor</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css"/>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
+<style>
+  :root{
+    --bg:#0b0e0d; --panel:#131816; --panel-2:#181f1c; --line:#28322d;
+    --ash:#cdd3ce; --ash-dim:#7e9088;
+    --sewage:#a9793f; --sewage-dim:#7a5527;
+    --discharging:#c1443b; --recent:#d9a441; --clear:#5c9c6e; --offline:#5c6a63;
+    --radius:3px;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;height:100%;background:var(--bg);color:var(--ash);font-family:'IBM Plex Sans',sans-serif;}
+  ::-webkit-scrollbar{width:8px;height:8px;}
+  ::-webkit-scrollbar-thumb{background:#28322d;border-radius:4px;}
+  ::-webkit-scrollbar-track{background:transparent;}
+
+  .app{display:grid;grid-template-rows:auto 1fr;height:100vh;}
+
+  header{
+    display:flex;align-items:center;gap:16px;padding:10px 18px;flex-wrap:wrap;
+    background:linear-gradient(180deg,#131816,#0e120f);border-bottom:1px solid var(--line);
+    font-family:'IBM Plex Mono',monospace;
+  }
+  .brand{display:flex;align-items:center;gap:10px;margin-right:6px;}
+  .brand .dot{width:9px;height:9px;border-radius:50%;background:var(--discharging);box-shadow:0 0 8px 2px rgba(193,68,59,.6);animation:pulse 2.4s infinite;}
+  @keyframes pulse{0%,100%{opacity:1;}50%{opacity:.35;}}
+  .brand b{font-family:'IBM Plex Sans',sans-serif;font-weight:700;font-size:15px;color:#fff;}
+  .brand span{font-size:11px;color:var(--ash-dim);}
+  .spacer{flex:1;}
+  .btn{
+    font-family:'IBM Plex Mono',monospace;font-size:11.5px;background:var(--panel-2);color:var(--ash);
+    border:1px solid var(--line);padding:8px 12px;border-radius:var(--radius);cursor:pointer;white-space:nowrap;
+  }
+  .btn:hover{border-color:var(--ash-dim);color:#fff;}
+  .btn.primary{background:var(--discharging);border-color:var(--discharging);color:#1a0604;font-weight:600;}
+  .btn.primary:hover{background:#d65f55;}
+  .btn.small{padding:5px 8px;font-size:11px;}
+
+  .main{display:grid;grid-template-columns:1fr 400px;min-height:0;}
+  .mapwrap{position:relative;min-height:0;}
+  #map{position:absolute;inset:0;background:#0b0e0d;}
+
+  .statusbar{
+    position:absolute;top:12px;left:50%;transform:translateX(-50%);z-index:460;
+    display:flex;gap:14px;background:rgba(11,14,13,.9);border:1px solid var(--line);
+    padding:9px 16px;border-radius:var(--radius);font-family:'IBM Plex Mono',monospace;font-size:12px;align-items:center;
+  }
+  .statusbar .item{display:flex;align-items:center;gap:6px;}
+  .statusbar .sw{width:9px;height:9px;border-radius:50%;}
+
+  .legendbox{
+    position:absolute;bottom:12px;right:12px;z-index:460;background:rgba(11,14,13,.9);
+    border:1px solid var(--line);border-radius:var(--radius);padding:9px 10px;font-size:11px;
+  }
+  .legendbox .row{display:flex;align-items:center;gap:7px;margin:3px 0;}
+  .legendbox .sw{width:10px;height:10px;border-radius:50%;flex:none;}
+
+  .panel{background:var(--panel);border-left:1px solid var(--line);overflow-y:auto;padding:16px 16px 60px;}
+  .panel h2{font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--ash-dim);margin:22px 0 10px;font-weight:600;}
+  .panel h2:first-child{margin-top:0;}
+  .note{font-size:11px;color:var(--ash-dim);line-height:1.5;margin-top:6px;}
+  a{color:#8fd3ea;}
+
+  .card{background:var(--panel-2);border:1px solid var(--line);border-radius:var(--radius);padding:9px 10px;margin-top:8px;}
+  .card .nm{font-size:12.5px;color:#fff;font-weight:600;display:flex;justify-content:space-between;}
+  .card .rv{font-size:10.5px;color:var(--ash-dim);margin-top:1px;}
+  .card .meta{font-size:10.5px;color:var(--ash-dim);margin-top:5px;}
+  .status-pill{display:inline-block;font-size:9.5px;text-transform:uppercase;letter-spacing:.05em;
+    padding:2px 6px;border-radius:2px;font-family:'IBM Plex Mono',monospace;}
+  .status-pill.discharging{background:rgba(193,68,59,.2);color:#e88f87;}
+  .status-pill.recent{background:rgba(217,164,65,.18);color:#e8c778;}
+  .status-pill.clear{background:rgba(92,156,110,.18);color:#8fce9f;}
+  .status-pill.offline{background:rgba(92,106,99,.22);color:#a7b3ac;}
+
+  .companychip{display:inline-block;font-size:9px;color:var(--ash-dim);border:1px solid var(--line);padding:1px 5px;border-radius:2px;}
+
+  .trend-chart{width:100%;height:90px;margin-top:8px;}
+  .log-controls{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap;}
+
+  .footer-credit{font-size:10px;color:var(--ash-dim);text-align:center;margin-top:26px;line-height:1.7;}
+  .toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:#181f1c;border:1px solid var(--sewage);
+    color:#fff;padding:9px 16px;border-radius:var(--radius);font-family:'IBM Plex Mono',monospace;font-size:12px;
+    z-index:1000;opacity:0;pointer-events:none;transition:opacity .25s;max-width:440px;text-align:center;}
+  .toast.show{opacity:1;}
+  .spin{display:inline-block;width:11px;height:11px;border:2px solid var(--ash-dim);border-top-color:var(--discharging);
+    border-radius:50%;animation:sp .7s linear infinite;vertical-align:-1px;}
+  @keyframes sp{to{transform:rotate(360deg);}}
+
+  @media (max-width:920px){ .main{grid-template-columns:1fr;} .panel{border-left:none;border-top:1px solid var(--line);} }
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <div class="brand">
+      <span class="dot"></span>
+      <div><b>LEICESTERSHIRE STORM OVERFLOW MONITOR</b><br><span>Live Severn Trent + Anglian Water EDM feeds, via Water UK's National Storm Overflow Hub</span></div>
+    </div>
+    <div class="spacer"></div>
+    <button class="btn primary" id="refreshBtn">Refresh live status</button>
+  </header>
+
+  <div class="main">
+    <div class="mapwrap">
+      <div id="map"></div>
+      <div class="statusbar" id="statusbar">
+        <span><span class="spin"></span> loading live storm overflow data…</span>
+      </div>
+      <div class="legendbox">
+        <div class="row"><span class="sw" style="background:#c1443b;"></span>Discharging now</div>
+        <div class="row"><span class="sw" style="background:#d9a441;"></span>Spilled in last 48h</div>
+        <div class="row"><span class="sw" style="background:#5c9c6e;"></span>No recent spill</div>
+        <div class="row"><span class="sw" style="background:#5c6a63;"></span>Monitor offline</div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>Currently discharging</h2>
+      <div id="dischargingList" class="note">Loading…</div>
+
+      <h2>Local history log (builds from today)</h2>
+      <div class="note">
+        The live API only shows current status plus the last event's start/end — it does <b>not</b>
+        expose a queryable 6-month archive. This log fills that gap the only honest way possible:
+        it snapshots what's discharging <i>right now</i>, every time you open this tool or click
+        "Log snapshot", and stores it in this browser only. Leave it open during a rainy week, or check
+        in every few days, and a genuine local history builds up over time.
+      </div>
+      <canvas id="trendChart" class="trend-chart"></canvas>
+      <div class="log-controls">
+        <button class="btn small" id="logNowBtn">Log snapshot now</button>
+        <button class="btn small" id="exportLogBtn">Export log (CSV)</button>
+        <button class="btn small" id="clearLogBtn">Clear log</button>
+      </div>
+      <div class="note" id="logStatus"></div>
+
+      <h2>For real historical data (not just from today)</h2>
+      <div class="note">
+        Water companies don't publish a live 6-month archive, but this regulatory and campaign data
+        goes back further:
+      </div>
+      <div class="card">
+        <div class="nm">EA Storm Overflow Annual Return</div>
+        <div class="note">Official spill count &amp; total duration per overflow, published annually (previous calendar year) — not day-by-day, but the authoritative regulatory record.</div>
+        <a class="btn small" style="display:inline-block;margin-top:6px;text-decoration:none;" href="https://www.gov.uk/government/publications/storm-overflow-annual-return-data" target="_blank">Open dataset ↗</a>
+      </div>
+      <div class="card">
+        <div class="nm">Top of the Poops — Severn Trent</div>
+        <div class="note">Independent longer-run analysis built from EDM annual returns, by company.</div>
+        <a class="btn small" style="display:inline-block;margin-top:6px;text-decoration:none;" href="https://top-of-the-poops.org/company/severn-trent-water" target="_blank">Open ↗</a>
+      </div>
+      <div class="card">
+        <div class="nm">The Rivers Trust — Sewage Map</div>
+        <div class="note">National live + recent map with downstream impact modelling.</div>
+        <a class="btn small" style="display:inline-block;margin-top:6px;text-decoration:none;" href="https://www.sewagemap.co.uk/" target="_blank">Open ↗</a>
+      </div>
+
+      <div class="footer-credit">
+        Live storm overflow data: Severn Trent Water &amp; Anglian Water Event Duration Monitoring (EDM),
+        via Water UK's National Storm Overflow Hub, CC-BY licence.<br>
+        EDM indicates a monitor activation, not a confirmed or measured discharge — see panel notes.<br>
+        Basemap: © CARTO, © OpenStreetMap contributors<br>
+        Endpoints identified via the open-source <a href="https://github.com/AlexLipp/POOPy" target="_blank">POOPy</a> project (Alex Lipp, Jonny Dawe, Sudhir Balaji).<br>
+        Built for reuse across teaching sessions — see README for how to add other water companies.
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ================= MAP ================= */
+const LEICS_BOUNDS = { west:-1.55, south:52.35, east:-0.55, north:52.85 };
+const map = L.map('map', {zoomControl:true}).fitBounds([
+  [LEICS_BOUNDS.south, LEICS_BOUNDS.west], [LEICS_BOUNDS.north, LEICS_BOUNDS.east]
+]);
+L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+  maxZoom: 18, attribution: '&copy; <a href="https://carto.com/">CARTO</a> &copy; OpenStreetMap contributors'
+}).addTo(map);
+
+function toast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  clearTimeout(window._toastT);
+  window._toastT = setTimeout(()=>t.classList.remove('show'), 4200);
+}
+
+/* ================= LIVE EDM FEEDS (confirmed endpoints, no key) ================= */
+// Endpoints identified from the open-source POOPy project (github.com/AlexLipp/POOPy),
+// which powers sewagemap.co.uk — same source Water UK's National Storm Overflow Hub uses.
+const COMPANIES = [
+  {
+    key:'stw', name:'Severn Trent Water',
+    url:'https://services1.arcgis.com/NO7lTIlnxRMMG9Gw/arcgis/rest/services/Severn_Trent_Water_Storm_Overflow_Activity/FeatureServer/0/query',
+    schema:'stw',
+  },
+  {
+    key:'anglian', name:'Anglian Water',
+    url:'https://services3.arcgis.com/VCOY1atHWVcDlvlJ/arcgis/rest/services/stream_service_outfall_locations_view/FeatureServer/0/query',
+    schema:'anglian',
+  },
+];
+
+function statusClass(status, lastEventEndMs){
+  if (status === 1) return 'discharging';
+  if (status === -1) return 'offline';
+  if (lastEventEndMs != null){
+    const hoursSince = (Date.now() - lastEventEndMs) / 3.6e6;
+    if (hoursSince <= 48) return 'recent';
+  }
+  return 'clear';
+}
+const STATUS_COLOR = {discharging:'#c1443b', recent:'#d9a441', clear:'#5c9c6e', offline:'#5c6a63'};
+const STATUS_LABEL = {discharging:'Discharging now', recent:'Spilled in last 48h', clear:'No recent spill', offline:'Monitor offline'};
+
+function parseFeature(f, def){
+  const p = f.attributes || f.properties || f;
+  const lat = p.Latitude ?? p.latitude;
+  const lon = p.Longitude ?? p.longitude;
+  const status = p.Status ?? p.status;
+  const river = (p.ReceivingWaterCourse && p.ReceivingWaterCourse !== null) ? p.ReceivingWaterCourse : 'Unknown watercourse';
+  const id = p.Id ?? p.id ?? 'Unnamed monitor';
+  let lastEventStart = null, lastEventEnd = null, statusStart = null;
+  if (def.schema === 'stw'){
+    statusStart = p.StatusStart ?? null;
+    lastEventEnd = p.LatestEventEnd ?? null;
+  } else {
+    lastEventStart = p.LatestEventStart ?? null;
+    lastEventEnd = p.LatestEventEnd ?? null;
+    statusStart = lastEventStart;
+  }
+  return {
+    company: def.name, companyKey: def.key,
+    id, river, lat, lon, status,
+    statusStart, lastEventEnd,
+    sclass: statusClass(status, lastEventEnd),
+  };
+}
+
+let monitors = [];
+let markers = [];
+
+async function fetchCompany(def){
+  const bbox = [LEICS_BOUNDS.west, LEICS_BOUNDS.south, LEICS_BOUNDS.east, LEICS_BOUNDS.north].join(',');
+  const params = new URLSearchParams({
+    where:'1=1', outFields:'*', f:'json',
+    geometry: bbox, geometryType:'esriGeometryEnvelope', inSR:'4326', spatialRel:'esriSpatialRelIntersects',
+  });
+  const resp = await fetch(`${def.url}?${params.toString()}`);
+  if (!resp.ok) throw new Error(`${def.name}: HTTP ${resp.status}`);
+  const data = await resp.json();
+  if (data.error) throw new Error(`${def.name}: ${data.error.message||'service error'}`);
+  return (data.features||[]).map(f=>parseFeature(f, def)).filter(m=>m.lat && m.lon);
+}
+
+async function loadAll(){
+  document.getElementById('statusbar').innerHTML = `<span><span class="spin"></span> loading live storm overflow data…</span>`;
+  markers.forEach(m=>map.removeLayer(m)); markers = [];
+  monitors = [];
+  const results = await Promise.allSettled(COMPANIES.map(fetchCompany));
+  const failures = [];
+  results.forEach((r, i)=>{
+    if (r.status === 'fulfilled') monitors.push(...r.value);
+    else failures.push(COMPANIES[i].name);
+  });
+
+  monitors.forEach(m=>{
+    const marker = L.circleMarker([m.lat, m.lon], {
+      radius: m.sclass==='discharging'?7:5.5, color:'#0b0e0d', weight:1.4,
+      fillColor: STATUS_COLOR[m.sclass], fillOpacity: m.sclass==='discharging'?0.95:0.8,
+    }).addTo(map);
+    marker.bindPopup(popupHtml(m));
+    markers.push(marker);
+  });
+
+  const counts = {discharging:0, recent:0, clear:0, offline:0};
+  monitors.forEach(m=>counts[m.sclass]++);
+  renderStatusbar(counts, failures);
+  renderDischargingList(monitors);
+  logSnapshot(counts, false);
+  renderTrendChart();
+}
+
+function fmtDateTime(ms){
+  if (ms==null) return null;
+  return new Date(ms).toLocaleString('en-GB', {day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit'});
+}
+function timeSince(ms){
+  if (ms==null) return null;
+  const diffH = (Date.now()-ms)/3.6e6;
+  if (diffH < 1) return 'less than an hour ago';
+  if (diffH < 48) return `${Math.round(diffH)}h ago`;
+  return `${Math.round(diffH/24)} days ago`;
+}
+
+function popupHtml(m){
+  let historyLine = '';
+  if (m.sclass === 'discharging' && m.statusStart){
+    historyLine = `Discharging since ${fmtDateTime(m.statusStart)} (${timeSince(m.statusStart)})`;
+  } else if (m.lastEventEnd){
+    historyLine = `Last spill ended ${fmtDateTime(m.lastEventEnd)} (${timeSince(m.lastEventEnd)})`;
+  } else {
+    historyLine = 'No discharge on record from this monitor';
+  }
+  return `<div style="font-family:'IBM Plex Mono',monospace;font-size:12px;min-width:180px;">
+    <b>${m.river}</b><br>
+    <span style="color:#789;">${m.company} · monitor ${m.id}</span><br>
+    <span style="text-transform:uppercase;font-size:10px;letter-spacing:.05em;color:${STATUS_COLOR[m.sclass]};">${STATUS_LABEL[m.sclass]}</span><br>
+    <span style="font-size:11px;">${historyLine}</span>
+  </div>`;
+}
+
+function renderStatusbar(counts, failures){
+  const el = document.getElementById('statusbar');
+  el.innerHTML = `
+    <span class="item"><span class="sw" style="background:${STATUS_COLOR.discharging}"></span>${counts.discharging} discharging</span>
+    <span class="item"><span class="sw" style="background:${STATUS_COLOR.recent}"></span>${counts.recent} spilled &lt;48h</span>
+    <span class="item"><span class="sw" style="background:${STATUS_COLOR.clear}"></span>${counts.clear} clear</span>
+    <span class="item"><span class="sw" style="background:${STATUS_COLOR.offline}"></span>${counts.offline} offline</span>
+  `;
+  if (failures.length){
+    toast(`Could not reach: ${failures.join(', ')} — showing whichever feed(s) loaded.`);
+  }
+}
+
+function renderDischargingList(monitors){
+  const container = document.getElementById('dischargingList');
+  const active = monitors.filter(m=>m.sclass==='discharging');
+  if (!active.length){
+    container.innerHTML = `<div class="note">No monitors in Leicestershire are currently showing as discharging.</div>`;
+    return;
+  }
+  container.innerHTML = active.map(m=>`
+    <div class="card">
+      <div class="nm">${m.river}<span class="status-pill discharging">live</span></div>
+      <div class="rv"><span class="companychip">${m.company}</span> · monitor ${m.id}</div>
+      <div class="meta">${m.statusStart? 'Since '+fmtDateTime(m.statusStart)+' ('+timeSince(m.statusStart)+')' : 'Start time not reported'}</div>
+    </div>
+  `).join('');
+}
+
+document.getElementById('refreshBtn').addEventListener('click', loadAll);
+loadAll();
+
+/* ================= LOCAL HISTORY LOG (builds forward from today, honestly) ================= */
+const LOG_KEY = 'leics_sewage_monitor_log_v1';
+
+function readLog(){
+  try{ return JSON.parse(localStorage.getItem(LOG_KEY) || '[]'); }catch(e){ return []; }
+}
+function writeLog(entries){
+  try{ localStorage.setItem(LOG_KEY, JSON.stringify(entries)); }catch(e){}
+}
+function logSnapshot(counts, forced){
+  const log = readLog();
+  const today = new Date().toISOString().slice(0,10);
+  const already = log.find(e=>e.date===today);
+  if (already && !forced){
+    already.discharging = Math.max(already.discharging, counts.discharging);
+    already.recent = Math.max(already.recent, counts.recent);
+  } else if (already && forced){
+    log.push({date: today+'T'+new Date().toISOString().slice(11,16), discharging:counts.discharging, recent:counts.recent, ts:Date.now()});
+  } else {
+    log.push({date: today, discharging:counts.discharging, recent:counts.recent, ts:Date.now()});
+  }
+  // keep last ~200 entries max
+  writeLog(log.slice(-200));
+  updateLogStatus();
+}
+function updateLogStatus(){
+  const log = readLog();
+  const el = document.getElementById('logStatus');
+  if (!log.length){ el.textContent = 'No snapshots logged yet.'; return; }
+  const first = log[0].date;
+  el.textContent = `${log.length} snapshot(s) logged, earliest ${first}. This is real history — but only from when logging started on this device.`;
+}
+updateLogStatus();
+
+document.getElementById('logNowBtn').addEventListener('click', ()=>{
+  const counts = {discharging:0, recent:0, clear:0, offline:0};
+  monitors.forEach(m=>counts[m.sclass]++);
+  logSnapshot(counts, true);
+  renderTrendChart();
+  toast('Snapshot logged.');
+});
+document.getElementById('clearLogBtn').addEventListener('click', ()=>{
+  if (confirm('Clear the local storm-overflow history log? This cannot be undone.')){
+    writeLog([]);
+    updateLogStatus();
+    renderTrendChart();
+  }
+});
+document.getElementById('exportLogBtn').addEventListener('click', ()=>{
+  const log = readLog();
+  if (!log.length){ toast('Nothing logged yet.'); return; }
+  const rows = ['date,discharging_count,recent_48h_count'];
+  log.forEach(e=>rows.push(`${e.date},${e.discharging},${e.recent}`));
+  const blob = new Blob([rows.join('\n')], {type:'text/csv'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'leicestershire_storm_overflow_log.csv';
+  a.click();
+  URL.revokeObjectURL(url);
+});
+
+function renderTrendChart(){
+  const canvas = document.getElementById('trendChart');
+  const ctx = canvas.getContext('2d');
+  const dpr = window.devicePixelRatio || 1;
+  const w = canvas.clientWidth || 340, h = 90;
+  canvas.width = w*dpr; canvas.height = h*dpr;
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  ctx.clearRect(0,0,w,h);
+
+  const log = readLog();
+  if (log.length < 2){
+    ctx.fillStyle = '#7e9088'; ctx.font = '11px IBM Plex Mono, monospace';
+    ctx.fillText('Log at least 2 snapshots to see a trend line.', 8, h/2);
+    return;
+  }
+  const maxVal = Math.max(1, ...log.map(e=>e.discharging));
+  const padL=28, padR=8, padT=8, padB=16;
+  const plotW = w-padL-padR, plotH = h-padT-padB;
+  ctx.strokeStyle = '#28322d'; ctx.lineWidth=1;
+  ctx.beginPath(); ctx.moveTo(padL,padT); ctx.lineTo(padL,padT+plotH); ctx.lineTo(padL+plotW,padT+plotH); ctx.stroke();
+  ctx.fillStyle = '#7e9088'; ctx.font = '9px IBM Plex Mono, monospace';
+  ctx.fillText(String(maxVal), 2, padT+4);
+  ctx.fillText('0', 2, padT+plotH);
+
+  ctx.strokeStyle = '#c1443b'; ctx.lineWidth = 1.6; ctx.beginPath();
+  log.forEach((e,i)=>{
+    const x = padL + (log.length===1? 0 : i/(log.length-1))*plotW;
+    const y = padT + plotH - (e.discharging/maxVal)*plotH;
+    if (i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+  });
+  ctx.stroke();
+  log.forEach((e,i)=>{
+    const x = padL + (log.length===1? 0 : i/(log.length-1))*plotW;
+    const y = padT + plotH - (e.discharging/maxVal)*plotH;
+    ctx.fillStyle = '#c1443b';
+    ctx.beginPath(); ctx.arc(x,y,2.2,0,7); ctx.fill();
+  });
+}
+renderTrendChart();
+window.addEventListener('resize', renderTrendChart);
+</script>
+</body>
+</html>

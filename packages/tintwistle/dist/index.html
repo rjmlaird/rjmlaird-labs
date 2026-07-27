@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EMS Impact Viewer — Copernicus Wildfire Mapping</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css"/>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/turf/6.5.0/turf.min.js"></script>
+<script src="ems-sample-emsr897.js"></script>
+<style>
+  :root{
+    --bg: #0a0d10;
+    --panel: #12171c;
+    --panel-2: #171d23;
+    --line: #232b32;
+    --ash: #c6ccd1;
+    --ash-dim: #7c8791;
+    --ember: #ff6a3d;
+    --ember-dim: #b9491f;
+    --sat-blue: #3fa7d6;
+    --veg: #5fa878;
+    --warn: #e8c547;
+    --radius: 3px;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;height:100%;background:var(--bg);color:var(--ash);font-family:'IBM Plex Sans',sans-serif;}
+  ::-webkit-scrollbar{width:8px;height:8px;}
+  ::-webkit-scrollbar-thumb{background:#2a333b;border-radius:4px;}
+  ::-webkit-scrollbar-track{background:transparent;}
+
+  .app{display:grid;grid-template-rows:auto 1fr;height:100vh;}
+
+  /* ---------- header / mission strip ---------- */
+  header{
+    display:flex;align-items:center;gap:22px;
+    padding:10px 18px;background:linear-gradient(180deg,#12171c,#0d1114);
+    border-bottom:1px solid var(--line);
+    font-family:'IBM Plex Mono',monospace;
+    flex-wrap:wrap;
+  }
+  .brand{display:flex;align-items:center;gap:10px;margin-right:8px;}
+  .brand .dot{width:9px;height:9px;border-radius:50%;background:var(--ember);box-shadow:0 0 8px 2px rgba(255,106,61,.6);animation:pulse 2.2s infinite;}
+  @keyframes pulse{0%,100%{opacity:1;}50%{opacity:.35;}}
+  .brand b{font-family:'IBM Plex Sans',sans-serif;font-weight:700;font-size:15px;letter-spacing:.2px;color:#fff;}
+  .brand span{font-size:11px;color:var(--ash-dim);}
+
+  .field{display:flex;flex-direction:column;gap:2px;}
+  .field label{font-size:9px;text-transform:uppercase;letter-spacing:.09em;color:var(--ash-dim);}
+  .field input, .field select{
+    background:var(--panel-2);border:1px solid var(--line);color:var(--ash);
+    font-family:'IBM Plex Mono',monospace;font-size:12px;padding:5px 7px;border-radius:var(--radius);
+    min-width:120px;
+  }
+  .field input:focus, .field select:focus{outline:1px solid var(--ember);}
+
+  .spacer{flex:1;}
+  .btn{
+    font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.02em;
+    background:var(--panel-2);color:var(--ash);border:1px solid var(--line);
+    padding:8px 12px;border-radius:var(--radius);cursor:pointer;white-space:nowrap;
+    transition:border-color .15s, color .15s;
+  }
+  .btn:hover{border-color:var(--ash-dim);color:#fff;}
+  .btn.primary{background:var(--ember);border-color:var(--ember);color:#1a0a04;font-weight:600;}
+  .btn.primary:hover{background:#ff7d55;}
+  .btn.ghost{background:transparent;}
+
+  /* ---------- main layout ---------- */
+  .main{display:grid;grid-template-columns:1fr 360px;min-height:0;}
+  .mapwrap{position:relative;min-height:0;}
+  #map{position:absolute;inset:0;background:#0a0d10;}
+
+  /* swipe divider */
+  #afterClip{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:400;}
+  #divider{
+    position:absolute;top:0;bottom:0;width:2px;background:var(--ember);
+    box-shadow:0 0 10px 2px rgba(255,106,61,.7);cursor:ew-resize;z-index:450;pointer-events:auto;
+  }
+  #divider::after{
+    content:"⟷";position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+    width:34px;height:34px;background:var(--ember);color:#1a0a04;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;
+    box-shadow:0 2px 10px rgba(0,0,0,.5);
+  }
+  .swipe-label{
+    position:absolute;top:12px;z-index:460;font-family:'IBM Plex Mono',monospace;font-size:10.5px;
+    letter-spacing:.08em;text-transform:uppercase;background:rgba(10,13,16,.78);
+    padding:5px 9px;border:1px solid var(--line);border-radius:var(--radius);color:var(--ash);
+    pointer-events:none;
+  }
+  .swipe-label.before{left:12px;border-left:2px solid var(--sat-blue);}
+  .swipe-label.after{right:12px;border-left:2px solid var(--ember);}
+
+  .legend{
+    position:absolute;bottom:12px;left:12px;z-index:460;background:rgba(10,13,16,.85);
+    border:1px solid var(--line);border-radius:var(--radius);padding:9px 11px;
+    font-size:11px;line-height:1.7;max-width:210px;
+  }
+  .legend .row{display:flex;align-items:center;gap:7px;}
+  .swatch{width:10px;height:10px;border-radius:2px;flex:none;}
+
+  .layerbar{
+    position:absolute;top:12px;left:50%;transform:translateX(-50%);z-index:460;
+    display:flex;gap:6px;background:rgba(10,13,16,.85);border:1px solid var(--line);
+    padding:6px;border-radius:var(--radius);flex-wrap:wrap;justify-content:center;max-width:76%;
+  }
+  .chip{
+    font-family:'IBM Plex Mono',monospace;font-size:10.5px;padding:5px 9px;border-radius:2px;
+    border:1px solid var(--line);color:var(--ash-dim);cursor:pointer;user-select:none;background:transparent;
+  }
+  .chip.on{color:#fff;border-color:var(--ash-dim);background:var(--panel-2);}
+  .chip .sw{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:5px;}
+
+  /* ---------- side panel ---------- */
+  .panel{background:var(--panel);border-left:1px solid var(--line);overflow-y:auto;padding:16px 16px 60px;}
+  .panel h2{
+    font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--ash-dim);
+    margin:22px 0 10px;font-weight:600;
+  }
+  .panel h2:first-child{margin-top:0;}
+  .stat-big{
+    font-family:'IBM Plex Mono',monospace;font-size:30px;font-weight:600;color:#fff;line-height:1.05;
+  }
+  .stat-big small{font-size:13px;color:var(--ash-dim);font-weight:400;margin-left:4px;}
+  .stat-sub{font-size:11.5px;color:var(--ash-dim);margin-top:3px;}
+
+  .kpi-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  .kpi{background:var(--panel-2);border:1px solid var(--line);border-radius:var(--radius);padding:10px 11px;}
+  .kpi .v{font-family:'IBM Plex Mono',monospace;font-size:19px;font-weight:600;color:#fff;}
+  .kpi .l{font-size:10px;color:var(--ash-dim);text-transform:uppercase;letter-spacing:.06em;margin-top:2px;}
+
+  .bar-row{margin-bottom:7px;}
+  .bar-row .lbl{display:flex;justify-content:space-between;font-size:11px;margin-bottom:3px;color:var(--ash);}
+  .bar-row .track{height:6px;background:var(--panel-2);border-radius:3px;overflow:hidden;}
+  .bar-row .fill{height:100%;border-radius:3px;}
+
+  .impact-box{
+    border:1px solid var(--ember-dim);background:rgba(255,106,61,.06);border-radius:var(--radius);
+    padding:12px 13px;margin-top:6px;
+  }
+  .impact-box.empty{border-style:dashed;border-color:var(--line);background:transparent;color:var(--ash-dim);font-size:12px;line-height:1.5;}
+  .impact-box .row{display:flex;justify-content:space-between;align-items:baseline;padding:5px 0;border-bottom:1px dashed var(--line);}
+  .impact-box .row:last-child{border-bottom:none;}
+  .impact-box .row .l{font-size:11.5px;color:var(--ash-dim);}
+  .impact-box .row .v{font-family:'IBM Plex Mono',monospace;font-size:14px;color:#fff;}
+
+  .upload-zone{
+    border:1.5px dashed var(--line);border-radius:var(--radius);padding:14px;text-align:center;
+    font-size:11.5px;color:var(--ash-dim);cursor:pointer;transition:border-color .15s;
+  }
+  .upload-zone:hover, .upload-zone.drag{border-color:var(--ember);color:var(--ash);}
+  .upload-zone b{color:var(--ash);}
+  #fileInput{display:none;}
+
+  .layer-list{font-size:11px;margin-top:8px;}
+  .layer-list .li{display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--line);}
+  .layer-list .li .status{color:var(--veg);}
+  .layer-list .li .status.missing{color:var(--ash-dim);}
+
+  .note{font-size:11px;color:var(--ash-dim);line-height:1.5;margin-top:8px;}
+  .footer-credit{font-size:10px;color:var(--ash-dim);text-align:center;margin-top:26px;line-height:1.6;}
+  a{color:var(--sat-blue);}
+
+  .toast{
+    position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:#171d23;
+    border:1px solid var(--ember);color:#fff;padding:9px 16px;border-radius:var(--radius);
+    font-family:'IBM Plex Mono',monospace;font-size:12px;z-index:1000;opacity:0;pointer-events:none;
+    transition:opacity .25s;
+  }
+  .toast.show{opacity:1;}
+
+  @media (max-width:860px){
+    .main{grid-template-columns:1fr;}
+    .panel{border-left:none;border-top:1px solid var(--line);}
+  }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <header>
+    <div class="brand">
+      <span class="dot"></span>
+      <div><b>EMS IMPACT VIEWER</b><br><span>Copernicus Emergency Mapping · before/after &amp; exposure analysis</span></div>
+    </div>
+
+    <div class="field">
+      <label>Activation</label>
+      <input id="cfgEmsr" type="text" value="EMSR897">
+    </div>
+    <div class="field">
+      <label>AOI / Site</label>
+      <input id="cfgAoi" type="text" value="AOI01 — Tintwistle Moor">
+    </div>
+    <div class="field">
+      <label>Before date</label>
+      <input id="cfgBefore" type="date" value="2026-06-20">
+    </div>
+    <div class="field">
+      <label>After date</label>
+      <input id="cfgAfter" type="date" value="2026-07-18">
+    </div>
+    <button class="btn" id="applyDates">Update imagery</button>
+
+    <div class="spacer"></div>
+    <button class="btn" id="loadSample">Load EMSR897 demo</button>
+    <button class="btn primary" id="uploadBtn">Load activation data…</button>
+  </header>
+
+  <div class="main">
+    <div class="mapwrap">
+      <div id="map"></div>
+      <div id="afterClip"><div id="afterInner" style="position:absolute;inset:0;"></div></div>
+      <div id="divider" style="left:50%;"></div>
+      <div class="swipe-label before">◀ Before — <span id="lblBefore">20 Jun 2026</span></div>
+      <div class="swipe-label after">After — <span id="lblAfter">18 Jul 2026</span> ▶</div>
+
+      <div class="layerbar" id="layerbar"></div>
+
+      <div class="legend" id="legend" style="display:none;">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--ash-dim);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px;">Land cover</div>
+        <div id="legendRows"></div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>Extent</h2>
+      <div class="stat-big" id="statAoiArea">—<small>km²</small></div>
+      <div class="stat-sub" id="statAoiName">Load activation data to begin</div>
+
+      <div class="kpi-grid" style="margin-top:12px;">
+        <div class="kpi"><div class="v" id="kpiBuildings">—</div><div class="l">Buildings mapped</div></div>
+        <div class="kpi"><div class="v" id="kpiFacilities">—</div><div class="l">Facilities</div></div>
+        <div class="kpi"><div class="v" id="kpiRoadKm">—</div><div class="l">Transport network, km</div></div>
+        <div class="kpi"><div class="v" id="kpiBuiltKm2">—</div><div class="l">Built-up footprint, km²</div></div>
+      </div>
+
+      <h2>Land cover exposed in AOI</h2>
+      <div id="landcoverBars"><div class="note">No land-cover layer loaded.</div></div>
+
+      <h2>Measurable impact</h2>
+      <div id="impactPanel" class="impact-box empty">
+        Upload a burnt-area / delineation layer (the fire perimeter polygon, usually a separate EMS "Delineation" or "Grading" product) to calculate burnt extent, exposed buildings, and affected road network automatically.
+      </div>
+
+      <h2>Data layers</h2>
+      <div class="layer-list" id="layerList"></div>
+      <div class="upload-zone" id="dropZone" style="margin-top:10px;">
+        <b>Drop GeoJSON files here</b><br>or click to browse — AOI, built-up, facilities,
+        land cover, transportation, or a delineation/burnt-area layer.
+        <input type="file" id="fileInput" multiple accept=".json,.geojson">
+      </div>
+      <div class="note">
+        Filenames following the Copernicus EMS convention
+        (<code>*_areaOfInterestA_*</code>, <code>*_builtUpA_*</code>, <code>*_facilitiesA/L_*</code>,
+        <code>*_naturalLandUseA_*</code>, <code>*_transportationL_*</code>) are detected automatically.
+        Anything else — including a burnt-area / delineation polygon — can be assigned manually below.
+      </div>
+
+      <div class="footer-credit">
+        Basemap imagery: NASA EOSDIS GIBS (VIIRS / MODIS true colour, by date)<br>
+        Reference vector data: Copernicus Emergency Management Service<br>
+        Built for reuse across future EMS activations
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ================= CONFIG ================= */
+const LC_COLORS = {
+  "Peatbogs":"#7a6a4f", "Moors and heathland":"#b08d57", "Natural grassland":"#8fae5c",
+  "Pastures":"#6fa96f", "Coniferous forest":"#2f5d3a", "Broad-leaved forest":"#4f7a3f",
+  "Mixed forest":"#3f6a3f", "Transitional woodland shrub":"#9c8a4f", "Other":"#5a6570",
+  "default":"#5a6570"
+};
+function lcColor(label){
+  for (const k in LC_COLORS){ if (label && label.includes(k)) return LC_COLORS[k]; }
+  return LC_COLORS.default;
+}
+const GIBS_LAYER = "VIIRS_SNPP_CorrectedReflectance_TrueColor";
+function gibsUrl(dateStr){
+  return `https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/${GIBS_LAYER}/default/${dateStr}/GoogleMapsCompatible_Level9/{z}/{y}/{x}.jpg`;
+}
+
+/* ================= STATE ================= */
+const state = {
+  layers: { aoi:null, builtup:null, facilities:null, landuse:null, transport:null, delineation:null },
+  leaflet: { map:null, beforeTile:null, afterTile:null, aoiLayer:null, builtLayer:null, facLayer:null, luLayer:null, transLayer:null, delinLayer:null },
+  visible: { landuse:true, builtup:false, facilities:false, transport:false, delineation:true }
+};
+
+/* ================= MAP INIT ================= */
+const map = L.map('map', {zoomControl:true, attributionControl:true}).setView([53.51, -1.94], 11);
+state.leaflet.map = map;
+
+function refreshBaseLayers(){
+  const beforeDate = document.getElementById('cfgBefore').value || '2026-06-20';
+  const afterDate = document.getElementById('cfgAfter').value || '2026-07-18';
+  document.getElementById('lblBefore').textContent = fmtDate(beforeDate);
+  document.getElementById('lblAfter').textContent = fmtDate(afterDate);
+
+  if (state.leaflet.beforeTile) map.removeLayer(state.leaflet.beforeTile);
+  if (state.leaflet.afterTile) map.removeLayer(state.leaflet.afterTile);
+
+  state.leaflet.beforeTile = L.tileLayer(gibsUrl(beforeDate), {
+    maxZoom: 100, minZoom: 2, tileSize:256,
+    attribution:'Imagery © NASA EOSDIS GIBS'
+  }).addTo(map);
+
+  // "after" tile goes inside the clipped div, positioned via a second leaflet instance-free approach:
+  // simplest robust technique — a second full Leaflet map synced to the first, clipped by width.
+  buildAfterMap(afterDate);
+}
+
+function fmtDate(iso){
+  const d = new Date(iso+"T00:00:00Z");
+  return d.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric',timeZone:'UTC'});
+}
+
+/* ---- synced "after" map for the swipe (separate Leaflet instance, clipped) ---- */
+let afterMap = null;
+function buildAfterMap(afterDate){
+  const afterInner = document.getElementById('afterInner');
+  afterInner.innerHTML = '';
+  const div = document.createElement('div');
+  div.style.position='absolute'; div.style.inset='0';
+  div.id = 'afterMapDiv';
+  afterInner.appendChild(div);
+
+  afterMap = L.map('afterMapDiv', {zoomControl:false, attributionControl:false, dragging:false, scrollWheelZoom:false, doubleClickZoom:false, boxZoom:false, keyboard:false, touchZoom:false});
+  afterMap.setView(map.getCenter(), map.getZoom());
+  L.tileLayer(gibsUrl(afterDate), {maxZoom:9, minZoom:2, tileSize:256}).addTo(afterMap);
+
+  map.on('move zoom', syncAfter);
+  syncAfter();
+  redrawOverlaysOn(afterMap, true);
+}
+function syncAfter(){
+  if (!afterMap) return;
+  afterMap.setView(map.getCenter(), map.getZoom(), {animate:false});
+}
+
+/* ---- swipe divider drag ---- */
+const divider = document.getElementById('divider');
+const afterClip = document.getElementById('afterClip');
+let dragging = false;
+function setClip(px){
+  const w = document.querySelector('.mapwrap').clientWidth;
+  const pct = Math.max(2, Math.min(98, (px/w)*100));
+  divider.style.left = pct+'%';
+  afterClip.style.clipPath = `inset(0 0 0 ${pct}%)`;
+}
+divider.addEventListener('mousedown', ()=>dragging=true);
+window.addEventListener('mouseup', ()=>dragging=false);
+window.addEventListener('mousemove', e=>{
+  if(!dragging) return;
+  const rect = document.querySelector('.mapwrap').getBoundingClientRect();
+  setClip(e.clientX-rect.left);
+});
+divider.addEventListener('touchstart', ()=>dragging=true, {passive:true});
+window.addEventListener('touchend', ()=>dragging=false);
+window.addEventListener('touchmove', e=>{
+  if(!dragging) return;
+  const rect = document.querySelector('.mapwrap').getBoundingClientRect();
+  setClip(e.touches[0].clientX-rect.left);
+}, {passive:true});
+setTimeout(()=>setClip(document.querySelector('.mapwrap').clientWidth/2), 50);
+
+document.getElementById('applyDates').addEventListener('click', refreshBaseLayers);
+refreshBaseLayers();
+
+/* ================= LAYER TOGGLE BAR ================= */
+const LAYER_DEFS = [
+  {key:'landuse', label:'Land cover', color:'#8fae5c'},
+  {key:'builtup', label:'Buildings', color:'#e8c547'},
+  {key:'facilities', label:'Facilities', color:'#3fa7d6'},
+  {key:'transport', label:'Transport', color:'#c6ccd1'},
+  {key:'delineation', label:'Fire perimeter', color:'#ff6a3d'},
+];
+function buildLayerBar(){
+  const bar = document.getElementById('layerbar');
+  bar.innerHTML = '';
+  LAYER_DEFS.forEach(d=>{
+    const chip = document.createElement('div');
+    chip.className = 'chip' + (state.visible[d.key] ? ' on':'');
+    chip.innerHTML = `<span class="sw" style="background:${d.color}"></span>${d.label}`;
+    chip.addEventListener('click', ()=>{
+      state.visible[d.key] = !state.visible[d.key];
+      chip.classList.toggle('on');
+      renderAllLayers();
+    });
+    bar.appendChild(chip);
+  });
+}
+buildLayerBar();
+
+/* ================= LAYER RENDERING ================= */
+function clearLayer(key){
+  ['leaflet'].forEach(()=>{});
+  const l = state.leaflet;
+  const map1 = map, map2 = afterMap;
+  const propName = key+'Layer';
+  if (l[propName]) { try{map.removeLayer(l[propName]);}catch(e){} l[propName]=null; }
+  if (l[propName+'2']) { try{afterMap && afterMap.removeLayer(l[propName+'2']);}catch(e){} l[propName+'2']=null; }
+}
+
+function redrawOverlaysOn(targetMap, isAfter){
+  // draw whichever toggled layers currently have data, onto a given map instance
+  const suffix = isAfter ? '2' : '';
+  if (state.layers.aoi){
+    const ly = L.geoJSON(state.layers.aoi, {style:{color:'#ff6a3d', weight:2, fillOpacity:0, dashArray:'4 3'}}).addTo(targetMap);
+    state.leaflet['aoiLayer'+suffix] = ly;
+  }
+  if (state.visible.landuse && state.layers.landuse){
+    const ly = L.geoJSON(state.layers.landuse, {
+      style:f=>({color:lcColor(f.properties.class), weight:0, fillOpacity:.45, fillColor:lcColor(f.properties.class)})
+    }).addTo(targetMap);
+    state.leaflet['luLayer'+suffix]=ly;
+  }
+  if (state.visible.builtup && state.layers.builtup){
+    const ly = L.geoJSON(state.layers.builtup, {
+      pointToLayer:(f,latlng)=>L.circleMarker(latlng,{radius:2,color:'#e8c547',weight:0,fillOpacity:.8})
+    }).addTo(targetMap);
+    state.leaflet['builtLayer'+suffix]=ly;
+  }
+  if (state.visible.facilities && state.layers.facilities){
+    const ly = L.geoJSON(state.layers.facilities, {
+      pointToLayer:(f,latlng)=>L.circleMarker(latlng,{radius:3,color:'#3fa7d6',weight:1,fillOpacity:.5})
+    }).addTo(targetMap);
+    state.leaflet['facLayer'+suffix]=ly;
+  }
+  if (state.visible.transport && state.layers.transport){
+    const ly = L.geoJSON(state.layers.transport, {style:{color:'#c6ccd1', weight:1, opacity:.55}}).addTo(targetMap);
+    state.leaflet['transLayer'+suffix]=ly;
+  }
+  if (state.visible.delineation && state.layers.delineation){
+    const ly = L.geoJSON(state.layers.delineation, {
+      style:{color:'#ff2d00', weight:2, fillColor:'#ff2d00', fillOpacity:.35}
+    }).addTo(targetMap);
+    state.leaflet['delinLayer'+suffix]=ly;
+  }
+}
+
+function renderAllLayers(){
+  ['aoi','builtup','facilities','landuse','transport','delineation'].forEach(k=>{
+    const propMap = {aoi:'aoiLayer',builtup:'builtLayer',facilities:'facLayer',landuse:'luLayer',transport:'transLayer',delineation:'delinLayer'};
+    const p = propMap[k];
+    if (state.leaflet[p]) { map.removeLayer(state.leaflet[p]); state.leaflet[p]=null; }
+    if (afterMap && state.leaflet[p+'2']) { afterMap.removeLayer(state.leaflet[p+'2']); state.leaflet[p+'2']=null; }
+  });
+  redrawOverlaysOn(map, false);
+  if (afterMap) redrawOverlaysOn(afterMap, true);
+  updateLegend();
+}
+
+function updateLegend(){
+  const legend = document.getElementById('legend');
+  const rows = document.getElementById('legendRows');
+  if (!state.visible.landuse || !state.layers.landuse){ legend.style.display='none'; return; }
+  const classes = new Set();
+  state.layers.landuse.features.forEach(f=>classes.add(f.properties.class));
+  rows.innerHTML = '';
+  [...classes].slice(0,8).forEach(c=>{
+    const short = c.replace(/^\d+-/,'');
+    rows.innerHTML += `<div class="row"><span class="swatch" style="background:${lcColor(c)}"></span>${short}</div>`;
+  });
+  legend.style.display = 'block';
+}
+
+/* ================= STATS / IMPACT PANEL ================= */
+function fmt(n, d=1){ return Number(n).toLocaleString(undefined,{maximumFractionDigits:d}); }
+
+function refreshStats(){
+  const s = state.layers.stats;
+  if (s){
+    document.getElementById('statAoiArea').innerHTML = fmt(s.aoi_area_km2,1)+'<small>km²</small>';
+    const nm = s.aoi_name || {};
+    document.getElementById('statAoiName').textContent = `${nm.emsr_id||''} · ${nm.locality||''} · ${nm.map_type||'reference'} product`;
+    document.getElementById('kpiBuildings').textContent = s.builtup_count!=null ? fmt(s.builtup_count,0) : '—';
+    document.getElementById('kpiFacilities').textContent = s.facilities_count!=null ? fmt(s.facilities_count,0) : '—';
+    document.getElementById('kpiRoadKm').textContent = s.transport_total_km!=null ? fmt(s.transport_total_km,0) : '—';
+    document.getElementById('kpiBuiltKm2').textContent = s.builtup_footprint_km2!=null ? fmt(s.builtup_footprint_km2,2) : '—';
+
+    if (s.land_use_km2){
+      const total = Object.values(s.land_use_km2).reduce((a,b)=>a+b,0);
+      const bars = document.getElementById('landcoverBars');
+      bars.innerHTML = '';
+      Object.entries(s.land_use_km2).slice(0,8).forEach(([k,v])=>{
+        const pct = total? (v/total*100):0;
+        const short = k.replace(/^\d+-/,'');
+        bars.innerHTML += `<div class="bar-row">
+          <div class="lbl"><span>${short}</span><span>${fmt(v,1)} km² · ${fmt(pct,0)}%</span></div>
+          <div class="track"><div class="fill" style="width:${pct}%;background:${lcColor(k)}"></div></div>
+        </div>`;
+      });
+    }
+  } else {
+    document.getElementById('statAoiArea').innerHTML = '—<small>km²</small>';
+  }
+  computeImpact();
+  updateLayerList();
+}
+
+function computeImpact(){
+  const box = document.getElementById('impactPanel');
+  const delin = state.layers.delineation;
+  const aoi = state.layers.aoi;
+  if (!delin){
+    box.className = 'impact-box empty';
+    box.innerHTML = 'Upload a burnt-area / delineation layer (the fire perimeter polygon, usually a separate EMS "Delineation" or "Grading" product) to calculate burnt extent, exposed buildings, and affected road network automatically.';
+    return;
+  }
+  try{
+    let burnt = delin;
+    // union all delineation polygons into one feature for area calc
+    let unioned = delin.features[0];
+    for (let i=1;i<delin.features.length;i++){
+      try{ unioned = turf.union(unioned, delin.features[i]); }catch(e){}
+    }
+    const burntKm2 = turf.area(unioned)/1e6;
+    const aoiKm2 = aoi ? turf.area(aoi.features[0])/1e6 : null;
+    const pctAoi = aoiKm2 ? (burntKm2/aoiKm2*100) : null;
+
+    let buildingsInside = 0;
+    if (state.layers.builtup){
+      state.layers.builtup.features.forEach(f=>{
+        try{ if (turf.booleanPointInPolygon(f, unioned)) buildingsInside++; }catch(e){}
+      });
+    }
+    let facilitiesInside = 0;
+    if (state.layers.facilities){
+      state.layers.facilities.features.forEach(f=>{
+        try{ if (turf.booleanPointInPolygon(f, unioned)) facilitiesInside++; }catch(e){}
+      });
+    }
+    let roadKm = 0;
+    if (state.layers.transport){
+      state.layers.transport.features.forEach(f=>{
+        try{
+          const clipped = turf.lineIntersect(f, turf.polygonToLine(unioned));
+          // approximate: if line intersects boundary or is within, measure length of segments inside
+          if (turf.booleanWithin(f, unioned)) { roadKm += turf.length(f,{units:'kilometers'}); }
+          else if (clipped.features.length>0){ roadKm += turf.length(f,{units:'kilometers'})*0.5; }
+        }catch(e){}
+      });
+    }
+
+    box.className = 'impact-box';
+    box.innerHTML = `
+      <div class="row"><span class="l">Burnt / affected extent</span><span class="v">${fmt(burntKm2,2)} km² (${fmt(burntKm2*100,0)} ha)</span></div>
+      ${pctAoi!=null?`<div class="row"><span class="l">Share of AOI</span><span class="v">${fmt(pctAoi,1)}%</span></div>`:''}
+      <div class="row"><span class="l">Buildings within perimeter</span><span class="v">${fmt(buildingsInside,0)}</span></div>
+      <div class="row"><span class="l">Facilities within perimeter</span><span class="v">${fmt(facilitiesInside,0)}</span></div>
+      <div class="row"><span class="l">Road/track network affected</span><span class="v">≈${fmt(roadKm,1)} km</span></div>
+    `;
+  }catch(e){
+    box.className = 'impact-box empty';
+    box.innerHTML = 'Could not compute impact statistics from the uploaded delineation layer — check it contains valid (multi)polygon geometry.';
+    console.error(e);
+  }
+}
+
+function updateLayerList(){
+  const defs = [
+    {key:'aoi', label:'Area of interest'},
+    {key:'landuse', label:'Natural land cover'},
+    {key:'builtup', label:'Built-up areas'},
+    {key:'facilities', label:'Facilities'},
+    {key:'transport', label:'Transportation'},
+    {key:'delineation', label:'Fire perimeter / delineation'},
+  ];
+  const list = document.getElementById('layerList');
+  list.innerHTML = '';
+  defs.forEach(d=>{
+    const has = !!state.layers[d.key];
+    list.innerHTML += `<div class="li"><span>${d.label}</span><span class="status ${has?'':'missing'}">${has?'loaded':'not loaded'}</span></div>`;
+  });
+}
+updateLayerList();
+
+/* ================= DATA LOADING ================= */
+function toast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  clearTimeout(window._toastT);
+  window._toastT = setTimeout(()=>t.classList.remove('show'), 3200);
+}
+
+function detectLayerKey(filename){
+  const f = filename.toLowerCase();
+  if (f.includes('areaofinterest')) return 'aoi';
+  if (f.includes('builtup')) return 'builtup';
+  if (f.includes('facilities')) return 'facilities';
+  if (f.includes('naturallanduse') || f.includes('landuse') || f.includes('landcover')) return 'landuse';
+  if (f.includes('transportation') || f.includes('roads')) return 'transport';
+  if (f.includes('delineation') || f.includes('grading') || f.includes('burnt') || f.includes('burn') ||
+      f.includes('observedevent') || f.includes('hazard') || f.includes('fire')) return 'delineation';
+  return null;
+}
+
+function loadGeoJSONFile(file){
+  const reader = new FileReader();
+  reader.onload = e=>{
+    try{
+      const gj = JSON.parse(e.target.result);
+      let key = detectLayerKey(file.name);
+      if (!key){
+        key = prompt(`Couldn't auto-detect the layer type for "${file.name}".\nType one of: aoi, builtup, facilities, landuse, transport, delineation`);
+      }
+      if (!key || !state.layers.hasOwnProperty(key)){
+        toast(`Skipped ${file.name} — unrecognised layer type`);
+        return;
+      }
+      state.layers[key] = gj;
+      toast(`Loaded ${file.name} → ${key}`);
+      if (key==='aoi' && gj.features[0]){
+        const b = turf.bbox(gj.features[0]);
+        map.fitBounds([[b[1],b[0]],[b[3],b[2]]], {padding:[20,20]});
+      }
+      renderAllLayers();
+      refreshStats();
+    }catch(err){
+      toast(`Could not parse ${file.name} as GeoJSON`);
+      console.error(err);
+    }
+  };
+  reader.readAsText(file);
+}
+
+const dropZone = document.getElementById('dropZone');
+const fileInput = document.getElementById('fileInput');
+dropZone.addEventListener('click', ()=>fileInput.click());
+document.getElementById('uploadBtn').addEventListener('click', ()=>fileInput.click());
+fileInput.addEventListener('change', e=>{
+  [...e.target.files].forEach(loadGeoJSONFile);
+  fileInput.value = '';
+});
+['dragenter','dragover'].forEach(ev=>dropZone.addEventListener(ev, e=>{e.preventDefault();dropZone.classList.add('drag');}));
+['dragleave','drop'].forEach(ev=>dropZone.addEventListener(ev, e=>{e.preventDefault();dropZone.classList.remove('drag');}));
+dropZone.addEventListener('drop', e=>{
+  [...e.dataTransfer.files].forEach(loadGeoJSONFile);
+});
+
+/* ================= SAMPLE DATA ================= */
+document.getElementById('loadSample').addEventListener('click', ()=>{
+  if (typeof EMS_SAMPLE_DATA === 'undefined'){
+    toast('Sample data file (ems-sample-emsr897.js) not found alongside this HTML file');
+    return;
+  }
+  state.layers.aoi = EMS_SAMPLE_DATA.aoi;
+  state.layers.landuse = EMS_SAMPLE_DATA.landuse;
+  state.layers.builtup = EMS_SAMPLE_DATA.builtup;
+  state.layers.facilities = EMS_SAMPLE_DATA.facilities;
+  state.layers.transport = EMS_SAMPLE_DATA.transport;
+  state.layers.stats = EMS_SAMPLE_DATA.stats;
+  state.layers.delineation = null;
+
+  const b = turf.bbox(EMS_SAMPLE_DATA.aoi.features[0]);
+  map.fitBounds([[b[1],b[0]],[b[3],b[2]]], {padding:[20,20]});
+
+  state.visible.landuse = true;
+  buildLayerBar();
+  renderAllLayers();
+  refreshStats();
+  toast('Loaded EMSR897 · AOI01 Tintwistle Moor reference data');
+});
+</script>
+</body>
+</html>

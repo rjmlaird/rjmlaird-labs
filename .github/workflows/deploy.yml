@@ -4,15 +4,23 @@ on:
   push:
     branches: [main]
     paths:
-      - "packages/labs-index/**"
-      - "packages/lab-orbital-mechanics/**"
-      - "packages/graphs/**"
-      - "packages/mechanics/**"
+      - "packages/astro/**"
+      - "packages/biodiversity/**"
       - "packages/carbon-reduction-plan/**"
-      - "packages/equation-scanner/**"
-      - "packages/contrast-lab/**"
-      - "packages/wildfire-story-lab/**"
       - "packages/climate-visualiser/**"
+      - "packages/component-sandbox/**"
+      - "packages/contrast-lab/**"
+      - "packages/drought/**"
+      - "packages/equation-scanner/**"
+      - "packages/exp-example/**"
+      - "packages/graphs/**"
+      - "packages/lab-orbital-mechanics/**"
+      - "packages/labs-index/**"
+      - "packages/mechanics/**"
+      - "packages/satellites/**"
+      - "packages/sewage/**"
+      - "packages/tintwistle/**"
+      - "packages/wildfire-story-lab/**"
       - "pnpm-workspace.yaml"
       - "package.json"
       - "pnpm-lock.yaml"
@@ -25,15 +33,23 @@ on:
         type: choice
         options:
           - all
-          - labs-index
-          - lab-orbital-mechanics
-          - graphs
-          - mechanics
+          - astro
+          - biodiversity
           - carbon-reduction-plan
-          - equation-scanner
-          - contrast-lab
-          - wildfire-story-lab
           - climate-visualiser
+          - component-sandbox
+          - contrast-lab
+          - drought
+          - equation-scanner
+          - exp-example
+          - graphs
+          - lab-orbital-mechanics
+          - labs-index
+          - mechanics
+          - satellites
+          - sewage
+          - tintwistle
+          - wildfire-story-lab
         default: all
 
 permissions:
@@ -52,26 +68,14 @@ jobs:
         if: github.event_name == 'push'
         with:
           filters: |
-            labs-index:
-              - 'packages/labs-index/**'
+            astro:
+              - 'packages/astro/**'
               - 'pnpm-workspace.yaml'
               - 'package.json'
               - 'pnpm-lock.yaml'
               - '.github/workflows/deploy.yml'
-            lab-orbital-mechanics:
-              - 'packages/lab-orbital-mechanics/**'
-              - 'pnpm-workspace.yaml'
-              - 'package.json'
-              - 'pnpm-lock.yaml'
-              - '.github/workflows/deploy.yml'
-            graphs:
-              - 'packages/graphs/**'
-              - 'pnpm-workspace.yaml'
-              - 'package.json'
-              - 'pnpm-lock.yaml'
-              - '.github/workflows/deploy.yml'
-            mechanics:
-              - 'packages/mechanics/**'
+            biodiversity:
+              - 'packages/biodiversity/**'
               - 'pnpm-workspace.yaml'
               - 'package.json'
               - 'pnpm-lock.yaml'
@@ -82,8 +86,14 @@ jobs:
               - 'package.json'
               - 'pnpm-lock.yaml'
               - '.github/workflows/deploy.yml'
-            equation-scanner:
-              - 'packages/equation-scanner/**'
+            climate-visualiser:
+              - 'packages/climate-visualiser/**'
+              - 'pnpm-workspace.yaml'
+              - 'package.json'
+              - 'pnpm-lock.yaml'
+              - '.github/workflows/deploy.yml'
+            component-sandbox:
+              - 'packages/component-sandbox/**'
               - 'pnpm-workspace.yaml'
               - 'package.json'
               - 'pnpm-lock.yaml'
@@ -94,14 +104,68 @@ jobs:
               - 'package.json'
               - 'pnpm-lock.yaml'
               - '.github/workflows/deploy.yml'
-            wildfire-story-lab:
-              - 'packages/wildfire-story-lab/**'
+            drought:
+              - 'packages/drought/**'
               - 'pnpm-workspace.yaml'
               - 'package.json'
               - 'pnpm-lock.yaml'
               - '.github/workflows/deploy.yml'
-            climate-visualiser:
-              - 'packages/climate-visualiser/**'
+            equation-scanner:
+              - 'packages/equation-scanner/**'
+              - 'pnpm-workspace.yaml'
+              - 'package.json'
+              - 'pnpm-lock.yaml'
+              - '.github/workflows/deploy.yml'
+            exp-example:
+              - 'packages/exp-example/**'
+              - 'pnpm-workspace.yaml'
+              - 'package.json'
+              - 'pnpm-lock.yaml'
+              - '.github/workflows/deploy.yml'
+            graphs:
+              - 'packages/graphs/**'
+              - 'pnpm-workspace.yaml'
+              - 'package.json'
+              - 'pnpm-lock.yaml'
+              - '.github/workflows/deploy.yml'
+            lab-orbital-mechanics:
+              - 'packages/lab-orbital-mechanics/**'
+              - 'pnpm-workspace.yaml'
+              - 'package.json'
+              - 'pnpm-lock.yaml'
+              - '.github/workflows/deploy.yml'
+            labs-index:
+              - 'packages/labs-index/**'
+              - 'pnpm-workspace.yaml'
+              - 'package.json'
+              - 'pnpm-lock.yaml'
+              - '.github/workflows/deploy.yml'
+            mechanics:
+              - 'packages/mechanics/**'
+              - 'pnpm-workspace.yaml'
+              - 'package.json'
+              - 'pnpm-lock.yaml'
+              - '.github/workflows/deploy.yml'
+            satellites:
+              - 'packages/satellites/**'
+              - 'pnpm-workspace.yaml'
+              - 'package.json'
+              - 'pnpm-lock.yaml'
+              - '.github/workflows/deploy.yml'
+            sewage:
+              - 'packages/sewage/**'
+              - 'pnpm-workspace.yaml'
+              - 'package.json'
+              - 'pnpm-lock.yaml'
+              - '.github/workflows/deploy.yml'
+            tintwistle:
+              - 'packages/tintwistle/**'
+              - 'pnpm-workspace.yaml'
+              - 'package.json'
+              - 'pnpm-lock.yaml'
+              - '.github/workflows/deploy.yml'
+            wildfire-story-lab:
+              - 'packages/wildfire-story-lab/**'
               - 'pnpm-workspace.yaml'
               - 'package.json'
               - 'pnpm-lock.yaml'
@@ -113,15 +177,23 @@ jobs:
         env:
           EVENT_NAME: ${{ github.event_name }}
           DISPATCH_PACKAGE: ${{ inputs.package }}
-          CHANGED_LABS_INDEX: ${{ steps.filter.outputs.labs-index }}
-          CHANGED_ORBITAL: ${{ steps.filter.outputs.lab-orbital-mechanics }}
-          CHANGED_GRAPHS: ${{ steps.filter.outputs.graphs }}
-          CHANGED_MECHANICS: ${{ steps.filter.outputs.mechanics }}
+          CHANGED_ASTRO: ${{ steps.filter.outputs.astro }}
+          CHANGED_BIODIVERSITY: ${{ steps.filter.outputs.biodiversity }}
           CHANGED_CARBON: ${{ steps.filter.outputs.carbon-reduction-plan }}
-          CHANGED_EQUATION: ${{ steps.filter.outputs.equation-scanner }}
-          CHANGED_CONTRAST: ${{ steps.filter.outputs.contrast-lab }}
-          CHANGED_WILDFIRE: ${{ steps.filter.outputs.wildfire-story-lab }}
           CHANGED_CLIMATE: ${{ steps.filter.outputs.climate-visualiser }}
+          CHANGED_COMPONENT_SANDBOX: ${{ steps.filter.outputs.component-sandbox }}
+          CHANGED_CONTRAST: ${{ steps.filter.outputs.contrast-lab }}
+          CHANGED_DROUGHT: ${{ steps.filter.outputs.drought }}
+          CHANGED_EQUATION: ${{ steps.filter.outputs.equation-scanner }}
+          CHANGED_EXP_EXAMPLE: ${{ steps.filter.outputs.exp-example }}
+          CHANGED_GRAPHS: ${{ steps.filter.outputs.graphs }}
+          CHANGED_ORBITAL: ${{ steps.filter.outputs.lab-orbital-mechanics }}
+          CHANGED_LABS_INDEX: ${{ steps.filter.outputs.labs-index }}
+          CHANGED_MECHANICS: ${{ steps.filter.outputs.mechanics }}
+          CHANGED_SATELLITES: ${{ steps.filter.outputs.satellites }}
+          CHANGED_SEWAGE: ${{ steps.filter.outputs.sewage }}
+          CHANGED_TINTWISTLE: ${{ steps.filter.outputs.tintwistle }}
+          CHANGED_WILDFIRE: ${{ steps.filter.outputs.wildfire-story-lab }}
         run: |
           packages='[]'
 
@@ -129,18 +201,26 @@ jobs:
             if [ -n "$DISPATCH_PACKAGE" ] && [ "$DISPATCH_PACKAGE" != "all" ]; then
               packages="[\"$DISPATCH_PACKAGE\"]"
             else
-              packages='["labs-index","lab-orbital-mechanics","graphs","mechanics","carbon-reduction-plan","equation-scanner","contrast-lab","wildfire-story-lab","climate-visualiser"]'
+              packages='["astro","biodiversity","carbon-reduction-plan","climate-visualiser","component-sandbox","contrast-lab","drought","equation-scanner","exp-example","graphs","lab-orbital-mechanics","labs-index","mechanics","satellites","sewage","tintwistle","wildfire-story-lab"]'
             fi
           else
-            [ "$CHANGED_LABS_INDEX" = "true" ] && packages=$(echo "$packages" | jq -c '. + ["labs-index"]')
-            [ "$CHANGED_ORBITAL" = "true" ] && packages=$(echo "$packages" | jq -c '. + ["lab-orbital-mechanics"]')
-            [ "$CHANGED_GRAPHS" = "true" ] && packages=$(echo "$packages" | jq -c '. + ["graphs"]')
-            [ "$CHANGED_MECHANICS" = "true" ] && packages=$(echo "$packages" | jq -c '. + ["mechanics"]')
+            [ "$CHANGED_ASTRO" = "true" ] && packages=$(echo "$packages" | jq -c '. + ["astro"]')
+            [ "$CHANGED_BIODIVERSITY" = "true" ] && packages=$(echo "$packages" | jq -c '. + ["biodiversity"]')
             [ "$CHANGED_CARBON" = "true" ] && packages=$(echo "$packages" | jq -c '. + ["carbon-reduction-plan"]')
-            [ "$CHANGED_EQUATION" = "true" ] && packages=$(echo "$packages" | jq -c '. + ["equation-scanner"]')
-            [ "$CHANGED_CONTRAST" = "true" ] && packages=$(echo "$packages" | jq -c '. + ["contrast-lab"]')
-            [ "$CHANGED_WILDFIRE" = "true" ] && packages=$(echo "$packages" | jq -c '. + ["wildfire-story-lab"]')
             [ "$CHANGED_CLIMATE" = "true" ] && packages=$(echo "$packages" | jq -c '. + ["climate-visualiser"]')
+            [ "$CHANGED_COMPONENT_SANDBOX" = "true" ] && packages=$(echo "$packages" | jq -c '. + ["component-sandbox"]')
+            [ "$CHANGED_CONTRAST" = "true" ] && packages=$(echo "$packages" | jq -c '. + ["contrast-lab"]')
+            [ "$CHANGED_DROUGHT" = "true" ] && packages=$(echo "$packages" | jq -c '. + ["drought"]')
+            [ "$CHANGED_EQUATION" = "true" ] && packages=$(echo "$packages" | jq -c '. + ["equation-scanner"]')
+            [ "$CHANGED_EXP_EXAMPLE" = "true" ] && packages=$(echo "$packages" | jq -c '. + ["exp-example"]')
+            [ "$CHANGED_GRAPHS" = "true" ] && packages=$(echo "$packages" | jq -c '. + ["graphs"]')
+            [ "$CHANGED_ORBITAL" = "true" ] && packages=$(echo "$packages" | jq -c '. + ["lab-orbital-mechanics"]')
+            [ "$CHANGED_LABS_INDEX" = "true" ] && packages=$(echo "$packages" | jq -c '. + ["labs-index"]')
+            [ "$CHANGED_MECHANICS" = "true" ] && packages=$(echo "$packages" | jq -c '. + ["mechanics"]')
+            [ "$CHANGED_SATELLITES" = "true" ] && packages=$(echo "$packages" | jq -c '. + ["satellites"]')
+            [ "$CHANGED_SEWAGE" = "true" ] && packages=$(echo "$packages" | jq -c '. + ["sewage"]')
+            [ "$CHANGED_TINTWISTLE" = "true" ] && packages=$(echo "$packages" | jq -c '. + ["tintwistle"]')
+            [ "$CHANGED_WILDFIRE" = "true" ] && packages=$(echo "$packages" | jq -c '. + ["wildfire-story-lab"]')
           fi
 
           echo "packages=$packages" >> "$GITHUB_OUTPUT"

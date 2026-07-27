@@ -1,28 +1,30 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
 import '../styles/global.css';
+import 'leaflet/dist/leaflet.css';
 ---
 
-<Layout title="Global Launch Sites">
+<Layout title="Global Launch Sites — labs.rjmlaird.co.uk">
   <div id="app">
-    <header>
-      <div class="header-top">
-        <div>
-          <div class="crumb">
-            <a href="https://labs.rjmlaird.co.uk" target="_blank" rel="noopener">rjmlaird.co.uk labs</a> / launch sites
-          </div>
-          <div class="h-title">Global Launch Sites</div>
-          <div class="h-tagline">Launch site locations plotted on a Leaflet map from JSON data.</div>
-        </div>
-        <div class="status-cluster">
-          <span class="badge live"><span class="bdot"></span><span>loaded</span></span>
-        </div>
-      </div>
-    </header>
+    <Header
+      crumb="launch sites"
+      title="Global Launch Sites"
+      tagline="Launch site locations plotted on a Leaflet map."
+      active="launch-sites"
+    >
+      <span slot="status">
+        <span class="badge wait" id="statusBadge"><span class="bdot"></span><span id="statusBadgeText">pre-launch</span></span>
+      </span>
+    </Header>
 
     <div class="main">
       <div class="map-wrap">
         <div id="map"></div>
+        <div class="overlay" id="overlay">
+          <div class="ring"></div>
+          <div class="msg" id="overlayMsg">Loading launch site data…</div>
+        </div>
       </div>
     </div>
   </div>
@@ -31,11 +33,43 @@ import '../styles/global.css';
 <script type="module">
   import { initLaunchSitesMap } from '../scripts/launch-sites-map';
 
+  function setBadge(mode, text) {
+    const badge = document.getElementById('statusBadge');
+    const badgeText = document.getElementById('statusBadgeText');
+    if (badge) badge.className = 'badge ' + mode;
+    if (badgeText) badgeText.textContent = text;
+  }
+
+  function showError(err) {
+    setBadge('off', 'decayed');
+    const overlay = document.getElementById('overlay');
+    if (overlay) {
+      overlay.style.display = 'flex';
+      overlay.innerHTML = `
+        <div class="err">
+          <div style="color:var(--text); font-size:13px; font-weight:700; margin-bottom:6px;">Could not load launch sites</div>
+          ${String((err && err.message) || err).replace(/</g, '&lt;')}
+        </div>
+        <button id="retryBtn">Retry</button>
+      `;
+      const retry = document.getElementById('retryBtn');
+      if (retry) retry.onclick = () => location.reload();
+    }
+  }
+
   if (typeof window !== 'undefined') {
     window.addEventListener('DOMContentLoaded', () => {
-      initLaunchSitesMap().catch((err) => {
-        console.error('Error loading launch sites:', err);
-      });
+      setBadge('wait', 'connecting');
+      initLaunchSitesMap()
+        .then(() => {
+          setBadge('live', 'in orbit');
+          const overlay = document.getElementById('overlay');
+          if (overlay) overlay.style.display = 'none';
+        })
+        .catch((err) => {
+          console.error('Error loading launch sites:', err);
+          showError(err);
+        });
     });
   }
 </script>

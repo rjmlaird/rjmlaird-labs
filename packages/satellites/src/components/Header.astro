@@ -3,13 +3,14 @@ interface Props {
   crumb: string;
   title: string;
   tagline: string;
-  active: 'groundtrack' | 'launch-sites' | 'launch-stats';
+  active: 'groundtrack' | 'launch-sites' | 'launch-stats' | 'passes';
 }
 
 const { crumb, title, tagline, active } = Astro.props;
 
 const NAV = [
   { key: 'groundtrack', href: '/', label: 'Ground Track' },
+  { key: 'passes', href: '/passes', label: 'Passes' },
   { key: 'launch-sites', href: '/launch-sites', label: 'Launch Sites' },
   { key: 'launch-stats', href: '/launch-stats', label: 'Launch Stats' },
 ] as const;

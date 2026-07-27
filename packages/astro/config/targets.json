@@ -1,0 +1,64 @@
+{
+  "targets": [
+    {
+      "name": "Moon",
+      "kind": "moon",
+      "ra_deg": 0.0,
+      "dec_deg": 0.0,
+      "diameter_arcmin": 31.0,
+      "note": "RA/Dec are placeholders — the Moon's position is computed separately; use the Sun/Moon tools for its actual track."
+    },
+    {
+      "name": "Jupiter",
+      "kind": "planet",
+      "ra_deg": 55.0,
+      "dec_deg": 20.0,
+      "diameter_arcsec": 45.0
+    },
+    {
+      "name": "Saturn",
+      "kind": "planet",
+      "ra_deg": 348.0,
+      "dec_deg": -12.0,
+      "diameter_arcsec": 18.0
+    },
+    {
+      "name": "Orion Nebula (M42)",
+      "kind": "nebula",
+      "ra_deg": 83.8221,
+      "dec_deg": -5.3911,
+      "diameter_arcmin": 85.0
+    },
+    {
+      "name": "Andromeda Galaxy (M31)",
+      "kind": "galaxy",
+      "ra_deg": 10.6847,
+      "dec_deg": 41.2687,
+      "diameter_arcmin": 178.0,
+      "orientation_deg": 35,
+      "axis_ratio": 0.32
+    },
+    {
+      "name": "Whirlpool Galaxy (M51)",
+      "kind": "galaxy",
+      "ra_deg": 202.4696,
+      "dec_deg": 47.1952,
+      "diameter_arcmin": 11.2,
+      "arm_count": 2
+    },
+    {
+      "name": "Ring Nebula (M57)",
+      "kind": "nebula",
+      "ra_deg": 283.3963,
+      "dec_deg": 33.0292,
+      "diameter_arcsec": 230.0
+    },
+    {
+      "name": "Double Cluster (NGC 869/884)",
+      "kind": "cluster",
+      "ra_deg": 34.75,
+      "dec_deg": 57.13,
+      "diameter_arcmin": 60.0
+    }
+  ]
+}

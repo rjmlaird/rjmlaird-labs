@@ -52,12 +52,19 @@ export async function initLaunchSitesMap() {
 
   const L = await import('leaflet');
 
-  const response = await fetch('/data/launch-sites.json');
+  const response = await fetch('/data/launch_sites.json');
+  if (!response.ok) {
+    throw new Error(`Failed to fetch launch site data (HTTP ${response.status}).`);
+  }
   const data = (await response.json()) as LaunchSiteCollection | LaunchSiteFeature[];
 
   const geojson: LaunchSiteCollection = Array.isArray(data)
     ? { type: 'FeatureCollection', features: data }
     : data;
+
+  if (!geojson.features || geojson.features.length === 0) {
+    throw new Error('Launch site data was loaded but contained no features.');
+  }
 
   const map = L.map('map').setView([30, 0], 2);
 

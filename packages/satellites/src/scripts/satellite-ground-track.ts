@@ -1,5 +1,6 @@
 import * as satellite from 'satellite.js';
 import * as THREE from 'three';
+import { fetchText, gpUrl, parseTLE, parseSatcat, escapeHtml, get, SATCAT_URL, type SatcatKeys } from './lib/celestrak';
 
 const STATUS_INFO = {
   '+': { label: 'Operational', desc: 'Operational', key: 'op' },
@@ -41,17 +42,12 @@ type SatRecord = {
   satrec: any;
   statusCode: string;
   cat: Record<string, string> | null;
-  catKeys: Record<string, string | null>;
+  catKeys: SatcatKeys;
   lat: number | null;
   lon: number | null;
   alt: number | null;
   vel: number | null;
   valid: boolean;
-};
-
-type SatCatParse = {
-  rows: Record<string, string>[];
-  keys: Record<string, string | null>;
 };
 
 let satellites: SatRecord[] = [];
@@ -117,160 +113,19 @@ function setBadge(mode: string, text: string) {
   statusBadgeText.textContent = text;
 }
 
-async function fetchText(url: string) {
-  try {
-    const r = await fetch(url, { cache: 'no-store' });
-    if (!r.ok) throw new Error('HTTP ' + r.status);
-    return await r.text();
-  } catch (e) {
-    const relay = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(url);
-    const r2 = await fetch(relay, { cache: 'no-store' });
-    if (!r2.ok) throw e;
-    return await r2.text();
-  }
-}
-
-function gpUrl(group: string) {
-  return `https://celestrak.org/NORAD/elements/gp.php?GROUP=${group}&FORMAT=tle`;
-}
-
-const SATCAT_URL = 'https://celestrak.org/pub/satcat.csv';
-
-function parseTLE(text: string) {
-  const lines = text.split(/\r?\n/).filter((l) => l.trim().length > 0);
-  const out: { name: string; noradId: number; l1: string; l2: string }[] = [];
-  for (let i = 0; i + 2 < lines.length; i += 3) {
-    const name = lines[i].trim();
-    const l1 = lines[i + 1];
-    const l2 = lines[i + 2];
-    if (!l1.startsWith('1 ') || !l2.startsWith('2 ')) continue;
-    const noradId = parseInt(l1.substring(2, 7).trim(), 10);
-    out.push({ name, noradId, l1, l2 });
-  }
-  return out;
-}
-
-function splitCSVLine(line: string) {
-  const result: string[] = [];
-  let cur = '';
-  let inQ = false;
-  for (let i = 0; i < line.length; i++) {
-    const c = line[i];
-    if (c === '"') {
-      if (inQ && line[i + 1] === '"') {
-        cur += '"';
-        i++;
-      } else inQ = !inQ;
-    } else if (c === ',' && !inQ) {
-      result.push(cur);
-      cur = '';
-    } else {
-      cur += c;
-    }
-  }
-  result.push(cur);
-  return result;
-}
-
-function parseSatcat(text: string): SatCatParse {
-  const lines = text.split(/\r?\n/).filter((l) => l.length > 0);
-  if (!lines.length) return { rows: [], keys: {} };
-  const headers = splitCSVLine(lines[0]).map((h) => h.trim());
-  const rows: Record<string, string>[] = [];
-
-  for (let i = 1; i < lines.length; i++) {
-    const vals = splitCSVLine(lines[i]);
-    const obj: Record<string, string> = {};
-    headers.forEach((h, idx) => (obj[h] = vals[idx] !== undefined ? vals[idx].trim() : ''));
-    rows.push(obj);
-  }
-
-  const findKey = (re: RegExp) => headers.find((h) => re.test(h)) || null;
-
-  return {
-    rows,
-    keys: {
-      norad: findKey(/NORAD.*CAT.*ID/i),
-      status: findKey(/OPS.*STATUS/i),
-      type: findKey(/OBJECT_TYPE/i),
-      owner: findKey(/OWNER/i),
-      launch: findKey(/LAUNCH_DATE/i),
-      site: findKey(/LAUNCH_SITE/i),
-      decay: findKey(/DECAY_DATE/i),
-      period: findKey(/^PERIOD$/i),
-      incl: findKey(/INCLINATION/i),
-      apogee: findKey(/APOGEE/i),
-      perigee: findKey(/PERIGEE/i),
-      rcs: findKey(/RCS/i),
-      objid: findKey(/OBJECT_ID/i),
-      orbit: findKey(/ORBIT_TYPE/i),
-    },
-  };
-}
-
-function escapeHtml(s: string) {
-  const d = document.createElement('div');
-  d.textContent = s;
-  return d.innerHTML;
-}
-
-function get(cat: Record<string, string>, catKeys: Record<string, string | null>, key: string) {
-  return catKeys[key] ? cat[catKeys[key]!] || '—' : '—';
-}
-
 function resolveColor(varStr: string) {
   if (typeof window === 'undefined' || typeof document === 'undefined') return '#93a1b0';
   const name = varStr.replace('var(', '').replace(')', '');
   return getComputedStyle(document.documentElement).getPropertyValue(name).trim() || '#93a1b0';
 }
 
-function gstimeCompat(date: Date) {
-  if (typeof satellite.gstime === 'function') {
-    try {
-      const g = satellite.gstime(date);
-      if (typeof g === 'number' && !isNaN(g)) return g;
-    } catch {}
-  }
-  if (typeof satellite.gstimeFromDate === 'function') {
-    return satellite.gstimeFromDate(
-      date.getUTCFullYear(),
-      date.getUTCMonth() + 1,
-      date.getUTCDate(),
-      date.getUTCHours(),
-      date.getUTCMinutes(),
-      date.getUTCSeconds()
-    );
-  }
-  if (typeof satellite.gstimeFromJday === 'function') {
-    const jd = date.getTime() / 86400000 + 2440587.5;
-    return satellite.gstimeFromJday(jd);
-  }
-  throw new Error('No compatible gstime function in this satellite.js build');
-}
-
-function propagateCompat(satrec: any, date: Date) {
-  try {
-    const r = satellite.propagate(satrec, date);
-    if (r && r.position !== undefined) return r;
-  } catch {}
-  return satellite.propagate(
-    satrec,
-    date.getUTCFullYear(),
-    date.getUTCMonth() + 1,
-    date.getUTCDate(),
-    date.getUTCHours(),
-    date.getUTCMinutes(),
-    date.getUTCSeconds()
-  );
-}
-
 function computePositions() {
   const now = new Date();
-  const gmst = gstimeCompat(now);
+  const gmst = satellite.gstime(now);
 
   for (const sat of satellites) {
     try {
-      const pv = propagateCompat(sat.satrec, now);
+      const pv = satellite.propagate(sat.satrec, now);
       if (!pv || !pv.position) {
         sat.valid = false;
         continue;
@@ -1022,7 +877,7 @@ function loadFromPasted(tleText: string, csvText: string) {
     if (!tleEntries.length) throw new Error('No valid TLE records found in pasted text.');
 
     let catByNorad = new Map<number, Record<string, string>>();
-    let catKeys: Record<string, string | null> = {};
+    let catKeys: SatcatKeys = {} as SatcatKeys;
 
     if (csvText && csvText.trim().length) {
       const parsed = parseSatcat(csvText);

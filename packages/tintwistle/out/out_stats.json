@@ -1,0 +1,55 @@
+{
+  "aoi_area_km2": 327.24,
+  "aoi_name": {
+    "emsr_id": "EMSR897",
+    "area_id": "01",
+    "locality": "Tintwistle Moor",
+    "map_type": "Delineation",
+    "glide_no": "Not Applicable"
+  },
+  "land_use_km2": {
+    "412-Peatbogs": 126.933,
+    "998-Other": 72.646,
+    "231-Pastures": 70.31,
+    "322-Moors and heathland": 29.934,
+    "321-Natural grassland": 16.917,
+    "312-Coniferous forest": 4.977,
+    "311-Broad-leaved forest": 4.506,
+    "313-Mixed forest": 0.399,
+    "324-Transitional woodland shrub": 0.375,
+    "243-Land principally occupied by agriculture, with significant areas of natural vegetation": 0.241
+  },
+  "builtup_count": 8062,
+  "builtup_footprint_km2": 28.805,
+  "builtup_by_type": {
+    "Residential": 6214,
+    "School, university and research buildings": 281,
+    "Non residential": 1561,
+    "Military": 2,
+    "Hospital or institutional care buildings": 4
+  },
+  "facilities_count": 5817,
+  "facilities_by_type": {
+    "2412-Other sport and recreation constructions": 5377,
+    "2411-Sports grounds": 163,
+    "2224-Local electricity and telecommunication cables": 107,
+    "2152-Dams": 68,
+    "2214-Long-distance electricity lines": 43,
+    "221-Long-distance pipelines, communication and electricity lines": 19,
+    "2301-Constructions for mining or extraction": 18,
+    "21512-Settling Basin": 8,
+    "2302-Power plant constructions": 7,
+    "241-Sport and recreation constructions": 5,
+    "23011-Water Well": 1,
+    "2420-Dump site": 1
+  },
+  "transport_km_by_type": {
+    "Local roads": 1145.7,
+    "Tracks": 449.2,
+    "Main roads": 176.7,
+    "Railways": 146.6,
+    "Highway": 78.7,
+    "Tramway": 0.0
+  },
+  "transport_total_km": 1996.9
+}

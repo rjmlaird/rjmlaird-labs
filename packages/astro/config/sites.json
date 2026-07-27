@@ -1,0 +1,25 @@
+{
+  "sites": [
+    {
+      "name": "Leicester (home)",
+      "lat": 52.6369,
+      "lon": -1.1398,
+      "elevation_m": 60,
+      "timezone": "Europe/London"
+    },
+    {
+      "name": "Kielder Observatory",
+      "lat": 55.2287,
+      "lon": -2.5827,
+      "elevation_m": 260,
+      "timezone": "Europe/London"
+    },
+    {
+      "name": "Mauna Kea",
+      "lat": 19.8207,
+      "lon": -155.4681,
+      "elevation_m": 4207,
+      "timezone": "Pacific/Honolulu"
+    }
+  ]
+}
