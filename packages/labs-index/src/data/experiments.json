@@ -184,5 +184,18 @@
     "demoUrl": "https://astro.labs.rjmlaird.co.uk",
     "repoUrl": "https://github.com/greenorbitspace/labs/tree/main/packages/astro",
     "updated": "2026-07-26"
+  },
+  {
+    "slug": "atmosphere",
+    "title": "atmosphere",
+    "description": "New experiment — update this description.",
+    "status": "planned",
+    "tech": [
+      "React",
+      "Vite"
+    ],
+    "demoUrl": "https://atmosphere.labs.rjmlaird.co.uk",
+    "repoUrl": "https://github.com/greenorbitspace/labs/tree/main/packages/atmosphere",
+    "updated": "2026-07-27"
   }
 ]
