@@ -272,8 +272,8 @@ importers:
   packages/labs-index:
     dependencies:
       astro:
-        specifier: ^4.15.0
-        version: 4.16.19(lightningcss@1.32.0)(rollup@4.62.2)(typescript@5.9.3)
+        specifier: ^7.1.3
+        version: 7.1.3(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.2)(jiti@2.7.0)(rollup@4.62.2)(yaml@2.9.0)
 
   packages/mechanics:
     dependencies:
