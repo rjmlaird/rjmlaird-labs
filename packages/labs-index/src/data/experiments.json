@@ -81,9 +81,9 @@
     "updated": "2026-07-11"
   },
   {
-    "slug": "echanics",
+    "slug": "mechanics",
     "title": "Mechanics",
-    "description": "New experiment — update this description.",
+    "description": "An interactive classical mechanics lab featuring four real-time simulations built on a shared physics engine: ramp forces and friction, Newton's cradle momentum transfers, projectile motion with independent SUVAT equations, and vehicle stopping distances.",
     "status": "planned",
     "tech": [
       "React",
@@ -96,7 +96,7 @@
   {
     "slug": "graphs",
     "title": "Graphs",
-    "description": "New experiment — update this description.",
+    "description": "A modular pre-launch template designed for data visualization, custom charting, and analytical metric rendering.",
     "status": "planned",
     "tech": [
       "React",
@@ -109,7 +109,7 @@
   {
     "slug": "satellites",
     "title": "satellites",
-    "description": "Satellite plots.",
+    "description": "A live orbital tracker utilizing SGP4 propagation of Celestrak's GP catalog, cross-referenced with SATCAT and rendered interactively via Leaflet maps.",
     "status": "active",
     "tech": [
       "Astro",
@@ -123,7 +123,7 @@
   {
     "slug": "drought",
     "title": "drought",
-    "description": "New experiment — update this description.",
+    "description": "A comprehensive UK drought risk monitor combining live Copernicus European Drought Observatory (EDO/GDO) indicators with real-time Environment Agency and SEPA hydrology data.",
     "status": "planned",
     "tech": [
       "React",
@@ -136,7 +136,7 @@
   {
     "slug": "tintwistle",
     "title": "tintwistle",
-    "description": "New experiment — update this description.",
+    "description": "A pre-launch environmental or geographical monitoring experiment focused on the Tintwistle area, currently in development.",
     "status": "planned",
     "tech": [
       "React",
@@ -149,7 +149,7 @@
   {
     "slug": "biodiversity",
     "title": "biodiversity",
-    "description": "New experiment — update this description.",
+    "description": "A habitat health monitor combining satellite-derived vegetation greenness (NDVI), live designated nature reserve boundaries (NNR, LNR, SSSI), and river water quality archives.",
     "status": "planned",
     "tech": [
       "React",
@@ -162,7 +162,7 @@
   {
     "slug": "sewage",
     "title": "sewage",
-    "description": "New experiment — update this description.",
+    "description": "A real-time monitoring tool tracking raw-sewage storm overflow activations (EDMs) across Severn Trent Water and Anglian Water, contextualised with Copernicus soil moisture and rainfall anomalies.",
     "status": "planned",
     "tech": [
       "React",
@@ -175,10 +175,10 @@
   {
     "slug": "astro",
     "title": "astro",
-    "description": "New experiment — update this description.",
+    "description": "A pre-launch exploratory tool dedicated to astronomical data processing, space missions, or celestial mechanics.",
     "status": "planned",
     "tech": [
-      "React",
+      "Streamliy",
       "Vite"
     ],
     "demoUrl": "https://astro.labs.rjmlaird.co.uk",
@@ -188,7 +188,7 @@
   {
     "slug": "atmosphere",
     "title": "atmosphere",
-    "description": "New experiment — update this description.",
+    "description": "A multi-tiered vertical air quality profile tracking nitrogen dioxide, ozone, and particulates over Leicestershire by blending Copernicus CAMS regional models with real-world AURN ground stations.",
     "status": "planned",
     "tech": [
       "React",
