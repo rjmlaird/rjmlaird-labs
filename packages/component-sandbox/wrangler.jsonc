@@ -1,7 +1,7 @@
 {
   "name": "components",
   "main": "worker/index.ts",
-  "compatibility_date": "2026-07-26",
+  "compatibility_date": "2026-10-01",
   "assets": {
     "directory": "./dist",
     "binding": "ASSETS",
@@ -9,6 +9,6 @@
     "run_worker_first": ["/api/*"]
   },
   "routes": [
-    { "pattern": "astro.labs.rjmlaird.co.uk", "custom_domain": true }
+    { "pattern": "components.labs.rjmlaird.co.uk", "custom_domain": true }
   ]
 }

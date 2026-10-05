@@ -55,14 +55,14 @@
     "updated": "2026-07-11"
   },
   {
-    "slug": "component-sandbox",
+    "slug": "components",
     "title": "Component Sandbox",
     "description": "A live gallery of the Astro UI blocks used across rjmlaird.co.uk, each rendered with its source snippet underneath.",
-    "status": "planned",
+    "status": "active",
     "tech": [
       "Astro"
     ],
-    "demoUrl": "https://component-sandbox.labs.rjmlaird.co.uk",
+    "demoUrl": "https://components.labs.rjmlaird.co.uk",
     "repoUrl": "https://github.com/rjmlaird/rjmlaird-labs/tree/main/packages/component-sandbox",
     "updated": "2026-07-11"
   },
