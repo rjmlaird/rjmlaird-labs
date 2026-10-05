@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Periodic Table — Elements Lab</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap');
+
+:root{
+  --void:#0a0d12;
+  --panel:#12161d;
+  --panel-raised:#161b23;
+  --grid-line:#1c2129;
+  --text-primary:#e6ecf2;
+  --text-muted:#6b7684;
+  --text-dim:#454e5c;
+  --accent-cyan:#5fd4c4;
+  --accent-amber:#e8a94d;
+
+  --am:#e8735f;   /* alkali metal */
+  --ae:#eab064;   /* alkaline earth metal */
+  --tm:#5fa8e8;   /* transition metal */
+  --pm:#6bd1a8;   /* post-transition metal */
+  --me:#b98ce8;   /* metalloid */
+  --nm:#8fce6b;   /* reactive nonmetal */
+  --hal:#e8d35f;  /* halogen */
+  --ng:#7f8ce8;   /* noble gas */
+  --la:#e87fb9;   /* lanthanide */
+  --ac:#c26be8;   /* actinide */
+  --un:#59636f;   /* unknown */
+}
+
+*{box-sizing:border-box; margin:0; padding:0;}
+
+body{
+  background:var(--void);
+  background-image:
+    linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+  background-size:24px 24px;
+  color:var(--text-primary);
+  font-family:'Inter', sans-serif;
+  min-height:100vh;
+  padding-bottom:40px;
+}
+
+header{
+  padding:28px 18px 18px;
+  border-bottom:1px solid var(--grid-line);
+  background:linear-gradient(180deg, rgba(18,22,29,0.9), rgba(18,22,29,0.4));
+}
+
+.eyebrow{
+  font-family:'IBM Plex Mono', monospace;
+  font-size:11px;
+  letter-spacing:2px;
+  color:var(--accent-cyan);
+  text-transform:uppercase;
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+.eyebrow::before{
+  content:'';
+  width:6px; height:6px;
+  border-radius:50%;
+  background:var(--accent-cyan);
+  box-shadow:0 0 8px var(--accent-cyan);
+  animation:pulse 2s ease-in-out infinite;
+}
+@keyframes pulse{
+  0%,100%{opacity:1;} 50%{opacity:0.35;}
+}
+
+h1{
+  font-family:'Space Grotesk', sans-serif;
+  font-weight:700;
+  font-size:26px;
+  letter-spacing:-0.02em;
+  margin-top:8px;
+}
+h1 span{color:var(--text-muted); font-weight:400;}
+
+.subtitle{
+  font-size:13px;
+  color:var(--text-muted);
+  margin-top:6px;
+  max-width:520px;
+  line-height:1.5;
+}
+
+.controls{
+  display:flex;
+  gap:8px;
+  margin-top:18px;
+  flex-wrap:wrap;
+}
+
+#search{
+  flex:1;
+  min-width:140px;
+  background:var(--panel);
+  border:1px solid var(--grid-line);
+  color:var(--text-primary);
+  font-family:'IBM Plex Mono', monospace;
+  font-size:13px;
+  padding:10px 12px;
+  border-radius:2px;
+  outline:none;
+}
+#search:focus{border-color:var(--accent-cyan);}
+#search::placeholder{color:var(--text-dim);}
+
+.legend{
+  display:flex;
+  gap:6px;
+  flex-wrap:wrap;
+  margin-top:14px;
+}
+.legend-item{
+  font-family:'IBM Plex Mono', monospace;
+  font-size:10px;
+  letter-spacing:0.3px;
+  padding:5px 9px 5px 7px;
+  border-radius:2px;
+  background:var(--panel);
+  border:1px solid var(--grid-line);
+  color:var(--text-muted);
+  display:flex;
+  align-items:center;
+  gap:6px;
+  cursor:pointer;
+  user-select:none;
+  transition:opacity .15s, border-color .15s;
+}
+.legend-item .dot{width:8px; height:8px; border-radius:1px; flex-shrink:0;}
+.legend-item.active{border-color:var(--text-primary); color:var(--text-primary);}
+.legend-item.faded{opacity:0.3;}
+
+.scroll-hint{
+  font-family:'IBM Plex Mono', monospace;
+  font-size:10px;
+  color:var(--text-dim);
+  padding:14px 18px 0;
+  letter-spacing:0.5px;
+}
+
+#table-wrap{
+  overflow-x:auto;
+  padding:10px 18px 24px;
+  -webkit-overflow-scrolling:touch;
+}
+
+#grid{
+  display:grid;
+  grid-template-columns:repeat(18, 42px);
+  grid-template-rows:repeat(7, 42px) 14px repeat(2, 42px);
+  gap:3px;
+  width:max-content;
+}
+
+.cell{
+  border-radius:2px;
+  position:relative;
+  overflow:hidden;
+  transition:transform .12s ease, box-shadow .12s ease, opacity .15s;
+}
+
+.el{
+  background:var(--panel);
+  border-left:2px solid var(--cat-color, var(--un));
+  cursor:pointer;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  padding:3px 4px;
+}
+.el:hover{
+  transform:translateY(-1px);
+  box-shadow:0 3px 10px rgba(95,212,196,0.15);
+  background:var(--panel-raised);
+}
+.el.faded{opacity:0.18;}
+.el.selected{
+  background:var(--panel-raised);
+  box-shadow:0 0 0 1.5px var(--accent-cyan), 0 4px 14px rgba(95,212,196,0.25);
+}
+
+.el .num{
+  font-family:'IBM Plex Mono', monospace;
+  font-size:7px;
+  color:var(--text-dim);
+  line-height:1;
+}
+.el .sym{
+  font-family:'Space Grotesk', sans-serif;
+  font-weight:700;
+  font-size:15px;
+  line-height:1.15;
+  color:var(--text-primary);
+}
+.el .mass{
+  font-family:'IBM Plex Mono', monospace;
+  font-size:6px;
+  color:var(--text-dim);
+  line-height:1;
+}
+
+.placeholder{
+  background:transparent;
+  border:1px dashed var(--grid-line);
+  border-radius:2px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-family:'IBM Plex Mono', monospace;
+  font-size:7px;
+  color:var(--text-dim);
+  text-align:center;
+  line-height:1.2;
+  padding:2px;
+}
+
+/* Detail panel */
+#overlay{
+  position:fixed; inset:0;
+  background:rgba(6,8,11,0.55);
+  backdrop-filter:blur(2px);
+  opacity:0; pointer-events:none;
+  transition:opacity .2s;
+  z-index:10;
+}
+#overlay.show{opacity:1; pointer-events:auto;}
+
+#panel{
+  position:fixed;
+  left:0; right:0; bottom:0;
+  max-width:480px;
+  margin:0 auto;
+  background:var(--panel);
+  border-top:1px solid var(--grid-line);
+  border-radius:12px 12px 0 0;
+  transform:translateY(100%);
+  transition:transform .28s cubic-bezier(.2,.8,.2,1);
+  z-index:11;
+  padding:20px 20px 28px;
+  max-height:82vh;
+  overflow-y:auto;
+}
+#panel.show{transform:translateY(0);}
+
+.panel-close{
+  position:absolute;
+  top:14px; right:16px;
+  width:28px; height:28px;
+  border-radius:50%;
+  background:var(--panel-raised);
+  border:1px solid var(--grid-line);
+  color:var(--text-muted);
+  font-family:'IBM Plex Mono', monospace;
+  font-size:14px;
+  cursor:pointer;
+  display:flex; align-items:center; justify-content:center;
+}
+
+.panel-head{
+  display:flex;
+  align-items:baseline;
+  gap:16px;
+}
+.panel-symbol{
+  font-family:'Space Grotesk', sans-serif;
+  font-weight:700;
+  font-size:52px;
+  line-height:1;
+  color:var(--panel-cat-color, var(--accent-cyan));
+}
+.panel-titles .panel-num{
+  font-family:'IBM Plex Mono', monospace;
+  font-size:11px;
+  color:var(--text-dim);
+  letter-spacing:1px;
+}
+.panel-titles .panel-name{
+  font-family:'Space Grotesk', sans-serif;
+  font-weight:500;
+  font-size:19px;
+  margin-top:2px;
+}
+.panel-titles .panel-cat{
+  font-family:'IBM Plex Mono', monospace;
+  font-size:10px;
+  color:var(--panel-cat-color, var(--accent-cyan));
+  text-transform:uppercase;
+  letter-spacing:1px;
+  margin-top:4px;
+}
+
+.waveform{
+  width:100%; height:20px;
+  margin:14px 0;
+  display:block;
+}
+.waveform path{
+  stroke:var(--accent-cyan);
+  stroke-width:1.2;
+  fill:none;
+  opacity:0.6;
+}
+
+.readout{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin-bottom:16px;
+}
+.readout-field{
+  background:var(--void);
+  border:1px solid var(--grid-line);
+  border-radius:4px;
+  padding:9px 11px;
+}
+.readout-field .rf-label{
+  font-family:'IBM Plex Mono', monospace;
+  font-size:9px;
+  color:var(--text-dim);
+  text-transform:uppercase;
+  letter-spacing:1px;
+}
+.readout-field .rf-value{
+  font-family:'IBM Plex Mono', monospace;
+  font-size:14px;
+  color:var(--text-primary);
+  margin-top:3px;
+}
+
+.panel-fact{
+  font-size:14px;
+  line-height:1.55;
+  color:var(--text-primary);
+  border-left:2px solid var(--panel-cat-color, var(--accent-cyan));
+  padding-left:12px;
+}
+
+.panel-nav{
+  display:flex;
+  justify-content:space-between;
+  margin-top:20px;
+  gap:10px;
+}
+.panel-nav button{
+  flex:1;
+  background:var(--panel-raised);
+  border:1px solid var(--grid-line);
+  color:var(--text-muted);
+  font-family:'IBM Plex Mono', monospace;
+  font-size:11px;
+  letter-spacing:1px;
+  padding:10px;
+  border-radius:4px;
+  cursor:pointer;
+}
+.panel-nav button:hover{color:var(--text-primary); border-color:var(--accent-cyan);}
+.panel-nav button:disabled{opacity:0.25; cursor:default;}
+
+@media (min-width:600px){
+  #grid{grid-template-columns:repeat(18, 52px); grid-template-rows:repeat(7,52px) 16px repeat(2,52px);}
+  .el .sym{font-size:18px;}
+  .el .num{font-size:8px;}
+  .el .mass{font-size:7px;}
+  #panel{border-radius:12px; left:auto; right:24px; bottom:24px; width:400px;}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="eyebrow">Elements Lab — Live Readout</div>
+  <h1>Periodic Table <span>/ interactive</span></h1>
+  <div class="subtitle">All 118 known elements. Tap any cell for a full readout — mass, phase, category and a fact worth knowing. Scroll sideways to see the whole table.</div>
+  <div class="controls">
+    <input id="search" type="text" placeholder="Search by name or symbol…" autocomplete="off">
+  </div>
+  <div class="legend" id="legend"></div>
+</header>
+
+<div class="scroll-hint">← scroll to explore the full table →</div>
+<div id="table-wrap">
+  <div id="grid"></div>
+</div>
+
+<div id="overlay"></div>
+<div id="panel">
+  <button class="panel-close" id="closeBtn">✕</button>
+  <div class="panel-head">
+    <div class="panel-symbol" id="pSym">H</div>
+    <div class="panel-titles">
+      <div class="panel-num" id="pNum">ATOMIC No. 1</div>
+      <div class="panel-name" id="pName">Hydrogen</div>
+      <div class="panel-cat" id="pCat">Reactive Nonmetal</div>
+    </div>
+  </div>
+  <svg class="waveform" viewBox="0 0 400 20" preserveAspectRatio="none"><path id="wavePath" d="M0,10 L400,10"/></svg>
+  <div class="readout">
+    <div class="readout-field"><div class="rf-label">Atomic Mass</div><div class="rf-value" id="pMass">1.008</div></div>
+    <div class="readout-field"><div class="rf-label">Phase (STP)</div><div class="rf-value" id="pPhase">Gas</div></div>
+    <div class="readout-field"><div class="rf-label">Period</div><div class="rf-value" id="pPeriod">1</div></div>
+    <div class="readout-field"><div class="rf-label">Group</div><div class="rf-value" id="pGroup">1</div></div>
+    <div class="readout-field"><div class="rf-label">Block</div><div class="rf-value" id="pBlock">s-block</div></div>
+  </div>
+  <div class="panel-fact" id="pFact">Most abundant element in the universe; powers stars via fusion.</div>
+  <div class="panel-nav">
+    <button id="prevBtn">← PREV</button>
+    <button id="nextBtn">NEXT →</button>
+  </div>
+</div>
+
+<script>
+// [num, sym, name, mass, cat, row, col, period, group, block, phase, fact]
+const CAT_NAMES = {
+  am:'Alkali metal', ae:'Alkaline earth metal', tm:'Transition metal', pm:'Post-transition metal',
+  me:'Metalloid', nm:'Reactive nonmetal', hal:'Halogen', ng:'Noble gas', la:'Lanthanide', ac:'Actinide', un:'Unknown'
+};
+
+const ELEMENTS = [
+[1,"H","Hydrogen",1.008,"nm",1,1,1,1,"s","gas","Most abundant element in the universe; powers stars via fusion."],
+[2,"He","Helium",4.003,"ng",1,18,1,18,"s","gas","Second lightest element; makes your voice squeaky and balloons float."],
+[3,"Li","Lithium",6.94,"am",2,1,2,1,"s","solid","Lightest metal; core of modern rechargeable batteries."],
+[4,"Be","Beryllium",9.012,"ae",2,2,2,2,"s","solid","Rigid, lightweight metal used in aerospace and X-ray windows."],
+[5,"B","Boron",10.81,"me",2,13,2,13,"p","solid","Essential for plant growth; hardens glass and ceramics."],
+[6,"C","Carbon",12.011,"nm",2,14,2,14,"p","solid","Backbone of all known life; forms diamond and graphite."],
+[7,"N","Nitrogen",14.007,"nm",2,15,2,15,"p","gas","Makes up 78% of Earth's atmosphere."],
+[8,"O","Oxygen",15.999,"nm",2,16,2,16,"p","gas","Essential for respiration; makes up 21% of the air we breathe."],
+[9,"F","Fluorine",18.998,"hal",2,17,2,17,"p","gas","Most reactive element; added to toothpaste to fight decay."],
+[10,"Ne","Neon",20.180,"ng",2,18,2,18,"p","gas","Glows orange-red in the electric signs that bear its name."],
+[11,"Na","Sodium",22.990,"am",3,1,3,1,"s","solid","Reacts violently with water; essential for nerve function."],
+[12,"Mg","Magnesium",24.305,"ae",3,2,3,2,"s","solid","Burns with a brilliant white flame; vital in chlorophyll."],
+[13,"Al","Aluminium",26.982,"pm",3,13,3,13,"p","solid","Lightweight, corrosion-resistant metal used in aircraft and cans."],
+[14,"Si","Silicon",28.085,"me",3,14,3,14,"p","solid","Foundation of computer chips and glass."],
+[15,"P","Phosphorus",30.974,"nm",3,15,3,15,"p","solid","Essential to DNA and ATP; glows faintly in the dark."],
+[16,"S","Sulfur",32.06,"nm",3,16,3,16,"p","solid","Smells of rotten eggs when combined with hydrogen."],
+[17,"Cl","Chlorine",35.45,"hal",3,17,3,17,"p","gas","Used to disinfect drinking water and swimming pools."],
+[18,"Ar","Argon",39.948,"ng",3,18,3,18,"p","gas","Fills incandescent bulbs to stop the filament burning out."],
+[19,"K","Potassium",39.098,"am",4,1,4,1,"s","solid","Critical for nerve signals and muscle contraction."],
+[20,"Ca","Calcium",40.078,"ae",4,2,4,2,"s","solid","Builds bones and teeth; fifth most abundant element in the body."],
+[21,"Sc","Scandium",44.956,"tm",4,3,4,3,"d","solid","Rare metal used in aerospace alloys and stadium floodlights."],
+[22,"Ti","Titanium",47.867,"tm",4,4,4,4,"d","solid","Strong as steel, half the weight; used in implants."],
+[23,"V","Vanadium",50.942,"tm",4,5,4,5,"d","solid","Strengthens steel; named after a Scandinavian goddess."],
+[24,"Cr","Chromium",51.996,"tm",4,6,4,6,"d","solid","Gives stainless steel its shine and corrosion resistance."],
+[25,"Mn","Manganese",54.938,"tm",4,7,4,7,"d","solid","Essential trace nutrient; hardens steel."],
+[26,"Fe","Iron",55.845,"tm",4,8,4,8,"d","solid","Core of Earth's magnetic field; most used metal on the planet."],
+[27,"Co","Cobalt",58.933,"tm",4,9,4,9,"d","solid","Gives glass and ceramics a deep blue colour."],
+[28,"Ni","Nickel",58.693,"tm",4,10,4,10,"d","solid","Used in coins and rechargeable battery electrodes."],
+[29,"Cu","Copper",63.546,"tm",4,11,4,11,"d","solid","Excellent conductor; used in electrical wiring for millennia."],
+[30,"Zn","Zinc",65.38,"tm",4,12,4,12,"d","solid","Coats steel to prevent rust; essential trace nutrient."],
+[31,"Ga","Gallium",69.723,"pm",4,13,4,13,"p","solid","Melts in the palm of your hand at 30°C."],
+[32,"Ge","Germanium",72.630,"me",4,14,4,14,"p","solid","Key semiconductor before silicon took over electronics."],
+[33,"As","Arsenic",74.922,"me",4,15,4,15,"p","solid","Notorious poison; also used in semiconductors."],
+[34,"Se","Selenium",78.971,"nm",4,16,4,16,"p","solid","Used in solar cells and to give glass a red tint."],
+[35,"Br","Bromine",79.904,"hal",4,17,4,17,"p","liquid","One of only two elements liquid at room temperature."],
+[36,"Kr","Krypton",83.798,"ng",4,18,4,18,"p","gas","Used in high-performance photographic flash lamps."],
+[37,"Rb","Rubidium",85.468,"am",5,1,5,1,"s","solid","Highly reactive alkali metal used in atomic clocks."],
+[38,"Sr","Strontium",87.62,"ae",5,2,5,2,"s","solid","Gives fireworks their brilliant red colour."],
+[39,"Y","Yttrium",88.906,"tm",5,3,5,3,"d","solid","Used in LED phosphors and superconductors."],
+[40,"Zr","Zirconium",91.224,"tm",5,4,5,4,"d","solid","Highly corrosion-resistant; used in nuclear reactor cladding."],
+[41,"Nb","Niobium",92.906,"tm",5,5,5,5,"d","solid","Superconducting metal used in MRI magnet wiring."],
+[42,"Mo","Molybdenum",95.95,"tm",5,6,5,6,"d","solid","Strengthens steel at high temperatures for jet engines."],
+[43,"Tc","Technetium",97,"tm",5,7,5,7,"d","solid","First artificially produced element; used in medical imaging."],
+[44,"Ru","Ruthenium",101.07,"tm",5,8,5,8,"d","solid","Hardens platinum and palladium alloys."],
+[45,"Rh","Rhodium",102.906,"tm",5,9,5,9,"d","solid","One of the rarest, most reflective metals; coats jewellery."],
+[46,"Pd","Palladium",106.42,"tm",5,10,5,10,"d","solid","Key catalyst in catalytic converters."],
+[47,"Ag","Silver",107.868,"tm",5,11,5,11,"d","solid","Best electrical conductor of any element."],
+[48,"Cd","Cadmium",112.414,"tm",5,12,5,12,"d","solid","Used in rechargeable nickel-cadmium batteries."],
+[49,"In","Indium",114.818,"pm",5,13,5,13,"p","solid","Coats touchscreens as a transparent conductor."],
+[50,"Sn","Tin",118.710,"pm",5,14,5,14,"p","solid","Prevents corrosion; alloyed into bronze since antiquity."],
+[51,"Sb","Antimony",121.760,"me",5,15,5,15,"p","solid","Used since antiquity in cosmetics and alloys."],
+[52,"Te","Tellurium",127.60,"me",5,16,5,16,"p","solid","Alloyed into steel to improve machinability."],
+[53,"I","Iodine",126.904,"hal",5,17,5,17,"p","solid","Essential for thyroid hormone production."],
+[54,"Xe","Xenon",131.293,"ng",5,18,5,18,"p","gas","Powers ion thrusters on spacecraft."],
+[55,"Cs","Caesium",132.905,"am",6,1,6,1,"s","solid","Defines the length of a second via its atomic clock."],
+[56,"Ba","Barium",137.327,"ae",6,2,6,2,"s","solid","Swallowed as a contrast agent for medical X-rays."],
+[57,"La","Lanthanum",138.905,"la",9,3,6,3,"f","solid","Named the whole lanthanide series after itself."],
+[58,"Ce","Cerium",140.116,"la",9,4,6,4,"f","solid","Most abundant rare-earth element; used in catalytic converters."],
+[59,"Pr","Praseodymium",140.908,"la",9,5,6,5,"f","solid","Colours glass and ceramics a bright yellow-green."],
+[60,"Nd","Neodymium",144.242,"la",9,6,6,6,"f","solid","Powers the strongest permanent magnets known."],
+[61,"Pm","Promethium",145,"la",9,7,6,7,"f","solid","Only lanthanide with no stable isotopes; used in luminous paint."],
+[62,"Sm","Samarium",150.36,"la",9,8,6,8,"f","solid","Used in high-temperature permanent magnets."],
+[63,"Eu","Europium",151.964,"la",9,9,6,9,"f","solid","Provides the red phosphor in old CRT televisions."],
+[64,"Gd","Gadolinium",157.25,"la",9,10,6,10,"f","solid","Used as a contrast agent in MRI scans."],
+[65,"Tb","Terbium",158.925,"la",9,11,6,11,"f","solid","Green phosphor in energy-efficient lighting."],
+[66,"Dy","Dysprosium",162.500,"la",9,12,6,12,"f","solid","Boosts the heat resistance of neodymium magnets."],
+[67,"Ho","Holmium",164.930,"la",9,13,6,13,"f","solid","Has the highest magnetic strength of any element."],
+[68,"Er","Erbium",167.259,"la",9,14,6,14,"f","solid","Amplifies signals in fibre-optic communication cables."],
+[69,"Tm","Thulium",168.934,"la",9,15,6,15,"f","solid","Rarest naturally occurring lanthanide."],
+[70,"Yb","Ytterbium",173.045,"la",9,16,6,16,"f","solid","Used in atomic clocks more precise than caesium's."],
+[71,"Lu","Lutetium",174.967,"la",9,17,6,17,"f","solid","Densest of the lanthanides; used in PET scan detectors."],
+[72,"Hf","Hafnium",178.49,"tm",6,4,6,4,"d","solid","Absorbs neutrons well; used in nuclear reactor control rods."],
+[73,"Ta","Tantalum",180.948,"tm",6,5,6,5,"d","solid","Highly corrosion-resistant; used in surgical implants and capacitors."],
+[74,"W","Tungsten",183.84,"tm",6,6,6,6,"d","solid","Highest melting point of any metal; lit old filament bulbs."],
+[75,"Re","Rhenium",186.207,"tm",6,7,6,7,"d","solid","One of the rarest elements in Earth's crust."],
+[76,"Os","Osmium",190.23,"tm",6,8,6,8,"d","solid","Densest naturally occurring element."],
+[77,"Ir","Iridium",192.217,"tm",6,9,6,9,"d","solid","A spike of it in rock layers marks the dinosaur extinction."],
+[78,"Pt","Platinum",195.084,"tm",6,10,6,10,"d","solid","Prized catalyst and jewellery metal, denser than gold."],
+[79,"Au","Gold",196.967,"tm",6,11,6,11,"d","solid","Prized for millennia; never tarnishes."],
+[80,"Hg","Mercury",200.592,"tm",6,12,6,12,"d","liquid","The only metal liquid at room temperature."],
+[81,"Tl","Thallium",204.38,"pm",6,13,6,13,"p","solid","Historically used as an odourless, tasteless poison."],
+[82,"Pb","Lead",207.2,"pm",6,14,6,14,"p","solid","Dense, soft metal once common in pipes and paint."],
+[83,"Bi","Bismuth",208.980,"pm",6,15,6,15,"p","solid","Forms colourful, iridescent crystals; least toxic heavy metal."],
+[84,"Po","Polonium",209,"me",6,16,6,16,"p","solid","Intensely radioactive; discovered by Marie Curie."],
+[85,"At","Astatine",210,"hal",6,17,6,17,"p","solid","Rarest naturally occurring element on Earth."],
+[86,"Rn","Radon",222,"ng",6,18,6,18,"p","gas","Radioactive gas that seeps from the ground into homes."],
+[87,"Fr","Francium",223,"am",7,1,7,1,"s","solid","Among the rarest elements in Earth's crust; intensely radioactive."],
+[88,"Ra","Radium",226,"ae",7,2,7,2,"s","solid","Once used in glow-in-the-dark watch dials."],
+[89,"Ac","Actinium",227,"ac",10,3,7,3,"f","solid","Glows faintly blue in the dark from its own radioactivity."],
+[90,"Th","Thorium",232.038,"ac",10,4,7,4,"f","solid","Proposed alternative nuclear fuel to uranium."],
+[91,"Pa","Protactinium",231.036,"ac",10,5,7,5,"f","solid","Rare and highly radioactive; found in trace amounts in uranium ore."],
+[92,"U","Uranium",238.029,"ac",10,6,7,6,"f","solid","Fuels nuclear reactors and weapons."],
+[93,"Np","Neptunium",237,"ac",10,7,7,7,"f","solid","First transuranium element to be discovered."],
+[94,"Pu","Plutonium",244,"ac",10,8,7,8,"f","solid","Powered the Nagasaki bomb and Voyager spacecraft."],
+[95,"Am","Americium",243,"ac",10,9,7,9,"f","solid","Used in household smoke detectors."],
+[96,"Cm","Curium",247,"ac",10,10,7,10,"f","solid","Used to analyse Martian soil on rover missions."],
+[97,"Bk","Berkelium",247,"ac",10,11,7,11,"f","solid","Named after Berkeley, California, where it was made."],
+[98,"Cf","Californium",251,"ac",10,12,7,12,"f","solid","Used to help start up nuclear reactors."],
+[99,"Es","Einsteinium",252,"ac",10,13,7,13,"f","solid","Discovered in the debris of the first hydrogen bomb test."],
+[100,"Fm","Fermium",257,"ac",10,14,7,14,"f","solid","Also discovered in hydrogen bomb test debris."],
+[101,"Md","Mendelevium",258,"ac",10,15,7,15,"f","solid","First element made one atom at a time."],
+[102,"No","Nobelium",259,"ac",10,16,7,16,"f","solid","Named after Alfred Nobel."],
+[103,"Lr","Lawrencium",262,"ac",10,17,7,17,"f","solid","Named after physicist Ernest Lawrence."],
+[104,"Rf","Rutherfordium",267,"tm",7,4,7,4,"d","solid","Named after physicist Ernest Rutherford."],
+[105,"Db","Dubnium",268,"tm",7,5,7,5,"d","solid","Named after Dubna, Russia, site of its discovery."],
+[106,"Sg","Seaborgium",269,"tm",7,6,7,6,"d","solid","Named after Nobel laureate Glenn Seaborg."],
+[107,"Bh","Bohrium",270,"tm",7,7,7,7,"d","solid","Named after physicist Niels Bohr."],
+[108,"Hs","Hassium",269,"tm",7,8,7,8,"d","solid","Named after the German state of Hesse."],
+[109,"Mt","Meitnerium",278,"un",7,9,7,9,"d","solid","Named after physicist Lise Meitner."],
+[110,"Ds","Darmstadtium",281,"un",7,10,7,10,"d","solid","Named after Darmstadt, Germany, where it was made."],
+[111,"Rg","Roentgenium",282,"un",7,11,7,11,"d","solid","Named after physicist Wilhelm Röntgen."],
+[112,"Cn","Copernicium",285,"tm",7,12,7,12,"d","solid","Named after astronomer Nicolaus Copernicus."],
+[113,"Nh","Nihonium",286,"pm",7,13,7,13,"p","solid","First element named by Japanese researchers."],
+[114,"Fl","Flerovium",289,"pm",7,14,7,14,"p","solid","Named after the Flerov Laboratory in Russia."],
+[115,"Mc","Moscovium",290,"pm",7,15,7,15,"p","solid","Named after Moscow, Russia."],
+[116,"Lv","Livermorium",293,"pm",7,16,7,16,"p","solid","Named after Livermore, California."],
+[117,"Ts","Tennessine",294,"hal",7,17,7,17,"p","solid","Named after the state of Tennessee, USA."],
+[118,"Og","Oganesson",294,"ng",7,18,7,18,"p","gas","Heaviest confirmed element; named after physicist Yuri Oganessian."],
+];
+
+const grid = document.getElementById('grid');
+const legend = document.getElementById('legend');
+let activeCat = null;
+let selectedIndex = 0;
+
+// Render legend
+Object.entries(CAT_NAMES).forEach(([code,label])=>{
+  const el = document.createElement('div');
+  el.className = 'legend-item';
+  el.dataset.cat = code;
+  el.innerHTML = `<span class="dot" style="background:var(--${code})"></span>${label}`;
+  el.addEventListener('click', ()=>{
+    activeCat = activeCat === code ? null : code;
+    applyFilter();
+    updateLegend();
+  });
+  legend.appendChild(el);
+});
+
+function updateLegend(){
+  document.querySelectorAll('.legend-item').forEach(item=>{
+    item.classList.toggle('active', item.dataset.cat === activeCat);
+    item.classList.toggle('faded', activeCat !== null && item.dataset.cat !== activeCat);
+  });
+}
+
+// Render grid
+const bySlug = {};
+ELEMENTS.forEach((e, idx)=>{
+  const [num, sym, name, mass, cat, row, col] = e;
+  const slug = sym.toLowerCase();
+  bySlug[slug] = idx;
+  const cell = document.createElement('div');
+  cell.className = 'cell el';
+  cell.style.gridRow = row;
+  cell.style.gridColumn = col;
+  cell.style.setProperty('--cat-color', `var(--${cat})`);
+  cell.dataset.idx = idx;
+  cell.dataset.cat = cat;
+  cell.dataset.slug = slug;
+  cell.dataset.search = (name + ' ' + sym).toLowerCase();
+  cell.innerHTML = `<div class="num">${num}</div><div class="sym">${sym}</div><div class="mass">${mass}</div>`;
+  cell.addEventListener('click', ()=> openPanel(idx));
+  grid.appendChild(cell);
+});
+
+// Placeholder cells for the f-block gap in the main table
+[[6,3,'57–71'],[7,3,'89–103']].forEach(([row,col,label])=>{
+  const ph = document.createElement('div');
+  ph.className = 'cell placeholder';
+  ph.style.gridRow = row;
+  ph.style.gridColumn = col;
+  ph.textContent = label;
+  grid.appendChild(ph);
+});
+
+function applyFilter(){
+  const q = document.getElementById('search').value.trim().toLowerCase();
+  document.querySelectorAll('.el').forEach(cell=>{
+    const matchesCat = !activeCat || cell.dataset.cat === activeCat;
+    const matchesSearch = !q || cell.dataset.search.includes(q);
+    cell.classList.toggle('faded', !(matchesCat && matchesSearch));
+  });
+}
+
+document.getElementById('search').addEventListener('input', applyFilter);
+
+// Detail panel
+const overlay = document.getElementById('overlay');
+const panel = document.getElementById('panel');
+
+const BLOCK_NAMES = {s:'s-block', p:'p-block', d:'d-block', f:'f-block'};
+
+function openPanel(idx, pushHash=true){
+  selectedIndex = idx;
+  const [num, sym, name, mass, cat, row, col, period, group, block, phase, fact] = ELEMENTS[idx];
+  document.querySelectorAll('.el').forEach(c=>c.classList.remove('selected'));
+  const cellEl = document.querySelector(`.el[data-idx="${idx}"]`);
+  if(cellEl) cellEl.classList.add('selected');
+
+  document.getElementById('pSym').textContent = sym;
+  document.getElementById('pNum').textContent = `ATOMIC No. ${num}`;
+  document.getElementById('pName').textContent = name;
+  document.getElementById('pCat').textContent = CAT_NAMES[cat];
+  document.getElementById('pMass').textContent = mass;
+  document.getElementById('pPhase').textContent = phase.charAt(0).toUpperCase()+phase.slice(1);
+  document.getElementById('pPeriod').textContent = period;
+  document.getElementById('pGroup').textContent = group;
+  document.getElementById('pBlock').textContent = BLOCK_NAMES[block];
+  document.getElementById('pFact').textContent = fact;
+
+  panel.style.setProperty('--panel-cat-color', `var(--${cat})`);
+
+  // Waveform keyed to atomic number
+  const path = document.getElementById('wavePath');
+  let d = `M0,10`;
+  const seed = num;
+  for(let x=0; x<=400; x+=20){
+    const h = 10 + Math.sin((x/400)*Math.PI*2 + seed) * (4 + (seed % 7));
+    d += ` L${x},${h.toFixed(1)}`;
+  }
+  path.setAttribute('d', d);
+
+  document.getElementById('prevBtn').disabled = idx === 0;
+  document.getElementById('nextBtn').disabled = idx === ELEMENTS.length-1;
+
+  overlay.classList.add('show');
+  panel.classList.add('show');
+
+  if(pushHash){
+    safeSetHash(sym.toLowerCase());
+  }
+}
+
+function closePanel(){
+  overlay.classList.remove('show');
+  panel.classList.remove('show');
+  document.querySelectorAll('.el').forEach(c=>c.classList.remove('selected'));
+  safeSetHash('');
+}
+
+// Some embedding contexts (e.g. sandboxed srcdoc iframes) block history.replaceState
+// with a SecurityError. Deep-linking is a nice-to-have, so fail silently there.
+function safeSetHash(hash){
+  try{
+    if(hash){
+      history.replaceState(null, '', `#${hash}`);
+    } else {
+      history.replaceState(null, '', window.location.pathname + window.location.search);
+    }
+  }catch(err){
+    /* deep-linking unavailable in this embedding context (e.g. sandboxed preview), ignore */
+  }
+}
+
+document.getElementById('closeBtn').addEventListener('click', closePanel);
+overlay.addEventListener('click', closePanel);
+document.getElementById('prevBtn').addEventListener('click', ()=>{ if(selectedIndex>0) openPanel(selectedIndex-1); });
+document.getElementById('nextBtn').addEventListener('click', ()=>{ if(selectedIndex<ELEMENTS.length-1) openPanel(selectedIndex+1); });
+document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') closePanel(); });
+
+updateLegend();
+
+// Deep-link support: #<symbol> opens that element directly, matching the
+// per-element URL scheme used in the site's structured data. Reading the
+// hash is safe even in sandboxed contexts; writing to it goes via safeSetHash.
+try{
+  const initialSlug = window.location.hash.replace('#','').toLowerCase();
+  if(initialSlug && bySlug.hasOwnProperty(initialSlug)){
+    openPanel(bySlug[initialSlug], false);
+  }
+  window.addEventListener('hashchange', ()=>{
+    const slug = window.location.hash.replace('#','').toLowerCase();
+    if(slug && bySlug.hasOwnProperty(slug)){
+      openPanel(bySlug[slug], false);
+    } else if(!slug){
+      closePanel();
+    }
+  });
+}catch(err){ /* hash APIs unavailable in this embedding context, ignore */ }
+</script>
+</body>
+</html>

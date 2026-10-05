@@ -197,5 +197,44 @@
     "demoUrl": "https://atmosphere.labs.rjmlaird.co.uk",
     "repoUrl": "https://github.com/greenorbitspace/labs/tree/main/packages/atmosphere",
     "updated": "2026-07-27"
+  },
+  {
+    "slug": "cfd",
+    "title": "cfd",
+    "description": "New experiment — update this description.",
+    "status": "planned",
+    "tech": [
+      "React",
+      "Vite"
+    ],
+    "demoUrl": "https://cfd.labs.rjmlaird.co.uk",
+    "repoUrl": "https://github.com/greenorbitspace/labs/tree/main/packages/cfd",
+    "updated": "2026-10-05"
+  },
+  {
+    "slug": "electricity",
+    "title": "electricity",
+    "description": "New experiment — update this description.",
+    "status": "planned",
+    "tech": [
+      "React",
+      "Vite"
+    ],
+    "demoUrl": "https://electricity.labs.rjmlaird.co.uk",
+    "repoUrl": "https://github.com/greenorbitspace/labs/tree/main/packages/electricity",
+    "updated": "2026-10-05"
+  },
+  {
+    "slug": "elements",
+    "title": "elements",
+    "description": "New experiment — update this description.",
+    "status": "planned",
+    "tech": [
+      "React",
+      "Vite"
+    ],
+    "demoUrl": "https://elements.labs.rjmlaird.co.uk",
+    "repoUrl": "https://github.com/greenorbitspace/labs/tree/main/packages/elements",
+    "updated": "2026-10-05"
   }
 ]

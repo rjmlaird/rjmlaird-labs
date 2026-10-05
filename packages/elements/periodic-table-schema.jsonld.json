@@ -1,0 +1,6160 @@
+{
+  "@context": "https://schema.org",
+  "@type": "Dataset",
+  "@id": "https://labs.rjmlaird.co.uk/elements#dataset",
+  "name": "Periodic Table of Elements — Elements Lab",
+  "description": "Structured data for all 118 known chemical elements, as presented in the Elements Lab interactive periodic table.",
+  "url": "https://labs.rjmlaird.co.uk/elements",
+  "creator": {
+    "@type": "Organization",
+    "name": "rjmlaird Labs"
+  },
+  "license": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "variableMeasured": [
+    "atomicNumber",
+    "atomicMass",
+    "period",
+    "group",
+    "block",
+    "category",
+    "phaseAtSTP"
+  ],
+  "hasPart": [
+    {
+      "@type": "ChemicalSubstance",
+      "@id": "https://labs.rjmlaird.co.uk/elements/h#element",
+      "identifier": "1",
+      "name": "Hydrogen",
+      "alternateName": "H",
+      "url": "https://labs.rjmlaird.co.uk/elements/h",
+      "description": "Most abundant element in the universe; powers stars via fusion.",
+      "additionalType": "https://en.wikipedia.org/wiki/Chemical_element",
+      "sameAs": [
+        "https://pubchem.ncbi.nlm.nih.gov/element/1",
+        "https://en.wikipedia.org/wiki/Hydrogen"
+      ],
+      "additionalProperty": [
+        {
+          "@type": "PropertyValue",
+          "name": "atomicNumber",
+          "value": 1
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "atomicMass",
+          "value": 1.008,
+          "unitText": "u"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "period",
+          "value": 1
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "group",
+          "value": 1
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "block",
+          "value": "s"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "category",
+          "value": "Reactive nonmetal"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "phaseAtSTP",
+          "value": "Gas"
+        }
+      ]
+    },
+    {
+      "@type": "ChemicalSubstance",
+      "@id": "https://labs.rjmlaird.co.uk/elements/he#element",
+      "identifier": "2",
+      "name": "Helium",
+      "alternateName": "He",
+      "url": "https://labs.rjmlaird.co.uk/elements/he",
+      "description": "Second lightest element; makes your voice squeaky and balloons float.",
+      "additionalType": "https://en.wikipedia.org/wiki/Chemical_element",
+      "sameAs": [
+        "https://pubchem.ncbi.nlm.nih.gov/element/2",
+        "https://en.wikipedia.org/wiki/Helium"
+      ],
+      "additionalProperty": [
+        {
+          "@type": "PropertyValue",
+          "name": "atomicNumber",
+          "value": 2
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "atomicMass",
+          "value": 4.003,
+          "unitText": "u"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "period",
+          "value": 1
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "group",
+          "value": 18
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "block",
+          "value": "s"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "category",
+          "value": "Noble gas"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "phaseAtSTP",
+          "value": "Gas"
+        }
+      ]
+    },
+    {
+      "@type": "ChemicalSubstance",
+      "@id": "https://labs.rjmlaird.co.uk/elements/li#element",
+      "identifier": "3",
+      "name": "Lithium",
+      "alternateName": "Li",
+      "url": "https://labs.rjmlaird.co.uk/elements/li",
+      "description": "Lightest metal; core of modern rechargeable batteries.",
+      "additionalType": "https://en.wikipedia.org/wiki/Chemical_element",
+      "sameAs": [
+        "https://pubchem.ncbi.nlm.nih.gov/element/3",
+        "https://en.wikipedia.org/wiki/Lithium"
+      ],
+      "additionalProperty": [
+        {
+          "@type": "PropertyValue",
+          "name": "atomicNumber",
+          "value": 3
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "atomicMass",
+          "value": 6.94,
+          "unitText": "u"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "period",
+          "value": 2
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "group",
+          "value": 1
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "block",
+          "value": "s"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "category",
+          "value": "Alkali metal"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "phaseAtSTP",
+          "value": "Solid"
+        }
+      ]
+    },
+    {
+      "@type": "ChemicalSubstance",
+      "@id": "https://labs.rjmlaird.co.uk/elements/be#element",
+      "identifier": "4",
+      "name": "Beryllium",
+      "alternateName": "Be",
+      "url": "https://labs.rjmlaird.co.uk/elements/be",
+      "description": "Rigid, lightweight metal used in aerospace and X-ray windows.",
+      "additionalType": "https://en.wikipedia.org/wiki/Chemical_element",
+      "sameAs": [
+        "https://pubchem.ncbi.nlm.nih.gov/element/4",
+        "https://en.wikipedia.org/wiki/Beryllium"
+      ],
+      "additionalProperty": [
+        {
+          "@type": "PropertyValue",
+          "name": "atomicNumber",
+          "value": 4
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "atomicMass",
+          "value": 9.012,
+          "unitText": "u"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "period",
+          "value": 2
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "group",
+          "value": 2
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "block",
+          "value": "s"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "category",
+          "value": "Alkaline earth metal"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "phaseAtSTP",
+          "value": "Solid"
+        }
+      ]
+    },
+    {
+      "@type": "ChemicalSubstance",
+      "@id": "https://labs.rjmlaird.co.uk/elements/b#element",
+      "identifier": "5",
+      "name": "Boron",
+      "alternateName": "B",
+      "url": "https://labs.rjmlaird.co.uk/elements/b",
+      "description": "Essential for plant growth; hardens glass and ceramics.",
+      "additionalType": "https://en.wikipedia.org/wiki/Chemical_element",
+      "sameAs": [
+        "https://pubchem.ncbi.nlm.nih.gov/element/5",
+        "https://en.wikipedia.org/wiki/Boron"
+      ],
+      "additionalProperty": [
+        {
+          "@type": "PropertyValue",
+          "name": "atomicNumber",
+          "value": 5
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "atomicMass",
+          "value": 10.81,
+          "unitText": "u"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "period",
+          "value": 2
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "group",
+          "value": 13
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "block",
+          "value": "p"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "category",
+          "value": "Metalloid"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "phaseAtSTP",
+          "value": "Solid"
+        }
+      ]
+    },
+    {
+      "@type": "ChemicalSubstance",
+      "@id": "https://labs.rjmlaird.co.uk/elements/c#element",
+      "identifier": "6",
+      "name": "Carbon",
+      "alternateName": "C",
+      "url": "https://labs.rjmlaird.co.uk/elements/c",
+      "description": "Backbone of all known life; forms diamond and graphite.",
+      "additionalType": "https://en.wikipedia.org/wiki/Chemical_element",
+      "sameAs": [
+        "https://pubchem.ncbi.nlm.nih.gov/element/6",
+        "https://en.wikipedia.org/wiki/Carbon"
+      ],
+      "additionalProperty": [
+        {
+          "@type": "PropertyValue",
+          "name": "atomicNumber",
+          "value": 6
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "atomicMass",
+          "value": 12.011,
+          "unitText": "u"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "period",
+          "value": 2
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "group",
+          "value": 14
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "block",
+          "value": "p"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "category",
+          "value": "Reactive nonmetal"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "phaseAtSTP",
+          "value": "Solid"
+        }
+      ]
+    },
+    {
+      "@type": "ChemicalSubstance",
+      "@id": "https://labs.rjmlaird.co.uk/elements/n#element",
+      "identifier": "7",
+      "name": "Nitrogen",
+      "alternateName": "N",
+      "url": "https://labs.rjmlaird.co.uk/elements/n",
+      "description": "Makes up 78% of Earth's atmosphere.",
+      "additionalType": "https://en.wikipedia.org/wiki/Chemical_element",
+      "sameAs": [
+        "https://pubchem.ncbi.nlm.nih.gov/element/7",
+        "https://en.wikipedia.org/wiki/Nitrogen"
+      ],
+      "additionalProperty": [
+        {
+          "@type": "PropertyValue",
+          "name": "atomicNumber",
+          "value": 7
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "atomicMass",
+          "value": 14.007,
+          "unitText": "u"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "period",
+          "value": 2
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "group",
+          "value": 15
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "block",
+          "value": "p"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "category",
+          "value": "Reactive nonmetal"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "phaseAtSTP",
+          "value": "Gas"
+        }
+      ]
+    },
+    {
+      "@type": "ChemicalSubstance",
+      "@id": "https://labs.rjmlaird.co.uk/elements/o#element",
+      "identifier": "8",
+      "name": "Oxygen",
+      "alternateName": "O",
+      "url": "https://labs.rjmlaird.co.uk/elements/o",
+      "description": "Essential for respiration; makes up 21% of the air we breathe.",
+      "additionalType": "https://en.wikipedia.org/wiki/Chemical_element",
+      "sameAs": [
+        "https://pubchem.ncbi.nlm.nih.gov/element/8",
+        "https://en.wikipedia.org/wiki/Oxygen"
+      ],
+      "additionalProperty": [
+        {
+          "@type": "PropertyValue",
+          "name": "atomicNumber",
+          "value": 8
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "atomicMass",
+          "value": 15.999,
+          "unitText": "u"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "period",
+          "value": 2
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "group",
+          "value": 16
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "block",
+          "value": "p"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "category",
+          "value": "Reactive nonmetal"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "phaseAtSTP",
+          "value": "Gas"
+        }
+      ]
+    },
+    {
+      "@type": "ChemicalSubstance",
+      "@id": "https://labs.rjmlaird.co.uk/elements/f#element",
+      "identifier": "9",
+      "name": "Fluorine",
+      "alternateName": "F",
+      "url": "https://labs.rjmlaird.co.uk/elements/f",
+      "description": "Most reactive element; added to toothpaste to fight decay.",
+      "additionalType": "https://en.wikipedia.org/wiki/Chemical_element",
+      "sameAs": [
+        "https://pubchem.ncbi.nlm.nih.gov/element/9",
+        "https://en.wikipedia.org/wiki/Fluorine"
+      ],
+      "additionalProperty": [
+        {
+          "@type": "PropertyValue",
+          "name": "atomicNumber",
+          "value": 9
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "atomicMass",
+          "value": 18.998,
+          "unitText": "u"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "period",
+          "value": 2
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "group",
+          "value": 17
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "block",
+          "value": "p"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "category",
+          "value": "Halogen"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "phaseAtSTP",
+          "value": "Gas"
+        }
+      ]
+    },
+    {
+      "@type": "ChemicalSubstance",
+      "@id": "https://labs.rjmlaird.co.uk/elements/ne#element",
+      "identifier": "10",
+      "name": "Neon",
+      "alternateName": "Ne",
+      "url": "https://labs.rjmlaird.co.uk/elements/ne",
+      "description": "Glows orange-red in the electric signs that bear its name.",
+      "additionalType": "https://en.wikipedia.org/wiki/Chemical_element",
+      "sameAs": [
+        "https://pubchem.ncbi.nlm.nih.gov/element/10",
+        "https://en.wikipedia.org/wiki/Neon"
+      ],
+      "additionalProperty": [
+        {
+          "@type": "PropertyValue",
+          "name": "atomicNumber",
+          "value": 10
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "atomicMass",
+          "value": 20.18,
+          "unitText": "u"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "period",
+          "value": 2
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "group",
+          "value": 18
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "block",
+          "value": "p"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "category",
+          "value": "Noble gas"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "phaseAtSTP",
+          "value": "Gas"
+        }
+      ]
+    },
+    {
+      "@type": "ChemicalSubstance",
+      "@id": "https://labs.rjmlaird.co.uk/elements/na#element",
+      "identifier": "11",
+      "name": "Sodium",
+      "alternateName": "Na",
+      "url": "https://labs.rjmlaird.co.uk/elements/na",
+      "description": "Reacts violently with water; essential for nerve function.",
+      "additionalType": "https://en.wikipedia.org/wiki/Chemical_element",
+      "sameAs": [
+        "https://pubchem.ncbi.nlm.nih.gov/element/11",
+        "https://en.wikipedia.org/wiki/Sodium"
+      ],
+      "additionalProperty": [
+        {
+          "@type": "PropertyValue",
+          "name": "atomicNumber",
+          "value": 11
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "atomicMass",
+          "value": 22.99,
+          "unitText": "u"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "period",
+          "value": 3
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "group",
+          "value": 1
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "block",
+          "value": "s"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "category",
+          "value": "Alkali metal"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "phaseAtSTP",
+          "value": "Solid"
+        }
+      ]
+    },
+    {
+      "@type": "ChemicalSubstance",
+      "@id": "https://labs.rjmlaird.co.uk/elements/mg#element",
+      "identifier": "12",
+      "name": "Magnesium",
+      "alternateName": "Mg",
+      "url": "https://labs.rjmlaird.co.uk/elements/mg",
+      "description": "Burns with a brilliant white flame; vital in chlorophyll.",
+      "additionalType": "https://en.wikipedia.org/wiki/Chemical_element",
+      "sameAs": [
+        "https://pubchem.ncbi.nlm.nih.gov/element/12",
+        "https://en.wikipedia.org/wiki/Magnesium"
+      ],
+      "additionalProperty": [
+        {
+          "@type": "PropertyValue",
+          "name": "atomicNumber",
+          "value": 12
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "atomicMass",
+          "value": 24.305,
+          "unitText": "u"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "period",
+          "value": 3
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "group",
+          "value": 2
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "block",
+          "value": "s"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "category",
+          "value": "Alkaline earth metal"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "phaseAtSTP",
+          "value": "Solid"
+        }
+      ]
+    },
+    {
+      "@type": "ChemicalSubstance",
+      "@id": "https://labs.rjmlaird.co.uk/elements/al#element",
+      "identifier": "13",
+      "name": "Aluminium",
+      "alternateName": "Al",
+      "url": "https://labs.rjmlaird.co.uk/elements/al",
+      "description": "Lightweight, corrosion-resistant metal used in aircraft and cans.",
+      "additionalType": "https://en.wikipedia.org/wiki/Chemical_element",
+      "sameAs": [
+        "https://pubchem.ncbi.nlm.nih.gov/element/13",
+        "https://en.wikipedia.org/wiki/Aluminium"
+      ],
+      "additionalProperty": [
+        {
+          "@type": "PropertyValue",
+          "name": "atomicNumber",
+          "value": 13
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "atomicMass",
+          "value": 26.982,
+          "unitText": "u"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "period",
+          "value": 3
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "group",
+          "value": 13
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "block",
+          "value": "p"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "category",
+          "value": "Post-transition metal"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "phaseAtSTP",
+          "value": "Solid"
+        }
+      ]
+    },
+    {
+      "@type": "ChemicalSubstance",
+      "@id": "https://labs.rjmlaird.co.uk/elements/si#element",
+      "identifier": "14",
+      "name": "Silicon",
+      "alternateName": "Si",
+      "url": "https://labs.rjmlaird.co.uk/elements/si",
+      "description": "Foundation of computer chips and glass.",
+      "additionalType": "https://en.wikipedia.org/wiki/Chemical_element",
+      "sameAs": [
+        "https://pubchem.ncbi.nlm.nih.gov/element/14",
+        "https://en.wikipedia.org/wiki/Silicon"
+      ],
+      "additionalProperty": [
+        {
+          "@type": "PropertyValue",
+          "name": "atomicNumber",
+          "value": 14
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "atomicMass",
+          "value": 28.085,
+          "unitText": "u"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "period",
+          "value": 3
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "group",
+          "value": 14
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "block",
+          "value": "p"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "category",
+          "value": "Metalloid"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "phaseAtSTP",
+          "value": "Solid"
+        }
+      ]
+    },
+    {
+      "@type": "ChemicalSubstance",
+      "@id": "https://labs.rjmlaird.co.uk/elements/p#element",
+      "identifier": "15",
+      "name": "Phosphorus",
+      "alternateName": "P",
+      "url": "https://labs.rjmlaird.co.uk/elements/p",
+      "description": "Essential to DNA and ATP; glows faintly in the dark.",
+      "additionalType": "https://en.wikipedia.org/wiki/Chemical_element",
+      "sameAs": [
+        "https://pubchem.ncbi.nlm.nih.gov/element/15",
+        "https://en.wikipedia.org/wiki/Phosphorus"
+      ],
+      "additionalProperty": [
+        {
+          "@type": "PropertyValue",
+          "name": "atomicNumber",
+          "value": 15
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "atomicMass",
+          "value": 30.974,
+          "unitText": "u"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "period",
+          "value": 3
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "group",
+          "value": 15
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "block",
+          "value": "p"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "category",
+          "value": "Reactive nonmetal"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "phaseAtSTP",
+          "value": "Solid"
+        }
+      ]
+    },
+    {
+      "@type": "ChemicalSubstance",
+      "@id": "https://labs.rjmlaird.co.uk/elements/s#element",
+      "identifier": "16",
+      "name": "Sulfur",
+      "alternateName": "S",
+      "url": "https://labs.rjmlaird.co.uk/elements/s",
+      "description": "Smells of rotten eggs when combined with hydrogen.",
+      "additionalType": "https://en.wikipedia.org/wiki/Chemical_element",
+      "sameAs": [
+        "https://pubchem.ncbi.nlm.nih.gov/element/16",
+        "https://en.wikipedia.org/wiki/Sulfur"
+      ],
+      "additionalProperty": [
+        {
+          "@type": "PropertyValue",
+          "name": "atomicNumber",
+          "value": 16
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "atomicMass",
+          "value": 32.06,
+          "unitText": "u"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "period",
+          "value": 3
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "group",
+          "value": 16
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "block",
+          "value": "p"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "category",
+          "value": "Reactive nonmetal"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "phaseAtSTP",
+          "value": "Solid"
+        }
+      ]
+    },
+    {
+      "@type": "ChemicalSubstance",
+      "@id": "https://labs.rjmlaird.co.uk/elements/cl#element",
+      "identifier": "17",
+      "name": "Chlorine",
+      "alternateName": "Cl",
+      "url": "https://labs.rjmlaird.co.uk/elements/cl",
+      "description": "Used to disinfect drinking water and swimming pools.",
+      "additionalType": "https://en.wikipedia.org/wiki/Chemical_element",
+      "sameAs": [
+        "https://pubchem.ncbi.nlm.nih.gov/element/17",
+        "https://en.wikipedia.org/wiki/Chlorine"
+      ],
+      "additionalProperty": [
+        {
+          "@type": "PropertyValue",
+          "name": "atomicNumber",
+          "value": 17
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "atomicMass",
+          "value": 35.45,
+          "unitText": "u"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "period",
+          "value": 3
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "group",
+          "value": 17
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "block",
+          "value": "p"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "category",
+          "value": "Halogen"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "phaseAtSTP",
+          "value": "Gas"
+        }
+      ]
+    },
+    {
+      "@type": "ChemicalSubstance",
+      "@id": "https://labs.rjmlaird.co.uk/elements/ar#element",
+      "identifier": "18",
+      "name": "Argon",
+      "alternateName": "Ar",
+      "url": "https://labs.rjmlaird.co.uk/elements/ar",
+      "description": "Fills incandescent bulbs to stop the filament burning out.",
+      "additionalType": "https://en.wikipedia.org/wiki/Chemical_element",
+      "sameAs": [
+        "https://pubchem.ncbi.nlm.nih.gov/element/18",
+        "https://en.wikipedia.org/wiki/Argon"
+      ],
+      "additionalProperty": [
+        {
+          "@type": "PropertyValue",
+          "name": "atomicNumber",
+          "value": 18
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "atomicMass",
+          "value": 39.948,
+          "unitText": "u"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "period",
+          "value": 3
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "group",
+          "value": 18
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "block",
+          "value": "p"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "category",
+          "value": "Noble gas"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "phaseAtSTP",
+          "value": "Gas"
+        }
+      ]
+    },
+    {
+      "@type": "ChemicalSubstance",
+      "@id": "https://labs.rjmlaird.co.uk/elements/k#element",
+      "identifier": "19",
+      "name": "Potassium",
+      "alternateName": "K",
+      "url": "https://labs.rjmlaird.co.uk/elements/k",
+      "description": "Critical for nerve signals and muscle contraction.",
+      "additionalType": "https://en.wikipedia.org/wiki/Chemical_element",
+      "sameAs": [
+        "https://pubchem.ncbi.nlm.nih.gov/element/19",
+        "https://en.wikipedia.org/wiki/Potassium"
+      ],
+      "additionalProperty": [
+        {
+          "@type": "PropertyValue",
+          "name": "atomicNumber",
+          "value": 19
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "atomicMass",
+          "value": 39.098,
+          "unitText": "u"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "period",
+          "value": 4
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "group",
+          "value": 1
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "block",
+          "value": "s"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "category",
+          "value": "Alkali metal"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "phaseAtSTP",
+          "value": "Solid"
+        }
+      ]
+    },
+    {
+      "@type": "ChemicalSubstance",
+      "@id": "https://labs.rjmlaird.co.uk/elements/ca#element",
+      "identifier": "20",
+      "name": "Calcium",
+      "alternateName": "Ca",
+      "url": "https://labs.rjmlaird.co.uk/elements/ca",
+      "description": "Builds bones and teeth; fifth most abundant element in the body.",
+      "additionalType": "https://en.wikipedia.org/wiki/Chemical_element",
+      "sameAs": [
+        "https://pubchem.ncbi.nlm.nih.gov/element/20",
+        "https://en.wikipedia.org/wiki/Calcium"
+      ],
+      "additionalProperty": [
+        {
+          "@type": "PropertyValue",
+          "name": "atomicNumber",
+          "value": 20
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "atomicMass",
+          "value": 40.078,
+          "unitText": "u"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "period",
+          "value": 4
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "group",
+          "value": 2
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "block",
+          "value": "s"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "category",
+          "value": "Alkaline earth metal"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "phaseAtSTP",
+          "value": "Solid"
+        }
+      ]
+    },
+    {
+      "@type": "ChemicalSubstance",
+      "@id": "https://labs.rjmlaird.co.uk/elements/sc#element",
+      "identifier": "21",
+      "name": "Scandium",
+      "alternateName": "Sc",
+      "url": "https://labs.rjmlaird.co.uk/elements/sc",
+      "description": "Rare metal used in aerospace alloys and stadium floodlights.",
+      "additionalType": "https://en.wikipedia.org/wiki/Chemical_element",
+      "sameAs": [
+        "https://pubchem.ncbi.nlm.nih.gov/element/21",
+        "https://en.wikipedia.org/wiki/Scandium"
+      ],
+      "additionalProperty": [
+        {
+          "@type": "PropertyValue",
+          "name": "atomicNumber",
+          "value": 21
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "atomicMass",
+          "value": 44.956,
+          "unitText": "u"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "period",
+          "value": 4
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "group",
+          "value": 3
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "block",
+          "value": "d"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "category",
+          "value": "Transition metal"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "phaseAtSTP",
+          "value": "Solid"
+        }
+      ]
+    },
+    {
+      "@type": "ChemicalSubstance",
+      "@id": "https://labs.rjmlaird.co.uk/elements/ti#element",
+      "identifier": "22",
+      "name": "Titanium",
+      "alternateName": "Ti",
+      "url": "https://labs.rjmlaird.co.uk/elements/ti",
+      "description": "Strong as steel, half the weight; used in implants.",
+      "additionalType": "https://en.wikipedia.org/wiki/Chemical_element",
+      "sameAs": [
+        "https://pubchem.ncbi.nlm.nih.gov/element/22",
+        "https://en.wikipedia.org/wiki/Titanium"
+      ],
+      "additionalProperty": [
+        {
+          "@type": "PropertyValue",
+          "name": "atomicNumber",
+          "value": 22
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "atomicMass",
+          "value": 47.867,
+          "unitText": "u"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "period",
+          "value": 4
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "group",
+          "value": 4
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "block",
+          "value": "d"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "category",
+          "value": "Transition metal"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "phaseAtSTP",
+          "value": "Solid"
+        }
+      ]
+    },
+    {
+      "@type": "ChemicalSubstance",
+      "@id": "https://labs.rjmlaird.co.uk/elements/v#element",
+      "identifier": "23",
+      "name": "Vanadium",
+      "alternateName": "V",
+      "url": "https://labs.rjmlaird.co.uk/elements/v",
+      "description": "Strengthens steel; named after a Scandinavian goddess.",
+      "additionalType": "https://en.wikipedia.org/wiki/Chemical_element",
+      "sameAs": [
+        "https://pubchem.ncbi.nlm.nih.gov/element/23",
+        "https://en.wikipedia.org/wiki/Vanadium"
+      ],
+      "additionalProperty": [
+        {
+          "@type": "PropertyValue",
+          "name": "atomicNumber",
+          "value": 23
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "atomicMass",
+          "value": 50.942,
+          "unitText": "u"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "period",
+          "value": 4
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "group",
+          "value": 5
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "block",
+          "value": "d"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "category",
+          "value": "Transition metal"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "phaseAtSTP",
+          "value": "Solid"
+        }
+      ]
+    },
+    {
+      "@type": "ChemicalSubstance",
+      "@id": "https://labs.rjmlaird.co.uk/elements/cr#element",
+      "identifier": "24",
+      "name": "Chromium",
+      "alternateName": "Cr",
+      "url": "https://labs.rjmlaird.co.uk/elements/cr",
+      "description": "Gives stainless steel its shine and corrosion resistance.",
+      "additionalType": "https://en.wikipedia.org/wiki/Chemical_element",
+      "sameAs": [
+        "https://pubchem.ncbi.nlm.nih.gov/element/24",
+        "https://en.wikipedia.org/wiki/Chromium"
+      ],
+      "additionalProperty": [
+        {
+          "@type": "PropertyValue",
+          "name": "atomicNumber",
+          "value": 24
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "atomicMass",
+          "value": 51.996,
+          "unitText": "u"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "period",
+          "value": 4
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "group",
+          "value": 6
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "block",
+          "value": "d"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "category",
+          "value": "Transition metal"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "phaseAtSTP",
+          "value": "Solid"
+        }
+      ]
+    },
+    {
+      "@type": "ChemicalSubstance",
+      "@id": "https://labs.rjmlaird.co.uk/elements/mn#element",
+      "identifier": "25",
+      "name": "Manganese",
+      "alternateName": "Mn",
+      "url": "https://labs.rjmlaird.co.uk/elements/mn",
+      "description": "Essential trace nutrient; hardens steel.",
+      "additionalType": "https://en.wikipedia.org/wiki/Chemical_element",
+      "sameAs": [
+        "https://pubchem.ncbi.nlm.nih.gov/element/25",
+        "https://en.wikipedia.org/wiki/Manganese"
+      ],
+      "additionalProperty": [
+        {
+          "@type": "PropertyValue",
+          "name": "atomicNumber",
+          "value": 25
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "atomicMass",
+          "value": 54.938,
+          "unitText": "u"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "period",
+          "value": 4
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "group",
+          "value": 7
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "block",
+          "value": "d"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "category",
+          "value": "Transition metal"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "phaseAtSTP",
+          "value": "Solid"
+        }
+      ]
+    },
+    {
+      "@type": "ChemicalSubstance",
+      "@id": "https://labs.rjmlaird.co.uk/elements/fe#element",
+      "identifier": "26",
+      "name": "Iron",
+      "alternateName": "Fe",
+      "url": "https://labs.rjmlaird.co.uk/elements/fe",
+      "description": "Core of Earth's magnetic field; most used metal on the planet.",
+      "additionalType": "https://en.wikipedia.org/wiki/Chemical_element",
+      "sameAs": [
+        "https://pubchem.ncbi.nlm.nih.gov/element/26",
+        "https://en.wikipedia.org/wiki/Iron"
+      ],
+      "additionalProperty": [
+        {
+          "@type": "PropertyValue",
+          "name": "atomicNumber",
+          "value": 26
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "atomicMass",
+          "value": 55.845,
+          "unitText": "u"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "period",
+          "value": 4
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "group",
+          "value": 8
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "block",
+          "value": "d"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "category",
+          "value": "Transition metal"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "phaseAtSTP",
+          "value": "Solid"
+        }
+      ]
+    },
+    {
+      "@type": "ChemicalSubstance",
+      "@id": "https://labs.rjmlaird.co.uk/elements/co#element",
+      "identifier": "27",
+      "name": "Cobalt",
+      "alternateName": "Co",
+      "url": "https://labs.rjmlaird.co.uk/elements/co",
+      "description": "Gives glass and ceramics a deep blue colour.",
+      "additionalType": "https://en.wikipedia.org/wiki/Chemical_element",
+      "sameAs": [
+        "https://pubchem.ncbi.nlm.nih.gov/element/27",
+        "https://en.wikipedia.org/wiki/Cobalt"
+      ],
+      "additionalProperty": [
+        {
+          "@type": "PropertyValue",
+          "name": "atomicNumber",
+          "value": 27
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "atomicMass",
+          "value": 58.933,
+          "unitText": "u"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "period",
+          "value": 4
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "group",
+          "value": 9
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "block",
+          "value": "d"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "category",
+          "value": "Transition metal"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "phaseAtSTP",
+          "value": "Solid"
+        }
+      ]
+    },
+    {
+      "@type": "ChemicalSubstance",
+      "@id": "https://labs.rjmlaird.co.uk/elements/ni#element",
+      "identifier": "28",
+      "name": "Nickel",
+      "alternateName": "Ni",
+      "url": "https://labs.rjmlaird.co.uk/elements/ni",
+      "description": "Used in coins and rechargeable battery electrodes.",
+      "additionalType": "https://en.wikipedia.org/wiki/Chemical_element",
+      "sameAs": [
+        "https://pubchem.ncbi.nlm.nih.gov/element/28",
+        "https://en.wikipedia.org/wiki/Nickel"
+      ],
+      "additionalProperty": [
+        {
+          "@type": "PropertyValue",
+          "name": "atomicNumber",
+          "value": 28
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "atomicMass",
+          "value": 58.693,
+          "unitText": "u"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "period",
+          "value": 4
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "group",
+          "value": 10
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "block",
+          "value": "d"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "category",
+          "value": "Transition metal"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "phaseAtSTP",
+          "value": "Solid"
+        }
+      ]
+    },
+    {
+      "@type": "ChemicalSubstance",
+      "@id": "https://labs.rjmlaird.co.uk/elements/cu#element",
+      "identifier": "29",
+      "name": "Copper",
+      "alternateName": "Cu",
+      "url": "https://labs.rjmlaird.co.uk/elements/cu",
+      "description": "Excellent conductor; used in electrical wiring for millennia.",
+      "additionalType": "https://en.wikipedia.org/wiki/Chemical_element",
+      "sameAs": [
+        "https://pubchem.ncbi.nlm.nih.gov/element/29",
+        "https://en.wikipedia.org/wiki/Copper"
+      ],
+      "additionalProperty": [
+        {
+          "@type": "PropertyValue",
+          "name": "atomicNumber",
+          "value": 29
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "atomicMass",
+          "value": 63.546,
+          "unitText": "u"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "period",
+          "value": 4
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "group",
+          "value": 11
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "block",
+          "value": "d"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "category",
+          "value": "Transition metal"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "phaseAtSTP",
+          "value": "Solid"
+        }
+      ]
+    },
+    {
+      "@type": "ChemicalSubstance",
+      "@id": "https://labs.rjmlaird.co.uk/elements/zn#element",
+      "identifier": "30",
+      "name": "Zinc",
+      "alternateName": "Zn",
+      "url": "https://labs.rjmlaird.co.uk/elements/zn",
+      "description": "Coats steel to prevent rust; essential trace nutrient.",
+      "additionalType": "https://en.wikipedia.org/wiki/Chemical_element",
+      "sameAs": [
+        "https://pubchem.ncbi.nlm.nih.gov/element/30",
+        "https://en.wikipedia.org/wiki/Zinc"
+      ],
+      "additionalProperty": [
+        {
+          "@type": "PropertyValue",
+          "name": "atomicNumber",
+          "value": 30
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "atomicMass",
+          "value": 65.38,
+          "unitText": "u"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "period",
+          "value": 4
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "group",
+          "value": 12
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "block",
+          "value": "d"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "category",
+          "value": "Transition metal"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "phaseAtSTP",
+          "value": "Solid"
+        }
+      ]
+    },
+    {
+      "@type": "ChemicalSubstance",
+      "@id": "https://labs.rjmlaird.co.uk/elements/ga#element",
+      "identifier": "31",
+      "name": "Gallium",
+      "alternateName": "Ga",
+      "url": "https://labs.rjmlaird.co.uk/elements/ga",
+      "description": "Melts in the palm of your hand at 30°C.",
+      "additionalType": "https://en.wikipedia.org/wiki/Chemical_element",
+      "sameAs": [
+        "https://pubchem.ncbi.nlm.nih.gov/element/31",
+        "https://en.wikipedia.org/wiki/Gallium"
+      ],
+      "additionalProperty": [
+        {
+          "@type": "PropertyValue",
+          "name": "atomicNumber",
+          "value": 31
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "atomicMass",
+          "value": 69.723,
+          "unitText": "u"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "period",
+          "value": 4
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "group",
+          "value": 13
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "block",
+          "value": "p"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "category",
+          "value": "Post-transition metal"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "phaseAtSTP",
+          "value": "Solid"
+        }
+      ]
+    },
+    {
+      "@type": "ChemicalSubstance",
+      "@id": "https://labs.rjmlaird.co.uk/elements/ge#element",
+      "identifier": "32",
+      "name": "Germanium",
+      "alternateName": "Ge",
+      "url": "https://labs.rjmlaird.co.uk/elements/ge",
+      "description": "Key semiconductor before silicon took over electronics.",
+      "additionalType": "https://en.wikipedia.org/wiki/Chemical_element",
+      "sameAs": [
+        "https://pubchem.ncbi.nlm.nih.gov/element/32",
+        "https://en.wikipedia.org/wiki/Germanium"
+      ],
+      "additionalProperty": [
+        {
+          "@type": "PropertyValue",
+          "name": "atomicNumber",
+          "value": 32
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "atomicMass",
+          "value": 72.63,
+          "unitText": "u"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "period",
+          "value": 4
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "group",
+          "value": 14
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "block",
+          "value": "p"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "category",
+          "value": "Metalloid"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "phaseAtSTP",
+          "value": "Solid"
+        }
+      ]
+    },
+    {
+      "@type": "ChemicalSubstance",
+      "@id": "https://labs.rjmlaird.co.uk/elements/as#element",
+      "identifier": "33",
+      "name": "Arsenic",
+      "alternateName": "As",
+      "url": "https://labs.rjmlaird.co.uk/elements/as",
+      "description": "Notorious poison; also used in semiconductors.",
+      "additionalType": "https://en.wikipedia.org/wiki/Chemical_element",
+      "sameAs": [
+        "https://pubchem.ncbi.nlm.nih.gov/element/33",
+        "https://en.wikipedia.org/wiki/Arsenic"
+      ],
+      "additionalProperty": [
+        {
+          "@type": "PropertyValue",
+          "name": "atomicNumber",
+          "value": 33
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "atomicMass",
+          "value": 74.922,
+          "unitText": "u"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "period",
+          "value": 4
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "group",
+          "value": 15
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "block",
+          "value": "p"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "category",
+          "value": "Metalloid"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "phaseAtSTP",
+          "value": "Solid"
+        }
+      ]
+    },
+    {
+      "@type": "ChemicalSubstance",
+      "@id": "https://labs.rjmlaird.co.uk/elements/se#element",
+      "identifier": "34",
+      "name": "Selenium",
+      "alternateName": "Se",
+      "url": "https://labs.rjmlaird.co.uk/elements/se",
+      "description": "Used in solar cells and to give glass a red tint.",
+      "additionalType": "https://en.wikipedia.org/wiki/Chemical_element",
+      "sameAs": [
+        "https://pubchem.ncbi.nlm.nih.gov/element/34",
+        "https://en.wikipedia.org/wiki/Selenium"
+      ],
+      "additionalProperty": [
+        {
+          "@type": "PropertyValue",
+          "name": "atomicNumber",
+          "value": 34
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "atomicMass",
+          "value": 78.971,
+          "unitText": "u"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "period",
+          "value": 4
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "group",
+          "value": 16
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "block",
+          "value": "p"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "category",
+          "value": "Reactive nonmetal"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "phaseAtSTP",
+          "value": "Solid"
+        }
+      ]
+    },
+    {
+      "@type": "ChemicalSubstance",
+      "@id": "https://labs.rjmlaird.co.uk/elements/br#element",
+      "identifier": "35",
+      "name": "Bromine",
+      "alternateName": "Br",
+      "url": "https://labs.rjmlaird.co.uk/elements/br",
+      "description": "One of only two elements liquid at room temperature.",
+      "additionalType": "https://en.wikipedia.org/wiki/Chemical_element",
+      "sameAs": [
+        "https://pubchem.ncbi.nlm.nih.gov/element/35",
+        "https://en.wikipedia.org/wiki/Bromine"
+      ],
+      "additionalProperty": [
+        {
+          "@type": "PropertyValue",
+          "name": "atomicNumber",
+          "value": 35
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "atomicMass",
+          "value": 79.904,
+          "unitText": "u"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "period",
+          "value": 4
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "group",
+          "value": 17
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "block",
+          "value": "p"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "category",
+          "value": "Halogen"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "phaseAtSTP",
+          "value": "Liquid"
+        }
+      ]
+    },
+    {
+      "@type": "ChemicalSubstance",
+      "@id": "https://labs.rjmlaird.co.uk/elements/kr#element",
+      "identifier": "36",
+      "name": "Krypton",
+      "alternateName": "Kr",
+      "url": "https://labs.rjmlaird.co.uk/elements/kr",
+      "description": "Used in high-performance photographic flash lamps.",
+      "additionalType": "https://en.wikipedia.org/wiki/Chemical_element",
+      "sameAs": [
+        "https://pubchem.ncbi.nlm.nih.gov/element/36",
+        "https://en.wikipedia.org/wiki/Krypton"
+      ],
+      "additionalProperty": [
+        {
+          "@type": "PropertyValue",
+          "name": "atomicNumber",
+          "value": 36
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "atomicMass",
+          "value": 83.798,
+          "unitText": "u"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "period",
+          "value": 4
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "group",
+          "value": 18
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "block",
+          "value": "p"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "category",
+          "value": "Noble gas"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "phaseAtSTP",
+          "value": "Gas"
+        }
+      ]
+    },
+    {
+      "@type": "ChemicalSubstance",
+      "@id": "https://labs.rjmlaird.co.uk/elements/rb#element",
+      "identifier": "37",
+      "name": "Rubidium",
+      "alternateName": "Rb",
+      "url": "https://labs.rjmlaird.co.uk/elements/rb",
+      "description": "Highly reactive alkali metal used in atomic clocks.",
+      "additionalType": "https://en.wikipedia.org/wiki/Chemical_element",
+      "sameAs": [
+        "https://pubchem.ncbi.nlm.nih.gov/element/37",
+        "https://en.wikipedia.org/wiki/Rubidium"
+      ],
+      "additionalProperty": [
+        {
+          "@type": "PropertyValue",
+          "name": "atomicNumber",
+          "value": 37
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "atomicMass",
+          "value": 85.468,
+          "unitText": "u"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "period",
+          "value": 5
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "group",
+          "value": 1
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "block",
+          "value": "s"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "category",
+          "value": "Alkali metal"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "phaseAtSTP",
+          "value": "Solid"
+        }
+      ]
+    },
+    {
+      "@type": "ChemicalSubstance",
+      "@id": "https://labs.rjmlaird.co.uk/elements/sr#element",
+      "identifier": "38",
+      "name": "Strontium",
+      "alternateName": "Sr",
+      "url": "https://labs.rjmlaird.co.uk/elements/sr",
+      "description": "Gives fireworks their brilliant red colour.",
+      "additionalType": "https://en.wikipedia.org/wiki/Chemical_element",
+      "sameAs": [
+        "https://pubchem.ncbi.nlm.nih.gov/element/38",
+        "https://en.wikipedia.org/wiki/Strontium"
+      ],
+      "additionalProperty": [
+        {
+          "@type": "PropertyValue",
+          "name": "atomicNumber",
+          "value": 38
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "atomicMass",
+          "value": 87.62,
+          "unitText": "u"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "period",
+          "value": 5
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "group",
+          "value": 2
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "block",
+          "value": "s"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "category",
+          "value": "Alkaline earth metal"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "phaseAtSTP",
+          "value": "Solid"
+        }
+      ]
+    },
+    {
+      "@type": "ChemicalSubstance",
+      "@id": "https://labs.rjmlaird.co.uk/elements/y#element",
+      "identifier": "39",
+      "name": "Yttrium",
+      "alternateName": "Y",
+      "url": "https://labs.rjmlaird.co.uk/elements/y",
+      "description": "Used in LED phosphors and superconductors.",
+      "additionalType": "https://en.wikipedia.org/wiki/Chemical_element",
+      "sameAs": [
+        "https://pubchem.ncbi.nlm.nih.gov/element/39",
+        "https://en.wikipedia.org/wiki/Yttrium"
+      ],
+      "additionalProperty": [
+        {
+          "@type": "PropertyValue",
+          "name": "atomicNumber",
+          "value": 39
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "atomicMass",
+          "value": 88.906,
+          "unitText": "u"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "period",
+          "value": 5
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "group",
+          "value": 3
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "block",
+          "value": "d"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "category",
+          "value": "Transition metal"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "phaseAtSTP",
+          "value": "Solid"
+        }
+      ]
+    },
+    {
+      "@type": "ChemicalSubstance",
+      "@id": "https://labs.rjmlaird.co.uk/elements/zr#element",
+      "identifier": "40",
+      "name": "Zirconium",
+      "alternateName": "Zr",
+      "url": "https://labs.rjmlaird.co.uk/elements/zr",
+      "description": "Highly corrosion-resistant; used in nuclear reactor cladding.",
+      "additionalType": "https://en.wikipedia.org/wiki/Chemical_element",
+      "sameAs": [
+        "https://pubchem.ncbi.nlm.nih.gov/element/40",
+        "https://en.wikipedia.org/wiki/Zirconium"
+      ],
+      "additionalProperty": [
+        {
+          "@type": "PropertyValue",
+          "name": "atomicNumber",
+          "value": 40
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "atomicMass",
+          "value": 91.224,
+          "unitText": "u"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "period",
+          "value": 5
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "group",
+          "value": 4
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "block",
+          "value": "d"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "category",
+          "value": "Transition metal"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "phaseAtSTP",
+          "value": "Solid"
+        }
+      ]
+    },
+    {
+      "@type": "ChemicalSubstance",
+      "@id": "https://labs.rjmlaird.co.uk/elements/nb#element",
+      "identifier": "41",
+      "name": "Niobium",
+      "alternateName": "Nb",
+      "url": "https://labs.rjmlaird.co.uk/elements/nb",
+      "description": "Superconducting metal used in MRI magnet wiring.",
+      "additionalType": "https://en.wikipedia.org/wiki/Chemical_element",
+      "sameAs": [
+        "https://pubchem.ncbi.nlm.nih.gov/element/41",
+        "https://en.wikipedia.org/wiki/Niobium"
+      ],
+      "additionalProperty": [
+        {
+          "@type": "PropertyValue",
+          "name": "atomicNumber",
+          "value": 41
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "atomicMass",
+          "value": 92.906,
+          "unitText": "u"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "period",
+          "value": 5
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "group",
+          "value": 5
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "block",
+          "value": "d"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "category",
+          "value": "Transition metal"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "phaseAtSTP",
+          "value": "Solid"
+        }
+      ]
+    },
+    {
+      "@type": "ChemicalSubstance",
+      "@id": "https://labs.rjmlaird.co.uk/elements/mo#element",
+      "identifier": "42",
+      "name": "Molybdenum",
+      "alternateName": "Mo",
+      "url": "https://labs.rjmlaird.co.uk/elements/mo",
+      "description": "Strengthens steel at high temperatures for jet engines.",
+      "additionalType": "https://en.wikipedia.org/wiki/Chemical_element",
+      "sameAs": [
+        "https://pubchem.ncbi.nlm.nih.gov/element/42",
+        "https://en.wikipedia.org/wiki/Molybdenum"
+      ],
+      "additionalProperty": [
+        {
+          "@type": "PropertyValue",
+          "name": "atomicNumber",
+          "value": 42
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "atomicMass",
+          "value": 95.95,
+          "unitText": "u"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "period",
+          "value": 5
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "group",
+          "value": 6
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "block",
+          "value": "d"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "category",
+          "value": "Transition metal"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "phaseAtSTP",
+          "value": "Solid"
+        }
+      ]
+    },
+    {
+      "@type": "ChemicalSubstance",
+      "@id": "https://labs.rjmlaird.co.uk/elements/tc#element",
+      "identifier": "43",
+      "name": "Technetium",
+      "alternateName": "Tc",
+      "url": "https://labs.rjmlaird.co.uk/elements/tc",
+      "description": "First artificially produced element; used in medical imaging.",
+      "additionalType": "https://en.wikipedia.org/wiki/Chemical_element",
+      "sameAs": [
+        "https://pubchem.ncbi.nlm.nih.gov/element/43",
+        "https://en.wikipedia.org/wiki/Technetium"
+      ],
+      "additionalProperty": [
+        {
+          "@type": "PropertyValue",
+          "name": "atomicNumber",
+          "value": 43
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "atomicMass",
+          "value": 97.0,
+          "unitText": "u"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "period",
+          "value": 5
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "group",
+          "value": 7
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "block",
+          "value": "d"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "category",
+          "value": "Transition metal"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "phaseAtSTP",
+          "value": "Solid"
+        }
+      ]
+    },
+    {
+      "@type": "ChemicalSubstance",
+      "@id": "https://labs.rjmlaird.co.uk/elements/ru#element",
+      "identifier": "44",
+      "name": "Ruthenium",
+      "alternateName": "Ru",
+      "url": "https://labs.rjmlaird.co.uk/elements/ru",
+      "description": "Hardens platinum and palladium alloys.",
+      "additionalType": "https://en.wikipedia.org/wiki/Chemical_element",
+      "sameAs": [
+        "https://pubchem.ncbi.nlm.nih.gov/element/44",
+        "https://en.wikipedia.org/wiki/Ruthenium"
+      ],
+      "additionalProperty": [
+        {
+          "@type": "PropertyValue",
+          "name": "atomicNumber",
+          "value": 44
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "atomicMass",
+          "value": 101.07,
+          "unitText": "u"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "period",
+          "value": 5
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "group",
+          "value": 8
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "block",
+          "value": "d"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "category",
+          "value": "Transition metal"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "phaseAtSTP",
+          "value": "Solid"
+        }
+      ]
+    },
+    {
+      "@type": "ChemicalSubstance",
+      "@id": "https://labs.rjmlaird.co.uk/elements/rh#element",
+      "identifier": "45",
+      "name": "Rhodium",
+      "alternateName": "Rh",
+      "url": "https://labs.rjmlaird.co.uk/elements/rh",
+      "description": "One of the rarest, most reflective metals; coats jewellery.",
+      "additionalType": "https://en.wikipedia.org/wiki/Chemical_element",
+      "sameAs": [
+        "https://pubchem.ncbi.nlm.nih.gov/element/45",
+        "https://en.wikipedia.org/wiki/Rhodium"
+      ],
+      "additionalProperty": [
+        {
+          "@type": "PropertyValue",
+          "name": "atomicNumber",
+          "value": 45
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "atomicMass",
+          "value": 102.906,
+          "unitText": "u"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "period",
+          "value": 5
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "group",
+          "value": 9
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "block",
+          "value": "d"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "category",
+          "value": "Transition metal"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "phaseAtSTP",
+          "value": "Solid"
+        }
+      ]
+    },
+    {
+      "@type": "ChemicalSubstance",
+      "@id": "https://labs.rjmlaird.co.uk/elements/pd#element",
+      "identifier": "46",
+      "name": "Palladium",
+      "alternateName": "Pd",
+      "url": "https://labs.rjmlaird.co.uk/elements/pd",
+      "description": "Key catalyst in catalytic converters.",
+      "additionalType": "https://en.wikipedia.org/wiki/Chemical_element",
+      "sameAs": [
+        "https://pubchem.ncbi.nlm.nih.gov/element/46",
+        "https://en.wikipedia.org/wiki/Palladium"
+      ],
+      "additionalProperty": [
+        {
+          "@type": "PropertyValue",
+          "name": "atomicNumber",
+          "value": 46
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "atomicMass",
+          "value": 106.42,
+          "unitText": "u"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "period",
+          "value": 5
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "group",
+          "value": 10
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "block",
+          "value": "d"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "category",
+          "value": "Transition metal"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "phaseAtSTP",
+          "value": "Solid"
+        }
+      ]
+    },
+    {
+      "@type": "ChemicalSubstance",
+      "@id": "https://labs.rjmlaird.co.uk/elements/ag#element",
+      "identifier": "47",
+      "name": "Silver",
+      "alternateName": "Ag",
+      "url": "https://labs.rjmlaird.co.uk/elements/ag",
+      "description": "Best electrical conductor of any element.",
+      "additionalType": "https://en.wikipedia.org/wiki/Chemical_element",
+      "sameAs": [
+        "https://pubchem.ncbi.nlm.nih.gov/element/47",
+        "https://en.wikipedia.org/wiki/Silver"
+      ],
+      "additionalProperty": [
+        {
+          "@type": "PropertyValue",
+          "name": "atomicNumber",
+          "value": 47
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "atomicMass",
+          "value": 107.868,
+          "unitText": "u"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "period",
+          "value": 5
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "group",
+          "value": 11
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "block",
+          "value": "d"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "category",
+          "value": "Transition metal"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "phaseAtSTP",
+          "value": "Solid"
+        }
+      ]
+    },
+    {
+      "@type": "ChemicalSubstance",
+      "@id": "https://labs.rjmlaird.co.uk/elements/cd#element",
+      "identifier": "48",
+      "name": "Cadmium",
+      "alternateName": "Cd",
+      "url": "https://labs.rjmlaird.co.uk/elements/cd",
+      "description": "Used in rechargeable nickel-cadmium batteries.",
+      "additionalType": "https://en.wikipedia.org/wiki/Chemical_element",
+      "sameAs": [
+        "https://pubchem.ncbi.nlm.nih.gov/element/48",
+        "https://en.wikipedia.org/wiki/Cadmium"
+      ],
+      "additionalProperty": [
+        {
+          "@type": "PropertyValue",
+          "name": "atomicNumber",
+          "value": 48
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "atomicMass",
+          "value": 112.414,
+          "unitText": "u"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "period",
+          "value": 5
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "group",
+          "value": 12
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "block",
+          "value": "d"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "category",
+          "value": "Transition metal"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "phaseAtSTP",
+          "value": "Solid"
+        }
+      ]
+    },
+    {
+      "@type": "ChemicalSubstance",
+      "@id": "https://labs.rjmlaird.co.uk/elements/in#element",
+      "identifier": "49",
+      "name": "Indium",
+      "alternateName": "In",
+      "url": "https://labs.rjmlaird.co.uk/elements/in",
+      "description": "Coats touchscreens as a transparent conductor.",
+      "additionalType": "https://en.wikipedia.org/wiki/Chemical_element",
+      "sameAs": [
+        "https://pubchem.ncbi.nlm.nih.gov/element/49",
+        "https://en.wikipedia.org/wiki/Indium"
+      ],
+      "additionalProperty": [
+        {
+          "@type": "PropertyValue",
+          "name": "atomicNumber",
+          "value": 49
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "atomicMass",
+          "value": 114.818,
+          "unitText": "u"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "period",
+          "value": 5
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "group",
+          "value": 13
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "block",
+          "value": "p"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "category",
+          "value": "Post-transition metal"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "phaseAtSTP",
+          "value": "Solid"
+        }
+      ]
+    },
+    {
+      "@type": "ChemicalSubstance",
+      "@id": "https://labs.rjmlaird.co.uk/elements/sn#element",
+      "identifier": "50",
+      "name": "Tin",
+      "alternateName": "Sn",
+      "url": "https://labs.rjmlaird.co.uk/elements/sn",
+      "description": "Prevents corrosion; alloyed into bronze since antiquity.",
+      "additionalType": "https://en.wikipedia.org/wiki/Chemical_element",
+      "sameAs": [
+        "https://pubchem.ncbi.nlm.nih.gov/element/50",
+        "https://en.wikipedia.org/wiki/Tin"
+      ],
+      "additionalProperty": [
+        {
+          "@type": "PropertyValue",
+          "name": "atomicNumber",
+          "value": 50
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "atomicMass",
+          "value": 118.71,
+          "unitText": "u"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "period",
+          "value": 5
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "group",
+          "value": 14
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "block",
+          "value": "p"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "category",
+          "value": "Post-transition metal"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "phaseAtSTP",
+          "value": "Solid"
+        }
+      ]
+    },
+    {
+      "@type": "ChemicalSubstance",
+      "@id": "https://labs.rjmlaird.co.uk/elements/sb#element",
+      "identifier": "51",
+      "name": "Antimony",
+      "alternateName": "Sb",
+      "url": "https://labs.rjmlaird.co.uk/elements/sb",
+      "description": "Used since antiquity in cosmetics and alloys.",
+      "additionalType": "https://en.wikipedia.org/wiki/Chemical_element",
+      "sameAs": [
+        "https://pubchem.ncbi.nlm.nih.gov/element/51",
+        "https://en.wikipedia.org/wiki/Antimony"
+      ],
+      "additionalProperty": [
+        {
+          "@type": "PropertyValue",
+          "name": "atomicNumber",
+          "value": 51
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "atomicMass",
+          "value": 121.76,
+          "unitText": "u"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "period",
+          "value": 5
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "group",
+          "value": 15
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "block",
+          "value": "p"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "category",
+          "value": "Metalloid"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "phaseAtSTP",
+          "value": "Solid"
+        }
+      ]
+    },
+    {
+      "@type": "ChemicalSubstance",
+      "@id": "https://labs.rjmlaird.co.uk/elements/te#element",
+      "identifier": "52",
+      "name": "Tellurium",
+      "alternateName": "Te",
+      "url": "https://labs.rjmlaird.co.uk/elements/te",
+      "description": "Alloyed into steel to improve machinability.",
+      "additionalType": "https://en.wikipedia.org/wiki/Chemical_element",
+      "sameAs": [
+        "https://pubchem.ncbi.nlm.nih.gov/element/52",
+        "https://en.wikipedia.org/wiki/Tellurium"
+      ],
+      "additionalProperty": [
+        {
+          "@type": "PropertyValue",
+          "name": "atomicNumber",
+          "value": 52
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "atomicMass",
+          "value": 127.6,
+          "unitText": "u"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "period",
+          "value": 5
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "group",
+          "value": 16
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "block",
+          "value": "p"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "category",
+          "value": "Metalloid"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "phaseAtSTP",
+          "value": "Solid"
+        }
+      ]
+    },
+    {
+      "@type": "ChemicalSubstance",
+      "@id": "https://labs.rjmlaird.co.uk/elements/i#element",
+      "identifier": "53",
+      "name": "Iodine",
+      "alternateName": "I",
+      "url": "https://labs.rjmlaird.co.uk/elements/i",
+      "description": "Essential for thyroid hormone production.",
+      "additionalType": "https://en.wikipedia.org/wiki/Chemical_element",
+      "sameAs": [
+        "https://pubchem.ncbi.nlm.nih.gov/element/53",
+        "https://en.wikipedia.org/wiki/Iodine"
+      ],
+      "additionalProperty": [
+        {
+          "@type": "PropertyValue",
+          "name": "atomicNumber",
+          "value": 53
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "atomicMass",
+          "value": 126.904,
+          "unitText": "u"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "period",
+          "value": 5
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "group",
+          "value": 17
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "block",
+          "value": "p"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "category",
+          "value": "Halogen"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "phaseAtSTP",
+          "value": "Solid"
+        }
+      ]
+    },
+    {
+      "@type": "ChemicalSubstance",
+      "@id": "https://labs.rjmlaird.co.uk/elements/xe#element",
+      "identifier": "54",
+      "name": "Xenon",
+      "alternateName": "Xe",
+      "url": "https://labs.rjmlaird.co.uk/elements/xe",
+      "description": "Powers ion thrusters on spacecraft.",
+      "additionalType": "https://en.wikipedia.org/wiki/Chemical_element",
+      "sameAs": [
+        "https://pubchem.ncbi.nlm.nih.gov/element/54",
+        "https://en.wikipedia.org/wiki/Xenon"
+      ],
+      "additionalProperty": [
+        {
+          "@type": "PropertyValue",
+          "name": "atomicNumber",
+          "value": 54
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "atomicMass",
+          "value": 131.293,
+          "unitText": "u"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "period",
+          "value": 5
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "group",
+          "value": 18
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "block",
+          "value": "p"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "category",
+          "value": "Noble gas"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "phaseAtSTP",
+          "value": "Gas"
+        }
+      ]
+    },
+    {
+      "@type": "ChemicalSubstance",
+      "@id": "https://labs.rjmlaird.co.uk/elements/cs#element",
+      "identifier": "55",
+      "name": "Caesium",
+      "alternateName": "Cs",
+      "url": "https://labs.rjmlaird.co.uk/elements/cs",
+      "description": "Defines the length of a second via its atomic clock.",
+      "additionalType": "https://en.wikipedia.org/wiki/Chemical_element",
+      "sameAs": [
+        "https://pubchem.ncbi.nlm.nih.gov/element/55",
+        "https://en.wikipedia.org/wiki/Caesium"
+      ],
+      "additionalProperty": [
+        {
+          "@type": "PropertyValue",
+          "name": "atomicNumber",
+          "value": 55
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "atomicMass",
+          "value": 132.905,
+          "unitText": "u"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "period",
+          "value": 6
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "group",
+          "value": 1
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "block",
+          "value": "s"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "category",
+          "value": "Alkali metal"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "phaseAtSTP",
+          "value": "Solid"
+        }
+      ]
+    },
+    {
+      "@type": "ChemicalSubstance",
+      "@id": "https://labs.rjmlaird.co.uk/elements/ba#element",
+      "identifier": "56",
+      "name": "Barium",
+      "alternateName": "Ba",
+      "url": "https://labs.rjmlaird.co.uk/elements/ba",
+      "description": "Swallowed as a contrast agent for medical X-rays.",
+      "additionalType": "https://en.wikipedia.org/wiki/Chemical_element",
+      "sameAs": [
+        "https://pubchem.ncbi.nlm.nih.gov/element/56",
+        "https://en.wikipedia.org/wiki/Barium"
+      ],
+      "additionalProperty": [
+        {
+          "@type": "PropertyValue",
+          "name": "atomicNumber",
+          "value": 56
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "atomicMass",
+          "value": 137.327,
+          "unitText": "u"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "period",
+          "value": 6
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "group",
+          "value": 2
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "block",
+          "value": "s"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "category",
+          "value": "Alkaline earth metal"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "phaseAtSTP",
+          "value": "Solid"
+        }
+      ]
+    },
+    {
+      "@type": "ChemicalSubstance",
+      "@id": "https://labs.rjmlaird.co.uk/elements/la#element",
+      "identifier": "57",
+      "name": "Lanthanum",
+      "alternateName": "La",
+      "url": "https://labs.rjmlaird.co.uk/elements/la",
+      "description": "Named the whole lanthanide series after itself.",
+      "additionalType": "https://en.wikipedia.org/wiki/Chemical_element",
+      "sameAs": [
+        "https://pubchem.ncbi.nlm.nih.gov/element/57",
+        "https://en.wikipedia.org/wiki/Lanthanum"
+      ],
+      "additionalProperty": [
+        {
+          "@type": "PropertyValue",
+          "name": "atomicNumber",
+          "value": 57
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "atomicMass",
+          "value": 138.905,
+          "unitText": "u"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "period",
+          "value": 6
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "group",
+          "value": 3
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "block",
+          "value": "f"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "category",
+          "value": "Lanthanide"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "phaseAtSTP",
+          "value": "Solid"
+        }
+      ]
+    },
+    {
+      "@type": "ChemicalSubstance",
+      "@id": "https://labs.rjmlaird.co.uk/elements/ce#element",
+      "identifier": "58",
+      "name": "Cerium",
+      "alternateName": "Ce",
+      "url": "https://labs.rjmlaird.co.uk/elements/ce",
+      "description": "Most abundant rare-earth element; used in catalytic converters.",
+      "additionalType": "https://en.wikipedia.org/wiki/Chemical_element",
+      "sameAs": [
+        "https://pubchem.ncbi.nlm.nih.gov/element/58",
+        "https://en.wikipedia.org/wiki/Cerium"
+      ],
+      "additionalProperty": [
+        {
+          "@type": "PropertyValue",
+          "name": "atomicNumber",
+          "value": 58
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "atomicMass",
+          "value": 140.116,
+          "unitText": "u"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "period",
+          "value": 6
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "group",
+          "value": 4
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "block",
+          "value": "f"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "category",
+          "value": "Lanthanide"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "phaseAtSTP",
+          "value": "Solid"
+        }
+      ]
+    },
+    {
+      "@type": "ChemicalSubstance",
+      "@id": "https://labs.rjmlaird.co.uk/elements/pr#element",
+      "identifier": "59",
+      "name": "Praseodymium",
+      "alternateName": "Pr",
+      "url": "https://labs.rjmlaird.co.uk/elements/pr",
+      "description": "Colours glass and ceramics a bright yellow-green.",
+      "additionalType": "https://en.wikipedia.org/wiki/Chemical_element",
+      "sameAs": [
+        "https://pubchem.ncbi.nlm.nih.gov/element/59",
+        "https://en.wikipedia.org/wiki/Praseodymium"
+      ],
+      "additionalProperty": [
+        {
+          "@type": "PropertyValue",
+          "name": "atomicNumber",
+          "value": 59
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "atomicMass",
+          "value": 140.908,
+          "unitText": "u"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "period",
+          "value": 6
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "group",
+          "value": 5
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "block",
+          "value": "f"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "category",
+          "value": "Lanthanide"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "phaseAtSTP",
+          "value": "Solid"
+        }
+      ]
+    },
+    {
+      "@type": "ChemicalSubstance",
+      "@id": "https://labs.rjmlaird.co.uk/elements/nd#element",
+      "identifier": "60",
+      "name": "Neodymium",
+      "alternateName": "Nd",
+      "url": "https://labs.rjmlaird.co.uk/elements/nd",
+      "description": "Powers the strongest permanent magnets known.",
+      "additionalType": "https://en.wikipedia.org/wiki/Chemical_element",
+      "sameAs": [
+        "https://pubchem.ncbi.nlm.nih.gov/element/60",
+        "https://en.wikipedia.org/wiki/Neodymium"
+      ],
+      "additionalProperty": [
+        {
+          "@type": "PropertyValue",
+          "name": "atomicNumber",
+          "value": 60
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "atomicMass",
+          "value": 144.242,
+          "unitText": "u"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "period",
+          "value": 6
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "group",
+          "value": 6
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "block",
+          "value": "f"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "category",
+          "value": "Lanthanide"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "phaseAtSTP",
+          "value": "Solid"
+        }
+      ]
+    },
+    {
+      "@type": "ChemicalSubstance",
+      "@id": "https://labs.rjmlaird.co.uk/elements/pm#element",
+      "identifier": "61",
+      "name": "Promethium",
+      "alternateName": "Pm",
+      "url": "https://labs.rjmlaird.co.uk/elements/pm",
+      "description": "Only lanthanide with no stable isotopes; used in luminous paint.",
+      "additionalType": "https://en.wikipedia.org/wiki/Chemical_element",
+      "sameAs": [
+        "https://pubchem.ncbi.nlm.nih.gov/element/61",
+        "https://en.wikipedia.org/wiki/Promethium"
+      ],
+      "additionalProperty": [
+        {
+          "@type": "PropertyValue",
+          "name": "atomicNumber",
+          "value": 61
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "atomicMass",
+          "value": 145.0,
+          "unitText": "u"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "period",
+          "value": 6
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "group",
+          "value": 7
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "block",
+          "value": "f"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "category",
+          "value": "Lanthanide"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "phaseAtSTP",
+          "value": "Solid"
+        }
+      ]
+    },
+    {
+      "@type": "ChemicalSubstance",
+      "@id": "https://labs.rjmlaird.co.uk/elements/sm#element",
+      "identifier": "62",
+      "name": "Samarium",
+      "alternateName": "Sm",
+      "url": "https://labs.rjmlaird.co.uk/elements/sm",
+      "description": "Used in high-temperature permanent magnets.",
+      "additionalType": "https://en.wikipedia.org/wiki/Chemical_element",
+      "sameAs": [
+        "https://pubchem.ncbi.nlm.nih.gov/element/62",
+        "https://en.wikipedia.org/wiki/Samarium"
+      ],
+      "additionalProperty": [
+        {
+          "@type": "PropertyValue",
+          "name": "atomicNumber",
+          "value": 62
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "atomicMass",
+          "value": 150.36,
+          "unitText": "u"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "period",
+          "value": 6
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "group",
+          "value": 8
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "block",
+          "value": "f"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "category",
+          "value": "Lanthanide"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "phaseAtSTP",
+          "value": "Solid"
+        }
+      ]
+    },
+    {
+      "@type": "ChemicalSubstance",
+      "@id": "https://labs.rjmlaird.co.uk/elements/eu#element",
+      "identifier": "63",
+      "name": "Europium",
+      "alternateName": "Eu",
+      "url": "https://labs.rjmlaird.co.uk/elements/eu",
+      "description": "Provides the red phosphor in old CRT televisions.",
+      "additionalType": "https://en.wikipedia.org/wiki/Chemical_element",
+      "sameAs": [
+        "https://pubchem.ncbi.nlm.nih.gov/element/63",
+        "https://en.wikipedia.org/wiki/Europium"
+      ],
+      "additionalProperty": [
+        {
+          "@type": "PropertyValue",
+          "name": "atomicNumber",
+          "value": 63
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "atomicMass",
+          "value": 151.964,
+          "unitText": "u"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "period",
+          "value": 6
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "group",
+          "value": 9
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "block",
+          "value": "f"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "category",
+          "value": "Lanthanide"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "phaseAtSTP",
+          "value": "Solid"
+        }
+      ]
+    },
+    {
+      "@type": "ChemicalSubstance",
+      "@id": "https://labs.rjmlaird.co.uk/elements/gd#element",
+      "identifier": "64",
+      "name": "Gadolinium",
+      "alternateName": "Gd",
+      "url": "https://labs.rjmlaird.co.uk/elements/gd",
+      "description": "Used as a contrast agent in MRI scans.",
+      "additionalType": "https://en.wikipedia.org/wiki/Chemical_element",
+      "sameAs": [
+        "https://pubchem.ncbi.nlm.nih.gov/element/64",
+        "https://en.wikipedia.org/wiki/Gadolinium"
+      ],
+      "additionalProperty": [
+        {
+          "@type": "PropertyValue",
+          "name": "atomicNumber",
+          "value": 64
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "atomicMass",
+          "value": 157.25,
+          "unitText": "u"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "period",
+          "value": 6
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "group",
+          "value": 10
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "block",
+          "value": "f"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "category",
+          "value": "Lanthanide"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "phaseAtSTP",
+          "value": "Solid"
+        }
+      ]
+    },
+    {
+      "@type": "ChemicalSubstance",
+      "@id": "https://labs.rjmlaird.co.uk/elements/tb#element",
+      "identifier": "65",
+      "name": "Terbium",
+      "alternateName": "Tb",
+      "url": "https://labs.rjmlaird.co.uk/elements/tb",
+      "description": "Green phosphor in energy-efficient lighting.",
+      "additionalType": "https://en.wikipedia.org/wiki/Chemical_element",
+      "sameAs": [
+        "https://pubchem.ncbi.nlm.nih.gov/element/65",
+        "https://en.wikipedia.org/wiki/Terbium"
+      ],
+      "additionalProperty": [
+        {
+          "@type": "PropertyValue",
+          "name": "atomicNumber",
+          "value": 65
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "atomicMass",
+          "value": 158.925,
+          "unitText": "u"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "period",
+          "value": 6
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "group",
+          "value": 11
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "block",
+          "value": "f"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "category",
+          "value": "Lanthanide"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "phaseAtSTP",
+          "value": "Solid"
+        }
+      ]
+    },
+    {
+      "@type": "ChemicalSubstance",
+      "@id": "https://labs.rjmlaird.co.uk/elements/dy#element",
+      "identifier": "66",
+      "name": "Dysprosium",
+      "alternateName": "Dy",
+      "url": "https://labs.rjmlaird.co.uk/elements/dy",
+      "description": "Boosts the heat resistance of neodymium magnets.",
+      "additionalType": "https://en.wikipedia.org/wiki/Chemical_element",
+      "sameAs": [
+        "https://pubchem.ncbi.nlm.nih.gov/element/66",
+        "https://en.wikipedia.org/wiki/Dysprosium"
+      ],
+      "additionalProperty": [
+        {
+          "@type": "PropertyValue",
+          "name": "atomicNumber",
+          "value": 66
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "atomicMass",
+          "value": 162.5,
+          "unitText": "u"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "period",
+          "value": 6
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "group",
+          "value": 12
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "block",
+          "value": "f"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "category",
+          "value": "Lanthanide"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "phaseAtSTP",
+          "value": "Solid"
+        }
+      ]
+    },
+    {
+      "@type": "ChemicalSubstance",
+      "@id": "https://labs.rjmlaird.co.uk/elements/ho#element",
+      "identifier": "67",
+      "name": "Holmium",
+      "alternateName": "Ho",
+      "url": "https://labs.rjmlaird.co.uk/elements/ho",
+      "description": "Has the highest magnetic strength of any element.",
+      "additionalType": "https://en.wikipedia.org/wiki/Chemical_element",
+      "sameAs": [
+        "https://pubchem.ncbi.nlm.nih.gov/element/67",
+        "https://en.wikipedia.org/wiki/Holmium"
+      ],
+      "additionalProperty": [
+        {
+          "@type": "PropertyValue",
+          "name": "atomicNumber",
+          "value": 67
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "atomicMass",
+          "value": 164.93,
+          "unitText": "u"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "period",
+          "value": 6
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "group",
+          "value": 13
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "block",
+          "value": "f"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "category",
+          "value": "Lanthanide"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "phaseAtSTP",
+          "value": "Solid"
+        }
+      ]
+    },
+    {
+      "@type": "ChemicalSubstance",
+      "@id": "https://labs.rjmlaird.co.uk/elements/er#element",
+      "identifier": "68",
+      "name": "Erbium",
+      "alternateName": "Er",
+      "url": "https://labs.rjmlaird.co.uk/elements/er",
+      "description": "Amplifies signals in fibre-optic communication cables.",
+      "additionalType": "https://en.wikipedia.org/wiki/Chemical_element",
+      "sameAs": [
+        "https://pubchem.ncbi.nlm.nih.gov/element/68",
+        "https://en.wikipedia.org/wiki/Erbium"
+      ],
+      "additionalProperty": [
+        {
+          "@type": "PropertyValue",
+          "name": "atomicNumber",
+          "value": 68
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "atomicMass",
+          "value": 167.259,
+          "unitText": "u"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "period",
+          "value": 6
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "group",
+          "value": 14
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "block",
+          "value": "f"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "category",
+          "value": "Lanthanide"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "phaseAtSTP",
+          "value": "Solid"
+        }
+      ]
+    },
+    {
+      "@type": "ChemicalSubstance",
+      "@id": "https://labs.rjmlaird.co.uk/elements/tm#element",
+      "identifier": "69",
+      "name": "Thulium",
+      "alternateName": "Tm",
+      "url": "https://labs.rjmlaird.co.uk/elements/tm",
+      "description": "Rarest naturally occurring lanthanide.",
+      "additionalType": "https://en.wikipedia.org/wiki/Chemical_element",
+      "sameAs": [
+        "https://pubchem.ncbi.nlm.nih.gov/element/69",
+        "https://en.wikipedia.org/wiki/Thulium"
+      ],
+      "additionalProperty": [
+        {
+          "@type": "PropertyValue",
+          "name": "atomicNumber",
+          "value": 69
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "atomicMass",
+          "value": 168.934,
+          "unitText": "u"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "period",
+          "value": 6
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "group",
+          "value": 15
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "block",
+          "value": "f"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "category",
+          "value": "Lanthanide"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "phaseAtSTP",
+          "value": "Solid"
+        }
+      ]
+    },
+    {
+      "@type": "ChemicalSubstance",
+      "@id": "https://labs.rjmlaird.co.uk/elements/yb#element",
+      "identifier": "70",
+      "name": "Ytterbium",
+      "alternateName": "Yb",
+      "url": "https://labs.rjmlaird.co.uk/elements/yb",
+      "description": "Used in atomic clocks more precise than caesium's.",
+      "additionalType": "https://en.wikipedia.org/wiki/Chemical_element",
+      "sameAs": [
+        "https://pubchem.ncbi.nlm.nih.gov/element/70",
+        "https://en.wikipedia.org/wiki/Ytterbium"
+      ],
+      "additionalProperty": [
+        {
+          "@type": "PropertyValue",
+          "name": "atomicNumber",
+          "value": 70
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "atomicMass",
+          "value": 173.045,
+          "unitText": "u"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "period",
+          "value": 6
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "group",
+          "value": 16
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "block",
+          "value": "f"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "category",
+          "value": "Lanthanide"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "phaseAtSTP",
+          "value": "Solid"
+        }
+      ]
+    },
+    {
+      "@type": "ChemicalSubstance",
+      "@id": "https://labs.rjmlaird.co.uk/elements/lu#element",
+      "identifier": "71",
+      "name": "Lutetium",
+      "alternateName": "Lu",
+      "url": "https://labs.rjmlaird.co.uk/elements/lu",
+      "description": "Densest of the lanthanides; used in PET scan detectors.",
+      "additionalType": "https://en.wikipedia.org/wiki/Chemical_element",
+      "sameAs": [
+        "https://pubchem.ncbi.nlm.nih.gov/element/71",
+        "https://en.wikipedia.org/wiki/Lutetium"
+      ],
+      "additionalProperty": [
+        {
+          "@type": "PropertyValue",
+          "name": "atomicNumber",
+          "value": 71
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "atomicMass",
+          "value": 174.967,
+          "unitText": "u"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "period",
+          "value": 6
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "group",
+          "value": 17
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "block",
+          "value": "f"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "category",
+          "value": "Lanthanide"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "phaseAtSTP",
+          "value": "Solid"
+        }
+      ]
+    },
+    {
+      "@type": "ChemicalSubstance",
+      "@id": "https://labs.rjmlaird.co.uk/elements/hf#element",
+      "identifier": "72",
+      "name": "Hafnium",
+      "alternateName": "Hf",
+      "url": "https://labs.rjmlaird.co.uk/elements/hf",
+      "description": "Absorbs neutrons well; used in nuclear reactor control rods.",
+      "additionalType": "https://en.wikipedia.org/wiki/Chemical_element",
+      "sameAs": [
+        "https://pubchem.ncbi.nlm.nih.gov/element/72",
+        "https://en.wikipedia.org/wiki/Hafnium"
+      ],
+      "additionalProperty": [
+        {
+          "@type": "PropertyValue",
+          "name": "atomicNumber",
+          "value": 72
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "atomicMass",
+          "value": 178.49,
+          "unitText": "u"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "period",
+          "value": 6
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "group",
+          "value": 4
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "block",
+          "value": "d"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "category",
+          "value": "Transition metal"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "phaseAtSTP",
+          "value": "Solid"
+        }
+      ]
+    },
+    {
+      "@type": "ChemicalSubstance",
+      "@id": "https://labs.rjmlaird.co.uk/elements/ta#element",
+      "identifier": "73",
+      "name": "Tantalum",
+      "alternateName": "Ta",
+      "url": "https://labs.rjmlaird.co.uk/elements/ta",
+      "description": "Highly corrosion-resistant; used in surgical implants and capacitors.",
+      "additionalType": "https://en.wikipedia.org/wiki/Chemical_element",
+      "sameAs": [
+        "https://pubchem.ncbi.nlm.nih.gov/element/73",
+        "https://en.wikipedia.org/wiki/Tantalum"
+      ],
+      "additionalProperty": [
+        {
+          "@type": "PropertyValue",
+          "name": "atomicNumber",
+          "value": 73
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "atomicMass",
+          "value": 180.948,
+          "unitText": "u"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "period",
+          "value": 6
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "group",
+          "value": 5
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "block",
+          "value": "d"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "category",
+          "value": "Transition metal"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "phaseAtSTP",
+          "value": "Solid"
+        }
+      ]
+    },
+    {
+      "@type": "ChemicalSubstance",
+      "@id": "https://labs.rjmlaird.co.uk/elements/w#element",
+      "identifier": "74",
+      "name": "Tungsten",
+      "alternateName": "W",
+      "url": "https://labs.rjmlaird.co.uk/elements/w",
+      "description": "Highest melting point of any metal; lit old filament bulbs.",
+      "additionalType": "https://en.wikipedia.org/wiki/Chemical_element",
+      "sameAs": [
+        "https://pubchem.ncbi.nlm.nih.gov/element/74",
+        "https://en.wikipedia.org/wiki/Tungsten"
+      ],
+      "additionalProperty": [
+        {
+          "@type": "PropertyValue",
+          "name": "atomicNumber",
+          "value": 74
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "atomicMass",
+          "value": 183.84,
+          "unitText": "u"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "period",
+          "value": 6
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "group",
+          "value": 6
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "block",
+          "value": "d"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "category",
+          "value": "Transition metal"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "phaseAtSTP",
+          "value": "Solid"
+        }
+      ]
+    },
+    {
+      "@type": "ChemicalSubstance",
+      "@id": "https://labs.rjmlaird.co.uk/elements/re#element",
+      "identifier": "75",
+      "name": "Rhenium",
+      "alternateName": "Re",
+      "url": "https://labs.rjmlaird.co.uk/elements/re",
+      "description": "One of the rarest elements in Earth's crust.",
+      "additionalType": "https://en.wikipedia.org/wiki/Chemical_element",
+      "sameAs": [
+        "https://pubchem.ncbi.nlm.nih.gov/element/75",
+        "https://en.wikipedia.org/wiki/Rhenium"
+      ],
+      "additionalProperty": [
+        {
+          "@type": "PropertyValue",
+          "name": "atomicNumber",
+          "value": 75
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "atomicMass",
+          "value": 186.207,
+          "unitText": "u"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "period",
+          "value": 6
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "group",
+          "value": 7
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "block",
+          "value": "d"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "category",
+          "value": "Transition metal"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "phaseAtSTP",
+          "value": "Solid"
+        }
+      ]
+    },
+    {
+      "@type": "ChemicalSubstance",
+      "@id": "https://labs.rjmlaird.co.uk/elements/os#element",
+      "identifier": "76",
+      "name": "Osmium",
+      "alternateName": "Os",
+      "url": "https://labs.rjmlaird.co.uk/elements/os",
+      "description": "Densest naturally occurring element.",
+      "additionalType": "https://en.wikipedia.org/wiki/Chemical_element",
+      "sameAs": [
+        "https://pubchem.ncbi.nlm.nih.gov/element/76",
+        "https://en.wikipedia.org/wiki/Osmium"
+      ],
+      "additionalProperty": [
+        {
+          "@type": "PropertyValue",
+          "name": "atomicNumber",
+          "value": 76
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "atomicMass",
+          "value": 190.23,
+          "unitText": "u"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "period",
+          "value": 6
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "group",
+          "value": 8
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "block",
+          "value": "d"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "category",
+          "value": "Transition metal"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "phaseAtSTP",
+          "value": "Solid"
+        }
+      ]
+    },
+    {
+      "@type": "ChemicalSubstance",
+      "@id": "https://labs.rjmlaird.co.uk/elements/ir#element",
+      "identifier": "77",
+      "name": "Iridium",
+      "alternateName": "Ir",
+      "url": "https://labs.rjmlaird.co.uk/elements/ir",
+      "description": "A spike of it in rock layers marks the dinosaur extinction.",
+      "additionalType": "https://en.wikipedia.org/wiki/Chemical_element",
+      "sameAs": [
+        "https://pubchem.ncbi.nlm.nih.gov/element/77",
+        "https://en.wikipedia.org/wiki/Iridium"
+      ],
+      "additionalProperty": [
+        {
+          "@type": "PropertyValue",
+          "name": "atomicNumber",
+          "value": 77
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "atomicMass",
+          "value": 192.217,
+          "unitText": "u"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "period",
+          "value": 6
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "group",
+          "value": 9
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "block",
+          "value": "d"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "category",
+          "value": "Transition metal"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "phaseAtSTP",
+          "value": "Solid"
+        }
+      ]
+    },
+    {
+      "@type": "ChemicalSubstance",
+      "@id": "https://labs.rjmlaird.co.uk/elements/pt#element",
+      "identifier": "78",
+      "name": "Platinum",
+      "alternateName": "Pt",
+      "url": "https://labs.rjmlaird.co.uk/elements/pt",
+      "description": "Prized catalyst and jewellery metal, denser than gold.",
+      "additionalType": "https://en.wikipedia.org/wiki/Chemical_element",
+      "sameAs": [
+        "https://pubchem.ncbi.nlm.nih.gov/element/78",
+        "https://en.wikipedia.org/wiki/Platinum"
+      ],
+      "additionalProperty": [
+        {
+          "@type": "PropertyValue",
+          "name": "atomicNumber",
+          "value": 78
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "atomicMass",
+          "value": 195.084,
+          "unitText": "u"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "period",
+          "value": 6
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "group",
+          "value": 10
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "block",
+          "value": "d"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "category",
+          "value": "Transition metal"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "phaseAtSTP",
+          "value": "Solid"
+        }
+      ]
+    },
+    {
+      "@type": "ChemicalSubstance",
+      "@id": "https://labs.rjmlaird.co.uk/elements/au#element",
+      "identifier": "79",
+      "name": "Gold",
+      "alternateName": "Au",
+      "url": "https://labs.rjmlaird.co.uk/elements/au",
+      "description": "Prized for millennia; never tarnishes.",
+      "additionalType": "https://en.wikipedia.org/wiki/Chemical_element",
+      "sameAs": [
+        "https://pubchem.ncbi.nlm.nih.gov/element/79",
+        "https://en.wikipedia.org/wiki/Gold"
+      ],
+      "additionalProperty": [
+        {
+          "@type": "PropertyValue",
+          "name": "atomicNumber",
+          "value": 79
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "atomicMass",
+          "value": 196.967,
+          "unitText": "u"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "period",
+          "value": 6
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "group",
+          "value": 11
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "block",
+          "value": "d"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "category",
+          "value": "Transition metal"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "phaseAtSTP",
+          "value": "Solid"
+        }
+      ]
+    },
+    {
+      "@type": "ChemicalSubstance",
+      "@id": "https://labs.rjmlaird.co.uk/elements/hg#element",
+      "identifier": "80",
+      "name": "Mercury",
+      "alternateName": "Hg",
+      "url": "https://labs.rjmlaird.co.uk/elements/hg",
+      "description": "The only metal liquid at room temperature.",
+      "additionalType": "https://en.wikipedia.org/wiki/Chemical_element",
+      "sameAs": [
+        "https://pubchem.ncbi.nlm.nih.gov/element/80",
+        "https://en.wikipedia.org/wiki/Mercury"
+      ],
+      "additionalProperty": [
+        {
+          "@type": "PropertyValue",
+          "name": "atomicNumber",
+          "value": 80
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "atomicMass",
+          "value": 200.592,
+          "unitText": "u"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "period",
+          "value": 6
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "group",
+          "value": 12
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "block",
+          "value": "d"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "category",
+          "value": "Transition metal"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "phaseAtSTP",
+          "value": "Liquid"
+        }
+      ]
+    },
+    {
+      "@type": "ChemicalSubstance",
+      "@id": "https://labs.rjmlaird.co.uk/elements/tl#element",
+      "identifier": "81",
+      "name": "Thallium",
+      "alternateName": "Tl",
+      "url": "https://labs.rjmlaird.co.uk/elements/tl",
+      "description": "Historically used as an odourless, tasteless poison.",
+      "additionalType": "https://en.wikipedia.org/wiki/Chemical_element",
+      "sameAs": [
+        "https://pubchem.ncbi.nlm.nih.gov/element/81",
+        "https://en.wikipedia.org/wiki/Thallium"
+      ],
+      "additionalProperty": [
+        {
+          "@type": "PropertyValue",
+          "name": "atomicNumber",
+          "value": 81
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "atomicMass",
+          "value": 204.38,
+          "unitText": "u"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "period",
+          "value": 6
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "group",
+          "value": 13
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "block",
+          "value": "p"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "category",
+          "value": "Post-transition metal"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "phaseAtSTP",
+          "value": "Solid"
+        }
+      ]
+    },
+    {
+      "@type": "ChemicalSubstance",
+      "@id": "https://labs.rjmlaird.co.uk/elements/pb#element",
+      "identifier": "82",
+      "name": "Lead",
+      "alternateName": "Pb",
+      "url": "https://labs.rjmlaird.co.uk/elements/pb",
+      "description": "Dense, soft metal once common in pipes and paint.",
+      "additionalType": "https://en.wikipedia.org/wiki/Chemical_element",
+      "sameAs": [
+        "https://pubchem.ncbi.nlm.nih.gov/element/82",
+        "https://en.wikipedia.org/wiki/Lead"
+      ],
+      "additionalProperty": [
+        {
+          "@type": "PropertyValue",
+          "name": "atomicNumber",
+          "value": 82
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "atomicMass",
+          "value": 207.2,
+          "unitText": "u"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "period",
+          "value": 6
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "group",
+          "value": 14
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "block",
+          "value": "p"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "category",
+          "value": "Post-transition metal"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "phaseAtSTP",
+          "value": "Solid"
+        }
+      ]
+    },
+    {
+      "@type": "ChemicalSubstance",
+      "@id": "https://labs.rjmlaird.co.uk/elements/bi#element",
+      "identifier": "83",
+      "name": "Bismuth",
+      "alternateName": "Bi",
+      "url": "https://labs.rjmlaird.co.uk/elements/bi",
+      "description": "Forms colourful, iridescent crystals; least toxic heavy metal.",
+      "additionalType": "https://en.wikipedia.org/wiki/Chemical_element",
+      "sameAs": [
+        "https://pubchem.ncbi.nlm.nih.gov/element/83",
+        "https://en.wikipedia.org/wiki/Bismuth"
+      ],
+      "additionalProperty": [
+        {
+          "@type": "PropertyValue",
+          "name": "atomicNumber",
+          "value": 83
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "atomicMass",
+          "value": 208.98,
+          "unitText": "u"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "period",
+          "value": 6
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "group",
+          "value": 15
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "block",
+          "value": "p"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "category",
+          "value": "Post-transition metal"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "phaseAtSTP",
+          "value": "Solid"
+        }
+      ]
+    },
+    {
+      "@type": "ChemicalSubstance",
+      "@id": "https://labs.rjmlaird.co.uk/elements/po#element",
+      "identifier": "84",
+      "name": "Polonium",
+      "alternateName": "Po",
+      "url": "https://labs.rjmlaird.co.uk/elements/po",
+      "description": "Intensely radioactive; discovered by Marie Curie.",
+      "additionalType": "https://en.wikipedia.org/wiki/Chemical_element",
+      "sameAs": [
+        "https://pubchem.ncbi.nlm.nih.gov/element/84",
+        "https://en.wikipedia.org/wiki/Polonium"
+      ],
+      "additionalProperty": [
+        {
+          "@type": "PropertyValue",
+          "name": "atomicNumber",
+          "value": 84
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "atomicMass",
+          "value": 209.0,
+          "unitText": "u"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "period",
+          "value": 6
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "group",
+          "value": 16
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "block",
+          "value": "p"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "category",
+          "value": "Metalloid"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "phaseAtSTP",
+          "value": "Solid"
+        }
+      ]
+    },
+    {
+      "@type": "ChemicalSubstance",
+      "@id": "https://labs.rjmlaird.co.uk/elements/at#element",
+      "identifier": "85",
+      "name": "Astatine",
+      "alternateName": "At",
+      "url": "https://labs.rjmlaird.co.uk/elements/at",
+      "description": "Rarest naturally occurring element on Earth.",
+      "additionalType": "https://en.wikipedia.org/wiki/Chemical_element",
+      "sameAs": [
+        "https://pubchem.ncbi.nlm.nih.gov/element/85",
+        "https://en.wikipedia.org/wiki/Astatine"
+      ],
+      "additionalProperty": [
+        {
+          "@type": "PropertyValue",
+          "name": "atomicNumber",
+          "value": 85
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "atomicMass",
+          "value": 210.0,
+          "unitText": "u"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "period",
+          "value": 6
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "group",
+          "value": 17
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "block",
+          "value": "p"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "category",
+          "value": "Halogen"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "phaseAtSTP",
+          "value": "Solid"
+        }
+      ]
+    },
+    {
+      "@type": "ChemicalSubstance",
+      "@id": "https://labs.rjmlaird.co.uk/elements/rn#element",
+      "identifier": "86",
+      "name": "Radon",
+      "alternateName": "Rn",
+      "url": "https://labs.rjmlaird.co.uk/elements/rn",
+      "description": "Radioactive gas that seeps from the ground into homes.",
+      "additionalType": "https://en.wikipedia.org/wiki/Chemical_element",
+      "sameAs": [
+        "https://pubchem.ncbi.nlm.nih.gov/element/86",
+        "https://en.wikipedia.org/wiki/Radon"
+      ],
+      "additionalProperty": [
+        {
+          "@type": "PropertyValue",
+          "name": "atomicNumber",
+          "value": 86
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "atomicMass",
+          "value": 222.0,
+          "unitText": "u"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "period",
+          "value": 6
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "group",
+          "value": 18
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "block",
+          "value": "p"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "category",
+          "value": "Noble gas"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "phaseAtSTP",
+          "value": "Gas"
+        }
+      ]
+    },
+    {
+      "@type": "ChemicalSubstance",
+      "@id": "https://labs.rjmlaird.co.uk/elements/fr#element",
+      "identifier": "87",
+      "name": "Francium",
+      "alternateName": "Fr",
+      "url": "https://labs.rjmlaird.co.uk/elements/fr",
+      "description": "Among the rarest elements in Earth's crust; intensely radioactive.",
+      "additionalType": "https://en.wikipedia.org/wiki/Chemical_element",
+      "sameAs": [
+        "https://pubchem.ncbi.nlm.nih.gov/element/87",
+        "https://en.wikipedia.org/wiki/Francium"
+      ],
+      "additionalProperty": [
+        {
+          "@type": "PropertyValue",
+          "name": "atomicNumber",
+          "value": 87
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "atomicMass",
+          "value": 223.0,
+          "unitText": "u"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "period",
+          "value": 7
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "group",
+          "value": 1
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "block",
+          "value": "s"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "category",
+          "value": "Alkali metal"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "phaseAtSTP",
+          "value": "Solid"
+        }
+      ]
+    },
+    {
+      "@type": "ChemicalSubstance",
+      "@id": "https://labs.rjmlaird.co.uk/elements/ra#element",
+      "identifier": "88",
+      "name": "Radium",
+      "alternateName": "Ra",
+      "url": "https://labs.rjmlaird.co.uk/elements/ra",
+      "description": "Once used in glow-in-the-dark watch dials.",
+      "additionalType": "https://en.wikipedia.org/wiki/Chemical_element",
+      "sameAs": [
+        "https://pubchem.ncbi.nlm.nih.gov/element/88",
+        "https://en.wikipedia.org/wiki/Radium"
+      ],
+      "additionalProperty": [
+        {
+          "@type": "PropertyValue",
+          "name": "atomicNumber",
+          "value": 88
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "atomicMass",
+          "value": 226.0,
+          "unitText": "u"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "period",
+          "value": 7
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "group",
+          "value": 2
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "block",
+          "value": "s"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "category",
+          "value": "Alkaline earth metal"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "phaseAtSTP",
+          "value": "Solid"
+        }
+      ]
+    },
+    {
+      "@type": "ChemicalSubstance",
+      "@id": "https://labs.rjmlaird.co.uk/elements/ac#element",
+      "identifier": "89",
+      "name": "Actinium",
+      "alternateName": "Ac",
+      "url": "https://labs.rjmlaird.co.uk/elements/ac",
+      "description": "Glows faintly blue in the dark from its own radioactivity.",
+      "additionalType": "https://en.wikipedia.org/wiki/Chemical_element",
+      "sameAs": [
+        "https://pubchem.ncbi.nlm.nih.gov/element/89",
+        "https://en.wikipedia.org/wiki/Actinium"
+      ],
+      "additionalProperty": [
+        {
+          "@type": "PropertyValue",
+          "name": "atomicNumber",
+          "value": 89
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "atomicMass",
+          "value": 227.0,
+          "unitText": "u"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "period",
+          "value": 7
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "group",
+          "value": 3
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "block",
+          "value": "f"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "category",
+          "value": "Actinide"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "phaseAtSTP",
+          "value": "Solid"
+        }
+      ]
+    },
+    {
+      "@type": "ChemicalSubstance",
+      "@id": "https://labs.rjmlaird.co.uk/elements/th#element",
+      "identifier": "90",
+      "name": "Thorium",
+      "alternateName": "Th",
+      "url": "https://labs.rjmlaird.co.uk/elements/th",
+      "description": "Proposed alternative nuclear fuel to uranium.",
+      "additionalType": "https://en.wikipedia.org/wiki/Chemical_element",
+      "sameAs": [
+        "https://pubchem.ncbi.nlm.nih.gov/element/90",
+        "https://en.wikipedia.org/wiki/Thorium"
+      ],
+      "additionalProperty": [
+        {
+          "@type": "PropertyValue",
+          "name": "atomicNumber",
+          "value": 90
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "atomicMass",
+          "value": 232.038,
+          "unitText": "u"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "period",
+          "value": 7
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "group",
+          "value": 4
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "block",
+          "value": "f"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "category",
+          "value": "Actinide"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "phaseAtSTP",
+          "value": "Solid"
+        }
+      ]
+    },
+    {
+      "@type": "ChemicalSubstance",
+      "@id": "https://labs.rjmlaird.co.uk/elements/pa#element",
+      "identifier": "91",
+      "name": "Protactinium",
+      "alternateName": "Pa",
+      "url": "https://labs.rjmlaird.co.uk/elements/pa",
+      "description": "Rare and highly radioactive; found in trace amounts in uranium ore.",
+      "additionalType": "https://en.wikipedia.org/wiki/Chemical_element",
+      "sameAs": [
+        "https://pubchem.ncbi.nlm.nih.gov/element/91",
+        "https://en.wikipedia.org/wiki/Protactinium"
+      ],
+      "additionalProperty": [
+        {
+          "@type": "PropertyValue",
+          "name": "atomicNumber",
+          "value": 91
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "atomicMass",
+          "value": 231.036,
+          "unitText": "u"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "period",
+          "value": 7
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "group",
+          "value": 5
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "block",
+          "value": "f"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "category",
+          "value": "Actinide"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "phaseAtSTP",
+          "value": "Solid"
+        }
+      ]
+    },
+    {
+      "@type": "ChemicalSubstance",
+      "@id": "https://labs.rjmlaird.co.uk/elements/u#element",
+      "identifier": "92",
+      "name": "Uranium",
+      "alternateName": "U",
+      "url": "https://labs.rjmlaird.co.uk/elements/u",
+      "description": "Fuels nuclear reactors and weapons.",
+      "additionalType": "https://en.wikipedia.org/wiki/Chemical_element",
+      "sameAs": [
+        "https://pubchem.ncbi.nlm.nih.gov/element/92",
+        "https://en.wikipedia.org/wiki/Uranium"
+      ],
+      "additionalProperty": [
+        {
+          "@type": "PropertyValue",
+          "name": "atomicNumber",
+          "value": 92
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "atomicMass",
+          "value": 238.029,
+          "unitText": "u"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "period",
+          "value": 7
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "group",
+          "value": 6
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "block",
+          "value": "f"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "category",
+          "value": "Actinide"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "phaseAtSTP",
+          "value": "Solid"
+        }
+      ]
+    },
+    {
+      "@type": "ChemicalSubstance",
+      "@id": "https://labs.rjmlaird.co.uk/elements/np#element",
+      "identifier": "93",
+      "name": "Neptunium",
+      "alternateName": "Np",
+      "url": "https://labs.rjmlaird.co.uk/elements/np",
+      "description": "First transuranium element to be discovered.",
+      "additionalType": "https://en.wikipedia.org/wiki/Chemical_element",
+      "sameAs": [
+        "https://pubchem.ncbi.nlm.nih.gov/element/93",
+        "https://en.wikipedia.org/wiki/Neptunium"
+      ],
+      "additionalProperty": [
+        {
+          "@type": "PropertyValue",
+          "name": "atomicNumber",
+          "value": 93
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "atomicMass",
+          "value": 237.0,
+          "unitText": "u"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "period",
+          "value": 7
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "group",
+          "value": 7
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "block",
+          "value": "f"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "category",
+          "value": "Actinide"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "phaseAtSTP",
+          "value": "Solid"
+        }
+      ]
+    },
+    {
+      "@type": "ChemicalSubstance",
+      "@id": "https://labs.rjmlaird.co.uk/elements/pu#element",
+      "identifier": "94",
+      "name": "Plutonium",
+      "alternateName": "Pu",
+      "url": "https://labs.rjmlaird.co.uk/elements/pu",
+      "description": "Powered the Nagasaki bomb and Voyager spacecraft.",
+      "additionalType": "https://en.wikipedia.org/wiki/Chemical_element",
+      "sameAs": [
+        "https://pubchem.ncbi.nlm.nih.gov/element/94",
+        "https://en.wikipedia.org/wiki/Plutonium"
+      ],
+      "additionalProperty": [
+        {
+          "@type": "PropertyValue",
+          "name": "atomicNumber",
+          "value": 94
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "atomicMass",
+          "value": 244.0,
+          "unitText": "u"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "period",
+          "value": 7
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "group",
+          "value": 8
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "block",
+          "value": "f"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "category",
+          "value": "Actinide"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "phaseAtSTP",
+          "value": "Solid"
+        }
+      ]
+    },
+    {
+      "@type": "ChemicalSubstance",
+      "@id": "https://labs.rjmlaird.co.uk/elements/am#element",
+      "identifier": "95",
+      "name": "Americium",
+      "alternateName": "Am",
+      "url": "https://labs.rjmlaird.co.uk/elements/am",
+      "description": "Used in household smoke detectors.",
+      "additionalType": "https://en.wikipedia.org/wiki/Chemical_element",
+      "sameAs": [
+        "https://pubchem.ncbi.nlm.nih.gov/element/95",
+        "https://en.wikipedia.org/wiki/Americium"
+      ],
+      "additionalProperty": [
+        {
+          "@type": "PropertyValue",
+          "name": "atomicNumber",
+          "value": 95
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "atomicMass",
+          "value": 243.0,
+          "unitText": "u"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "period",
+          "value": 7
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "group",
+          "value": 9
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "block",
+          "value": "f"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "category",
+          "value": "Actinide"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "phaseAtSTP",
+          "value": "Solid"
+        }
+      ]
+    },
+    {
+      "@type": "ChemicalSubstance",
+      "@id": "https://labs.rjmlaird.co.uk/elements/cm#element",
+      "identifier": "96",
+      "name": "Curium",
+      "alternateName": "Cm",
+      "url": "https://labs.rjmlaird.co.uk/elements/cm",
+      "description": "Used to analyse Martian soil on rover missions.",
+      "additionalType": "https://en.wikipedia.org/wiki/Chemical_element",
+      "sameAs": [
+        "https://pubchem.ncbi.nlm.nih.gov/element/96",
+        "https://en.wikipedia.org/wiki/Curium"
+      ],
+      "additionalProperty": [
+        {
+          "@type": "PropertyValue",
+          "name": "atomicNumber",
+          "value": 96
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "atomicMass",
+          "value": 247.0,
+          "unitText": "u"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "period",
+          "value": 7
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "group",
+          "value": 10
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "block",
+          "value": "f"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "category",
+          "value": "Actinide"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "phaseAtSTP",
+          "value": "Solid"
+        }
+      ]
+    },
+    {
+      "@type": "ChemicalSubstance",
+      "@id": "https://labs.rjmlaird.co.uk/elements/bk#element",
+      "identifier": "97",
+      "name": "Berkelium",
+      "alternateName": "Bk",
+      "url": "https://labs.rjmlaird.co.uk/elements/bk",
+      "description": "Named after Berkeley, California, where it was made.",
+      "additionalType": "https://en.wikipedia.org/wiki/Chemical_element",
+      "sameAs": [
+        "https://pubchem.ncbi.nlm.nih.gov/element/97",
+        "https://en.wikipedia.org/wiki/Berkelium"
+      ],
+      "additionalProperty": [
+        {
+          "@type": "PropertyValue",
+          "name": "atomicNumber",
+          "value": 97
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "atomicMass",
+          "value": 247.0,
+          "unitText": "u"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "period",
+          "value": 7
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "group",
+          "value": 11
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "block",
+          "value": "f"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "category",
+          "value": "Actinide"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "phaseAtSTP",
+          "value": "Solid"
+        }
+      ]
+    },
+    {
+      "@type": "ChemicalSubstance",
+      "@id": "https://labs.rjmlaird.co.uk/elements/cf#element",
+      "identifier": "98",
+      "name": "Californium",
+      "alternateName": "Cf",
+      "url": "https://labs.rjmlaird.co.uk/elements/cf",
+      "description": "Used to help start up nuclear reactors.",
+      "additionalType": "https://en.wikipedia.org/wiki/Chemical_element",
+      "sameAs": [
+        "https://pubchem.ncbi.nlm.nih.gov/element/98",
+        "https://en.wikipedia.org/wiki/Californium"
+      ],
+      "additionalProperty": [
+        {
+          "@type": "PropertyValue",
+          "name": "atomicNumber",
+          "value": 98
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "atomicMass",
+          "value": 251.0,
+          "unitText": "u"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "period",
+          "value": 7
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "group",
+          "value": 12
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "block",
+          "value": "f"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "category",
+          "value": "Actinide"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "phaseAtSTP",
+          "value": "Solid"
+        }
+      ]
+    },
+    {
+      "@type": "ChemicalSubstance",
+      "@id": "https://labs.rjmlaird.co.uk/elements/es#element",
+      "identifier": "99",
+      "name": "Einsteinium",
+      "alternateName": "Es",
+      "url": "https://labs.rjmlaird.co.uk/elements/es",
+      "description": "Discovered in the debris of the first hydrogen bomb test.",
+      "additionalType": "https://en.wikipedia.org/wiki/Chemical_element",
+      "sameAs": [
+        "https://pubchem.ncbi.nlm.nih.gov/element/99",
+        "https://en.wikipedia.org/wiki/Einsteinium"
+      ],
+      "additionalProperty": [
+        {
+          "@type": "PropertyValue",
+          "name": "atomicNumber",
+          "value": 99
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "atomicMass",
+          "value": 252.0,
+          "unitText": "u"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "period",
+          "value": 7
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "group",
+          "value": 13
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "block",
+          "value": "f"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "category",
+          "value": "Actinide"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "phaseAtSTP",
+          "value": "Solid"
+        }
+      ]
+    },
+    {
+      "@type": "ChemicalSubstance",
+      "@id": "https://labs.rjmlaird.co.uk/elements/fm#element",
+      "identifier": "100",
+      "name": "Fermium",
+      "alternateName": "Fm",
+      "url": "https://labs.rjmlaird.co.uk/elements/fm",
+      "description": "Also discovered in hydrogen bomb test debris.",
+      "additionalType": "https://en.wikipedia.org/wiki/Chemical_element",
+      "sameAs": [
+        "https://pubchem.ncbi.nlm.nih.gov/element/100",
+        "https://en.wikipedia.org/wiki/Fermium"
+      ],
+      "additionalProperty": [
+        {
+          "@type": "PropertyValue",
+          "name": "atomicNumber",
+          "value": 100
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "atomicMass",
+          "value": 257.0,
+          "unitText": "u"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "period",
+          "value": 7
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "group",
+          "value": 14
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "block",
+          "value": "f"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "category",
+          "value": "Actinide"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "phaseAtSTP",
+          "value": "Solid"
+        }
+      ]
+    },
+    {
+      "@type": "ChemicalSubstance",
+      "@id": "https://labs.rjmlaird.co.uk/elements/md#element",
+      "identifier": "101",
+      "name": "Mendelevium",
+      "alternateName": "Md",
+      "url": "https://labs.rjmlaird.co.uk/elements/md",
+      "description": "First element made one atom at a time.",
+      "additionalType": "https://en.wikipedia.org/wiki/Chemical_element",
+      "sameAs": [
+        "https://pubchem.ncbi.nlm.nih.gov/element/101",
+        "https://en.wikipedia.org/wiki/Mendelevium"
+      ],
+      "additionalProperty": [
+        {
+          "@type": "PropertyValue",
+          "name": "atomicNumber",
+          "value": 101
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "atomicMass",
+          "value": 258.0,
+          "unitText": "u"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "period",
+          "value": 7
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "group",
+          "value": 15
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "block",
+          "value": "f"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "category",
+          "value": "Actinide"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "phaseAtSTP",
+          "value": "Solid"
+        }
+      ]
+    },
+    {
+      "@type": "ChemicalSubstance",
+      "@id": "https://labs.rjmlaird.co.uk/elements/no#element",
+      "identifier": "102",
+      "name": "Nobelium",
+      "alternateName": "No",
+      "url": "https://labs.rjmlaird.co.uk/elements/no",
+      "description": "Named after Alfred Nobel.",
+      "additionalType": "https://en.wikipedia.org/wiki/Chemical_element",
+      "sameAs": [
+        "https://pubchem.ncbi.nlm.nih.gov/element/102",
+        "https://en.wikipedia.org/wiki/Nobelium"
+      ],
+      "additionalProperty": [
+        {
+          "@type": "PropertyValue",
+          "name": "atomicNumber",
+          "value": 102
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "atomicMass",
+          "value": 259.0,
+          "unitText": "u"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "period",
+          "value": 7
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "group",
+          "value": 16
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "block",
+          "value": "f"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "category",
+          "value": "Actinide"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "phaseAtSTP",
+          "value": "Solid"
+        }
+      ]
+    },
+    {
+      "@type": "ChemicalSubstance",
+      "@id": "https://labs.rjmlaird.co.uk/elements/lr#element",
+      "identifier": "103",
+      "name": "Lawrencium",
+      "alternateName": "Lr",
+      "url": "https://labs.rjmlaird.co.uk/elements/lr",
+      "description": "Named after physicist Ernest Lawrence.",
+      "additionalType": "https://en.wikipedia.org/wiki/Chemical_element",
+      "sameAs": [
+        "https://pubchem.ncbi.nlm.nih.gov/element/103",
+        "https://en.wikipedia.org/wiki/Lawrencium"
+      ],
+      "additionalProperty": [
+        {
+          "@type": "PropertyValue",
+          "name": "atomicNumber",
+          "value": 103
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "atomicMass",
+          "value": 262.0,
+          "unitText": "u"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "period",
+          "value": 7
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "group",
+          "value": 17
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "block",
+          "value": "f"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "category",
+          "value": "Actinide"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "phaseAtSTP",
+          "value": "Solid"
+        }
+      ]
+    },
+    {
+      "@type": "ChemicalSubstance",
+      "@id": "https://labs.rjmlaird.co.uk/elements/rf#element",
+      "identifier": "104",
+      "name": "Rutherfordium",
+      "alternateName": "Rf",
+      "url": "https://labs.rjmlaird.co.uk/elements/rf",
+      "description": "Named after physicist Ernest Rutherford.",
+      "additionalType": "https://en.wikipedia.org/wiki/Chemical_element",
+      "sameAs": [
+        "https://pubchem.ncbi.nlm.nih.gov/element/104",
+        "https://en.wikipedia.org/wiki/Rutherfordium"
+      ],
+      "additionalProperty": [
+        {
+          "@type": "PropertyValue",
+          "name": "atomicNumber",
+          "value": 104
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "atomicMass",
+          "value": 267.0,
+          "unitText": "u"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "period",
+          "value": 7
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "group",
+          "value": 4
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "block",
+          "value": "d"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "category",
+          "value": "Transition metal"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "phaseAtSTP",
+          "value": "Solid"
+        }
+      ]
+    },
+    {
+      "@type": "ChemicalSubstance",
+      "@id": "https://labs.rjmlaird.co.uk/elements/db#element",
+      "identifier": "105",
+      "name": "Dubnium",
+      "alternateName": "Db",
+      "url": "https://labs.rjmlaird.co.uk/elements/db",
+      "description": "Named after Dubna, Russia, site of its discovery.",
+      "additionalType": "https://en.wikipedia.org/wiki/Chemical_element",
+      "sameAs": [
+        "https://pubchem.ncbi.nlm.nih.gov/element/105",
+        "https://en.wikipedia.org/wiki/Dubnium"
+      ],
+      "additionalProperty": [
+        {
+          "@type": "PropertyValue",
+          "name": "atomicNumber",
+          "value": 105
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "atomicMass",
+          "value": 268.0,
+          "unitText": "u"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "period",
+          "value": 7
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "group",
+          "value": 5
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "block",
+          "value": "d"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "category",
+          "value": "Transition metal"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "phaseAtSTP",
+          "value": "Solid"
+        }
+      ]
+    },
+    {
+      "@type": "ChemicalSubstance",
+      "@id": "https://labs.rjmlaird.co.uk/elements/sg#element",
+      "identifier": "106",
+      "name": "Seaborgium",
+      "alternateName": "Sg",
+      "url": "https://labs.rjmlaird.co.uk/elements/sg",
+      "description": "Named after Nobel laureate Glenn Seaborg.",
+      "additionalType": "https://en.wikipedia.org/wiki/Chemical_element",
+      "sameAs": [
+        "https://pubchem.ncbi.nlm.nih.gov/element/106",
+        "https://en.wikipedia.org/wiki/Seaborgium"
+      ],
+      "additionalProperty": [
+        {
+          "@type": "PropertyValue",
+          "name": "atomicNumber",
+          "value": 106
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "atomicMass",
+          "value": 269.0,
+          "unitText": "u"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "period",
+          "value": 7
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "group",
+          "value": 6
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "block",
+          "value": "d"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "category",
+          "value": "Transition metal"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "phaseAtSTP",
+          "value": "Solid"
+        }
+      ]
+    },
+    {
+      "@type": "ChemicalSubstance",
+      "@id": "https://labs.rjmlaird.co.uk/elements/bh#element",
+      "identifier": "107",
+      "name": "Bohrium",
+      "alternateName": "Bh",
+      "url": "https://labs.rjmlaird.co.uk/elements/bh",
+      "description": "Named after physicist Niels Bohr.",
+      "additionalType": "https://en.wikipedia.org/wiki/Chemical_element",
+      "sameAs": [
+        "https://pubchem.ncbi.nlm.nih.gov/element/107",
+        "https://en.wikipedia.org/wiki/Bohrium"
+      ],
+      "additionalProperty": [
+        {
+          "@type": "PropertyValue",
+          "name": "atomicNumber",
+          "value": 107
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "atomicMass",
+          "value": 270.0,
+          "unitText": "u"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "period",
+          "value": 7
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "group",
+          "value": 7
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "block",
+          "value": "d"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "category",
+          "value": "Transition metal"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "phaseAtSTP",
+          "value": "Solid"
+        }
+      ]
+    },
+    {
+      "@type": "ChemicalSubstance",
+      "@id": "https://labs.rjmlaird.co.uk/elements/hs#element",
+      "identifier": "108",
+      "name": "Hassium",
+      "alternateName": "Hs",
+      "url": "https://labs.rjmlaird.co.uk/elements/hs",
+      "description": "Named after the German state of Hesse.",
+      "additionalType": "https://en.wikipedia.org/wiki/Chemical_element",
+      "sameAs": [
+        "https://pubchem.ncbi.nlm.nih.gov/element/108",
+        "https://en.wikipedia.org/wiki/Hassium"
+      ],
+      "additionalProperty": [
+        {
+          "@type": "PropertyValue",
+          "name": "atomicNumber",
+          "value": 108
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "atomicMass",
+          "value": 269.0,
+          "unitText": "u"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "period",
+          "value": 7
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "group",
+          "value": 8
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "block",
+          "value": "d"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "category",
+          "value": "Transition metal"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "phaseAtSTP",
+          "value": "Solid"
+        }
+      ]
+    },
+    {
+      "@type": "ChemicalSubstance",
+      "@id": "https://labs.rjmlaird.co.uk/elements/mt#element",
+      "identifier": "109",
+      "name": "Meitnerium",
+      "alternateName": "Mt",
+      "url": "https://labs.rjmlaird.co.uk/elements/mt",
+      "description": "Named after physicist Lise Meitner.",
+      "additionalType": "https://en.wikipedia.org/wiki/Chemical_element",
+      "sameAs": [
+        "https://pubchem.ncbi.nlm.nih.gov/element/109",
+        "https://en.wikipedia.org/wiki/Meitnerium"
+      ],
+      "additionalProperty": [
+        {
+          "@type": "PropertyValue",
+          "name": "atomicNumber",
+          "value": 109
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "atomicMass",
+          "value": 278.0,
+          "unitText": "u"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "period",
+          "value": 7
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "group",
+          "value": 9
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "block",
+          "value": "d"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "category",
+          "value": "Unknown"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "phaseAtSTP",
+          "value": "Solid"
+        }
+      ]
+    },
+    {
+      "@type": "ChemicalSubstance",
+      "@id": "https://labs.rjmlaird.co.uk/elements/ds#element",
+      "identifier": "110",
+      "name": "Darmstadtium",
+      "alternateName": "Ds",
+      "url": "https://labs.rjmlaird.co.uk/elements/ds",
+      "description": "Named after Darmstadt, Germany, where it was made.",
+      "additionalType": "https://en.wikipedia.org/wiki/Chemical_element",
+      "sameAs": [
+        "https://pubchem.ncbi.nlm.nih.gov/element/110",
+        "https://en.wikipedia.org/wiki/Darmstadtium"
+      ],
+      "additionalProperty": [
+        {
+          "@type": "PropertyValue",
+          "name": "atomicNumber",
+          "value": 110
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "atomicMass",
+          "value": 281.0,
+          "unitText": "u"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "period",
+          "value": 7
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "group",
+          "value": 10
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "block",
+          "value": "d"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "category",
+          "value": "Unknown"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "phaseAtSTP",
+          "value": "Solid"
+        }
+      ]
+    },
+    {
+      "@type": "ChemicalSubstance",
+      "@id": "https://labs.rjmlaird.co.uk/elements/rg#element",
+      "identifier": "111",
+      "name": "Roentgenium",
+      "alternateName": "Rg",
+      "url": "https://labs.rjmlaird.co.uk/elements/rg",
+      "description": "Named after physicist Wilhelm Röntgen.",
+      "additionalType": "https://en.wikipedia.org/wiki/Chemical_element",
+      "sameAs": [
+        "https://pubchem.ncbi.nlm.nih.gov/element/111",
+        "https://en.wikipedia.org/wiki/Roentgenium"
+      ],
+      "additionalProperty": [
+        {
+          "@type": "PropertyValue",
+          "name": "atomicNumber",
+          "value": 111
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "atomicMass",
+          "value": 282.0,
+          "unitText": "u"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "period",
+          "value": 7
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "group",
+          "value": 11
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "block",
+          "value": "d"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "category",
+          "value": "Unknown"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "phaseAtSTP",
+          "value": "Solid"
+        }
+      ]
+    },
+    {
+      "@type": "ChemicalSubstance",
+      "@id": "https://labs.rjmlaird.co.uk/elements/cn#element",
+      "identifier": "112",
+      "name": "Copernicium",
+      "alternateName": "Cn",
+      "url": "https://labs.rjmlaird.co.uk/elements/cn",
+      "description": "Named after astronomer Nicolaus Copernicus.",
+      "additionalType": "https://en.wikipedia.org/wiki/Chemical_element",
+      "sameAs": [
+        "https://pubchem.ncbi.nlm.nih.gov/element/112",
+        "https://en.wikipedia.org/wiki/Copernicium"
+      ],
+      "additionalProperty": [
+        {
+          "@type": "PropertyValue",
+          "name": "atomicNumber",
+          "value": 112
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "atomicMass",
+          "value": 285.0,
+          "unitText": "u"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "period",
+          "value": 7
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "group",
+          "value": 12
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "block",
+          "value": "d"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "category",
+          "value": "Transition metal"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "phaseAtSTP",
+          "value": "Solid"
+        }
+      ]
+    },
+    {
+      "@type": "ChemicalSubstance",
+      "@id": "https://labs.rjmlaird.co.uk/elements/nh#element",
+      "identifier": "113",
+      "name": "Nihonium",
+      "alternateName": "Nh",
+      "url": "https://labs.rjmlaird.co.uk/elements/nh",
+      "description": "First element named by Japanese researchers.",
+      "additionalType": "https://en.wikipedia.org/wiki/Chemical_element",
+      "sameAs": [
+        "https://pubchem.ncbi.nlm.nih.gov/element/113",
+        "https://en.wikipedia.org/wiki/Nihonium"
+      ],
+      "additionalProperty": [
+        {
+          "@type": "PropertyValue",
+          "name": "atomicNumber",
+          "value": 113
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "atomicMass",
+          "value": 286.0,
+          "unitText": "u"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "period",
+          "value": 7
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "group",
+          "value": 13
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "block",
+          "value": "p"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "category",
+          "value": "Post-transition metal"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "phaseAtSTP",
+          "value": "Solid"
+        }
+      ]
+    },
+    {
+      "@type": "ChemicalSubstance",
+      "@id": "https://labs.rjmlaird.co.uk/elements/fl#element",
+      "identifier": "114",
+      "name": "Flerovium",
+      "alternateName": "Fl",
+      "url": "https://labs.rjmlaird.co.uk/elements/fl",
+      "description": "Named after the Flerov Laboratory in Russia.",
+      "additionalType": "https://en.wikipedia.org/wiki/Chemical_element",
+      "sameAs": [
+        "https://pubchem.ncbi.nlm.nih.gov/element/114",
+        "https://en.wikipedia.org/wiki/Flerovium"
+      ],
+      "additionalProperty": [
+        {
+          "@type": "PropertyValue",
+          "name": "atomicNumber",
+          "value": 114
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "atomicMass",
+          "value": 289.0,
+          "unitText": "u"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "period",
+          "value": 7
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "group",
+          "value": 14
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "block",
+          "value": "p"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "category",
+          "value": "Post-transition metal"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "phaseAtSTP",
+          "value": "Solid"
+        }
+      ]
+    },
+    {
+      "@type": "ChemicalSubstance",
+      "@id": "https://labs.rjmlaird.co.uk/elements/mc#element",
+      "identifier": "115",
+      "name": "Moscovium",
+      "alternateName": "Mc",
+      "url": "https://labs.rjmlaird.co.uk/elements/mc",
+      "description": "Named after Moscow, Russia.",
+      "additionalType": "https://en.wikipedia.org/wiki/Chemical_element",
+      "sameAs": [
+        "https://pubchem.ncbi.nlm.nih.gov/element/115",
+        "https://en.wikipedia.org/wiki/Moscovium"
+      ],
+      "additionalProperty": [
+        {
+          "@type": "PropertyValue",
+          "name": "atomicNumber",
+          "value": 115
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "atomicMass",
+          "value": 290.0,
+          "unitText": "u"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "period",
+          "value": 7
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "group",
+          "value": 15
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "block",
+          "value": "p"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "category",
+          "value": "Post-transition metal"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "phaseAtSTP",
+          "value": "Solid"
+        }
+      ]
+    },
+    {
+      "@type": "ChemicalSubstance",
+      "@id": "https://labs.rjmlaird.co.uk/elements/lv#element",
+      "identifier": "116",
+      "name": "Livermorium",
+      "alternateName": "Lv",
+      "url": "https://labs.rjmlaird.co.uk/elements/lv",
+      "description": "Named after Livermore, California.",
+      "additionalType": "https://en.wikipedia.org/wiki/Chemical_element",
+      "sameAs": [
+        "https://pubchem.ncbi.nlm.nih.gov/element/116",
+        "https://en.wikipedia.org/wiki/Livermorium"
+      ],
+      "additionalProperty": [
+        {
+          "@type": "PropertyValue",
+          "name": "atomicNumber",
+          "value": 116
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "atomicMass",
+          "value": 293.0,
+          "unitText": "u"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "period",
+          "value": 7
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "group",
+          "value": 16
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "block",
+          "value": "p"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "category",
+          "value": "Post-transition metal"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "phaseAtSTP",
+          "value": "Solid"
+        }
+      ]
+    },
+    {
+      "@type": "ChemicalSubstance",
+      "@id": "https://labs.rjmlaird.co.uk/elements/ts#element",
+      "identifier": "117",
+      "name": "Tennessine",
+      "alternateName": "Ts",
+      "url": "https://labs.rjmlaird.co.uk/elements/ts",
+      "description": "Named after the state of Tennessee, USA.",
+      "additionalType": "https://en.wikipedia.org/wiki/Chemical_element",
+      "sameAs": [
+        "https://pubchem.ncbi.nlm.nih.gov/element/117",
+        "https://en.wikipedia.org/wiki/Tennessine"
+      ],
+      "additionalProperty": [
+        {
+          "@type": "PropertyValue",
+          "name": "atomicNumber",
+          "value": 117
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "atomicMass",
+          "value": 294.0,
+          "unitText": "u"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "period",
+          "value": 7
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "group",
+          "value": 17
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "block",
+          "value": "p"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "category",
+          "value": "Halogen"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "phaseAtSTP",
+          "value": "Solid"
+        }
+      ]
+    },
+    {
+      "@type": "ChemicalSubstance",
+      "@id": "https://labs.rjmlaird.co.uk/elements/og#element",
+      "identifier": "118",
+      "name": "Oganesson",
+      "alternateName": "Og",
+      "url": "https://labs.rjmlaird.co.uk/elements/og",
+      "description": "Heaviest confirmed element; named after physicist Yuri Oganessian.",
+      "additionalType": "https://en.wikipedia.org/wiki/Chemical_element",
+      "sameAs": [
+        "https://pubchem.ncbi.nlm.nih.gov/element/118",
+        "https://en.wikipedia.org/wiki/Oganesson"
+      ],
+      "additionalProperty": [
+        {
+          "@type": "PropertyValue",
+          "name": "atomicNumber",
+          "value": 118
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "atomicMass",
+          "value": 294.0,
+          "unitText": "u"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "period",
+          "value": 7
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "group",
+          "value": 18
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "block",
+          "value": "p"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "category",
+          "value": "Noble gas"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "phaseAtSTP",
+          "value": "Gas"
+        }
+      ]
+    }
+  ]
+}

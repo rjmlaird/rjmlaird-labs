@@ -1,0 +1,2126 @@
+[
+  {
+    "atomicNumber": 1,
+    "symbol": "H",
+    "name": "Hydrogen",
+    "atomicMass": 1.008,
+    "category": "nm",
+    "categoryLabel": "Reactive nonmetal",
+    "period": 1,
+    "group": 1,
+    "block": "s",
+    "phaseAtSTP": "gas",
+    "fact": "Most abundant element in the universe; powers stars via fusion.",
+    "gridPosition": {
+      "row": 1,
+      "column": 1
+    },
+    "slug": "h"
+  },
+  {
+    "atomicNumber": 2,
+    "symbol": "He",
+    "name": "Helium",
+    "atomicMass": 4.003,
+    "category": "ng",
+    "categoryLabel": "Noble gas",
+    "period": 1,
+    "group": 18,
+    "block": "s",
+    "phaseAtSTP": "gas",
+    "fact": "Second lightest element; makes your voice squeaky and balloons float.",
+    "gridPosition": {
+      "row": 1,
+      "column": 18
+    },
+    "slug": "he"
+  },
+  {
+    "atomicNumber": 3,
+    "symbol": "Li",
+    "name": "Lithium",
+    "atomicMass": 6.94,
+    "category": "am",
+    "categoryLabel": "Alkali metal",
+    "period": 2,
+    "group": 1,
+    "block": "s",
+    "phaseAtSTP": "solid",
+    "fact": "Lightest metal; core of modern rechargeable batteries.",
+    "gridPosition": {
+      "row": 2,
+      "column": 1
+    },
+    "slug": "li"
+  },
+  {
+    "atomicNumber": 4,
+    "symbol": "Be",
+    "name": "Beryllium",
+    "atomicMass": 9.012,
+    "category": "ae",
+    "categoryLabel": "Alkaline earth metal",
+    "period": 2,
+    "group": 2,
+    "block": "s",
+    "phaseAtSTP": "solid",
+    "fact": "Rigid, lightweight metal used in aerospace and X-ray windows.",
+    "gridPosition": {
+      "row": 2,
+      "column": 2
+    },
+    "slug": "be"
+  },
+  {
+    "atomicNumber": 5,
+    "symbol": "B",
+    "name": "Boron",
+    "atomicMass": 10.81,
+    "category": "me",
+    "categoryLabel": "Metalloid",
+    "period": 2,
+    "group": 13,
+    "block": "p",
+    "phaseAtSTP": "solid",
+    "fact": "Essential for plant growth; hardens glass and ceramics.",
+    "gridPosition": {
+      "row": 2,
+      "column": 13
+    },
+    "slug": "b"
+  },
+  {
+    "atomicNumber": 6,
+    "symbol": "C",
+    "name": "Carbon",
+    "atomicMass": 12.011,
+    "category": "nm",
+    "categoryLabel": "Reactive nonmetal",
+    "period": 2,
+    "group": 14,
+    "block": "p",
+    "phaseAtSTP": "solid",
+    "fact": "Backbone of all known life; forms diamond and graphite.",
+    "gridPosition": {
+      "row": 2,
+      "column": 14
+    },
+    "slug": "c"
+  },
+  {
+    "atomicNumber": 7,
+    "symbol": "N",
+    "name": "Nitrogen",
+    "atomicMass": 14.007,
+    "category": "nm",
+    "categoryLabel": "Reactive nonmetal",
+    "period": 2,
+    "group": 15,
+    "block": "p",
+    "phaseAtSTP": "gas",
+    "fact": "Makes up 78% of Earth's atmosphere.",
+    "gridPosition": {
+      "row": 2,
+      "column": 15
+    },
+    "slug": "n"
+  },
+  {
+    "atomicNumber": 8,
+    "symbol": "O",
+    "name": "Oxygen",
+    "atomicMass": 15.999,
+    "category": "nm",
+    "categoryLabel": "Reactive nonmetal",
+    "period": 2,
+    "group": 16,
+    "block": "p",
+    "phaseAtSTP": "gas",
+    "fact": "Essential for respiration; makes up 21% of the air we breathe.",
+    "gridPosition": {
+      "row": 2,
+      "column": 16
+    },
+    "slug": "o"
+  },
+  {
+    "atomicNumber": 9,
+    "symbol": "F",
+    "name": "Fluorine",
+    "atomicMass": 18.998,
+    "category": "hal",
+    "categoryLabel": "Halogen",
+    "period": 2,
+    "group": 17,
+    "block": "p",
+    "phaseAtSTP": "gas",
+    "fact": "Most reactive element; added to toothpaste to fight decay.",
+    "gridPosition": {
+      "row": 2,
+      "column": 17
+    },
+    "slug": "f"
+  },
+  {
+    "atomicNumber": 10,
+    "symbol": "Ne",
+    "name": "Neon",
+    "atomicMass": 20.18,
+    "category": "ng",
+    "categoryLabel": "Noble gas",
+    "period": 2,
+    "group": 18,
+    "block": "p",
+    "phaseAtSTP": "gas",
+    "fact": "Glows orange-red in the electric signs that bear its name.",
+    "gridPosition": {
+      "row": 2,
+      "column": 18
+    },
+    "slug": "ne"
+  },
+  {
+    "atomicNumber": 11,
+    "symbol": "Na",
+    "name": "Sodium",
+    "atomicMass": 22.99,
+    "category": "am",
+    "categoryLabel": "Alkali metal",
+    "period": 3,
+    "group": 1,
+    "block": "s",
+    "phaseAtSTP": "solid",
+    "fact": "Reacts violently with water; essential for nerve function.",
+    "gridPosition": {
+      "row": 3,
+      "column": 1
+    },
+    "slug": "na"
+  },
+  {
+    "atomicNumber": 12,
+    "symbol": "Mg",
+    "name": "Magnesium",
+    "atomicMass": 24.305,
+    "category": "ae",
+    "categoryLabel": "Alkaline earth metal",
+    "period": 3,
+    "group": 2,
+    "block": "s",
+    "phaseAtSTP": "solid",
+    "fact": "Burns with a brilliant white flame; vital in chlorophyll.",
+    "gridPosition": {
+      "row": 3,
+      "column": 2
+    },
+    "slug": "mg"
+  },
+  {
+    "atomicNumber": 13,
+    "symbol": "Al",
+    "name": "Aluminium",
+    "atomicMass": 26.982,
+    "category": "pm",
+    "categoryLabel": "Post-transition metal",
+    "period": 3,
+    "group": 13,
+    "block": "p",
+    "phaseAtSTP": "solid",
+    "fact": "Lightweight, corrosion-resistant metal used in aircraft and cans.",
+    "gridPosition": {
+      "row": 3,
+      "column": 13
+    },
+    "slug": "al"
+  },
+  {
+    "atomicNumber": 14,
+    "symbol": "Si",
+    "name": "Silicon",
+    "atomicMass": 28.085,
+    "category": "me",
+    "categoryLabel": "Metalloid",
+    "period": 3,
+    "group": 14,
+    "block": "p",
+    "phaseAtSTP": "solid",
+    "fact": "Foundation of computer chips and glass.",
+    "gridPosition": {
+      "row": 3,
+      "column": 14
+    },
+    "slug": "si"
+  },
+  {
+    "atomicNumber": 15,
+    "symbol": "P",
+    "name": "Phosphorus",
+    "atomicMass": 30.974,
+    "category": "nm",
+    "categoryLabel": "Reactive nonmetal",
+    "period": 3,
+    "group": 15,
+    "block": "p",
+    "phaseAtSTP": "solid",
+    "fact": "Essential to DNA and ATP; glows faintly in the dark.",
+    "gridPosition": {
+      "row": 3,
+      "column": 15
+    },
+    "slug": "p"
+  },
+  {
+    "atomicNumber": 16,
+    "symbol": "S",
+    "name": "Sulfur",
+    "atomicMass": 32.06,
+    "category": "nm",
+    "categoryLabel": "Reactive nonmetal",
+    "period": 3,
+    "group": 16,
+    "block": "p",
+    "phaseAtSTP": "solid",
+    "fact": "Smells of rotten eggs when combined with hydrogen.",
+    "gridPosition": {
+      "row": 3,
+      "column": 16
+    },
+    "slug": "s"
+  },
+  {
+    "atomicNumber": 17,
+    "symbol": "Cl",
+    "name": "Chlorine",
+    "atomicMass": 35.45,
+    "category": "hal",
+    "categoryLabel": "Halogen",
+    "period": 3,
+    "group": 17,
+    "block": "p",
+    "phaseAtSTP": "gas",
+    "fact": "Used to disinfect drinking water and swimming pools.",
+    "gridPosition": {
+      "row": 3,
+      "column": 17
+    },
+    "slug": "cl"
+  },
+  {
+    "atomicNumber": 18,
+    "symbol": "Ar",
+    "name": "Argon",
+    "atomicMass": 39.948,
+    "category": "ng",
+    "categoryLabel": "Noble gas",
+    "period": 3,
+    "group": 18,
+    "block": "p",
+    "phaseAtSTP": "gas",
+    "fact": "Fills incandescent bulbs to stop the filament burning out.",
+    "gridPosition": {
+      "row": 3,
+      "column": 18
+    },
+    "slug": "ar"
+  },
+  {
+    "atomicNumber": 19,
+    "symbol": "K",
+    "name": "Potassium",
+    "atomicMass": 39.098,
+    "category": "am",
+    "categoryLabel": "Alkali metal",
+    "period": 4,
+    "group": 1,
+    "block": "s",
+    "phaseAtSTP": "solid",
+    "fact": "Critical for nerve signals and muscle contraction.",
+    "gridPosition": {
+      "row": 4,
+      "column": 1
+    },
+    "slug": "k"
+  },
+  {
+    "atomicNumber": 20,
+    "symbol": "Ca",
+    "name": "Calcium",
+    "atomicMass": 40.078,
+    "category": "ae",
+    "categoryLabel": "Alkaline earth metal",
+    "period": 4,
+    "group": 2,
+    "block": "s",
+    "phaseAtSTP": "solid",
+    "fact": "Builds bones and teeth; fifth most abundant element in the body.",
+    "gridPosition": {
+      "row": 4,
+      "column": 2
+    },
+    "slug": "ca"
+  },
+  {
+    "atomicNumber": 21,
+    "symbol": "Sc",
+    "name": "Scandium",
+    "atomicMass": 44.956,
+    "category": "tm",
+    "categoryLabel": "Transition metal",
+    "period": 4,
+    "group": 3,
+    "block": "d",
+    "phaseAtSTP": "solid",
+    "fact": "Rare metal used in aerospace alloys and stadium floodlights.",
+    "gridPosition": {
+      "row": 4,
+      "column": 3
+    },
+    "slug": "sc"
+  },
+  {
+    "atomicNumber": 22,
+    "symbol": "Ti",
+    "name": "Titanium",
+    "atomicMass": 47.867,
+    "category": "tm",
+    "categoryLabel": "Transition metal",
+    "period": 4,
+    "group": 4,
+    "block": "d",
+    "phaseAtSTP": "solid",
+    "fact": "Strong as steel, half the weight; used in implants.",
+    "gridPosition": {
+      "row": 4,
+      "column": 4
+    },
+    "slug": "ti"
+  },
+  {
+    "atomicNumber": 23,
+    "symbol": "V",
+    "name": "Vanadium",
+    "atomicMass": 50.942,
+    "category": "tm",
+    "categoryLabel": "Transition metal",
+    "period": 4,
+    "group": 5,
+    "block": "d",
+    "phaseAtSTP": "solid",
+    "fact": "Strengthens steel; named after a Scandinavian goddess.",
+    "gridPosition": {
+      "row": 4,
+      "column": 5
+    },
+    "slug": "v"
+  },
+  {
+    "atomicNumber": 24,
+    "symbol": "Cr",
+    "name": "Chromium",
+    "atomicMass": 51.996,
+    "category": "tm",
+    "categoryLabel": "Transition metal",
+    "period": 4,
+    "group": 6,
+    "block": "d",
+    "phaseAtSTP": "solid",
+    "fact": "Gives stainless steel its shine and corrosion resistance.",
+    "gridPosition": {
+      "row": 4,
+      "column": 6
+    },
+    "slug": "cr"
+  },
+  {
+    "atomicNumber": 25,
+    "symbol": "Mn",
+    "name": "Manganese",
+    "atomicMass": 54.938,
+    "category": "tm",
+    "categoryLabel": "Transition metal",
+    "period": 4,
+    "group": 7,
+    "block": "d",
+    "phaseAtSTP": "solid",
+    "fact": "Essential trace nutrient; hardens steel.",
+    "gridPosition": {
+      "row": 4,
+      "column": 7
+    },
+    "slug": "mn"
+  },
+  {
+    "atomicNumber": 26,
+    "symbol": "Fe",
+    "name": "Iron",
+    "atomicMass": 55.845,
+    "category": "tm",
+    "categoryLabel": "Transition metal",
+    "period": 4,
+    "group": 8,
+    "block": "d",
+    "phaseAtSTP": "solid",
+    "fact": "Core of Earth's magnetic field; most used metal on the planet.",
+    "gridPosition": {
+      "row": 4,
+      "column": 8
+    },
+    "slug": "fe"
+  },
+  {
+    "atomicNumber": 27,
+    "symbol": "Co",
+    "name": "Cobalt",
+    "atomicMass": 58.933,
+    "category": "tm",
+    "categoryLabel": "Transition metal",
+    "period": 4,
+    "group": 9,
+    "block": "d",
+    "phaseAtSTP": "solid",
+    "fact": "Gives glass and ceramics a deep blue colour.",
+    "gridPosition": {
+      "row": 4,
+      "column": 9
+    },
+    "slug": "co"
+  },
+  {
+    "atomicNumber": 28,
+    "symbol": "Ni",
+    "name": "Nickel",
+    "atomicMass": 58.693,
+    "category": "tm",
+    "categoryLabel": "Transition metal",
+    "period": 4,
+    "group": 10,
+    "block": "d",
+    "phaseAtSTP": "solid",
+    "fact": "Used in coins and rechargeable battery electrodes.",
+    "gridPosition": {
+      "row": 4,
+      "column": 10
+    },
+    "slug": "ni"
+  },
+  {
+    "atomicNumber": 29,
+    "symbol": "Cu",
+    "name": "Copper",
+    "atomicMass": 63.546,
+    "category": "tm",
+    "categoryLabel": "Transition metal",
+    "period": 4,
+    "group": 11,
+    "block": "d",
+    "phaseAtSTP": "solid",
+    "fact": "Excellent conductor; used in electrical wiring for millennia.",
+    "gridPosition": {
+      "row": 4,
+      "column": 11
+    },
+    "slug": "cu"
+  },
+  {
+    "atomicNumber": 30,
+    "symbol": "Zn",
+    "name": "Zinc",
+    "atomicMass": 65.38,
+    "category": "tm",
+    "categoryLabel": "Transition metal",
+    "period": 4,
+    "group": 12,
+    "block": "d",
+    "phaseAtSTP": "solid",
+    "fact": "Coats steel to prevent rust; essential trace nutrient.",
+    "gridPosition": {
+      "row": 4,
+      "column": 12
+    },
+    "slug": "zn"
+  },
+  {
+    "atomicNumber": 31,
+    "symbol": "Ga",
+    "name": "Gallium",
+    "atomicMass": 69.723,
+    "category": "pm",
+    "categoryLabel": "Post-transition metal",
+    "period": 4,
+    "group": 13,
+    "block": "p",
+    "phaseAtSTP": "solid",
+    "fact": "Melts in the palm of your hand at 30°C.",
+    "gridPosition": {
+      "row": 4,
+      "column": 13
+    },
+    "slug": "ga"
+  },
+  {
+    "atomicNumber": 32,
+    "symbol": "Ge",
+    "name": "Germanium",
+    "atomicMass": 72.63,
+    "category": "me",
+    "categoryLabel": "Metalloid",
+    "period": 4,
+    "group": 14,
+    "block": "p",
+    "phaseAtSTP": "solid",
+    "fact": "Key semiconductor before silicon took over electronics.",
+    "gridPosition": {
+      "row": 4,
+      "column": 14
+    },
+    "slug": "ge"
+  },
+  {
+    "atomicNumber": 33,
+    "symbol": "As",
+    "name": "Arsenic",
+    "atomicMass": 74.922,
+    "category": "me",
+    "categoryLabel": "Metalloid",
+    "period": 4,
+    "group": 15,
+    "block": "p",
+    "phaseAtSTP": "solid",
+    "fact": "Notorious poison; also used in semiconductors.",
+    "gridPosition": {
+      "row": 4,
+      "column": 15
+    },
+    "slug": "as"
+  },
+  {
+    "atomicNumber": 34,
+    "symbol": "Se",
+    "name": "Selenium",
+    "atomicMass": 78.971,
+    "category": "nm",
+    "categoryLabel": "Reactive nonmetal",
+    "period": 4,
+    "group": 16,
+    "block": "p",
+    "phaseAtSTP": "solid",
+    "fact": "Used in solar cells and to give glass a red tint.",
+    "gridPosition": {
+      "row": 4,
+      "column": 16
+    },
+    "slug": "se"
+  },
+  {
+    "atomicNumber": 35,
+    "symbol": "Br",
+    "name": "Bromine",
+    "atomicMass": 79.904,
+    "category": "hal",
+    "categoryLabel": "Halogen",
+    "period": 4,
+    "group": 17,
+    "block": "p",
+    "phaseAtSTP": "liquid",
+    "fact": "One of only two elements liquid at room temperature.",
+    "gridPosition": {
+      "row": 4,
+      "column": 17
+    },
+    "slug": "br"
+  },
+  {
+    "atomicNumber": 36,
+    "symbol": "Kr",
+    "name": "Krypton",
+    "atomicMass": 83.798,
+    "category": "ng",
+    "categoryLabel": "Noble gas",
+    "period": 4,
+    "group": 18,
+    "block": "p",
+    "phaseAtSTP": "gas",
+    "fact": "Used in high-performance photographic flash lamps.",
+    "gridPosition": {
+      "row": 4,
+      "column": 18
+    },
+    "slug": "kr"
+  },
+  {
+    "atomicNumber": 37,
+    "symbol": "Rb",
+    "name": "Rubidium",
+    "atomicMass": 85.468,
+    "category": "am",
+    "categoryLabel": "Alkali metal",
+    "period": 5,
+    "group": 1,
+    "block": "s",
+    "phaseAtSTP": "solid",
+    "fact": "Highly reactive alkali metal used in atomic clocks.",
+    "gridPosition": {
+      "row": 5,
+      "column": 1
+    },
+    "slug": "rb"
+  },
+  {
+    "atomicNumber": 38,
+    "symbol": "Sr",
+    "name": "Strontium",
+    "atomicMass": 87.62,
+    "category": "ae",
+    "categoryLabel": "Alkaline earth metal",
+    "period": 5,
+    "group": 2,
+    "block": "s",
+    "phaseAtSTP": "solid",
+    "fact": "Gives fireworks their brilliant red colour.",
+    "gridPosition": {
+      "row": 5,
+      "column": 2
+    },
+    "slug": "sr"
+  },
+  {
+    "atomicNumber": 39,
+    "symbol": "Y",
+    "name": "Yttrium",
+    "atomicMass": 88.906,
+    "category": "tm",
+    "categoryLabel": "Transition metal",
+    "period": 5,
+    "group": 3,
+    "block": "d",
+    "phaseAtSTP": "solid",
+    "fact": "Used in LED phosphors and superconductors.",
+    "gridPosition": {
+      "row": 5,
+      "column": 3
+    },
+    "slug": "y"
+  },
+  {
+    "atomicNumber": 40,
+    "symbol": "Zr",
+    "name": "Zirconium",
+    "atomicMass": 91.224,
+    "category": "tm",
+    "categoryLabel": "Transition metal",
+    "period": 5,
+    "group": 4,
+    "block": "d",
+    "phaseAtSTP": "solid",
+    "fact": "Highly corrosion-resistant; used in nuclear reactor cladding.",
+    "gridPosition": {
+      "row": 5,
+      "column": 4
+    },
+    "slug": "zr"
+  },
+  {
+    "atomicNumber": 41,
+    "symbol": "Nb",
+    "name": "Niobium",
+    "atomicMass": 92.906,
+    "category": "tm",
+    "categoryLabel": "Transition metal",
+    "period": 5,
+    "group": 5,
+    "block": "d",
+    "phaseAtSTP": "solid",
+    "fact": "Superconducting metal used in MRI magnet wiring.",
+    "gridPosition": {
+      "row": 5,
+      "column": 5
+    },
+    "slug": "nb"
+  },
+  {
+    "atomicNumber": 42,
+    "symbol": "Mo",
+    "name": "Molybdenum",
+    "atomicMass": 95.95,
+    "category": "tm",
+    "categoryLabel": "Transition metal",
+    "period": 5,
+    "group": 6,
+    "block": "d",
+    "phaseAtSTP": "solid",
+    "fact": "Strengthens steel at high temperatures for jet engines.",
+    "gridPosition": {
+      "row": 5,
+      "column": 6
+    },
+    "slug": "mo"
+  },
+  {
+    "atomicNumber": 43,
+    "symbol": "Tc",
+    "name": "Technetium",
+    "atomicMass": 97.0,
+    "category": "tm",
+    "categoryLabel": "Transition metal",
+    "period": 5,
+    "group": 7,
+    "block": "d",
+    "phaseAtSTP": "solid",
+    "fact": "First artificially produced element; used in medical imaging.",
+    "gridPosition": {
+      "row": 5,
+      "column": 7
+    },
+    "slug": "tc"
+  },
+  {
+    "atomicNumber": 44,
+    "symbol": "Ru",
+    "name": "Ruthenium",
+    "atomicMass": 101.07,
+    "category": "tm",
+    "categoryLabel": "Transition metal",
+    "period": 5,
+    "group": 8,
+    "block": "d",
+    "phaseAtSTP": "solid",
+    "fact": "Hardens platinum and palladium alloys.",
+    "gridPosition": {
+      "row": 5,
+      "column": 8
+    },
+    "slug": "ru"
+  },
+  {
+    "atomicNumber": 45,
+    "symbol": "Rh",
+    "name": "Rhodium",
+    "atomicMass": 102.906,
+    "category": "tm",
+    "categoryLabel": "Transition metal",
+    "period": 5,
+    "group": 9,
+    "block": "d",
+    "phaseAtSTP": "solid",
+    "fact": "One of the rarest, most reflective metals; coats jewellery.",
+    "gridPosition": {
+      "row": 5,
+      "column": 9
+    },
+    "slug": "rh"
+  },
+  {
+    "atomicNumber": 46,
+    "symbol": "Pd",
+    "name": "Palladium",
+    "atomicMass": 106.42,
+    "category": "tm",
+    "categoryLabel": "Transition metal",
+    "period": 5,
+    "group": 10,
+    "block": "d",
+    "phaseAtSTP": "solid",
+    "fact": "Key catalyst in catalytic converters.",
+    "gridPosition": {
+      "row": 5,
+      "column": 10
+    },
+    "slug": "pd"
+  },
+  {
+    "atomicNumber": 47,
+    "symbol": "Ag",
+    "name": "Silver",
+    "atomicMass": 107.868,
+    "category": "tm",
+    "categoryLabel": "Transition metal",
+    "period": 5,
+    "group": 11,
+    "block": "d",
+    "phaseAtSTP": "solid",
+    "fact": "Best electrical conductor of any element.",
+    "gridPosition": {
+      "row": 5,
+      "column": 11
+    },
+    "slug": "ag"
+  },
+  {
+    "atomicNumber": 48,
+    "symbol": "Cd",
+    "name": "Cadmium",
+    "atomicMass": 112.414,
+    "category": "tm",
+    "categoryLabel": "Transition metal",
+    "period": 5,
+    "group": 12,
+    "block": "d",
+    "phaseAtSTP": "solid",
+    "fact": "Used in rechargeable nickel-cadmium batteries.",
+    "gridPosition": {
+      "row": 5,
+      "column": 12
+    },
+    "slug": "cd"
+  },
+  {
+    "atomicNumber": 49,
+    "symbol": "In",
+    "name": "Indium",
+    "atomicMass": 114.818,
+    "category": "pm",
+    "categoryLabel": "Post-transition metal",
+    "period": 5,
+    "group": 13,
+    "block": "p",
+    "phaseAtSTP": "solid",
+    "fact": "Coats touchscreens as a transparent conductor.",
+    "gridPosition": {
+      "row": 5,
+      "column": 13
+    },
+    "slug": "in"
+  },
+  {
+    "atomicNumber": 50,
+    "symbol": "Sn",
+    "name": "Tin",
+    "atomicMass": 118.71,
+    "category": "pm",
+    "categoryLabel": "Post-transition metal",
+    "period": 5,
+    "group": 14,
+    "block": "p",
+    "phaseAtSTP": "solid",
+    "fact": "Prevents corrosion; alloyed into bronze since antiquity.",
+    "gridPosition": {
+      "row": 5,
+      "column": 14
+    },
+    "slug": "sn"
+  },
+  {
+    "atomicNumber": 51,
+    "symbol": "Sb",
+    "name": "Antimony",
+    "atomicMass": 121.76,
+    "category": "me",
+    "categoryLabel": "Metalloid",
+    "period": 5,
+    "group": 15,
+    "block": "p",
+    "phaseAtSTP": "solid",
+    "fact": "Used since antiquity in cosmetics and alloys.",
+    "gridPosition": {
+      "row": 5,
+      "column": 15
+    },
+    "slug": "sb"
+  },
+  {
+    "atomicNumber": 52,
+    "symbol": "Te",
+    "name": "Tellurium",
+    "atomicMass": 127.6,
+    "category": "me",
+    "categoryLabel": "Metalloid",
+    "period": 5,
+    "group": 16,
+    "block": "p",
+    "phaseAtSTP": "solid",
+    "fact": "Alloyed into steel to improve machinability.",
+    "gridPosition": {
+      "row": 5,
+      "column": 16
+    },
+    "slug": "te"
+  },
+  {
+    "atomicNumber": 53,
+    "symbol": "I",
+    "name": "Iodine",
+    "atomicMass": 126.904,
+    "category": "hal",
+    "categoryLabel": "Halogen",
+    "period": 5,
+    "group": 17,
+    "block": "p",
+    "phaseAtSTP": "solid",
+    "fact": "Essential for thyroid hormone production.",
+    "gridPosition": {
+      "row": 5,
+      "column": 17
+    },
+    "slug": "i"
+  },
+  {
+    "atomicNumber": 54,
+    "symbol": "Xe",
+    "name": "Xenon",
+    "atomicMass": 131.293,
+    "category": "ng",
+    "categoryLabel": "Noble gas",
+    "period": 5,
+    "group": 18,
+    "block": "p",
+    "phaseAtSTP": "gas",
+    "fact": "Powers ion thrusters on spacecraft.",
+    "gridPosition": {
+      "row": 5,
+      "column": 18
+    },
+    "slug": "xe"
+  },
+  {
+    "atomicNumber": 55,
+    "symbol": "Cs",
+    "name": "Caesium",
+    "atomicMass": 132.905,
+    "category": "am",
+    "categoryLabel": "Alkali metal",
+    "period": 6,
+    "group": 1,
+    "block": "s",
+    "phaseAtSTP": "solid",
+    "fact": "Defines the length of a second via its atomic clock.",
+    "gridPosition": {
+      "row": 6,
+      "column": 1
+    },
+    "slug": "cs"
+  },
+  {
+    "atomicNumber": 56,
+    "symbol": "Ba",
+    "name": "Barium",
+    "atomicMass": 137.327,
+    "category": "ae",
+    "categoryLabel": "Alkaline earth metal",
+    "period": 6,
+    "group": 2,
+    "block": "s",
+    "phaseAtSTP": "solid",
+    "fact": "Swallowed as a contrast agent for medical X-rays.",
+    "gridPosition": {
+      "row": 6,
+      "column": 2
+    },
+    "slug": "ba"
+  },
+  {
+    "atomicNumber": 57,
+    "symbol": "La",
+    "name": "Lanthanum",
+    "atomicMass": 138.905,
+    "category": "la",
+    "categoryLabel": "Lanthanide",
+    "period": 6,
+    "group": 3,
+    "block": "f",
+    "phaseAtSTP": "solid",
+    "fact": "Named the whole lanthanide series after itself.",
+    "gridPosition": {
+      "row": 9,
+      "column": 3
+    },
+    "slug": "la"
+  },
+  {
+    "atomicNumber": 58,
+    "symbol": "Ce",
+    "name": "Cerium",
+    "atomicMass": 140.116,
+    "category": "la",
+    "categoryLabel": "Lanthanide",
+    "period": 6,
+    "group": 4,
+    "block": "f",
+    "phaseAtSTP": "solid",
+    "fact": "Most abundant rare-earth element; used in catalytic converters.",
+    "gridPosition": {
+      "row": 9,
+      "column": 4
+    },
+    "slug": "ce"
+  },
+  {
+    "atomicNumber": 59,
+    "symbol": "Pr",
+    "name": "Praseodymium",
+    "atomicMass": 140.908,
+    "category": "la",
+    "categoryLabel": "Lanthanide",
+    "period": 6,
+    "group": 5,
+    "block": "f",
+    "phaseAtSTP": "solid",
+    "fact": "Colours glass and ceramics a bright yellow-green.",
+    "gridPosition": {
+      "row": 9,
+      "column": 5
+    },
+    "slug": "pr"
+  },
+  {
+    "atomicNumber": 60,
+    "symbol": "Nd",
+    "name": "Neodymium",
+    "atomicMass": 144.242,
+    "category": "la",
+    "categoryLabel": "Lanthanide",
+    "period": 6,
+    "group": 6,
+    "block": "f",
+    "phaseAtSTP": "solid",
+    "fact": "Powers the strongest permanent magnets known.",
+    "gridPosition": {
+      "row": 9,
+      "column": 6
+    },
+    "slug": "nd"
+  },
+  {
+    "atomicNumber": 61,
+    "symbol": "Pm",
+    "name": "Promethium",
+    "atomicMass": 145.0,
+    "category": "la",
+    "categoryLabel": "Lanthanide",
+    "period": 6,
+    "group": 7,
+    "block": "f",
+    "phaseAtSTP": "solid",
+    "fact": "Only lanthanide with no stable isotopes; used in luminous paint.",
+    "gridPosition": {
+      "row": 9,
+      "column": 7
+    },
+    "slug": "pm"
+  },
+  {
+    "atomicNumber": 62,
+    "symbol": "Sm",
+    "name": "Samarium",
+    "atomicMass": 150.36,
+    "category": "la",
+    "categoryLabel": "Lanthanide",
+    "period": 6,
+    "group": 8,
+    "block": "f",
+    "phaseAtSTP": "solid",
+    "fact": "Used in high-temperature permanent magnets.",
+    "gridPosition": {
+      "row": 9,
+      "column": 8
+    },
+    "slug": "sm"
+  },
+  {
+    "atomicNumber": 63,
+    "symbol": "Eu",
+    "name": "Europium",
+    "atomicMass": 151.964,
+    "category": "la",
+    "categoryLabel": "Lanthanide",
+    "period": 6,
+    "group": 9,
+    "block": "f",
+    "phaseAtSTP": "solid",
+    "fact": "Provides the red phosphor in old CRT televisions.",
+    "gridPosition": {
+      "row": 9,
+      "column": 9
+    },
+    "slug": "eu"
+  },
+  {
+    "atomicNumber": 64,
+    "symbol": "Gd",
+    "name": "Gadolinium",
+    "atomicMass": 157.25,
+    "category": "la",
+    "categoryLabel": "Lanthanide",
+    "period": 6,
+    "group": 10,
+    "block": "f",
+    "phaseAtSTP": "solid",
+    "fact": "Used as a contrast agent in MRI scans.",
+    "gridPosition": {
+      "row": 9,
+      "column": 10
+    },
+    "slug": "gd"
+  },
+  {
+    "atomicNumber": 65,
+    "symbol": "Tb",
+    "name": "Terbium",
+    "atomicMass": 158.925,
+    "category": "la",
+    "categoryLabel": "Lanthanide",
+    "period": 6,
+    "group": 11,
+    "block": "f",
+    "phaseAtSTP": "solid",
+    "fact": "Green phosphor in energy-efficient lighting.",
+    "gridPosition": {
+      "row": 9,
+      "column": 11
+    },
+    "slug": "tb"
+  },
+  {
+    "atomicNumber": 66,
+    "symbol": "Dy",
+    "name": "Dysprosium",
+    "atomicMass": 162.5,
+    "category": "la",
+    "categoryLabel": "Lanthanide",
+    "period": 6,
+    "group": 12,
+    "block": "f",
+    "phaseAtSTP": "solid",
+    "fact": "Boosts the heat resistance of neodymium magnets.",
+    "gridPosition": {
+      "row": 9,
+      "column": 12
+    },
+    "slug": "dy"
+  },
+  {
+    "atomicNumber": 67,
+    "symbol": "Ho",
+    "name": "Holmium",
+    "atomicMass": 164.93,
+    "category": "la",
+    "categoryLabel": "Lanthanide",
+    "period": 6,
+    "group": 13,
+    "block": "f",
+    "phaseAtSTP": "solid",
+    "fact": "Has the highest magnetic strength of any element.",
+    "gridPosition": {
+      "row": 9,
+      "column": 13
+    },
+    "slug": "ho"
+  },
+  {
+    "atomicNumber": 68,
+    "symbol": "Er",
+    "name": "Erbium",
+    "atomicMass": 167.259,
+    "category": "la",
+    "categoryLabel": "Lanthanide",
+    "period": 6,
+    "group": 14,
+    "block": "f",
+    "phaseAtSTP": "solid",
+    "fact": "Amplifies signals in fibre-optic communication cables.",
+    "gridPosition": {
+      "row": 9,
+      "column": 14
+    },
+    "slug": "er"
+  },
+  {
+    "atomicNumber": 69,
+    "symbol": "Tm",
+    "name": "Thulium",
+    "atomicMass": 168.934,
+    "category": "la",
+    "categoryLabel": "Lanthanide",
+    "period": 6,
+    "group": 15,
+    "block": "f",
+    "phaseAtSTP": "solid",
+    "fact": "Rarest naturally occurring lanthanide.",
+    "gridPosition": {
+      "row": 9,
+      "column": 15
+    },
+    "slug": "tm"
+  },
+  {
+    "atomicNumber": 70,
+    "symbol": "Yb",
+    "name": "Ytterbium",
+    "atomicMass": 173.045,
+    "category": "la",
+    "categoryLabel": "Lanthanide",
+    "period": 6,
+    "group": 16,
+    "block": "f",
+    "phaseAtSTP": "solid",
+    "fact": "Used in atomic clocks more precise than caesium's.",
+    "gridPosition": {
+      "row": 9,
+      "column": 16
+    },
+    "slug": "yb"
+  },
+  {
+    "atomicNumber": 71,
+    "symbol": "Lu",
+    "name": "Lutetium",
+    "atomicMass": 174.967,
+    "category": "la",
+    "categoryLabel": "Lanthanide",
+    "period": 6,
+    "group": 17,
+    "block": "f",
+    "phaseAtSTP": "solid",
+    "fact": "Densest of the lanthanides; used in PET scan detectors.",
+    "gridPosition": {
+      "row": 9,
+      "column": 17
+    },
+    "slug": "lu"
+  },
+  {
+    "atomicNumber": 72,
+    "symbol": "Hf",
+    "name": "Hafnium",
+    "atomicMass": 178.49,
+    "category": "tm",
+    "categoryLabel": "Transition metal",
+    "period": 6,
+    "group": 4,
+    "block": "d",
+    "phaseAtSTP": "solid",
+    "fact": "Absorbs neutrons well; used in nuclear reactor control rods.",
+    "gridPosition": {
+      "row": 6,
+      "column": 4
+    },
+    "slug": "hf"
+  },
+  {
+    "atomicNumber": 73,
+    "symbol": "Ta",
+    "name": "Tantalum",
+    "atomicMass": 180.948,
+    "category": "tm",
+    "categoryLabel": "Transition metal",
+    "period": 6,
+    "group": 5,
+    "block": "d",
+    "phaseAtSTP": "solid",
+    "fact": "Highly corrosion-resistant; used in surgical implants and capacitors.",
+    "gridPosition": {
+      "row": 6,
+      "column": 5
+    },
+    "slug": "ta"
+  },
+  {
+    "atomicNumber": 74,
+    "symbol": "W",
+    "name": "Tungsten",
+    "atomicMass": 183.84,
+    "category": "tm",
+    "categoryLabel": "Transition metal",
+    "period": 6,
+    "group": 6,
+    "block": "d",
+    "phaseAtSTP": "solid",
+    "fact": "Highest melting point of any metal; lit old filament bulbs.",
+    "gridPosition": {
+      "row": 6,
+      "column": 6
+    },
+    "slug": "w"
+  },
+  {
+    "atomicNumber": 75,
+    "symbol": "Re",
+    "name": "Rhenium",
+    "atomicMass": 186.207,
+    "category": "tm",
+    "categoryLabel": "Transition metal",
+    "period": 6,
+    "group": 7,
+    "block": "d",
+    "phaseAtSTP": "solid",
+    "fact": "One of the rarest elements in Earth's crust.",
+    "gridPosition": {
+      "row": 6,
+      "column": 7
+    },
+    "slug": "re"
+  },
+  {
+    "atomicNumber": 76,
+    "symbol": "Os",
+    "name": "Osmium",
+    "atomicMass": 190.23,
+    "category": "tm",
+    "categoryLabel": "Transition metal",
+    "period": 6,
+    "group": 8,
+    "block": "d",
+    "phaseAtSTP": "solid",
+    "fact": "Densest naturally occurring element.",
+    "gridPosition": {
+      "row": 6,
+      "column": 8
+    },
+    "slug": "os"
+  },
+  {
+    "atomicNumber": 77,
+    "symbol": "Ir",
+    "name": "Iridium",
+    "atomicMass": 192.217,
+    "category": "tm",
+    "categoryLabel": "Transition metal",
+    "period": 6,
+    "group": 9,
+    "block": "d",
+    "phaseAtSTP": "solid",
+    "fact": "A spike of it in rock layers marks the dinosaur extinction.",
+    "gridPosition": {
+      "row": 6,
+      "column": 9
+    },
+    "slug": "ir"
+  },
+  {
+    "atomicNumber": 78,
+    "symbol": "Pt",
+    "name": "Platinum",
+    "atomicMass": 195.084,
+    "category": "tm",
+    "categoryLabel": "Transition metal",
+    "period": 6,
+    "group": 10,
+    "block": "d",
+    "phaseAtSTP": "solid",
+    "fact": "Prized catalyst and jewellery metal, denser than gold.",
+    "gridPosition": {
+      "row": 6,
+      "column": 10
+    },
+    "slug": "pt"
+  },
+  {
+    "atomicNumber": 79,
+    "symbol": "Au",
+    "name": "Gold",
+    "atomicMass": 196.967,
+    "category": "tm",
+    "categoryLabel": "Transition metal",
+    "period": 6,
+    "group": 11,
+    "block": "d",
+    "phaseAtSTP": "solid",
+    "fact": "Prized for millennia; never tarnishes.",
+    "gridPosition": {
+      "row": 6,
+      "column": 11
+    },
+    "slug": "au"
+  },
+  {
+    "atomicNumber": 80,
+    "symbol": "Hg",
+    "name": "Mercury",
+    "atomicMass": 200.592,
+    "category": "tm",
+    "categoryLabel": "Transition metal",
+    "period": 6,
+    "group": 12,
+    "block": "d",
+    "phaseAtSTP": "liquid",
+    "fact": "The only metal liquid at room temperature.",
+    "gridPosition": {
+      "row": 6,
+      "column": 12
+    },
+    "slug": "hg"
+  },
+  {
+    "atomicNumber": 81,
+    "symbol": "Tl",
+    "name": "Thallium",
+    "atomicMass": 204.38,
+    "category": "pm",
+    "categoryLabel": "Post-transition metal",
+    "period": 6,
+    "group": 13,
+    "block": "p",
+    "phaseAtSTP": "solid",
+    "fact": "Historically used as an odourless, tasteless poison.",
+    "gridPosition": {
+      "row": 6,
+      "column": 13
+    },
+    "slug": "tl"
+  },
+  {
+    "atomicNumber": 82,
+    "symbol": "Pb",
+    "name": "Lead",
+    "atomicMass": 207.2,
+    "category": "pm",
+    "categoryLabel": "Post-transition metal",
+    "period": 6,
+    "group": 14,
+    "block": "p",
+    "phaseAtSTP": "solid",
+    "fact": "Dense, soft metal once common in pipes and paint.",
+    "gridPosition": {
+      "row": 6,
+      "column": 14
+    },
+    "slug": "pb"
+  },
+  {
+    "atomicNumber": 83,
+    "symbol": "Bi",
+    "name": "Bismuth",
+    "atomicMass": 208.98,
+    "category": "pm",
+    "categoryLabel": "Post-transition metal",
+    "period": 6,
+    "group": 15,
+    "block": "p",
+    "phaseAtSTP": "solid",
+    "fact": "Forms colourful, iridescent crystals; least toxic heavy metal.",
+    "gridPosition": {
+      "row": 6,
+      "column": 15
+    },
+    "slug": "bi"
+  },
+  {
+    "atomicNumber": 84,
+    "symbol": "Po",
+    "name": "Polonium",
+    "atomicMass": 209.0,
+    "category": "me",
+    "categoryLabel": "Metalloid",
+    "period": 6,
+    "group": 16,
+    "block": "p",
+    "phaseAtSTP": "solid",
+    "fact": "Intensely radioactive; discovered by Marie Curie.",
+    "gridPosition": {
+      "row": 6,
+      "column": 16
+    },
+    "slug": "po"
+  },
+  {
+    "atomicNumber": 85,
+    "symbol": "At",
+    "name": "Astatine",
+    "atomicMass": 210.0,
+    "category": "hal",
+    "categoryLabel": "Halogen",
+    "period": 6,
+    "group": 17,
+    "block": "p",
+    "phaseAtSTP": "solid",
+    "fact": "Rarest naturally occurring element on Earth.",
+    "gridPosition": {
+      "row": 6,
+      "column": 17
+    },
+    "slug": "at"
+  },
+  {
+    "atomicNumber": 86,
+    "symbol": "Rn",
+    "name": "Radon",
+    "atomicMass": 222.0,
+    "category": "ng",
+    "categoryLabel": "Noble gas",
+    "period": 6,
+    "group": 18,
+    "block": "p",
+    "phaseAtSTP": "gas",
+    "fact": "Radioactive gas that seeps from the ground into homes.",
+    "gridPosition": {
+      "row": 6,
+      "column": 18
+    },
+    "slug": "rn"
+  },
+  {
+    "atomicNumber": 87,
+    "symbol": "Fr",
+    "name": "Francium",
+    "atomicMass": 223.0,
+    "category": "am",
+    "categoryLabel": "Alkali metal",
+    "period": 7,
+    "group": 1,
+    "block": "s",
+    "phaseAtSTP": "solid",
+    "fact": "Among the rarest elements in Earth's crust; intensely radioactive.",
+    "gridPosition": {
+      "row": 7,
+      "column": 1
+    },
+    "slug": "fr"
+  },
+  {
+    "atomicNumber": 88,
+    "symbol": "Ra",
+    "name": "Radium",
+    "atomicMass": 226.0,
+    "category": "ae",
+    "categoryLabel": "Alkaline earth metal",
+    "period": 7,
+    "group": 2,
+    "block": "s",
+    "phaseAtSTP": "solid",
+    "fact": "Once used in glow-in-the-dark watch dials.",
+    "gridPosition": {
+      "row": 7,
+      "column": 2
+    },
+    "slug": "ra"
+  },
+  {
+    "atomicNumber": 89,
+    "symbol": "Ac",
+    "name": "Actinium",
+    "atomicMass": 227.0,
+    "category": "ac",
+    "categoryLabel": "Actinide",
+    "period": 7,
+    "group": 3,
+    "block": "f",
+    "phaseAtSTP": "solid",
+    "fact": "Glows faintly blue in the dark from its own radioactivity.",
+    "gridPosition": {
+      "row": 10,
+      "column": 3
+    },
+    "slug": "ac"
+  },
+  {
+    "atomicNumber": 90,
+    "symbol": "Th",
+    "name": "Thorium",
+    "atomicMass": 232.038,
+    "category": "ac",
+    "categoryLabel": "Actinide",
+    "period": 7,
+    "group": 4,
+    "block": "f",
+    "phaseAtSTP": "solid",
+    "fact": "Proposed alternative nuclear fuel to uranium.",
+    "gridPosition": {
+      "row": 10,
+      "column": 4
+    },
+    "slug": "th"
+  },
+  {
+    "atomicNumber": 91,
+    "symbol": "Pa",
+    "name": "Protactinium",
+    "atomicMass": 231.036,
+    "category": "ac",
+    "categoryLabel": "Actinide",
+    "period": 7,
+    "group": 5,
+    "block": "f",
+    "phaseAtSTP": "solid",
+    "fact": "Rare and highly radioactive; found in trace amounts in uranium ore.",
+    "gridPosition": {
+      "row": 10,
+      "column": 5
+    },
+    "slug": "pa"
+  },
+  {
+    "atomicNumber": 92,
+    "symbol": "U",
+    "name": "Uranium",
+    "atomicMass": 238.029,
+    "category": "ac",
+    "categoryLabel": "Actinide",
+    "period": 7,
+    "group": 6,
+    "block": "f",
+    "phaseAtSTP": "solid",
+    "fact": "Fuels nuclear reactors and weapons.",
+    "gridPosition": {
+      "row": 10,
+      "column": 6
+    },
+    "slug": "u"
+  },
+  {
+    "atomicNumber": 93,
+    "symbol": "Np",
+    "name": "Neptunium",
+    "atomicMass": 237.0,
+    "category": "ac",
+    "categoryLabel": "Actinide",
+    "period": 7,
+    "group": 7,
+    "block": "f",
+    "phaseAtSTP": "solid",
+    "fact": "First transuranium element to be discovered.",
+    "gridPosition": {
+      "row": 10,
+      "column": 7
+    },
+    "slug": "np"
+  },
+  {
+    "atomicNumber": 94,
+    "symbol": "Pu",
+    "name": "Plutonium",
+    "atomicMass": 244.0,
+    "category": "ac",
+    "categoryLabel": "Actinide",
+    "period": 7,
+    "group": 8,
+    "block": "f",
+    "phaseAtSTP": "solid",
+    "fact": "Powered the Nagasaki bomb and Voyager spacecraft.",
+    "gridPosition": {
+      "row": 10,
+      "column": 8
+    },
+    "slug": "pu"
+  },
+  {
+    "atomicNumber": 95,
+    "symbol": "Am",
+    "name": "Americium",
+    "atomicMass": 243.0,
+    "category": "ac",
+    "categoryLabel": "Actinide",
+    "period": 7,
+    "group": 9,
+    "block": "f",
+    "phaseAtSTP": "solid",
+    "fact": "Used in household smoke detectors.",
+    "gridPosition": {
+      "row": 10,
+      "column": 9
+    },
+    "slug": "am"
+  },
+  {
+    "atomicNumber": 96,
+    "symbol": "Cm",
+    "name": "Curium",
+    "atomicMass": 247.0,
+    "category": "ac",
+    "categoryLabel": "Actinide",
+    "period": 7,
+    "group": 10,
+    "block": "f",
+    "phaseAtSTP": "solid",
+    "fact": "Used to analyse Martian soil on rover missions.",
+    "gridPosition": {
+      "row": 10,
+      "column": 10
+    },
+    "slug": "cm"
+  },
+  {
+    "atomicNumber": 97,
+    "symbol": "Bk",
+    "name": "Berkelium",
+    "atomicMass": 247.0,
+    "category": "ac",
+    "categoryLabel": "Actinide",
+    "period": 7,
+    "group": 11,
+    "block": "f",
+    "phaseAtSTP": "solid",
+    "fact": "Named after Berkeley, California, where it was made.",
+    "gridPosition": {
+      "row": 10,
+      "column": 11
+    },
+    "slug": "bk"
+  },
+  {
+    "atomicNumber": 98,
+    "symbol": "Cf",
+    "name": "Californium",
+    "atomicMass": 251.0,
+    "category": "ac",
+    "categoryLabel": "Actinide",
+    "period": 7,
+    "group": 12,
+    "block": "f",
+    "phaseAtSTP": "solid",
+    "fact": "Used to help start up nuclear reactors.",
+    "gridPosition": {
+      "row": 10,
+      "column": 12
+    },
+    "slug": "cf"
+  },
+  {
+    "atomicNumber": 99,
+    "symbol": "Es",
+    "name": "Einsteinium",
+    "atomicMass": 252.0,
+    "category": "ac",
+    "categoryLabel": "Actinide",
+    "period": 7,
+    "group": 13,
+    "block": "f",
+    "phaseAtSTP": "solid",
+    "fact": "Discovered in the debris of the first hydrogen bomb test.",
+    "gridPosition": {
+      "row": 10,
+      "column": 13
+    },
+    "slug": "es"
+  },
+  {
+    "atomicNumber": 100,
+    "symbol": "Fm",
+    "name": "Fermium",
+    "atomicMass": 257.0,
+    "category": "ac",
+    "categoryLabel": "Actinide",
+    "period": 7,
+    "group": 14,
+    "block": "f",
+    "phaseAtSTP": "solid",
+    "fact": "Also discovered in hydrogen bomb test debris.",
+    "gridPosition": {
+      "row": 10,
+      "column": 14
+    },
+    "slug": "fm"
+  },
+  {
+    "atomicNumber": 101,
+    "symbol": "Md",
+    "name": "Mendelevium",
+    "atomicMass": 258.0,
+    "category": "ac",
+    "categoryLabel": "Actinide",
+    "period": 7,
+    "group": 15,
+    "block": "f",
+    "phaseAtSTP": "solid",
+    "fact": "First element made one atom at a time.",
+    "gridPosition": {
+      "row": 10,
+      "column": 15
+    },
+    "slug": "md"
+  },
+  {
+    "atomicNumber": 102,
+    "symbol": "No",
+    "name": "Nobelium",
+    "atomicMass": 259.0,
+    "category": "ac",
+    "categoryLabel": "Actinide",
+    "period": 7,
+    "group": 16,
+    "block": "f",
+    "phaseAtSTP": "solid",
+    "fact": "Named after Alfred Nobel.",
+    "gridPosition": {
+      "row": 10,
+      "column": 16
+    },
+    "slug": "no"
+  },
+  {
+    "atomicNumber": 103,
+    "symbol": "Lr",
+    "name": "Lawrencium",
+    "atomicMass": 262.0,
+    "category": "ac",
+    "categoryLabel": "Actinide",
+    "period": 7,
+    "group": 17,
+    "block": "f",
+    "phaseAtSTP": "solid",
+    "fact": "Named after physicist Ernest Lawrence.",
+    "gridPosition": {
+      "row": 10,
+      "column": 17
+    },
+    "slug": "lr"
+  },
+  {
+    "atomicNumber": 104,
+    "symbol": "Rf",
+    "name": "Rutherfordium",
+    "atomicMass": 267.0,
+    "category": "tm",
+    "categoryLabel": "Transition metal",
+    "period": 7,
+    "group": 4,
+    "block": "d",
+    "phaseAtSTP": "solid",
+    "fact": "Named after physicist Ernest Rutherford.",
+    "gridPosition": {
+      "row": 7,
+      "column": 4
+    },
+    "slug": "rf"
+  },
+  {
+    "atomicNumber": 105,
+    "symbol": "Db",
+    "name": "Dubnium",
+    "atomicMass": 268.0,
+    "category": "tm",
+    "categoryLabel": "Transition metal",
+    "period": 7,
+    "group": 5,
+    "block": "d",
+    "phaseAtSTP": "solid",
+    "fact": "Named after Dubna, Russia, site of its discovery.",
+    "gridPosition": {
+      "row": 7,
+      "column": 5
+    },
+    "slug": "db"
+  },
+  {
+    "atomicNumber": 106,
+    "symbol": "Sg",
+    "name": "Seaborgium",
+    "atomicMass": 269.0,
+    "category": "tm",
+    "categoryLabel": "Transition metal",
+    "period": 7,
+    "group": 6,
+    "block": "d",
+    "phaseAtSTP": "solid",
+    "fact": "Named after Nobel laureate Glenn Seaborg.",
+    "gridPosition": {
+      "row": 7,
+      "column": 6
+    },
+    "slug": "sg"
+  },
+  {
+    "atomicNumber": 107,
+    "symbol": "Bh",
+    "name": "Bohrium",
+    "atomicMass": 270.0,
+    "category": "tm",
+    "categoryLabel": "Transition metal",
+    "period": 7,
+    "group": 7,
+    "block": "d",
+    "phaseAtSTP": "solid",
+    "fact": "Named after physicist Niels Bohr.",
+    "gridPosition": {
+      "row": 7,
+      "column": 7
+    },
+    "slug": "bh"
+  },
+  {
+    "atomicNumber": 108,
+    "symbol": "Hs",
+    "name": "Hassium",
+    "atomicMass": 269.0,
+    "category": "tm",
+    "categoryLabel": "Transition metal",
+    "period": 7,
+    "group": 8,
+    "block": "d",
+    "phaseAtSTP": "solid",
+    "fact": "Named after the German state of Hesse.",
+    "gridPosition": {
+      "row": 7,
+      "column": 8
+    },
+    "slug": "hs"
+  },
+  {
+    "atomicNumber": 109,
+    "symbol": "Mt",
+    "name": "Meitnerium",
+    "atomicMass": 278.0,
+    "category": "un",
+    "categoryLabel": "Unknown",
+    "period": 7,
+    "group": 9,
+    "block": "d",
+    "phaseAtSTP": "solid",
+    "fact": "Named after physicist Lise Meitner.",
+    "gridPosition": {
+      "row": 7,
+      "column": 9
+    },
+    "slug": "mt"
+  },
+  {
+    "atomicNumber": 110,
+    "symbol": "Ds",
+    "name": "Darmstadtium",
+    "atomicMass": 281.0,
+    "category": "un",
+    "categoryLabel": "Unknown",
+    "period": 7,
+    "group": 10,
+    "block": "d",
+    "phaseAtSTP": "solid",
+    "fact": "Named after Darmstadt, Germany, where it was made.",
+    "gridPosition": {
+      "row": 7,
+      "column": 10
+    },
+    "slug": "ds"
+  },
+  {
+    "atomicNumber": 111,
+    "symbol": "Rg",
+    "name": "Roentgenium",
+    "atomicMass": 282.0,
+    "category": "un",
+    "categoryLabel": "Unknown",
+    "period": 7,
+    "group": 11,
+    "block": "d",
+    "phaseAtSTP": "solid",
+    "fact": "Named after physicist Wilhelm Röntgen.",
+    "gridPosition": {
+      "row": 7,
+      "column": 11
+    },
+    "slug": "rg"
+  },
+  {
+    "atomicNumber": 112,
+    "symbol": "Cn",
+    "name": "Copernicium",
+    "atomicMass": 285.0,
+    "category": "tm",
+    "categoryLabel": "Transition metal",
+    "period": 7,
+    "group": 12,
+    "block": "d",
+    "phaseAtSTP": "solid",
+    "fact": "Named after astronomer Nicolaus Copernicus.",
+    "gridPosition": {
+      "row": 7,
+      "column": 12
+    },
+    "slug": "cn"
+  },
+  {
+    "atomicNumber": 113,
+    "symbol": "Nh",
+    "name": "Nihonium",
+    "atomicMass": 286.0,
+    "category": "pm",
+    "categoryLabel": "Post-transition metal",
+    "period": 7,
+    "group": 13,
+    "block": "p",
+    "phaseAtSTP": "solid",
+    "fact": "First element named by Japanese researchers.",
+    "gridPosition": {
+      "row": 7,
+      "column": 13
+    },
+    "slug": "nh"
+  },
+  {
+    "atomicNumber": 114,
+    "symbol": "Fl",
+    "name": "Flerovium",
+    "atomicMass": 289.0,
+    "category": "pm",
+    "categoryLabel": "Post-transition metal",
+    "period": 7,
+    "group": 14,
+    "block": "p",
+    "phaseAtSTP": "solid",
+    "fact": "Named after the Flerov Laboratory in Russia.",
+    "gridPosition": {
+      "row": 7,
+      "column": 14
+    },
+    "slug": "fl"
+  },
+  {
+    "atomicNumber": 115,
+    "symbol": "Mc",
+    "name": "Moscovium",
+    "atomicMass": 290.0,
+    "category": "pm",
+    "categoryLabel": "Post-transition metal",
+    "period": 7,
+    "group": 15,
+    "block": "p",
+    "phaseAtSTP": "solid",
+    "fact": "Named after Moscow, Russia.",
+    "gridPosition": {
+      "row": 7,
+      "column": 15
+    },
+    "slug": "mc"
+  },
+  {
+    "atomicNumber": 116,
+    "symbol": "Lv",
+    "name": "Livermorium",
+    "atomicMass": 293.0,
+    "category": "pm",
+    "categoryLabel": "Post-transition metal",
+    "period": 7,
+    "group": 16,
+    "block": "p",
+    "phaseAtSTP": "solid",
+    "fact": "Named after Livermore, California.",
+    "gridPosition": {
+      "row": 7,
+      "column": 16
+    },
+    "slug": "lv"
+  },
+  {
+    "atomicNumber": 117,
+    "symbol": "Ts",
+    "name": "Tennessine",
+    "atomicMass": 294.0,
+    "category": "hal",
+    "categoryLabel": "Halogen",
+    "period": 7,
+    "group": 17,
+    "block": "p",
+    "phaseAtSTP": "solid",
+    "fact": "Named after the state of Tennessee, USA.",
+    "gridPosition": {
+      "row": 7,
+      "column": 17
+    },
+    "slug": "ts"
+  },
+  {
+    "atomicNumber": 118,
+    "symbol": "Og",
+    "name": "Oganesson",
+    "atomicMass": 294.0,
+    "category": "ng",
+    "categoryLabel": "Noble gas",
+    "period": 7,
+    "group": 18,
+    "block": "p",
+    "phaseAtSTP": "gas",
+    "fact": "Heaviest confirmed element; named after physicist Yuri Oganessian.",
+    "gridPosition": {
+      "row": 7,
+      "column": 18
+    },
+    "slug": "og"
+  }
+]

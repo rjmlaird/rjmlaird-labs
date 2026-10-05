@@ -1,0 +1,137 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://labs.rjmlaird.co.uk/schemas/element-card.json",
+  "title": "ElementCard",
+  "description": "Schema for a single periodic table element card in the Elements Lab visualiser.",
+  "type": "object",
+  "required": [
+    "atomicNumber",
+    "symbol",
+    "name",
+    "atomicMass",
+    "category",
+    "period",
+    "group",
+    "block",
+    "phaseAtSTP",
+    "fact",
+    "gridPosition",
+    "slug"
+  ],
+  "properties": {
+    "atomicNumber": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 118,
+      "description": "Number of protons; unique element identifier."
+    },
+    "symbol": {
+      "type": "string",
+      "pattern": "^[A-Z][a-z]?$",
+      "description": "One or two letter chemical symbol."
+    },
+    "name": {
+      "type": "string",
+      "description": "Full element name."
+    },
+    "atomicMass": {
+      "type": "number",
+      "description": "Standard atomic weight, in unified atomic mass units (u)."
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "am",
+        "ae",
+        "tm",
+        "pm",
+        "me",
+        "nm",
+        "hal",
+        "ng",
+        "la",
+        "ac",
+        "un"
+      ],
+      "description": "Short category code used for card colour-coding."
+    },
+    "categoryLabel": {
+      "type": "string",
+      "enum": [
+        "Alkali metal",
+        "Alkaline earth metal",
+        "Transition metal",
+        "Post-transition metal",
+        "Metalloid",
+        "Reactive nonmetal",
+        "Halogen",
+        "Noble gas",
+        "Lanthanide",
+        "Actinide",
+        "Unknown"
+      ],
+      "description": "Human-readable category name."
+    },
+    "period": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 7,
+      "description": "Row of the standard periodic table."
+    },
+    "group": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 18,
+      "description": "Column of the standard periodic table."
+    },
+    "block": {
+      "type": "string",
+      "enum": [
+        "s",
+        "p",
+        "d",
+        "f"
+      ],
+      "description": "Orbital block the element's valence electrons occupy."
+    },
+    "phaseAtSTP": {
+      "type": "string",
+      "enum": [
+        "solid",
+        "liquid",
+        "gas"
+      ],
+      "description": "Physical phase at standard temperature and pressure."
+    },
+    "fact": {
+      "type": "string",
+      "maxLength": 160,
+      "description": "Short, notable fact shown on the card's detail readout."
+    },
+    "gridPosition": {
+      "type": "object",
+      "required": [
+        "row",
+        "column"
+      ],
+      "properties": {
+        "row": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 10,
+          "description": "CSS grid row; rows 9-10 hold the lanthanide/actinide series."
+        },
+        "column": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 18
+        }
+      }
+    },
+    "slug": {
+      "type": "string",
+      "pattern": "^[a-z]{1,2}$",
+      "description": "Lowercase symbol used for per-element URLs, e.g. /elements/na"
+    }
+  }
+}
