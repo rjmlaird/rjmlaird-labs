@@ -117,7 +117,7 @@
       "Leaflet"
     ],
     "demoUrl": "https://satellites.labs.rjmlaird.co.uk",
-    "repoUrl": "https://github.com/greenorbitspace/labs/tree/main/packages/satellites",
+    "repoUrl": "https://github.com/rjmlaird/rjmlaird-labs/tree/main/packages/satellites",
     "updated": "2026-07-21"
   },
   {
@@ -130,7 +130,7 @@
       "Vite"
     ],
     "demoUrl": "https://drought.labs.rjmlaird.co.uk",
-    "repoUrl": "https://github.com/greenorbitspace/labs/tree/main/packages/drought",
+    "repoUrl": "https://github.com/rjmlaird/rjmlaird-labs/tree/main/packages/drought",
     "updated": "2026-07-26"
   },
   {
@@ -143,7 +143,7 @@
       "Vite"
     ],
     "demoUrl": "https://tintwistle.labs.rjmlaird.co.uk",
-    "repoUrl": "https://github.com/greenorbitspace/labs/tree/main/packages/tintwistle",
+    "repoUrl": "https://github.com/rjmlaird/rjmlaird-labs/tree/main/packages/tintwistle",
     "updated": "2026-07-26"
   },
   {
@@ -156,7 +156,7 @@
       "Vite"
     ],
     "demoUrl": "https://biodiversity.labs.rjmlaird.co.uk",
-    "repoUrl": "https://github.com/greenorbitspace/labs/tree/main/packages/biodiversity",
+    "repoUrl": "https://github.com/rjmlaird/rjmlaird-labs/tree/main/packages/biodiversity",
     "updated": "2026-07-26"
   },
   {
@@ -169,7 +169,7 @@
       "Vite"
     ],
     "demoUrl": "https://sewage.labs.rjmlaird.co.uk",
-    "repoUrl": "https://github.com/greenorbitspace/labs/tree/main/packages/sewage",
+    "repoUrl": "https://github.com/rjmlaird/rjmlaird-labs/tree/main/packages/sewage",
     "updated": "2026-07-26"
   },
   {
@@ -182,7 +182,7 @@
       "Vite"
     ],
     "demoUrl": "https://astro.labs.rjmlaird.co.uk",
-    "repoUrl": "https://github.com/greenorbitspace/labs/tree/main/packages/astro",
+    "repoUrl": "https://github.com/rjmlaird/rjmlaird-labs/tree/main/packages/astro",
     "updated": "2026-07-26"
   },
   {
@@ -195,46 +195,37 @@
       "Vite"
     ],
     "demoUrl": "https://atmosphere.labs.rjmlaird.co.uk",
-    "repoUrl": "https://github.com/greenorbitspace/labs/tree/main/packages/atmosphere",
+    "repoUrl": "https://github.com/rjmlaird/rjmlaird-labs/tree/main/packages/atmosphere",
     "updated": "2026-07-27"
   },
   {
     "slug": "cfd",
-    "title": "cfd",
-    "description": "New experiment — update this description.",
-    "status": "planned",
-    "tech": [
-      "React",
-      "Vite"
-    ],
+    "title": "Flow around objects",
+    "description": "A 2D fluid solver running in the browser. It uses the lattice Boltzmann method to compute flow around an aerofoil, square or cylinder in air or water, with live drag and lift coefficients, vortex shedding and pressure and vorticity fields. An educational model, not experimentally validated.",
+    "status": "active",
+    "tech": ["JavaScript", "Canvas 2D", "Lattice Boltzmann (D2Q9)", "Cloudflare Workers"],
     "demoUrl": "https://cfd.labs.rjmlaird.co.uk",
-    "repoUrl": "https://github.com/greenorbitspace/labs/tree/main/packages/cfd",
+    "repoUrl": "https://github.com/rjmlaird/rjmlaird-labs/tree/main/packages/cfd",
     "updated": "2026-10-05"
   },
   {
-    "slug": "electricity",
-    "title": "electricity",
-    "description": "New experiment — update this description.",
-    "status": "planned",
-    "tech": [
-      "React",
-      "Vite"
-    ],
+   "slug": "electricity",
+    "title": "Electricity",
+    "description": "An interactive exploration of electricity: how voltage, current and resistance relate, and how simple circuits behave as you change the components.",
+    "status": "active",
+    "tech": ["React", "Vite", "TypeScript"],
     "demoUrl": "https://electricity.labs.rjmlaird.co.uk",
-    "repoUrl": "https://github.com/greenorbitspace/labs/tree/main/packages/electricity",
+    "repoUrl": "https://github.com/rjmlaird/rjmlaird-labs/tree/main/packages/electricity",
     "updated": "2026-10-05"
   },
   {
     "slug": "elements",
-    "title": "elements",
-    "description": "New experiment — update this description.",
-    "status": "planned",
-    "tech": [
-      "React",
-      "Vite"
-    ],
+    "title": "Elements",
+    "description": "An interactive periodic table for exploring the chemical elements, their properties and how they group and trend across the table.",
+    "status": "active",
+    "tech": ["React", "Vite", "TypeScript"],
     "demoUrl": "https://elements.labs.rjmlaird.co.uk",
-    "repoUrl": "https://github.com/greenorbitspace/labs/tree/main/packages/elements",
+    "repoUrl": "https://github.com/rjmlaird/rjmlaird-labs/tree/main/packages/elements",
     "updated": "2026-10-05"
   }
 ]

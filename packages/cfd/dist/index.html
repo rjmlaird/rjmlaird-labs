@@ -1,0 +1,969 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>RJML Labs · Fluid flow</title>
+
+  <style>
+    :root {
+      --bg: #f4f1ea;
+      --ink: #17202a;
+      --muted: #66707a;
+      --panel: #ffffff;
+      --line: #d9d4ca;
+      --accent: #d85c38;
+      --blue: #3f83c5;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+    }
+
+    main {
+      max-width: 1050px;
+      margin: 0 auto;
+      padding: 32px 20px 50px;
+    }
+
+    header { margin-bottom: 22px; }
+
+    .eyebrow {
+      color: var(--accent);
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 8px 0 10px;
+      font-size: clamp(2rem, 6vw, 4.8rem);
+      line-height: 0.98;
+      letter-spacing: -0.06em;
+    }
+
+    .intro {
+      max-width: 760px;
+      color: var(--muted);
+      font-size: 1.05rem;
+      line-height: 1.6;
+    }
+
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin: 24px 0 16px;
+      padding: 14px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+    }
+
+    label {
+      display: grid;
+      gap: 5px;
+      color: var(--muted);
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    label.check {
+      display: flex;
+      align-items: center;
+      align-self: end;
+      gap: 8px;
+      min-height: 38px;
+      text-transform: none;
+      letter-spacing: 0;
+      font-weight: 600;
+    }
+
+    select, input, button {
+      border: 1px solid var(--line);
+      border-radius: 9px;
+      background: white;
+      color: var(--ink);
+      font: inherit;
+    }
+
+    select, input { min-height: 38px; padding: 7px 10px; }
+
+    input[type="range"] {
+      width: 160px;
+      padding: 0;
+      accent-color: var(--accent);
+    }
+
+    input[type="checkbox"] { min-height: 0; width: 16px; height: 16px; accent-color: var(--accent); }
+
+    input:disabled { opacity: 0.4; }
+
+    button {
+      align-self: end;
+      min-height: 38px;
+      padding: 7px 14px;
+      cursor: pointer;
+      background: var(--ink);
+      color: white;
+    }
+
+    button:hover { background: var(--accent); }
+
+    .stage {
+      position: relative;
+      overflow: hidden;
+      background: #102333;
+      border-radius: 18px;
+      box-shadow: 0 12px 35px rgba(20, 30, 40, 0.16);
+      aspect-ratio: 360 / 170;
+    }
+
+    .stage canvas {
+      position: absolute;
+      inset: 0;
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    .readout {
+      position: absolute;
+      top: 12px;
+      left: 14px;
+      display: grid;
+      gap: 3px;
+      padding: 10px 13px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.92);
+      font-size: 0.85rem;
+    }
+
+    .readout strong { font-size: 1rem; }
+
+    .scale {
+      position: absolute;
+      right: 12px;
+      bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 5px 10px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.9);
+      font-size: 0.74rem;
+      color: var(--ink);
+    }
+
+    .scale canvas { position: static; width: 110px; height: 9px; border-radius: 3px; }
+
+    .banner {
+      margin: 12px 0 0;
+      padding: 10px 14px;
+      border-left: 4px solid var(--accent);
+      border-radius: 0 10px 10px 0;
+      background: #fbeee8;
+      font-size: 0.9rem;
+      line-height: 1.5;
+    }
+
+    .banner[hidden] { display: none; }
+
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(135px, 1fr));
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .metric {
+      padding: 11px 13px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+    }
+
+    .metric span {
+      display: block;
+      color: var(--muted);
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .metric strong {
+      font-size: 1.25rem;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .chart {
+      margin-top: 10px;
+      padding: 10px 13px 6px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+    }
+
+    .chart canvas { display: block; width: 100%; height: 110px; }
+
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 0.82rem;
+    }
+
+    .legend span::before {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      margin-right: 6px;
+      border-radius: 50%;
+      content: "";
+      background: var(--blue);
+    }
+
+    .legend span.cd::before { background: var(--accent); }
+
+    .explanation {
+      max-width: 800px;
+      margin-top: 26px;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    .explanation h2 { margin: 22px 0 6px; color: var(--ink); font-size: 1.05rem; }
+
+    .explanation p { margin: 0 0 12px; }
+
+    @media (max-width: 650px) {
+      main { padding: 22px 14px 35px; }
+      .controls { display: grid; grid-template-columns: 1fr 1fr; }
+      .controls .wide { grid-column: span 2; }
+      input[type="range"] { width: 100%; }
+      button { grid-column: span 2; }
+      .readout { font-size: 0.74rem; padding: 7px 9px; }
+      .scale { display: none; }
+    }
+  </style>
+</head>
+
+<body>
+  <main>
+    <header>
+      <div class="eyebrow">RJML Labs · Experiment</div>
+      <h1>Flow around objects</h1>
+      <p class="intro">
+        A real flow solver running in your browser. It solves the 2D
+        Navier&ndash;Stokes equations with the lattice Boltzmann method, so the
+        pressure, vortices and wake you see are computed, not drawn. Change the
+        shape, fluid, speed and angle and watch the forces respond.
+      </p>
+    </header>
+
+    <section class="controls" aria-label="Simulation controls">
+      <label>
+        Object
+        <select id="object">
+          <option value="aerofoil">Aerofoil (NACA 0012)</option>
+          <option value="square">Square</option>
+          <option value="cylinder">Cylinder</option>
+        </select>
+      </label>
+
+      <label>
+        Medium
+        <select id="medium">
+          <option value="air">Air, 15 °C</option>
+          <option value="water">Water, 20 °C</option>
+        </select>
+      </label>
+
+      <label class="wide">
+        Speed
+        <input id="speed" type="range" min="0" max="100" step="0.5" value="46">
+        <span><span id="speedValue">0.50</span> m/s</span>
+      </label>
+
+      <label class="wide">
+        Angle
+        <input id="angle" type="range" min="-15" max="20" step="1" value="5">
+        <span><span id="angleValue">5</span>°</span>
+      </label>
+
+      <label>
+        Show
+        <select id="field">
+          <option value="speed">Speed</option>
+          <option value="vorticity">Vorticity</option>
+          <option value="pressure">Pressure</option>
+        </select>
+      </label>
+
+      <label class="check wide">
+        <input id="holdRe" type="checkbox">
+        Keep Reynolds number when changing medium
+      </label>
+
+      <button id="pause" type="button">Pause</button>
+      <button id="reset" type="button">Restart flow</button>
+    </section>
+
+    <section class="stage">
+      <canvas id="canvas" role="img" aria-label="Computed fluid flow around an aerofoil"></canvas>
+      <canvas id="trace" aria-hidden="true"></canvas>
+
+      <div class="readout" aria-live="polite">
+        <strong id="title">Aerofoil in air</strong>
+        <span id="details">Starting solver…</span>
+      </div>
+
+      <div class="scale" aria-hidden="true">
+        <span id="scaleLo">0</span>
+        <canvas id="scaleBar" width="110" height="9"></canvas>
+        <span id="scaleHi">2 U</span>
+      </div>
+    </section>
+
+    <p class="banner" id="clampNote" hidden></p>
+
+    <section class="metrics" aria-label="Measured results">
+      <div class="metric"><span>Reynolds no. (physical)</span><strong id="mRe">–</strong></div>
+      <div class="metric"><span>Reynolds no. (solver)</span><strong id="mReSim">–</strong></div>
+      <div class="metric"><span>Drag coefficient C<sub>d</sub></span><strong id="mCd">–</strong></div>
+      <div class="metric"><span>Lift coefficient C<sub>l</sub></span><strong id="mCl">–</strong></div>
+      <div class="metric"><span>Strouhal no. St</span><strong id="mSt">–</strong></div>
+      <div class="metric"><span>Flow time (L/U)</span><strong id="mT">0</strong></div>
+    </section>
+
+    <section class="chart">
+      <canvas id="chart" width="900" height="220" aria-label="History of lift and drag coefficients"></canvas>
+      <div class="legend" aria-hidden="true">
+        <span class="cd">Drag coefficient</span>
+        <span>Lift coefficient</span>
+      </div>
+    </section>
+
+    <div class="explanation">
+      <h2>What is being computed</h2>
+      <p>
+        The solver uses a D2Q9 lattice Boltzmann scheme on a 360 &times; 170 grid.
+        Fluid enters from the left at a fixed speed and leaves on the right, and the
+        top and bottom edges are slip walls. The object is a no-slip wall, and the
+        force on it is measured by momentum exchange at the surface, then turned
+        into C<sub>d</sub> and C<sub>l</sub> using the chord, side or diameter as the
+        reference length (0.1 m).
+      </p>
+
+      <h2>Air versus water</h2>
+      <p>
+        The flow depends on the Reynolds number, Re = &rho;UL/&mu;, not on speed
+        alone. At the same speed, water gives a Reynolds number about 55 times
+        higher than air. Tick &ldquo;Keep Reynolds number when changing medium&rdquo;
+        and switch between them: the speed changes but the flow pattern does not.
+      </p>
+
+      <h2>Limits of this model</h2>
+      <p>
+        This is a numerical simulation result and an educational model. It is
+        two-dimensional, so it cannot show real three-dimensional turbulence. A
+        browser grid can only resolve a limited Reynolds number, so above the cap
+        shown in the banner the solver runs at the cap and adds a Smagorinsky
+        sub-grid viscosity to stay stable; the physical value is still reported.
+        Blockage from the nearby slip walls raises the drag a little. Results
+        depend on mesh resolution, boundary conditions and the turbulence model,
+        and this result has not necessarily been experimentally validated.
+      </p>
+    </div>
+  </main>
+
+  <script>
+    // SOLVER-BEGIN
+    const NX = 360, NY = 170, N = NX * NY;
+    const ULB = 0.08;          // inflow speed in lattice units (Mach ~ 0.14)
+    const RE_MAX = 8000;       // highest Reynolds number the grid is asked to run
+    const CS_SGS = 0.14;       // Smagorinsky constant
+
+    const CX = [0, 1, 0, -1, 0, 1, -1, -1, 1];
+    const CY = [0, 0, 1, 0, -1, 1, 1, -1, -1];
+    const W = [4 / 9, 1 / 9, 1 / 9, 1 / 9, 1 / 9, 1 / 36, 1 / 36, 1 / 36, 1 / 36];
+    const OPP = [0, 3, 4, 1, 2, 7, 8, 5, 6];
+    const MIRY = [0, 1, 4, 3, 2, 8, 7, 6, 5];
+
+    const SHAPE_L = { aerofoil: 52, square: 30, cylinder: 30 };
+
+    function feqOf(d, rho, ux, uy) {
+      const cu = 3 * (CX[d] * ux + CY[d] * uy);
+      return W[d] * rho * (1 + cu + 0.5 * cu * cu - 1.5 * (ux * ux + uy * uy));
+    }
+
+    const EQ_IN = Array.from({ length: 9 }, (_, d) => feqOf(d, 1, ULB, 0));
+    const EQ_REST = Array.from({ length: 9 }, (_, d) => feqOf(d, 1, 0, 0));
+
+    function fillMask(mask, shape, angleDeg) {
+      const L = SHAPE_L[shape];
+      const a = (angleDeg * Math.PI) / 180;
+      const ca = Math.cos(a), sa = Math.sin(a);
+      const x0 = NX * 0.25, y0 = NY / 2;
+      for (let j = 0; j < NY; j++) {
+        for (let i = 0; i < NX; i++) {
+          const px = i + 0.5 - x0, py = j + 0.5 - y0;
+          let inside = 0;
+          if (shape === "cylinder") {
+            inside = px * px + py * py <= (L / 2) * (L / 2) ? 1 : 0;
+          } else {
+            const xl = px * ca - py * sa;
+            const yl = px * sa + py * ca;
+            if (shape === "square") {
+              inside = Math.abs(xl) <= L / 2 && Math.abs(yl) <= L / 2 ? 1 : 0;
+            } else {
+              const xc = xl / L + 0.25;
+              if (xc >= 0 && xc <= 1) {
+                const yt = 0.6 * (0.2969 * Math.sqrt(xc) - 0.1260 * xc -
+                  0.3516 * xc * xc + 0.2843 * xc * xc * xc - 0.1036 * xc * xc * xc * xc);
+                inside = Math.abs(yl) <= yt * L ? 1 : 0;
+              }
+            }
+          }
+          mask[j * NX + i] = inside;
+        }
+      }
+    }
+
+    class LBM {
+      constructor() {
+        this.f = new Float32Array(9 * N);
+        this.g = new Float32Array(9 * N);
+        this.solid = new Uint8Array(N);
+        this.rho = new Float32Array(N).fill(1);
+        this.ux = new Float32Array(N);
+        this.uy = new Float32Array(N);
+        this.shape = "aerofoil";
+        this.angle = 5;
+        this.Lc = SHAPE_L.aerofoil;
+        this.tau0 = 0.6;
+        this.sgs = 0;
+        this.steps = 0;
+        this.fx = 0;
+        this.fy = 0;
+        this.reset();
+      }
+
+      setShape(shape, angle) {
+        this.shape = shape;
+        this.angle = angle;
+        this.Lc = SHAPE_L[shape];
+        this.reset();
+      }
+
+      setAngle(angle) {
+        const prev = this.solid.slice();
+        this.angle = angle;
+        fillMask(this.solid, this.shape, angle);
+        this.buildLinks();
+        for (let n = 0; n < N; n++) {
+          if (prev[n] && !this.solid[n]) {
+            for (let d = 0; d < 9; d++) this.f[d * N + n] = EQ_REST[d];
+            this.rho[n] = 1;
+          }
+          if (this.solid[n]) { this.ux[n] = 0; this.uy[n] = 0; this.rho[n] = 1; }
+        }
+      }
+
+      setRe(re) {
+        const nu = (ULB * this.Lc) / re;
+        this.tau0 = 3 * nu + 0.5;
+        const k = Math.min(1, Math.max(0, (re - 400) / 1600));
+        this.sgs = CS_SGS * CS_SGS * 18 * Math.SQRT2 * k;
+      }
+
+      reset() {
+        fillMask(this.solid, this.shape, this.angle);
+        this.buildLinks();
+        for (let n = 0; n < N; n++) {
+          const s = this.solid[n];
+          for (let d = 0; d < 9; d++) this.f[d * N + n] = s ? EQ_REST[d] : EQ_IN[d];
+          this.rho[n] = 1;
+          this.ux[n] = s ? 0 : ULB;
+          this.uy[n] = 0;
+        }
+        this.kick();
+        this.steps = 0;
+        this.fx = 0;
+        this.fy = 0;
+      }
+
+      kick() {
+        // a brief sideways push breaks the symmetry so vortex shedding can start
+        const x0 = NX * 0.25;
+        for (let j = 0; j < NY; j++) {
+          for (let i = 0; i < NX; i++) {
+            const n = j * NX + i;
+            if (this.solid[n] || i < x0 - 20 || i > x0 + 4 * this.Lc) continue;
+            const uy = 0.15 * ULB * Math.exp(-((i - x0) * (i - x0)) / (2 * this.Lc * this.Lc));
+            for (let d = 0; d < 9; d++) this.f[d * N + n] = feqOf(d, 1, ULB, uy);
+            this.uy[n] = uy;
+          }
+        }
+      }
+
+      collide() {
+        const f = this.f, solid = this.solid, R = this.rho, UX = this.ux, UY = this.uy;
+        const tau0 = this.tau0, sgs = this.sgs;
+        for (let n = 0; n < N; n++) {
+          if (solid[n]) continue;
+          const f0 = f[n], f1 = f[N + n], f2 = f[2 * N + n], f3 = f[3 * N + n], f4 = f[4 * N + n];
+          const f5 = f[5 * N + n], f6 = f[6 * N + n], f7 = f[7 * N + n], f8 = f[8 * N + n];
+          const rho = f0 + f1 + f2 + f3 + f4 + f5 + f6 + f7 + f8;
+          const ux = (f1 - f3 + f5 - f6 - f7 + f8) / rho;
+          const uy = (f2 - f4 + f5 + f6 - f7 - f8) / rho;
+          R[n] = rho; UX[n] = ux; UY[n] = uy;
+
+          const usq = 1.5 * (ux * ux + uy * uy);
+          const r1 = rho / 9, r2 = rho / 36;
+          const n0 = f0 - (4 * rho / 9) * (1 - usq);
+          const n1 = f1 - r1 * (1 + 3 * ux + 4.5 * ux * ux - usq);
+          const n2 = f2 - r1 * (1 + 3 * uy + 4.5 * uy * uy - usq);
+          const n3 = f3 - r1 * (1 - 3 * ux + 4.5 * ux * ux - usq);
+          const n4 = f4 - r1 * (1 - 3 * uy + 4.5 * uy * uy - usq);
+          let c = ux + uy;
+          const n5 = f5 - r2 * (1 + 3 * c + 4.5 * c * c - usq);
+          c = -ux + uy;
+          const n6 = f6 - r2 * (1 + 3 * c + 4.5 * c * c - usq);
+          c = -ux - uy;
+          const n7 = f7 - r2 * (1 + 3 * c + 4.5 * c * c - usq);
+          c = ux - uy;
+          const n8 = f8 - r2 * (1 + 3 * c + 4.5 * c * c - usq);
+
+          let tau = tau0;
+          if (sgs > 0) {
+            const pxx = n1 + n3 + n5 + n6 + n7 + n8;
+            const pyy = n2 + n4 + n5 + n6 + n7 + n8;
+            const pxy = n5 - n6 + n7 - n8;
+            const q = Math.sqrt(pxx * pxx + 2 * pxy * pxy + pyy * pyy);
+            tau = 0.5 * (tau0 + Math.sqrt(tau0 * tau0 + (sgs * q) / rho));
+          }
+          const om = 1 / tau;
+          f[n] = f0 - om * n0;
+          f[N + n] = f1 - om * n1;
+          f[2 * N + n] = f2 - om * n2;
+          f[3 * N + n] = f3 - om * n3;
+          f[4 * N + n] = f4 - om * n4;
+          f[5 * N + n] = f5 - om * n5;
+          f[6 * N + n] = f6 - om * n6;
+          f[7 * N + n] = f7 - om * n7;
+          f[8 * N + n] = f8 - om * n8;
+        }
+      }
+
+      buildLinks() {
+        const solid = this.solid, bn = [], bd = [];
+        for (let j = 0; j < NY; j++) {
+          for (let i = 1; i < NX - 1; i++) {
+            const n = j * NX + i;
+            if (solid[n]) continue;
+            for (let d = 1; d < 9; d++) {
+              const sj = j - CY[d];
+              if (sj < 0 || sj >= NY) continue;
+              if (solid[sj * NX + (i - CX[d])]) { bn.push(n); bd.push(d); }
+            }
+          }
+        }
+        this.bn = Int32Array.from(bn);
+        this.bd = Uint8Array.from(bd);
+      }
+
+      stream() {
+        const f = this.f, g = this.g;
+        // 1. shift every population along its lattice velocity
+        for (let d = 1; d < 9; d++) {
+          const off = CY[d] * NX + CX[d];
+          const base = d * N;
+          if (off > 0) g.set(f.subarray(base, base + N - off), base + off);
+          else g.set(f.subarray(base - off, base + N), base);
+        }
+        g.set(f.subarray(0, N), 0);
+        // 2. slip walls top and bottom (specular reflection)
+        for (let i = 1; i < NX - 1; i++) {
+          const b0 = i, t0 = (NY - 1) * NX + i;
+          g[2 * N + b0] = f[4 * N + b0]; g[5 * N + b0] = f[8 * N + b0]; g[6 * N + b0] = f[7 * N + b0];
+          g[4 * N + t0] = f[2 * N + t0]; g[7 * N + t0] = f[6 * N + t0]; g[8 * N + t0] = f[5 * N + t0];
+        }
+        // 3. bounce-back on the object, with momentum exchange for the force
+        let Fx = 0, Fy = 0;
+        const bn = this.bn, bd = this.bd;
+        for (let k = 0; k < bn.length; k++) {
+          const n = bn[k], d = bd[k], o = OPP[d];
+          const v = f[o * N + n];
+          g[d * N + n] = v;
+          Fx += 2 * CX[o] * v;
+          Fy += 2 * CY[o] * v;
+        }
+        // 4. inlet (fixed velocity) and outlet (zero gradient)
+        for (let j = 0; j < NY; j++) {
+          const nl = j * NX, nr = nl + NX - 1;
+          for (let d = 0; d < 9; d++) {
+            g[d * N + nl] = EQ_IN[d];
+            g[d * N + nr] = g[d * N + nr - 1];
+          }
+        }
+        this.g = f;
+        this.f = g;
+        this.fx = Fx;
+        this.fy = Fy;
+        this.steps++;
+      }
+
+      step() { this.collide(); this.stream(); }
+
+      coefficients() {
+        const q = 0.5 * ULB * ULB * this.Lc;
+        return { cd: this.fx / q, cl: this.fy / q };
+      }
+    }
+    // SOLVER-END
+
+    // ---------- Interface ----------
+    const $ = (s) => document.querySelector(s);
+    const canvas = $("#canvas"), ctx = canvas.getContext("2d");
+    const trace = $("#trace"), tctx = trace.getContext("2d");
+    const chart = $("#chart"), cctx = chart.getContext("2d");
+    const scaleBar = $("#scaleBar");
+
+    canvas.width = NX; canvas.height = NY;
+    trace.width = NX * 2; trace.height = NY * 2;
+
+    const FLUIDS = {
+      air: { label: "air", rho: 1.225, mu: 1.81e-5 },
+      water: { label: "water", rho: 998.2, mu: 1.002e-3 }
+    };
+    const L_PHYS = 0.1;
+
+    const el = {
+      object: $("#object"), medium: $("#medium"), speed: $("#speed"), speedValue: $("#speedValue"),
+      angle: $("#angle"), angleValue: $("#angleValue"), field: $("#field"), holdRe: $("#holdRe"),
+      pause: $("#pause"), reset: $("#reset"), title: $("#title"), details: $("#details"),
+      note: $("#clampNote"), mRe: $("#mRe"), mReSim: $("#mReSim"), mCd: $("#mCd"),
+      mCl: $("#mCl"), mSt: $("#mSt"), mT: $("#mT"), lo: $("#scaleLo"), hi: $("#scaleHi")
+    };
+
+    const sim = new LBM();
+    let running = true;
+    let reSim = 1000, rePhys = 1000;
+    let cdAvg = 0, clAvg = 0;
+    let hist = [];
+    let lastSample = 0;
+
+    function speedFromSlider() {
+      return 0.01 * Math.pow(5000, Number(el.speed.value) / 100);
+    }
+
+    function sliderFromSpeed(u) {
+      const v = (100 * Math.log(u / 0.01)) / Math.log(5000);
+      return Math.max(0, Math.min(100, v));
+    }
+
+    function fmt(x) {
+      if (x >= 1e6) return (x / 1e6).toFixed(2) + " million";
+      if (x >= 1e4) return Math.round(x).toLocaleString("en-GB");
+      if (x >= 100) return String(Math.round(x));
+      return x.toPrecision(3);
+    }
+
+    function applyPhysics() {
+      const u = speedFromSlider();
+      const fl = FLUIDS[el.medium.value];
+      rePhys = (fl.rho * u * L_PHYS) / fl.mu;
+      reSim = Math.min(rePhys, RE_MAX);
+      sim.setRe(reSim);
+
+      el.speedValue.textContent = u < 1 ? u.toFixed(2) : u.toFixed(1);
+      el.angleValue.textContent = el.angle.value;
+
+      const names = { aerofoil: "Aerofoil", square: "Square", cylinder: "Cylinder" };
+      el.title.textContent = names[el.object.value] + " in " + fl.label;
+      el.details.textContent = "U = " + el.speedValue.textContent + " m/s · Re = " + fmt(rePhys);
+      canvas.setAttribute("aria-label", "Computed flow of " + fl.label + " around a " + el.object.value);
+
+      if (rePhys > RE_MAX) {
+        el.note.hidden = false;
+        el.note.textContent =
+          "The physical Reynolds number is " + fmt(rePhys) + ", which is beyond what this grid can resolve. " +
+          "The solver is running at Re = " + RE_MAX.toLocaleString("en-GB") +
+          " with a sub-grid turbulence model, so the pattern is qualitative at this setting.";
+      } else {
+        el.note.hidden = true;
+      }
+    }
+
+    function applyShape() {
+      const shape = el.object.value;
+      el.angle.disabled = shape === "cylinder";
+      sim.setShape(shape, Number(el.angle.value));
+      applyPhysics();
+      clearRun();
+    }
+
+    function clearRun() {
+      hist = [];
+      cdAvg = 0; clAvg = 0; lastSample = 0;
+      for (const p of particles) respawn(p, true);
+      tctx.clearRect(0, 0, trace.width, trace.height);
+    }
+
+    // ---------- colour maps ----------
+    function makeLUT(stops) {
+      const lut = new Uint32Array(256);
+      const rgb = stops.map(([t, h]) => [t, parseInt(h.slice(1, 3), 16), parseInt(h.slice(3, 5), 16), parseInt(h.slice(5, 7), 16)]);
+      for (let k = 0; k < 256; k++) {
+        const t = k / 255;
+        let a = rgb[0], b = rgb[rgb.length - 1];
+        for (let s = 0; s < rgb.length - 1; s++) {
+          if (t >= rgb[s][0] && t <= rgb[s + 1][0]) { a = rgb[s]; b = rgb[s + 1]; break; }
+        }
+        const m = b[0] === a[0] ? 0 : (t - a[0]) / (b[0] - a[0]);
+        const r = Math.round(a[1] + (b[1] - a[1]) * m);
+        const g = Math.round(a[2] + (b[2] - a[2]) * m);
+        const bl = Math.round(a[3] + (b[3] - a[3]) * m);
+        lut[k] = (255 << 24) | (bl << 16) | (g << 8) | r;
+      }
+      return lut;
+    }
+
+    const LUTS = {
+      speed: makeLUT([[0, "#0d2a4a"], [0.35, "#1f7a9a"], [0.65, "#7fd1a6"], [1, "#f6e27a"]]),
+      vorticity: makeLUT([[0, "#3f8fe0"], [0.5, "#102333"], [1, "#f06a3c"]]),
+      pressure: makeLUT([[0, "#3f8fe0"], [0.5, "#102333"], [1, "#f06a3c"]])
+    };
+
+    const SCALE_TEXT = {
+      speed: ["0", "2 × U"],
+      vorticity: ["clockwise", "anticlockwise"],
+      pressure: ["suction", "high pressure"]
+    };
+
+    const SOLID_COL = (255 << 24) | (0x6b << 16) | (0x9b << 8) | 0xe6;  // warm object colour (ABGR)
+
+    function drawScale() {
+      const sctx = scaleBar.getContext("2d");
+      const lut = LUTS[el.field.value];
+      for (let x = 0; x < 110; x++) {
+        const c = lut[Math.round((x / 109) * 255)];
+        sctx.fillStyle = "rgb(" + (c & 255) + "," + ((c >> 8) & 255) + "," + ((c >> 16) & 255) + ")";
+        sctx.fillRect(x, 0, 1, 9);
+      }
+      el.lo.textContent = SCALE_TEXT[el.field.value][0];
+      el.hi.textContent = SCALE_TEXT[el.field.value][1];
+    }
+
+    const img = ctx.createImageData(NX, NY);
+    const px = new Uint32Array(img.data.buffer);
+
+    function render() {
+      const mode = el.field.value;
+      const lut = LUTS[mode];
+      const { solid, ux, uy, rho } = sim;
+      const Lc = sim.Lc;
+      for (let j = 0; j < NY; j++) {
+        const outRow = (NY - 1 - j) * NX;
+        for (let i = 0; i < NX; i++) {
+          const n = j * NX + i;
+          if (solid[n]) { px[outRow + i] = SOLID_COL; continue; }
+          let t;
+          if (mode === "speed") {
+            t = Math.sqrt(ux[n] * ux[n] + uy[n] * uy[n]) / (2 * ULB);
+          } else if (mode === "vorticity") {
+            let w = 0;
+            if (i > 0 && i < NX - 1 && j > 0 && j < NY - 1) {
+              w = (uy[n + 1] - uy[n - 1] - (ux[n + NX] - ux[n - NX])) * 0.5;
+            }
+            t = 0.5 - (w * Lc) / ULB / 12;
+          } else {
+            const cp = ((rho[n] - 1) / 3) / (0.5 * ULB * ULB);
+            t = 0.5 + cp / 3;
+          }
+          t = t < 0 ? 0 : t > 1 ? 1 : t;
+          px[outRow + i] = lut[(t * 255) | 0];
+        }
+      }
+      ctx.putImageData(img, 0, 0);
+    }
+
+    // ---------- tracer particles ----------
+    const particles = Array.from({ length: 1300 }, () => ({ x: 0, y: 0, age: 0 }));
+
+    function respawn(p, anywhere) {
+      for (let tries = 0; tries < 20; tries++) {
+        p.x = anywhere ? Math.random() * (NX - 2) + 1 : 1 + Math.random() * 3;
+        p.y = Math.random() * (NY - 2) + 1;
+        if (!sim.solid[(p.y | 0) * NX + (p.x | 0)]) break;
+      }
+      p.age = Math.random() * 400;
+    }
+
+    function advect(steps) {
+      const { ux, uy, solid } = sim;
+      tctx.globalCompositeOperation = "destination-out";
+      tctx.fillStyle = "rgba(0,0,0,0.13)";
+      tctx.fillRect(0, 0, trace.width, trace.height);
+      tctx.globalCompositeOperation = "source-over";
+      tctx.strokeStyle = "rgba(255,255,255,0.75)";
+      tctx.lineWidth = 1.3;
+      tctx.beginPath();
+      for (const p of particles) {
+        const i = p.x | 0, j = p.y | 0;
+        const n = j * NX + i;
+        if (i < 1 || i >= NX - 2 || j < 1 || j >= NY - 2 || solid[n] || p.age > 700) { respawn(p, false); continue; }
+        const fx = p.x - i, fy = p.y - j;
+        const vx = (1 - fx) * (1 - fy) * ux[n] + fx * (1 - fy) * ux[n + 1] + (1 - fx) * fy * ux[n + NX] + fx * fy * ux[n + NX + 1];
+        const vy = (1 - fx) * (1 - fy) * uy[n] + fx * (1 - fy) * uy[n + 1] + (1 - fx) * fy * uy[n + NX] + fx * fy * uy[n + NX + 1];
+        const nx = p.x + vx * steps, ny = p.y + vy * steps;
+        tctx.moveTo(p.x * 2, (NY - p.y) * 2);
+        tctx.lineTo(nx * 2, (NY - ny) * 2);
+        p.x = nx; p.y = ny; p.age++;
+      }
+      tctx.stroke();
+    }
+
+    // ---------- measurements ----------
+    function strouhal() {
+      if (hist.length < 120 || sim.shape === "aerofoil" && Math.abs(Number(el.angle.value)) < 1) return null;
+      const h = hist.slice(-400);
+      const mean = h.reduce((a, s) => a + s.cl, 0) / h.length;
+      let lo = Infinity, hi = -Infinity;
+      for (const s of h) { lo = Math.min(lo, s.cl); hi = Math.max(hi, s.cl); }
+      if (hi - lo < 0.12) return null;
+      const ups = [];
+      for (let k = 1; k < h.length; k++) {
+        const a = h[k - 1].cl - mean, b = h[k].cl - mean;
+        if (a < 0 && b >= 0) ups.push(h[k - 1].t + (h[k].t - h[k - 1].t) * (-a / (b - a)));
+      }
+      if (ups.length < 4) return null;
+      const period = (ups[ups.length - 1] - ups[0]) / (ups.length - 1);
+      return (sim.Lc / ULB) / period;
+    }
+
+    function drawChart() {
+      const w = chart.width, h = chart.height;
+      cctx.clearRect(0, 0, w, h);
+      const data = hist.slice(-400);
+      cctx.strokeStyle = "#d9d4ca";
+      cctx.lineWidth = 1;
+      if (data.length < 2) return;
+      let lo = 0, hi = 0.5;
+      for (const s of data) { lo = Math.min(lo, s.cl, s.cd); hi = Math.max(hi, s.cl, s.cd); }
+      const pad = (hi - lo) * 0.08;
+      lo -= pad; hi += pad;
+      const y = (v) => h - 8 - ((v - lo) / (hi - lo)) * (h - 16);
+      cctx.beginPath(); cctx.moveTo(0, y(0)); cctx.lineTo(w, y(0)); cctx.stroke();
+      cctx.font = "20px sans-serif";
+      cctx.fillStyle = "#66707a";
+      cctx.fillText(hi.toFixed(1), 4, 18);
+      cctx.fillText(lo.toFixed(1), 4, h - 6);
+      const series = [["cd", "#d85c38"], ["cl", "#3f83c5"]];
+      for (const [key, col] of series) {
+        cctx.strokeStyle = col;
+        cctx.lineWidth = 2.5;
+        cctx.beginPath();
+        data.forEach((s, k) => {
+          const x = (k / 399) * w;
+          if (k === 0) cctx.moveTo(x, y(s[key])); else cctx.lineTo(x, y(s[key]));
+        });
+        cctx.stroke();
+      }
+    }
+
+    function updateMetrics() {
+      el.mRe.textContent = fmt(rePhys);
+      el.mReSim.textContent = fmt(reSim);
+      el.mCd.textContent = hist.length ? cdAvg.toFixed(2) : "–";
+      el.mCl.textContent = hist.length ? clAvg.toFixed(2) : "–";
+      const st = strouhal();
+      el.mSt.textContent = st ? st.toFixed(2) : "–";
+      el.mT.textContent = ((sim.steps * ULB) / sim.Lc).toFixed(1);
+      drawChart();
+    }
+
+    // ---------- main loop ----------
+    let frameCount = 0;
+    function frame() {
+      if (running) {
+        const t0 = performance.now();
+        let n = 0;
+        while (n < 24 && (n === 0 || performance.now() - t0 < 11)) {
+          sim.step();
+          n++;
+          const { cd, cl } = sim.coefficients();
+          cdAvg += (cd - cdAvg) * 0.01;
+          clAvg += (cl - clAvg) * 0.01;
+          if (sim.steps - lastSample >= 40) {
+            lastSample = sim.steps;
+            hist.push({ t: sim.steps, cd: cdAvg, cl });
+            if (hist.length > 1200) hist.shift();
+          }
+        }
+        const probe = sim.rho[(NY >> 1) * NX + 10];
+        if (!isFinite(probe) || probe < 0.5 || probe > 2) {
+          sim.reset();
+          clearRun();
+          el.details.textContent = "Solver restarted after an instability";
+        } else {
+          advect(n);
+        }
+      }
+      render();
+      if (frameCount++ % 8 === 0) updateMetrics();
+      requestAnimationFrame(frame);
+    }
+
+    // ---------- events ----------
+    el.object.addEventListener("change", applyShape);
+
+    el.medium.addEventListener("change", () => {
+      if (el.holdRe.checked) {
+        const prev = el.medium.value === "air" ? FLUIDS.water : FLUIDS.air;
+        const next = FLUIDS[el.medium.value];
+        const u = speedFromSlider() * (next.mu / next.rho) / (prev.mu / prev.rho);
+        el.speed.value = sliderFromSpeed(Math.max(0.01, Math.min(50, u)));
+      }
+      applyPhysics();
+    });
+
+    el.speed.addEventListener("input", applyPhysics);
+
+    el.angle.addEventListener("input", () => {
+      sim.setAngle(Number(el.angle.value));
+      applyPhysics();
+    });
+
+    el.field.addEventListener("change", drawScale);
+
+    el.pause.addEventListener("click", () => {
+      running = !running;
+      el.pause.textContent = running ? "Pause" : "Resume";
+    });
+
+    el.reset.addEventListener("click", () => {
+      sim.reset();
+      clearRun();
+      applyPhysics();
+    });
+
+    drawScale();
+    applyPhysics();
+    clearRun();
+    requestAnimationFrame(frame);
+  </script>
+</body>
+</html>
