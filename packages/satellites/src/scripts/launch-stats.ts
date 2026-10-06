@@ -1,4 +1,4 @@
-import { fetchText, parseSatcat, escapeHtml, SATCAT_URL } from './lib/celestrak';
+import { fetchText, parseSatcat, escapeHtml, SATCAT_PAYLOADS_URL } from './lib/celestrak';
 
 type YearCount = { year: number; count: number };
 type OwnerCount = { owner: string; count: number };
@@ -54,7 +54,7 @@ async function loadStats() {
   setBadge('wait', 'connecting');
 
   try {
-    const csvText = await fetchText(SATCAT_URL);
+    const csvText = await fetchText(SATCAT_PAYLOADS_URL);
     const { rows, keys } = parseSatcat(csvText);
     if (!keys.launch || !keys.owner || !keys.type) {
       throw new Error('SATCAT response was missing expected columns (launch date, owner, or object type).');
@@ -104,7 +104,7 @@ function showError(err: any) {
       <div style="color:var(--text); font-size:13px; font-weight:700; margin-bottom:6px;">Could not load SATCAT</div>
       ${escapeHtml(err.message || String(err))}
       <br><br>
-      This is usually a browser CORS/network restriction reaching <b>celestrak.org</b>, not a problem with your request.
+      The data service could not get fresh data from <b>celestrak.org</b> just now. Retrying usually works.
     </div>
     <div class="fallback">
       <label>Paste SATCAT CSV text (from the footer link)</label>

@@ -1,5 +1,5 @@
 import * as satellite from 'satellite.js';
-import { fetchText, gpUrl, parseTLE, parseSatcat, escapeHtml, SATCAT_URL } from './lib/celestrak';
+import { fetchText, gpUrl, satcatUrl, parseTLE, parseSatcat, escapeHtml } from './lib/celestrak';
 
 const AU_KM = 149597870.7;
 const MAX_SATS_SCANNED = 400; // performance guard for large catalogs
@@ -325,7 +325,7 @@ async function run() {
   passListEl.innerHTML = '';
 
   try {
-    const [tleText, satcatText] = await Promise.all([fetchText(gpUrl(group)), fetchText(SATCAT_URL)]);
+    const [tleText, satcatText] = await Promise.all([fetchText(gpUrl(group)), fetchText(satcatUrl(group))]);
 
     const tleEntries = parseTLE(tleText);
     if (tleEntries.length === 0) throw new Error('No TLE records parsed from Celestrak.');
@@ -394,7 +394,7 @@ async function run() {
         <div style="color:var(--text); font-size:13px; font-weight:700; margin-bottom:6px;">Could not predict passes</div>
         ${escapeHtml(err.message || String(err))}
         <br><br>
-        This is usually a browser CORS/network restriction reaching <b>celestrak.org</b>, not a problem with your request.
+        The data service could not get fresh data from <b>celestrak.org</b> just now. Retrying usually works.
       </div>
       <button id="retryBtn">Retry</button>
     `;

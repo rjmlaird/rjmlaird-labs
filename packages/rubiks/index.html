@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en-GB"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Nine circles · Rubik's Cube permutations · RJML Labs</title>
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+--bg:#f7f5ef;--ink:#161b22;--mute:#5b6570;--panel:#fff;--line:#dcd8cb;--acc:#c2410c;--ax:#d9480f;--ay:#0b7285;--az:#6741d9}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0b0f16;--ink:#e9eef5;--mute:#98a4b1;--panel:#131a24;--line:#263243;--acc:#fbbf24;--ax:#ff922b;--ay:#3bc9db;--az:#b197fc}}
+:root[data-theme="dark"]{--bg:#0b0f16;--ink:#e9eef5;--mute:#98a4b1;--panel:#131a24;--line:#263243;--acc:#fbbf24;--ax:#ff922b;--ay:#3bc9db;--az:#b197fc}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:1040px;margin:0 auto;padding:20px 16px 48px}
+.eye{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--acc);margin:0 0 4px}
+h1{font:600 clamp(30px,8vw,46px)/1.05 "Iowan Old Style",Georgia,serif;margin:0 0 10px}
+.lede{color:var(--mute);margin:0 0 16px}
+#stage{position:relative;background:var(--panel);border:1px solid var(--line);border-radius:16px;overflow:hidden}
+#svg{display:block;width:min(100%,76vh);aspect-ratio:1;margin:auto;touch-action:none;cursor:grab}
+.ring{fill:none;stroke-width:1.4;opacity:.55;vector-effect:non-scaling-stroke;transition:opacity .2s}
+.ring.hot{stroke-width:3.4;opacity:1}
+#svg.lit .ring:not(.hot){opacity:.15}
+.dot{stroke:var(--ink);stroke-opacity:.55;stroke-width:1;vector-effect:non-scaling-stroke}
+.zoom{position:absolute;right:8px;bottom:8px;display:flex;gap:6px}
+button{font:inherit;color:var(--ink);background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:8px 14px;cursor:pointer;min-height:40px}
+button:hover{border-color:var(--acc)}
+.zoom button{padding:4px 12px;min-height:34px;opacity:.9}
+#stat{min-height:3em;margin:12px 0 8px;font-size:15px}
+#ctl{display:flex;flex-wrap:wrap;gap:8px}
+#play{background:var(--acc);border-color:var(--acc);color:#fff;font-weight:600}
+:root[data-theme="dark"] #play{color:#111}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]) #play{color:#111}}
+#turns{display:flex;flex-wrap:wrap;gap:6px;margin:14px 0 6px}
+.chip{min-width:44px;padding:6px 8px;font-variant-numeric:tabular-nums;font-weight:600}
+.chip.done{opacity:.4}
+.chip.now{border-color:var(--acc);box-shadow:0 0 0 2px var(--acc) inset}
+.key{font-size:13px;color:var(--mute);margin:10px 0 0}
+.key i{display:inline-block;width:10px;height:10px;border-radius:50%;margin:0 4px 0 10px}
+.copy{margin-top:28px;max-width:720px}
+.copy p{margin:0 0 14px}
+footer{margin-top:28px;font-size:13px;color:var(--mute)}
+.pair{display:grid;gap:12px;grid-template-columns:1fr}
+@media(min-width:820px){.pair{grid-template-columns:1fr 1fr}}
+#cstage{position:relative;background:var(--panel);border:1px solid var(--line);border-radius:16px;overflow:hidden;min-height:320px;display:flex;align-items:center;justify-content:center;perspective:900px;touch-action:none;cursor:grab}
+#cube{position:relative;width:0;height:0;transform-style:preserve-3d}
+.st{position:absolute;left:-32px;top:-32px;width:64px;height:64px;transform-style:preserve-3d}
+.st b{position:absolute;inset:0;backface-visibility:hidden;border-radius:7px;box-sizing:border-box}
+.st .f{border:2px solid #0a0a0a}
+.st .k{background:#0a0a0a;transform:rotateY(180deg)}
+</style></head><body><main>
+<p class="eye">RJML Labs · Experiment</p>
+<h1>Nine circles</h1>
+<p class="lede">Every turn of a Rubik’s Cube is a permutation of its 54 stickers, and 9 circles are enough to draw all of them.</p>
+<div class="pair"><div id="stage"><svg id="svg" role="img" aria-label="Nine circles carrying 54 coloured dots, one for each sticker of a Rubik's Cube"></svg>
+<div class="zoom"><button id="zo" aria-label="Zoom out">−</button><button id="zi" aria-label="Zoom in">+</button><button id="zf">Fit</button></div></div><div id="cstage" role="img" aria-label="A Rubik's Cube turning in step with the circles"><div id="cube"></div></div></div>
+<p class="key"><i style="background:var(--ax)"></i>x layers L M R<i style="background:var(--ay)"></i>y layers D E U<i style="background:var(--az)"></i>z layers B S F · pinch or scroll to zoom, drag to pan · drag the cube to turn your view</p>
+<div id="stat" aria-live="polite"></div>
+<div id="ctl"><button id="play">Play</button><button id="bk" aria-label="Back one turn">◀ Back</button><button id="fw" aria-label="Forward one turn">Step ▶</button><button id="rs">Reset</button><button id="nw">New scramble</button></div>
+<div id="turns" aria-label="The fifteen turns of this solve"></div>
+<section class="copy">
+<p>The cube has three axes, and each axis has three layers, so there are 9 layers in all. In the picture each layer is one circle, and each circle carries 12 dots. Every one of the 54 stickers is a dot where two circles from different axes cross. When the cube turns, the matching circle lights up and its dots slide round it.</p>
+<p>A quarter turn moves the 12 dots on a circle 3 places. A turn of an outer layer also turns the 8 outer stickers on the face beside it. Together that moves 20 stickers in five cycles of length four, which is why four equal quarter turns put every sticker back. A turn of a middle layer moves only the 12 dots on its own circle. The scrambled cube is solved turn by turn, and each of the six clusters ends as one colour.</p>
+<p>Each turn has a name in the standard notation. A letter names the layer, and a letter alone is a clockwise quarter turn seen from outside that face. A letter with a mark after it is the same turn the other way. The row under the picture collects the fifteen turns of this solve.</p>
+<p>Group theory is the branch of algebra that studies this structure. The turns of the cube form a group, and each turn acts on the stickers as a permutation. The group has 43,252,003,274,489,856,000 positions. In 2010 Rokicki, Kociemba, Davidson and Dethridge showed that every one of them can be solved in 20 moves or fewer, when a half turn counts as one move.</p>
+</section>
+<footer>Method: the 54 stickers sit on a sphere, where each layer is a plane section, hence a circle. A stereographic projection keeps circles as circles, so nine true circles meet in 54 dots. Tap a turn in the row to watch it run.</footer>
+</main>
+<script>
+(()=>{
+const D=.3,PI=Math.PI,SQ=Math.sqrt,NS='http://www.w3.org/2000/svg',$=id=>document.getElementById(id);
+const el=(t,a,p)=>{const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);p&&p.appendChild(e);return e};
+const key=(p,n)=>p.join()+'|'+n.join(),dot=(a,b)=>a[0]*b[0]+a[1]*b[1]+a[2]*b[2];
+const FACE={'0,1':'#d6243a','0,-1':'#ff7a1a','1,1':'#f4f4ef','1,-1':'#ffd400','2,1':'#12a150','2,-1':'#1456c4'};
+const S=[],IDX={};
+for(let x=-1;x<2;x++)for(let y=-1;y<2;y++)for(let z=-1;z<2;z++){const p=[x,y,z];for(let k=0;k<3;k++)if(p[k]){const n=[0,0,0];n[k]=p[k];IDX[key(p,n)]=S.length;S.push({p,n,k,c:FACE[k+','+p[k]]})}}
+const SOLVED=S.map(s=>s.c);
+// sticker -> point on the unit sphere
+const Q=S.map(s=>{const q=s.p.map(v=>v*D),m=s.k;q[m]=s.n[m]*SQ(1-q.reduce((a,v,i)=>i===m?a:a+v*v,0));return q});
+// stereographic projection from the cube-corner direction
+const P=[1,1,1].map(v=>v/SQ(3)),E1=[1,-1,0].map(v=>v/SQ(2)),E2=[1,1,-2].map(v=>v/SQ(6));
+const proj=q=>{const w=1-dot(q,P);return[dot(q,E1)/w,-dot(q,E2)/w]};
+const XY=Q.map(proj);
+const rot=(v,k,s)=>{const u=(k+1)%3,w=(k+2)%3,r=v.slice();r[u]=-s*v[w];r[w]=s*v[u];return r};
+const rotQ=(q,k,t)=>{const u=(k+1)%3,w=(k+2)%3,c=Math.cos(t),s=Math.sin(t),r=q.slice();r[u]=c*q[u]-s*q[w];r[w]=s*q[u]+c*q[w];return r};
+// move name -> [axis, layer, right-handed sign] ; clockwise seen from outside the face
+const MV={U:[1,1,-1],D:[1,-1,1],R:[0,1,-1],L:[0,-1,1],F:[2,1,-1],B:[2,-1,1],M:[0,0,1],E:[1,0,1],S:[2,0,-1]},cache={};
+const mv=n=>cache[n]||(()=>{const[k,l,s0]=MV[n[0]],s=n[1]?-s0:s0,pairs=[];
+ S.forEach((o,i)=>{if(o.p[k]===l){const j=IDX[key(rot(o.p,k,s),rot(o.n,k,s))];if(j!==i)pairs.push([i,j])}});
+ return cache[n]={k,l,s,pairs}})();
+const app=(c,n)=>{const nc=c.slice();mv(n).pairs.forEach(([i,j])=>nc[j]=c[i]);return nc};
+const inv=m=>m[1]?m[0]:m+"'",disp=m=>m.replace("'",'′');
+// circles
+const svg=$('svg'),gR=el('g',{},svg),gD=el('g',{},svg),gM=el('g',{},svg),ring=[];
+function circ(a,b,c){const d=2*(a[0]*(b[1]-c[1])+b[0]*(c[1]-a[1])+c[0]*(a[1]-b[1])),f=p=>p[0]*p[0]+p[1]*p[1];
+ const x=(f(a)*(b[1]-c[1])+f(b)*(c[1]-a[1])+f(c)*(a[1]-b[1]))/d,y=(f(a)*(c[0]-b[0])+f(b)*(a[0]-c[0])+f(c)*(b[0]-a[0]))/d;
+ return[x,y,Math.hypot(a[0]-x,a[1]-y)]}
+const AXC=['var(--ax)','var(--ay)','var(--az)'];
+for(let k=0;k<3;k++)for(let l=-1;l<2;l++){const r=[];S.forEach((o,i)=>{if(o.p[k]===l&&!o.n[k])r.push(i)});
+ const[x,y,rad]=circ(XY[r[0]],XY[r[4]],XY[r[8]]);ring[k*3+l+1]=el('circle',{cx:x,cy:y,r:rad,class:'ring',stroke:AXC[k]},gR)}
+const dots=S.map((o,i)=>el('circle',{cx:XY[i][0],cy:XY[i][1],class:'dot'},gD));
+const mov=Array.from({length:20},()=>{const e=el('circle',{class:'dot'},gM);e.style.display='none';return e});
+// 3D cube, one sticker per slot
+const cube=$('cube'),U=64,FR={'0,1':'rotateY(90deg)','0,-1':'rotateY(-90deg)','1,1':'rotateX(90deg)','1,-1':'rotateX(-90deg)','2,1':'','2,-1':'rotateY(180deg)'};
+const base=S.map(o=>`translate3d(${o.p[0]*U}px,${-o.p[1]*U}px,${o.p[2]*U}px) ${FR[o.k+','+o.p[o.k]]} translateZ(${U/2}px)`);
+const cr=(k,t)=>`rotate${'XYZ'[k]}(${k===1?t:-t}rad) `;
+const sts=S.map((o,i)=>{const d=document.createElement('div');d.className='st';d.innerHTML='<b class="f"></b><b class="k"></b>';d.style.transform=base[i];cube.appendChild(d);return d});
+let ry=-38,rx=-26;const vw=()=>cube.style.transform=`rotateX(${rx}deg) rotateY(${ry}deg)`;vw();
+const cs=$('cstage');let cd=null;
+cs.addEventListener('pointerdown',e=>{cs.setPointerCapture(e.pointerId);cd=[e.clientX,e.clientY]});
+cs.addEventListener('pointermove',e=>{if(!cd)return;ry+=(e.clientX-cd[0])*.5;rx=Math.max(-85,Math.min(85,rx-(e.clientY-cd[1])*.5));cd=[e.clientX,e.clientY];vw()});
+['pointerup','pointercancel'].forEach(t=>cs.addEventListener(t,()=>cd=null));
+// view, pan and zoom
+const xs=XY.map(p=>p[0]),ys=XY.map(p=>p[1]),mx=(Math.min(...xs)+Math.max(...xs))/2,my=(Math.min(...ys)+Math.max(...ys))/2;
+const FIT=Math.max(Math.max(...xs)-Math.min(...xs),Math.max(...ys)-Math.min(...ys))*1.12;
+let V={x:mx-FIT/2,y:my-FIT/2,w:FIT};
+function setView(){svg.setAttribute('viewBox',`${V.x} ${V.y} ${V.w} ${V.w}`);const r=6*V.w/svg.getBoundingClientRect().width;dots.forEach(d=>d.setAttribute('r',r));mov.forEach(d=>d.setAttribute('r',r))}
+function zoomAt(cx,cy,f){const b=svg.getBoundingClientRect(),fx=(cx-b.left)/b.width,fy=(cy-b.top)/b.height,w=Math.min(FIT*1.6,Math.max(FIT/14,V.w/f));
+ V={x:V.x+fx*V.w-fx*w,y:V.y+fy*V.w-fy*w,w};setView()}
+const ptr=new Map();
+svg.addEventListener('pointerdown',e=>{svg.setPointerCapture(e.pointerId);ptr.set(e.pointerId,[e.clientX,e.clientY])});
+svg.addEventListener('pointermove',e=>{const prev=ptr.get(e.pointerId);if(!prev)return;const cur=[e.clientX,e.clientY];
+ if(ptr.size===1){const b=svg.getBoundingClientRect();V.x-=(cur[0]-prev[0])/b.width*V.w;V.y-=(cur[1]-prev[1])/b.height*V.w;setView()}
+ else if(ptr.size===2){const o=[...ptr.entries()].find(([id])=>id!==e.pointerId)[1];
+  zoomAt((cur[0]+o[0])/2,(cur[1]+o[1])/2,Math.hypot(cur[0]-o[0],cur[1]-o[1])/(Math.hypot(prev[0]-o[0],prev[1]-o[1])||1))}
+ ptr.set(e.pointerId,cur)});
+['pointerup','pointercancel'].forEach(t=>svg.addEventListener(t,e=>ptr.delete(e.pointerId)));
+svg.addEventListener('wheel',e=>{e.preventDefault();zoomAt(e.clientX,e.clientY,Math.exp(-e.deltaY*.0015))},{passive:false});
+const mid=()=>{const b=svg.getBoundingClientRect();return[b.left+b.width/2,b.top+b.height/2]};
+$('zi').onclick=()=>zoomAt(...mid(),1.5);$('zo').onclick=()=>zoomAt(...mid(),1/1.5);
+$('zf').onclick=()=>{V={x:mx-FIT/2,y:my-FIT/2,w:FIT};setView()};
+addEventListener('resize',setView);
+// state
+let sol=[],states=[],cur=0,cols=SOLVED,busy=false,playing=false;
+const T=$('turns'),sleep=ms=>new Promise(r=>setTimeout(r,ms));
+const show=c=>{cols=c;dots.forEach((d,i)=>{d.setAttribute('fill',c[i]);sts[i].firstChild.style.background=c[i]})};
+function marks(){[...T.children].forEach((b,i)=>b.className='chip'+(i<cur?' done':i===cur?' now':''))}
+function status(r){const s=$('stat');
+ if(r!=null){const m=sol[r],M=mv(m);s.innerHTML=`Turn <b>${r+1}</b> of 15 · <b>${disp(m)}</b> · ${M.l?'outer':'middle'} layer · ${M.pairs.length} stickers move in ${M.pairs.length/4} cycles of 4`}
+ else s.textContent=cur===15?'Solved: each of the six clusters is one colour.':cur?`${cur} of 15 turns done.`:'Scrambled. Fifteen turns will solve it.'}
+function setState(i){cur=i;show(states[i]);marks();status()}
+function run(name,to){return new Promise(res=>{busy=true;const M=mv(name),old=cols;
+ M.pairs.forEach(([i],j)=>{dots[i].style.opacity=0;mov[j].setAttribute('fill',old[i]);mov[j].style.display=''});
+ const h=ring[M.k*3+M.l+1];h.classList.add('hot');svg.classList.add('lit');const t0=performance.now();
+ (function f(now){const t=Math.min(1,(now-t0)/720),e=t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2;
+  M.pairs.forEach(([i],j)=>{const a=proj(rotQ(Q[i],M.k,M.s*PI/2*e));mov[j].setAttribute('cx',a[0]);mov[j].setAttribute('cy',a[1]);sts[i].style.transform=cr(M.k,M.s*PI/2*e)+base[i]});
+  if(t<1)requestAnimationFrame(f);else{M.pairs.forEach(([i])=>sts[i].style.transform=base[i]);show(states[to]);dots.forEach(d=>d.style.opacity='');mov.forEach(m=>m.style.display='none');h.classList.remove('hot');svg.classList.remove('lit');busy=false;res()}})(t0)})}
+async function fwd(){if(busy||cur>=15)return;const i=cur;status(i);await run(sol[i],i+1);cur=i+1;marks();status()}
+async function back(){if(busy||cur<=0)return;playing=false;upd();const i=cur;await run(inv(sol[i-1]),i-1);cur=i-1;marks();status()}
+const upd=()=>$('play').textContent=playing?'Pause':cur>=15?'Replay':'Play';
+async function play(){if(playing){playing=false;upd();return}if(busy)return;if(cur>=15)setState(0);playing=true;upd();
+ while(playing&&cur<15){await fwd();if(playing)await sleep(240)}playing=false;upd()}
+async function jump(i){if(busy)return;playing=false;setState(i);upd();await fwd();upd()}
+function scramble(){const L='UDLRFBMES';let a=[],last='';
+ while(a.length<15){const c=L[Math.random()*9|0];if(c===last)continue;last=c;a.push(Math.random()<.5?c:c+"'")}
+ sol=a.slice().reverse().map(inv);let c=SOLVED;a.forEach(m=>c=app(c,m));states=[c];sol.forEach(m=>{c=app(c,m);states.push(c)});
+ T.innerHTML='';sol.forEach((m,i)=>{const b=document.createElement('button');b.textContent=disp(m);b.setAttribute('aria-label','Run turn '+(i+1)+': '+disp(m));b.onclick=()=>jump(i);T.appendChild(b)});
+ playing=false;setState(0);upd()}
+$('play').onclick=play;$('fw').onclick=async()=>{playing=false;await fwd();upd()};$('bk').onclick=back;
+$('rs').onclick=()=>{if(busy)return;playing=false;setState(0);upd()};
+$('nw').onclick=()=>{if(busy)return;scramble()};
+setView();scramble();
+})();
+</script></body></html>

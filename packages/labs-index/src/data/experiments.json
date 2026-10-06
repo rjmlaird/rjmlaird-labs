@@ -203,17 +203,26 @@
     "title": "Flow around objects",
     "description": "A 2D fluid solver running in the browser. It uses the lattice Boltzmann method to compute flow around an aerofoil, square or cylinder in air or water, with live drag and lift coefficients, vortex shedding and pressure and vorticity fields. An educational model, not experimentally validated.",
     "status": "active",
-    "tech": ["JavaScript", "Canvas 2D", "Lattice Boltzmann (D2Q9)", "Cloudflare Workers"],
+    "tech": [
+      "JavaScript",
+      "Canvas 2D",
+      "Lattice Boltzmann (D2Q9)",
+      "Cloudflare Workers"
+    ],
     "demoUrl": "https://cfd.labs.rjmlaird.co.uk",
     "repoUrl": "https://github.com/rjmlaird/rjmlaird-labs/tree/main/packages/cfd",
     "updated": "2026-10-05"
   },
   {
-   "slug": "electricity",
+    "slug": "electricity",
     "title": "Electricity",
     "description": "An interactive exploration of electricity: how voltage, current and resistance relate, and how simple circuits behave as you change the components.",
     "status": "active",
-    "tech": ["React", "Vite", "TypeScript"],
+    "tech": [
+      "React",
+      "Vite",
+      "TypeScript"
+    ],
     "demoUrl": "https://electricity.labs.rjmlaird.co.uk",
     "repoUrl": "https://github.com/rjmlaird/rjmlaird-labs/tree/main/packages/electricity",
     "updated": "2026-10-05"
@@ -223,9 +232,39 @@
     "title": "Elements",
     "description": "An interactive periodic table for exploring the chemical elements, their properties and how they group and trend across the table.",
     "status": "active",
-    "tech": ["React", "Vite", "TypeScript"],
+    "tech": [
+      "React",
+      "Vite",
+      "TypeScript"
+    ],
     "demoUrl": "https://elements.labs.rjmlaird.co.uk",
     "repoUrl": "https://github.com/rjmlaird/rjmlaird-labs/tree/main/packages/elements",
     "updated": "2026-10-05"
+  },
+  {
+    "slug": "leicester-floods",
+    "title": "leicester-floods",
+    "description": "New experiment — update this description.",
+    "status": "planned",
+    "tech": [
+      "React",
+      "Vite"
+    ],
+    "demoUrl": "https://leicester-floods.labs.rjmlaird.co.uk",
+    "repoUrl": "https://github.com/greenorbitspace/labs/tree/main/packages/leicester-floods",
+    "updated": "2026-10-06"
+  },
+  {
+    "slug": "rubiks",
+    "title": "rubiks",
+    "description": "New experiment — update this description.",
+    "status": "planned",
+    "tech": [
+      "React",
+      "Vite"
+    ],
+    "demoUrl": "https://rubiks.labs.rjmlaird.co.uk",
+    "repoUrl": "https://github.com/greenorbitspace/labs/tree/main/packages/rubiks",
+    "updated": "2026-10-06"
   }
 ]

@@ -1,6 +1,6 @@
 import * as satellite from 'satellite.js';
 import * as THREE from 'three';
-import { fetchText, gpUrl, parseTLE, parseSatcat, escapeHtml, get, SATCAT_URL, type SatcatKeys } from './lib/celestrak';
+import { fetchText, gpUrl, satcatUrl, parseTLE, parseSatcat, escapeHtml, get, type SatcatKeys } from './lib/celestrak';
 
 const STATUS_INFO = {
   '+': { label: 'Operational', desc: 'Operational', key: 'op' },
@@ -801,7 +801,7 @@ function loadData(group: string) {
   overlay.innerHTML = `<div class="ring"></div><div class="msg" id="overlayMsg">Fetching GP element set "${group}" from Celestrak…</div>`;
   setBadge('wait', 'connecting');
 
-  return Promise.all([fetchText(gpUrl(group)), fetchText(SATCAT_URL)])
+  return Promise.all([fetchText(gpUrl(group)), fetchText(satcatUrl(group))])
     .then(([tleText, satcatText]) => {
       overlayMsg = document.getElementById('overlayMsg') as HTMLDivElement;
       overlayMsg.textContent = 'Parsing element sets and catalog records…';
@@ -951,7 +951,7 @@ function showError(err: any, group: string) {
       <div style="color:var(--text); font-size:13px; font-weight:700; margin-bottom:6px;">Could not load live data</div>
       ${escapeHtml(err.message || String(err))}
       <br><br>
-      This is usually a browser CORS/network restriction reaching <b>celestrak.org</b>.
+      The data service could not get fresh data from <b>celestrak.org</b> just now. Retrying usually works.
     </div>
     <div class="fallback">
       <label>Paste TLE text (from the GP/elements link)</label>
