@@ -52,7 +52,9 @@ jobs:
               -type f \
               -name wrangler.jsonc \
               -not -path "*/node_modules/*" \
+              -not -path "*/dist/*" \
               -not -path "*/templates/*" \
+              -not -path "*/legacy/*" \
               -printf "%h\n" \
               | sort -u \
               | jq -Rsc 'split("\n") | map(select(length > 0))' \
@@ -161,9 +163,6 @@ jobs:
           node-version: 24
           package-manager-cache: false
 
-      - name: Install dependencies
-        run: pnpm install --no-frozen-lockfile
-
       - name: Verify experiment manifest
         shell: bash
         run: |
@@ -178,6 +177,9 @@ jobs:
             echo "::error::Missing wrangler.jsonc in '${{ matrix.directory }}'."
             exit 1
           }
+
+      - name: Install dependencies
+        run: pnpm install --no-frozen-lockfile
 
       - name: Build experiment
         run: pnpm --dir "${{ matrix.directory }}" run build
@@ -196,4 +198,7 @@ jobs:
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-        run: pnpm --dir "${{ matrix.directory }}" exec wrangler deploy
+        run: >
+          pnpm dlx wrangler@4 deploy
+          --config "${{ matrix.directory }}/wrangler.jsonc"
+          --cwd "${{ matrix.directory }}"
