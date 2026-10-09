@@ -31,10 +31,10 @@ jobs:
       packages: ${{ steps.packages.outputs.packages }}
 
     steps:
-      - name: Check out repository history
+      - name: Check out repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          fetch-depth: 1
 
       - name: Discover deployable experiments
         id: packages
@@ -52,6 +52,7 @@ jobs:
               -type f \
               -name wrangler.jsonc \
               -not -path "*/node_modules/*" \
+              -not -path "*/templates/*" \
               -printf "%h\n" \
               | sort -u \
               | jq -Rsc 'split("\n") | map(select(length > 0))' \
@@ -115,11 +116,15 @@ jobs:
             if [ "$PUSH_BEFORE" = "0000000000000000000000000000000000000000" ]; then
               echo "New branch push detected; deploying all experiments." >&2
               packages="$(all_packages)"
-            elif ! git cat-file -e "${PUSH_BEFORE}^{commit}" 2>/dev/null; then
-              echo "Push base commit is unavailable; deploying all experiments." >&2
-              packages="$(all_packages)"
             else
-              packages="$(changed_packages)"
+              git fetch --no-tags --depth=1 origin "$PUSH_BEFORE" 2>/dev/null || true
+
+              if git cat-file -e "${PUSH_BEFORE}^{commit}" 2>/dev/null; then
+                packages="$(changed_packages)"
+              else
+                echo "Push base commit is unavailable; deploying all experiments." >&2
+                packages="$(all_packages)"
+              fi
             fi
           fi
 
@@ -142,6 +147,8 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
 
       - name: Set up pnpm
         uses: pnpm/action-setup@v4
@@ -153,20 +160,21 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 24
-          cache: pnpm
-          cache-dependency-path: pnpm-lock.yaml
+          package-manager-cache: false
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: pnpm install --no-frozen-lockfile
 
       - name: Verify experiment manifest
         shell: bash
         run: |
           set -euo pipefail
+
           test -f "${{ matrix.directory }}/package.json" || {
             echo "::error::Missing package.json in '${{ matrix.directory }}'."
             exit 1
           }
+
           test -f "${{ matrix.directory }}/wrangler.jsonc" || {
             echo "::error::Missing wrangler.jsonc in '${{ matrix.directory }}'."
             exit 1
