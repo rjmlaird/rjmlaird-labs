@@ -178,8 +178,8 @@ jobs:
             exit 1
           }
 
-      - name: Install dependencies
-        run: pnpm install --no-frozen-lockfile
+      - name: Install experiment dependencies
+        run: pnpm --dir "${{ matrix.directory }}" install --no-frozen-lockfile
 
       - name: Build experiment
         run: pnpm --dir "${{ matrix.directory }}" run build
