@@ -2,7 +2,8 @@ name: Deploy labs
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
     paths:
       - "packages/**"
       - "package.json"
@@ -13,7 +14,7 @@ on:
   workflow_dispatch:
     inputs:
       package:
-        description: "Experiment directory under packages/ (or all)"
+        description: "Experiment path under packages/ (for example: contrast), or all"
         required: true
         default: all
         type: string
@@ -23,14 +24,16 @@ permissions:
 
 jobs:
   discover:
+    name: Discover experiments to deploy
     runs-on: ubuntu-latest
     outputs:
       packages: ${{ steps.packages.outputs.packages }}
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Check out repository history
+        uses: actions/checkout@v4
         with:
-          fetch-depth: 2
+          fetch-depth: 0
 
       - name: Discover deployable experiments
         id: packages
@@ -38,6 +41,8 @@ jobs:
         env:
           EVENT_NAME: ${{ github.event_name }}
           REQUESTED_PACKAGE: ${{ inputs.package }}
+          PUSH_BEFORE: ${{ github.event.before }}
+          PUSH_SHA: ${{ github.sha }}
         run: |
           set -euo pipefail
 
@@ -45,48 +50,72 @@ jobs:
             find packages \
               -type f \
               -name wrangler.jsonc \
-              -not -path '*/node_modules/*' \
-              -printf '%h\n' \
+              -not -path "*/node_modules/*" \
+              -printf "%h\n" \
+              | sort -u \
+              | jq -Rsc 'split("\n") | map(select(length > 0))'
+          }
+
+          nearest_deployable_directory() {
+            local file="$1"
+            local directory
+
+            directory="$(dirname "$file")"
+
+            while [ "$directory" != "." ] && [ "$directory" != "/" ]; do
+              if [ -f "$directory/wrangler.jsonc" ]; then
+                printf "%s\n" "$directory"
+                return 0
+              fi
+
+              directory="$(dirname "$directory")"
+            done
+
+            return 0
+          }
+
+          changed_packages() {
+            local changed_files
+            local file
+
+            changed_files="$(git diff --name-only "$PUSH_BEFORE" "$PUSH_SHA")"
+
+            if printf "%s\n" "$changed_files" | grep -Eq '^(package\.json|pnpm-lock\.yaml|pnpm-workspace\.yaml|\.github/workflows/deploy\.yml)$'; then
+              echo "Shared dependency or deployment configuration changed."
+              all_packages
+              return 0
+            fi
+
+            while IFS= read -r file; do
+              [ -n "$file" ] || continue
+              nearest_deployable_directory "$file"
+            done <<< "$changed_files" \
               | sort -u \
               | jq -Rsc 'split("\n") | map(select(length > 0))'
           }
 
           if [ "$EVENT_NAME" = "workflow_dispatch" ]; then
-            if [ "$REQUESTED_PACKAGE" = "all" ] || [ -z "$REQUESTED_PACKAGE" ]; then
+            if [ -z "$REQUESTED_PACKAGE" ] || [ "$REQUESTED_PACKAGE" = "all" ]; then
               packages="$(all_packages)"
             else
-              requested="packages/$REQUESTED_PACKAGE"
+              requested="packages/${REQUESTED_PACKAGE#packages/}"
 
               if [ ! -f "$requested/wrangler.jsonc" ]; then
-                echo "::error::No deployable experiment at $requested. It must contain wrangler.jsonc."
+                echo "::error::No deployable experiment exists at '$requested'. Expected '$requested/wrangler.jsonc'."
                 exit 1
               fi
 
-              packages="$(jq -cn --arg dir "$requested" '[$dir]')"
+              packages="$(jq -cn --arg directory "$requested" '[$directory]')"
             fi
           else
-            base="${{ github.event.before }}"
-
-            if [ "$base" = "0000000000000000000000000000000000000000" ]; then
+            if [ "$PUSH_BEFORE" = "0000000000000000000000000000000000000000" ]; then
+              echo "New branch push detected; deploying all experiments."
+              packages="$(all_packages)"
+            elif ! git cat-file -e "${PUSH_BEFORE}^{commit}" 2>/dev/null; then
+              echo "Push base commit is unavailable (for example, after rewritten history); deploying all experiments."
               packages="$(all_packages)"
             else
-              changed_files="$(git diff --name-only "$base" "${{ github.sha }}")"
-
-              if echo "$changed_files" | grep -Eq '^(package\.json|pnpm-lock\.yaml|pnpm-workspace\.yaml|\.github/workflows/deploy\.yml)$'; then
-                packages="$(all_packages)"
-              else
-                packages="$(
-                  echo "$changed_files" \
-                    | awk -F/ '/^packages\/[^/]+\// { print $1 "/" $2 }' \
-                    | sort -u \
-                    | while read -r dir; do
-                        if [ -f "$dir/wrangler.jsonc" ]; then
-                          printf '%s\n' "$dir"
-                        fi
-                      done \
-                    | jq -Rsc 'split("\n") | map(select(length > 0))'
-                )"
-              fi
+              packages="$(changed_packages)"
             fi
           fi
 
@@ -94,6 +123,7 @@ jobs:
           echo "packages=$packages" >> "$GITHUB_OUTPUT"
 
   deploy:
+    name: Deploy ${{ matrix.directory }}
     needs: discover
     if: needs.discover.outputs.packages != '[]'
     runs-on: ubuntu-latest
@@ -104,14 +134,17 @@ jobs:
         directory: ${{ fromJSON(needs.discover.outputs.packages) }}
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Check out repository
+        uses: actions/checkout@v4
 
-      - uses: pnpm/action-setup@v4
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
         with:
           version: 10
           run_install: false
 
-      - uses: actions/setup-node@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
         with:
           node-version: 24
           cache: pnpm
@@ -124,13 +157,16 @@ jobs:
         run: pnpm --dir "${{ matrix.directory }}" run build
 
       - name: Verify static assets
+        shell: bash
         run: |
+          set -euo pipefail
+
           test -d "${{ matrix.directory }}/dist" || {
-            echo "::error::Expected ${{ matrix.directory }}/dist after build."
+            echo "::error::Expected static build output at '${{ matrix.directory }}/dist'."
             exit 1
           }
 
-      - name: Deploy Worker and assets
+      - name: Deploy Worker and static assets
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
