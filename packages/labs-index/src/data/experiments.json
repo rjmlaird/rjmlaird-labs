@@ -144,7 +144,7 @@
       "Geospatial Data"
     ],
     "demoUrl": "https://drought.labs.rjmlaird.co.uk",
-    "repoUrl": "https://github.com/rjmlaird/labs/tree/main/packages/drought",
+    "repoUrl": "https://github.com/rjmlaird/rjmlaird-labs/tree/main/packages/drought",
     "updated": "2026-07-26"
   },
   {
@@ -159,7 +159,7 @@
       "Geospatial Data"
     ],
     "demoUrl": "https://tintwistle.labs.rjmlaird.co.uk",
-    "repoUrl": "https://github.com/rjmlaird/labs/tree/main/packages/tintwistle",
+    "repoUrl": "https://github.com/rjmlaird/rjmlaird-labs/tree/main/packages/tintwistle",
     "updated": "2026-07-26"
   },
   {
@@ -174,7 +174,7 @@
       "Geospatial Data"
     ],
     "demoUrl": "https://biodiversity.labs.rjmlaird.co.uk",
-    "repoUrl": "https://github.com/rjmlaird/labs/tree/main/packages/biodiversity",
+    "repoUrl": "https://github.com/rjmlaird/rjmlaird-labs/tree/main/packages/biodiversity",
     "updated": "2026-07-26"
   },
   {
@@ -189,7 +189,7 @@
       "Geospatial Data"
     ],
     "demoUrl": "https://sewage.labs.rjmlaird.co.uk",
-    "repoUrl": "https://github.com/rjmlaird/labs/tree/main/packages/sewage",
+    "repoUrl": "https://github.com/rjmlaird/rjmlaird-labs/tree/main/packages/sewage",
     "updated": "2026-07-26"
   },
   {
@@ -204,7 +204,7 @@
       "Geospatial Data"
     ],
     "demoUrl": "https://atmosphere.labs.rjmlaird.co.uk",
-    "repoUrl": "https://github.com/rjmlaird/labs/tree/main/packages/atmosphere",
+    "repoUrl": "https://github.com/rjmlaird/rjmlaird-labs/tree/main/packages/atmosphere",
     "updated": "2026-07-27"
   },
   {
@@ -265,7 +265,7 @@
       "TypeScript"
     ],
     "demoUrl": "https://rubiks.labs.rjmlaird.co.uk",
-    "repoUrl": "https://github.com/rjmlaird/labs/tree/main/packages/rubiks",
+    "repoUrl": "https://github.com/rjmlaird/rjmlaird-labs/tree/main/packages/rubiks",
     "updated": "2026-10-06"
   },
   {
@@ -280,7 +280,7 @@
       "JavaScript"
     ],
     "demoUrl": "https://astronomy.labs.rjmlaird.co.uk",
-    "repoUrl": "https://github.com/rjmlaird/labs/tree/main/packages/astronomy",
+    "repoUrl": "https://github.com/rjmlaird/rjmlaird-labs/tree/main/packages/astronomy",
     "updated": "2026-10-08"
   },
   {
@@ -295,7 +295,7 @@
       "JavaScript"
     ],
     "demoUrl": "https://astronomy.labs.rjmlaird.co.uk",
-    "repoUrl": "https://github.com/rjmlaird/labs/tree/main/packages/space",
+    "repoUrl": "https://github.com/rjmlaird/rjmlaird-labs/tree/main/packages/space",
     "updated": "2026-10-08"
   },
   {
@@ -310,7 +310,7 @@
       "TypeScript"
     ],
     "demoUrl": "https://physics.labs.rjmlaird.co.uk",
-    "repoUrl": "https://github.com/rjmlaird/labs/tree/main/packages/physics",
+    "repoUrl": "https://github.com/rjmlaird/rjmlaird-labs/tree/main/packages/physics",
     "updated": "2026-10-08"
   },
   {
@@ -325,7 +325,7 @@
       "TypeScript"
     ],
     "demoUrl": "https://maths.labs.rjmlaird.co.uk",
-    "repoUrl": "https://github.com/rjmlaird/labs/tree/main/packages/maths",
+    "repoUrl": "https://github.com/rjmlaird/rjmlaird-labs/tree/main/packages/maths",
     "updated": "2026-10-08"
   },
   {
@@ -340,7 +340,7 @@
       "TypeScript"
     ],
     "demoUrl": "https://climate.labs.rjmlaird.co.uk",
-    "repoUrl": "https://github.com/rjmlaird/labs/tree/main/packages/climate",
+    "repoUrl": "https://github.com/rjmlaird/rjmlaird-labs/tree/main/packages/climate",
     "updated": "2026-10-08"
   },
   {
@@ -355,7 +355,7 @@
       "TypeScript"
     ],
     "demoUrl": "https://weather.labs.rjmlaird.co.uk",
-    "repoUrl": "https://github.com/rjmlaird/labs/tree/main/packages/weather",
+    "repoUrl": "https://github.com/rjmlaird/rjmlaird-labs/tree/main/packages/weather",
     "updated": "2026-10-08"
   },
   {
@@ -368,7 +368,7 @@
       "Vite"
     ],
     "demoUrl": "https://marketing.labs.rjmlaird.co.uk",
-    "repoUrl": "https://github.com/rjmlaird/labs/tree/main/packages/marketing",
+    "repoUrl": "https://github.com/rjmlaird/rjmlaird-labs/tree/main/packages/marketing",
     "updated": "2026-10-08"
   }
 ]
