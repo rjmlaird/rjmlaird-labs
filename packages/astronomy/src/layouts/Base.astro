@@ -1,0 +1,45 @@
+---
+import '../styles/global.css';
+import { categories } from '../data/categories';
+interface Props { title: string; description?: string }
+const { title, description = 'Interactive astronomy and space-science demos by Ryan Laird.' } = Astro.props;
+const full = title === 'Astronomy Labs' ? title : `${title} · Astronomy Labs`;
+const path = Astro.url.pathname;
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>{full}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={new URL(path, Astro.site)} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Familjen+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" />
+    <script is:inline>
+      try { var t = localStorage.getItem('al-theme'); if (t) document.documentElement.dataset.theme = t; } catch (e) {}
+    </script>
+  </head>
+  <body>
+    <header class="site-header">
+      <a href="/" class="site-logo">Astronomy Labs</a>
+      <nav class="site-nav" aria-label="Categories">
+        {categories.map((c) => <a href={`/c/${c.id}/`} aria-current={path.startsWith(`/c/${c.id}/`) ? 'page' : undefined}>{c.title.split(' &')[0]}</a>)}
+      </nav>
+      <button class="theme-btn" id="theme-btn" type="button">Theme</button>
+    </header>
+    <main><slot /></main>
+    <footer class="site-footer">© Ryan Laird · <a href="https://rjmlaird.co.uk">rjmlaird.co.uk</a></footer>
+    <script is:inline>
+      document.getElementById('theme-btn').addEventListener('click', function () {
+        var root = document.documentElement;
+        var cur = root.dataset.theme || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        var next = cur === 'dark' ? 'light' : 'dark';
+        root.dataset.theme = next;
+        try { localStorage.setItem('al-theme', next); } catch (e) {}
+        window.dispatchEvent(new CustomEvent('al-theme', { detail: next }));
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,238 @@
+<!--SITE_HEADER-->
+
+  <main id="main">
+    <section class="hero wrap">
+      <p class="eyebrow">Interactive impact-planning prototype</p>
+
+      <h1>Make the route from research to real-world change visible.</h1>
+
+      <p class="hero-copy">
+        Build an impact pathway by linking a research finding to the people who matter, the
+        engagement activity that could enable use, the change you intend to contribute to, and the
+        evidence needed to make a responsible claim later.
+      </p>
+
+      <div class="notice">
+        <span class="notice-icon" aria-hidden="true">!</span>
+        <div>
+          <strong>A pathway is a hypothesis, not proof of impact.</strong>
+          It helps a team test whether the finding is relevant, whether people can use it, what
+          engagement is appropriate, and what evidence should be captured as activity unfolds.
+        </div>
+      </div>
+    </section>
+
+    <section class="wrap app-shell" aria-label="Impact Pathway Canvas tool">
+      <form class="panel planner" id="pathway-form">
+        <div class="panel-heading">
+          <h2>Add a pathway card</h2>
+          <p>
+            Create cards, connect each one to a preceding point in the pathway, then drag cards on
+            the canvas to organise the story visually.
+          </p>
+        </div>
+
+        <div class="field-set">
+          <div class="field">
+            <label for="project-title">Research project or programme</label>
+            <input
+              id="project-title"
+              name="project-title"
+              type="text"
+              value="Urban heat and neighbourhood design"
+              placeholder="For example: Satellite evidence for healthier local places"
+            />
+          </div>
+
+          <div class="two-columns">
+            <div class="field">
+              <label for="card-type">Pathway stage</label>
+              <select id="card-type" name="card-type">
+                <option value="finding">Research finding</option>
+                <option value="stakeholder">Stakeholder / beneficiary</option>
+                <option value="activity">Engagement activity</option>
+                <option value="outcome">Outcome or intended change</option>
+                <option value="evidence">Evidence of impact</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="card-status">Status</label>
+              <select id="card-status" name="card-status">
+                <option value="planned">Planned</option>
+                <option value="active">Active</option>
+                <option value="documented">Documented</option>
+                <option value="validated">Externally validated</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="card-title">Card title</label>
+            <input
+              id="card-title"
+              name="card-title"
+              type="text"
+              value="Neighbourhood evidence workshops"
+              placeholder="For example: Local authority planning teams"
+            />
+          </div>
+
+          <div class="field">
+            <label for="card-description">What does this contribute?</label>
+            <textarea
+              id="card-description"
+              name="card-description"
+              placeholder="Describe the research, user, activity, outcome or evidence source in specific terms."
+            >Bring satellite-derived heat evidence together with local knowledge and practitioner expertise to test interpretation and identify relevant priorities.</textarea>
+          </div>
+
+          <div class="field">
+            <label for="card-owner">Owner or partner</label>
+            <input
+              id="card-owner"
+              name="card-owner"
+              type="text"
+              value="Research team and community partners"
+              placeholder="For example: Principal investigator and local authority climate team"
+            />
+          </div>
+
+          <div class="field">
+            <label for="card-assumption">Assumption, risk or dependency</label>
+            <textarea
+              id="card-assumption"
+              name="card-assumption"
+              placeholder="What has to be true for this part of the pathway to work?"
+            >The engagement process is accessible and participants can meaningfully influence interpretation and next steps.</textarea>
+          </div>
+
+          <div class="field">
+            <label for="connect-to">Connect from</label>
+            <select id="connect-to" name="connect-to">
+              <option value="">Start a new pathway</option>
+            </select>
+            <p class="field-help">
+              Connections describe a plausible contribution pathway. They do not establish
+              causation or prove later impact.
+            </p>
+          </div>
+
+          <div class="field">
+            <label for="demo-picker">Load a demo pathway</label>
+            <select id="demo-picker" name="demo-picker">
+              <option value="">Choose a demo…</option>
+              <option value="urban-heat">Urban heat and neighbourhood design</option>
+              <option value="coastal-monitoring">Satellite coastal monitoring</option>
+              <option value="research-policy">Research evidence to policy use</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="action-row">
+          <button class="button button-primary" type="submit">Add to canvas</button>
+          <button class="button button-secondary" id="clear-card" type="button">Clear card</button>
+          <button class="button button-secondary button-wide" id="copy-pathway" type="button">
+            Copy impact pathway
+          </button>
+        </div>
+      </form>
+
+      <section class="panel canvas" aria-labelledby="canvas-title">
+        <div class="canvas-header">
+          <div>
+            <h2 id="canvas-title">Impact pathway</h2>
+            <p id="canvas-subtitle">
+              Drag cards to organise the map. Click a card to inspect its contribution, owner and
+              evidence or assumption.
+            </p>
+          </div>
+
+          <div class="canvas-actions" aria-label="Canvas view controls">
+            <button id="show-pathway" type="button" aria-pressed="true">Pathway view</button>
+            <button id="show-assumptions" type="button" aria-pressed="false">Assumptions</button>
+          </div>
+        </div>
+
+        <div class="canvas-body">
+          <div class="legend" aria-label="Impact pathway legend">
+            <span class="legend-item"><span class="legend-swatch" style="color: var(--blue)"></span>Finding</span>
+            <span class="legend-item"><span class="legend-swatch" style="color: var(--teal)"></span>Stakeholder</span>
+            <span class="legend-item"><span class="legend-swatch" style="color: var(--purple)"></span>Activity</span>
+            <span class="legend-item"><span class="legend-swatch" style="color: var(--amber)"></span>Outcome</span>
+            <span class="legend-item"><span class="legend-swatch" style="color: var(--green)"></span>Evidence</span>
+            <span class="legend-item"><span class="legend-line" style="color: var(--text-lo)"></span>Contribution pathway</span>
+            <span class="legend-item"><span class="legend-line dashed" style="color: var(--red)"></span>Assumption view</span>
+          </div>
+
+          <div class="board-wrap" id="board-wrap">
+            <div id="impact-board" aria-live="polite"></div>
+          </div>
+
+          <section class="detail-card" aria-live="polite">
+            <div>
+              <h3 id="detail-title">Select a card</h3>
+              <p id="detail-description">
+                Click a card to inspect the pathway item and its current evidence or dependency.
+              </p>
+            </div>
+
+            <div class="detail-meta">
+              <div class="meta-box">
+                <small>Stage</small>
+                <strong id="detail-type">—</strong>
+              </div>
+
+              <div class="meta-box">
+                <small>Status</small>
+                <strong id="detail-status">—</strong>
+              </div>
+
+              <div class="meta-box">
+                <small>Owner / partner</small>
+                <strong id="detail-owner">—</strong>
+              </div>
+
+              <div class="meta-box">
+                <small>Assumption or risk</small>
+                <strong id="detail-assumption">—</strong>
+              </div>
+            </div>
+          </section>
+
+          <div class="insights-grid">
+            <article class="insight-card">
+              <small>Pathway coverage</small>
+              <p id="coverage-insight">Add cards to check whether the pathway runs from research to evidence.</p>
+            </article>
+
+            <article class="insight-card">
+              <small>Evidence readiness</small>
+              <p id="evidence-insight">Add evidence cards to make later impact claims traceable.</p>
+            </article>
+
+            <article class="insight-card">
+              <small>Engagement prompt</small>
+              <p id="engagement-insight">Add stakeholders and activities to identify whether engagement is being treated as a meaningful pathway.</p>
+            </article>
+          </div>
+
+          <section class="review-panel">
+            <h3>Impact-plan review prompts</h3>
+            <ul class="review-list" id="review-list"></ul>
+          </section>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <p>
+        This tool supports planning, facilitation and structured reflection. It does not prove
+        causation, guarantee impact, validate evidence, replace ethical review or determine REF
+        eligibility. Review pathways with intended users and affected communities, and record
+        engagement and evidence as the work happens rather than reconstructing it afterwards.
+      </p>
+    </div>
+  </footer>

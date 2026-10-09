@@ -1,0 +1,24 @@
+---
+import LabLayout from "@labs/ui/LabLayout.astro";
+import LabCard from "@labs/ui/LabCard.astro";
+import { experimentsOf } from "@labs/registry";
+
+const experiments = experimentsOf("mechanics");
+---
+
+<LabLayout lab="mechanics" current="index">
+  <main class="page">
+    <header class="hero">
+      <p class="eyebrow">Labs</p>
+      <h1>Mechanics Experiments</h1>
+      <p class="lede">
+        {experiments.length} interactive classical-mechanics experiments, all built on the same physics engine: SUVAT equations,
+        conservation of energy, and conservation of momentum, worked out live with the numbers you choose.
+      </p>
+    </header>
+
+    <section class="page-notes card-grid">
+      {experiments.map((e) => <LabCard eyebrow={e.eyebrow} title={e.label} href={e.href} description={e.summary} />)}
+    </section>
+  </main>
+</LabLayout>

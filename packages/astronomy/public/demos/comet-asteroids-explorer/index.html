@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Comets and asteroids by orbit and classification</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Familjen+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{--bg:#eceef2;--panel:#f9fafb;--field:#eef1f5;--ink:#16202c;--muted:#566274;--line:#d0d7e0;--accent:#8f5f10;--on-accent:#fff;--sky:#070b17;--red:#c0402c;--blue:#2a68b8;--display:'Familjen Grotesk',system-ui,-apple-system,'Segoe UI',sans-serif;--mono:'IBM Plex Mono',ui-monospace,Menlo,Consolas,monospace;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0a0e17;--panel:#111826;--field:#0c121e;--ink:#e6ebf3;--muted:#93a0b4;--line:#243046;--accent:#e0a844;--on-accent:#1a1100;--red:#e0624b;--blue:#5a9be8;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0a0e17;--panel:#111826;--field:#0c121e;--ink:#e6ebf3;--muted:#93a0b4;--line:#243046;--accent:#e0a844;--on-accent:#1a1100;--red:#e0624b;--blue:#5a9be8;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}*{box-sizing:border-box}[hidden]{display:none!important}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 var(--display);padding:20px 16px 36px}
+.wrap{max-width:1120px;margin-inline:auto;display:flex;flex-direction:column;gap:16px}
+h1{margin:0;font-size:1.7rem;letter-spacing:-.015em}.top p{margin:2px 0 0;color:var(--muted);max-width:68ch}
+h2{margin:0 0 8px;font-size:1.02rem;font-weight:600}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px;min-width:0}
+.layout{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:16px;align-items:start}
+@media(max-width:860px){.layout{grid-template-columns:minmax(0,1fr)}}
+.col{display:flex;flex-direction:column;gap:16px;min-width:0}
+.cw{border:1px solid var(--line);border-radius:6px;overflow:hidden;background:var(--sky)}.cw canvas{display:block;width:100%;cursor:pointer}
+button,input,select{font:inherit;font-size:.86rem;color:var(--ink);background:var(--field);border:1px solid var(--line);border-radius:6px;padding:6px 10px}
+button{cursor:pointer}button:hover{border-color:var(--muted)}button[aria-pressed=true]{border-color:var(--accent);background:var(--panel);font-weight:600}
+button.primary{background:var(--accent);color:var(--on-accent);border-color:transparent;font-weight:600;min-width:78px}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+select{max-width:100%}
+.btns{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:10px}
+.btns .lbl{color:var(--muted);font-size:.8rem}
+.live{margin:8px 0 0;font:.82rem var(--mono);color:var(--muted)}
+.note{margin:10px 0 0;color:var(--muted);font-size:.8rem;max-width:72ch}
+table{width:100%;border-collapse:collapse}td,th{padding:6px 0;border-top:1px solid var(--line);font:.84rem var(--mono);text-align:right}
+th{font-size:.68rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);border-top:0;font-weight:400}
+td:first-child,th:first-child{text-align:left;font-family:var(--display);font-size:.92rem;color:var(--muted)}
+td.dn{color:var(--red)}td.bl{color:var(--blue)}td.dn,td.bl{font-weight:500}
+.sw{display:inline-block;width:12px;height:12px;border-radius:50%;margin-right:7px;vertical-align:-1px;border:1px solid var(--line)}
+.off .sw{opacity:.35}
+.exp{font-size:.92rem}.exp p{margin:0 0 8px}.exp ul{margin:0 0 10px;padding-left:18px;color:var(--muted);font-size:.88rem}.exp li{margin-bottom:4px}
+.grp{margin:0 0 12px}.grp .lbl{display:block;color:var(--muted);font-size:.8rem;margin-bottom:5px}.grp .btns{margin-top:0;gap:6px}.grp button{padding:4px 8px;font-size:.8rem}
+</style></head><body>
+<main class="wrap">
+<header class="top"><h1>Comets and asteroids by orbit and classification</h1>
+<p>Small bodies are sorted by where they orbit and how elongated, tilted and bound those orbits are. Pick a class or a real object to see its orbit against the planets, then check where it sits on the semi-major axis and eccentricity chart.</p></header>
+<div class="layout">
+<div class="col">
+<section class="card" aria-label="Orbit map">
+<div class="btns" id="flt" style="margin:0 0 10px"></div>
+<div class="cw"><canvas id="map" role="img" aria-label="Top-down map of the Solar System with small-body orbits"></canvas></div>
+<p class="live" id="live"></p>
+<div class="btns"><button type="button" class="primary" id="play" aria-pressed="true">Pause</button>
+<select id="spd" aria-label="Animation speed"><option value="0.5">Slow</option><option value="1" selected>Normal</option><option value="2">Fast</option></select>
+<select id="view" aria-label="Map scale"><option value="fit">Fit selected orbit</option><option value="5">Inner: 5 AU</option><option value="35">Planets: 35 AU</option><option value="100">Outer: 100 AU</option><option value="1000">Wide: 1,000 AU</option></select>
+<button type="button" id="tPl" aria-pressed="true">Planet orbits</button><button type="button" id="tBe" aria-pressed="true">Belts and regions</button></div>
+<div class="btns"><span class="lbl">Object:</span><select id="obj" aria-label="Select an object"></select></div>
+<p class="note">Top-down view of the ecliptic plane, with the Sun at the centre. Time is sped up, and faster for wider scales. Click an object on the map to select it. Comets grow a coma and tail inside about 3 AU. Orbit orientations are approximate; inclination is given in the readout rather than drawn.</p>
+</section>
+<section class="card" aria-label="Orbit family chart"><h2>Semi-major axis and eccentricity</h2>
+<div class="cw"><canvas id="ae" role="img" aria-label="Chart of eccentricity against semi-major axis for the example objects"></canvas></div>
+<p class="note">Classes occupy different regions. Above the dashed curve, perihelion is under 1.3 AU (near-Earth). Interstellar objects have e above 1 and are off the chart. Click a point to select it.</p></section>
+</div>
+<div class="col">
+<section class="card" aria-label="Object readout"><h2 id="resH"></h2><table id="tbl"></table><p class="note" id="desc"></p></section>
+<section class="card exp" aria-label="Classification" id="exp"></section>
+<section class="card" aria-label="Examples by class"><h2>Real examples by class</h2><div id="ex"></div></section>
+</div></div></main>
+<script>
+const TAU = Math.PI * 2, $ = (id) => document.getElementById(id), RAD = Math.PI / 180, MONO = "11px 'IBM Plex Mono',monospace";
+const TYPES = {
+  mba: ['Main-belt asteroids', '#d8a45a'], nea: ['Near-Earth asteroids', '#f0824a'], trojan: ['Jupiter Trojans', '#c8b84e'], centaur: ['Centaurs', '#d46a8a'],
+  kbo: ['Kuiper belt and beyond', '#8e9bb8'], spc: ['Short-period comets', '#5aa9e8'], lpc: ['Long-period comets', '#4fd1c0'], ism: ['Interstellar objects', '#b48cf0']
+};
+/* name, type, class, a (AU; negative = hyperbolic), e, i (deg), longitude of perihelion (deg, approx), Trojan camp offset (deg), description.
+   Values are rounded for teaching; check JPL Small-Body Database before publishing. */
+const RAW = [
+['1 Ceres','mba','Main-belt asteroid, dwarf planet',2.77,0.08,10.6,154,0,'Dwarf planet about 940 km across. Orbited by NASA’s Dawn from 2015 to 2018.'],
+['2 Pallas','mba','Main-belt asteroid',2.77,0.231,34.8,123,0,'Third most massive asteroid, about 510 km across. Its steeply tilted orbit makes it hard to reach.'],
+['4 Vesta','mba','Main-belt asteroid',2.36,0.089,7.1,255,0,'Differentiated rocky world about 525 km across and the source of HED meteorites. Dawn orbited it in 2011–12.'],
+['10 Hygiea','mba','Main-belt asteroid, C-type',3.14,0.11,3.8,235,0,'Fourth largest asteroid, about 430 km across. A dark, carbon-rich body and a dwarf planet candidate.'],
+['433 Eros','nea','Amor near-Earth asteroid',1.458,0.223,10.8,123,0,'Elongated S-type about 34 km long. NEAR Shoemaker orbited it and landed in 2001.'],
+['25143 Itokawa','nea','Apollo near-Earth asteroid',1.324,0.28,1.6,231,0,'Peanut-shaped rubble pile about 0.5 km long. Hayabusa returned the first asteroid samples in 2010.'],
+['101955 Bennu','nea','Apollo near-Earth asteroid',1.126,0.204,6.0,68,0,'Carbon-rich rubble pile about 490 m across. OSIRIS-REx delivered a sample to Earth in September 2023.'],
+['99942 Apophis','nea','Aten near-Earth asteroid',0.922,0.191,3.3,330,0,'About 370 m across. Passes about 32,000 km from Earth’s centre on 13 April 2029, inside geostationary orbit.'],
+['2062 Aten','nea','Aten near-Earth asteroid',0.967,0.183,18.9,148,0,'Prototype of the Aten class: orbits mostly inside Earth’s orbit but crosses it near aphelion.'],
+['588 Achilles','trojan','Jupiter Trojan, L4 camp',5.21,0.148,10.3,100,60,'First Trojan found (1906). Leads Jupiter around the Sun in the L4 “Greek” camp.'],
+['624 Hektor','trojan','Jupiter Trojan, L4 camp',5.25,0.023,18.2,290,60,'One of the largest Trojans at about 225 km. Elongated and binary, and despite the name it sits in the Greek camp.'],
+['2060 Chiron','centaur','Centaur, active',13.7,0.38,6.9,189,0,'First centaur found (1977), about 200 km across. It grows a coma at times, so it also has the comet name 95P.'],
+['10199 Chariklo','centaur','Centaur',15.8,0.17,23.4,182,0,'Largest known centaur at about 250 km, and the first small body found to have rings (2013).'],
+['5145 Pholus','centaur','Centaur',20.4,0.57,24.7,113,0,'Very red centaur whose orbit crosses those of Saturn and Neptune.'],
+['134340 Pluto','kbo','Kuiper belt object, plutino',39.5,0.249,17.1,224,0,'Dwarf planet locked in a 3:2 resonance with Neptune. New Horizons flew past in July 2015.'],
+['136472 Makemake','kbo','Kuiper belt object, classical',45.5,0.16,29,16,0,'Classical dwarf planet about 1,400 km across with a methane-ice surface.'],
+['50000 Quaoar','kbo','Kuiper belt object, classical',43.7,0.04,8.0,336,0,'About 1,100 km across. Its ring orbits far outside the usual Roche limit.'],
+['486958 Arrokoth','kbo','Kuiper belt object, cold classical',44.2,0.04,2.5,170,0,'Contact binary about 36 km long. New Horizons flew past on 1 January 2019.'],
+['136199 Eris','kbo','Scattered-disc object',68,0.44,44,187,0,'Dwarf planet about as large as Pluto. Its discovery in 2005 led to the current definition of “planet”.'],
+['90377 Sedna','kbo','Detached object',506,0.85,11.9,96,0,'Perihelion near 76 AU keeps it clear of Neptune’s influence. One orbit takes about 11,400 years.'],
+['1P/Halley','spc','Halley-type comet, retrograde',17.8,0.967,162.3,170,0,'Last at perihelion in 1986; next in mid-2061. Orbits against the planets’ direction.'],
+['2P/Encke','spc','Jupiter-family comet',2.22,0.848,11.8,160,0,'Among the shortest periods of any known comet, about 3.3 years. Parent of the Taurid meteors.'],
+['67P/Churyumov–Gerasimenko','spc','Jupiter-family comet',3.46,0.641,7.0,58,0,'Rosetta orbited it in 2014–16 and landed the Philae probe on its nucleus.'],
+['81P/Wild','spc','Jupiter-family comet',3.44,0.54,3.2,178,0,'Wild 2. Stardust flew through its coma in 2004 and returned dust to Earth in 2006.'],
+['109P/Swift–Tuttle','spc','Halley-type comet, retrograde',26.1,0.963,113.5,292,0,'Nucleus about 26 km across and parent of the Perseid meteor shower. Next perihelion in 2126.'],
+['C/1995 O1 Hale–Bopp','lpc','Long-period comet',186,0.995,89.4,53,0,'Great comet of 1997, visible to the naked eye for about 18 months. Perihelion on 1 April 1997.'],
+['C/2020 F3 NEOWISE','lpc','Long-period comet',360,0.9992,128.9,98,0,'Naked-eye comet in July 2020, with perihelion at 0.29 AU on 3 July. Returns in about 6,800 years.'],
+['C/1965 S1 Ikeya–Seki','lpc','Long-period comet, Kreutz sungrazer',92,0.99992,141.9,55,0,'Grazed the Sun at about 0.008 AU in October 1965 and was visible in daylight.'],
+['1I/ʻOumuamua','ism','Interstellar object',-1.272,1.201,122.7,267,0,'First interstellar object seen (2017). No visible coma, yet it accelerated in ways gravity alone doesn’t explain.'],
+['2I/Borisov','ism','Interstellar comet',-0.851,3.357,44.1,157,0,'Second interstellar visitor (2019) and the first confirmed interstellar comet. Rich in carbon monoxide.'],
+['3I/ATLAS','ism','Interstellar comet',-0.264,6.14,175.1,90,0,'Third interstellar object, found in July 2025. Active comet with perihelion near 1.4 AU in October 2025.']
+];
+const D = RAW.map((r, k) => { const [name, t, cl, a, e, i, w, camp, d] = r, hyp = e > 1;
+  return { id: k, name, short: name.split(' ').pop(), t, cl, a, e, i, w: w * RAD, camp, d, hyp, q: a * (1 - e), Q: hyp ? null : a * (1 + e), P: hyp ? null : Math.pow(a, 1.5),
+    com: t === 'spc' || t === 'lpc' || /^[23]I/.test(name), m0: (k * 2.399) % TAU }; });
+const PL = [['Mercury', .387, .241], ['Venus', .723, .615], ['Earth', 1, 1], ['Mars', 1.524, 1.881], ['Jupiter', 5.203, 11.86], ['Saturn', 9.537, 29.46], ['Uranus', 19.19, 84.01], ['Neptune', 30.07, 164.8]];
+const st = { sel: D.findIndex((o) => o.name === '1P/Halley'), on: new Set(Object.keys(TYPES)), view: 'fit', planets: true, belts: true, speed: 1, t: 0, r: 0,
+  playing: !(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) };
+let dirty = true;
+
+/* ---- orbital geometry ---- */
+const jupAngle = () => 1 + TAU * st.t / 11.86;
+// Orbit as a polyline in AU (ecliptic x, y). Ellipse: x = a(cosE - e), y = b sinE, perihelion on +x, then rotated by the longitude of perihelion.
+// Hyperbola: x = A(e - coshH), y = A sqrt(e^2 - 1) sinhH, cut off at distance Rm. Retrograde orbits (i > 90) run clockwise.
+function orbitPts(o, Rm) {
+  const P = [], dir = o.i > 90 ? -1 : 1, c = Math.cos(o.w), s = Math.sin(o.w), rot = (x, y) => [x * c - y * s, x * s + y * c];
+  if (o.hyp) { const A = -o.a, Hm = Math.acosh((Rm / A + 1) / o.e);
+    for (let k = 0; k <= 160; k++) { const H = -Hm + 2 * Hm * k / 160; P.push(rot(A * (o.e - Math.cosh(H)), dir * A * Math.sqrt(o.e * o.e - 1) * Math.sinh(H))); } }
+  else { const b = o.a * Math.sqrt(1 - o.e * o.e);
+    for (let k = 0; k <= 240; k++) { const E = TAU * k / 240; P.push(rot(o.a * (Math.cos(E) - o.e), dir * b * Math.sin(E))); } }
+  return P;
+}
+function pos(o, Rm) {
+  const dir = o.i > 90 ? -1 : 1, c = Math.cos(o.w), s = Math.sin(o.w), e = o.e; let x, y;
+  if (o.hyp) { // hyperbolic Kepler equation: M = e sinhH - H; the object loops through the visible stretch of its path
+    const A = -o.a, n = TAU / Math.pow(A, 1.5), Hm = Math.acosh((Rm / A + 1) / e), Mm = e * Math.sinh(Hm) - Hm;
+    const M = ((((n * st.t + o.m0 / TAU * 2 * Mm) % (2 * Mm)) + 2 * Mm) % (2 * Mm)) - Mm; let H = Math.asinh(M / e);
+    for (let k = 0; k < 10; k++) H -= (e * Math.sinh(H) - H - M) / (e * Math.cosh(H) - 1);
+    x = A * (e - Math.cosh(H)); y = dir * A * Math.sqrt(e * e - 1) * Math.sinh(H);
+  } else {
+    let M = o.t === 'trojan' ? jupAngle() + o.camp * RAD - o.w : o.m0 + TAU * st.t / o.P; M = ((M + Math.PI) % TAU + TAU) % TAU - Math.PI;
+    let E = e > 0.8 ? Math.sign(M) * Math.PI : M; for (let k = 0; k < 25; k++) E -= (E - e * Math.sin(E) - M) / (1 - e * Math.cos(E));
+    x = o.a * (Math.cos(E) - e); y = dir * o.a * Math.sqrt(1 - e * e) * Math.sin(E);
+  }
+  return [x * c - y * s, x * s + y * c];
+}
+const tisserand = (o) => o.hyp ? null : 5.203 / o.a + 2 * Math.cos(o.i * RAD) * Math.sqrt(o.a / 5.203 * (1 - o.e * o.e));
+const viewR = () => { if (st.view !== 'fit') return +st.view; const o = D[st.sel]; return o.hyp ? Math.max(2, 6 * o.q) : Math.max(1.5, o.Q * 1.12); };
+const visible = (o) => st.on.has(o.t) || o.id === st.sel;
+
+/* ---- drawing ---- */
+function fit(c, ar) { const w = c.parentElement.clientWidth, d = window.devicePixelRatio || 1, h = Math.round(w / ar);
+  if (c.width !== Math.round(w * d) || c.height !== Math.round(h * d)) { c.width = Math.round(w * d); c.height = Math.round(h * d); c.style.height = h + 'px'; }
+  const g = c.getContext('2d'); g.setTransform(d, 0, 0, d, 0, 0); return [g, w, h]; }
+function drawMap() {
+  const [g, w, h] = fit($('map'), 1.35), cx = w / 2, cy = h / 2, R = viewR(), s = (h / 2 - 8) / R, sel = D[st.sel], Rm = R * 1.15, jA = jupAngle();
+  const X = (x) => cx + x * s, Y = (y) => cy - y * s;
+  g.fillStyle = '#070b17'; g.fillRect(0, 0, w, h); g.font = MONO; g.textBaseline = 'middle';
+  const ring = (r0, r1, fill, a0 = 0, a1 = TAU) => { g.beginPath(); g.arc(cx, cy, r1 * s, -a1, -a0); g.arc(cx, cy, r0 * s, -a0, -a1, true); g.closePath(); g.fillStyle = fill; g.fill(); };
+  const lab = (t, x, y, col = '#93a0b4', al = 'center') => { g.fillStyle = col; g.textAlign = al; g.fillText(t, x, y); };
+  if (st.belts) {
+    ring(2.1, 3.3, 'rgba(216,164,90,.14)'); ring(30, 50, 'rgba(142,155,184,.13)');
+    for (const sg of [1, -1]) ring(4.7, 5.7, 'rgba(200,184,78,.22)', jA + sg * 60 * RAD - 22 * RAD, jA + sg * 60 * RAD + 22 * RAD);
+    if (3.3 * s > 34) lab('Main belt', cx, cy - 3.3 * s - 8);
+    if (50 * s > 40 && 50 * s < h / 2 - 8) lab('Kuiper belt', cx, cy - 50 * s - 8);
+    if (5.7 * s > 45) { lab('L4', X(5.2 * Math.cos(jA + 60 * RAD)), Y(5.2 * Math.sin(jA + 60 * RAD)) - 14, '#c8b84e'); lab('L5', X(5.2 * Math.cos(jA - 60 * RAD)), Y(5.2 * Math.sin(jA - 60 * RAD)) + 14, '#c8b84e'); }
+    if (R >= 900) lab('Oort cloud begins beyond about 2,000 AU', cx, h - 14);
+  }
+  if (st.planets) PL.forEach((p, k) => { const r = p[1] * s; if (r < 3) return;
+    g.beginPath(); g.arc(cx, cy, r, 0, TAU); g.strokeStyle = 'rgba(147,160,180,.26)'; g.lineWidth = 1; g.stroke();
+    const th = p[0] === 'Jupiter' ? jA : k * 1.3 + TAU * st.t / p[2], px = X(p[1] * Math.cos(th)), py = Y(p[1] * Math.sin(th));
+    g.beginPath(); g.arc(px, py, 2.4, 0, TAU); g.fillStyle = '#9fb4d6'; g.fill(); if (r > 22) lab(p[0], px + 6, py - 8, '#7f8da3', 'left'); });
+  g.beginPath(); g.arc(cx, cy, 3.5, 0, TAU); g.fillStyle = '#ffd36b'; g.fill();
+  const vis = D.filter(visible); g.lineWidth = 1;
+  for (const o of vis) { if (o === sel) continue; const P = orbitPts(o, Rm); g.beginPath(); P.forEach((p, k) => k ? g.lineTo(X(p[0]), Y(p[1])) : g.moveTo(X(p[0]), Y(p[1])));
+    g.strokeStyle = TYPES[o.t][1] + '55'; g.stroke(); }
+  const P = orbitPts(sel, Rm); g.beginPath(); P.forEach((p, k) => k ? g.lineTo(X(p[0]), Y(p[1])) : g.moveTo(X(p[0]), Y(p[1]))); g.strokeStyle = TYPES[sel.t][1]; g.lineWidth = 2; g.stroke();
+  const pc = [sel.q * Math.cos(sel.w), sel.q * Math.sin(sel.w)]; g.beginPath(); g.arc(X(pc[0]), Y(pc[1]), 3, 0, TAU); g.strokeStyle = '#e6ebf3'; g.lineWidth = 1; g.stroke();
+  if (sel.hyp) { lab('incoming', X(P[0][0]), Y(P[0][1]) - 10); lab('outgoing', X(P[160][0]), Y(P[160][1]) - 10); }
+  for (const o of vis) { const [x, y] = pos(o, Rm), r = Math.hypot(x, y), sx = X(x), sy = Y(y); o.sx = sx; o.sy = sy; if (o === sel) st.r = r;
+    if (o.com && r < 3 && r > 0) { const L = (3 - r) / 3 * Math.min(70, w * .15); g.beginPath(); g.moveTo(sx, sy); g.lineTo(sx + x / r * L, sy - y / r * L); g.strokeStyle = TYPES[o.t][1] + 'aa'; g.lineWidth = 2.5; g.stroke();
+      g.beginPath(); g.arc(sx, sy, 4, 0, TAU); g.fillStyle = TYPES[o.t][1] + '55'; g.fill(); }
+    g.beginPath(); g.arc(sx, sy, o === sel ? 4.5 : 2.6, 0, TAU); g.fillStyle = TYPES[o.t][1]; g.fill();
+    if (o === sel) { g.strokeStyle = '#fff'; g.lineWidth = 1.5; g.stroke(); }
+    if (o === sel || vis.length <= 8) lab(o.short, sx + 8, sy - 9, o === sel ? '#fff' : '#b9c4d6', 'left'); }
+  lab(`scale: ${R < 10 ? R.toFixed(1) : Math.round(R).toLocaleString('en-GB')} AU from the Sun to the edge`, 8, h - 10, '#6c7a90', 'left');
+  $('live').textContent = `${sel.name} · ${st.r.toFixed(st.r < 10 ? 2 : 1)} AU from the Sun`;
+}
+function drawAE() {
+  const [g, w, h] = fit($('ae'), 2), L = 40, Rt = 12, T = 10, B = 28, lo = Math.log10(.5), hi = Math.log10(1000);
+  const px = (a) => L + (Math.log10(a) - lo) / (hi - lo) * (w - L - Rt), py = (e) => T + (1 - e) * (h - T - B);
+  g.fillStyle = '#070b17'; g.fillRect(0, 0, w, h); g.font = MONO; g.fillStyle = '#93a0b4'; g.strokeStyle = '#243046'; g.lineWidth = 1; g.textBaseline = 'middle';
+  [1, 10, 100, 1000].forEach((a) => { g.beginPath(); g.moveTo(px(a), T); g.lineTo(px(a), h - B); g.stroke(); g.textAlign = 'center'; g.fillText(a.toLocaleString('en-GB'), px(a), h - B + 12); });
+  [0, .5, 1].forEach((e) => { g.beginPath(); g.moveTo(L, py(e)); g.lineTo(w - Rt, py(e)); g.stroke(); g.textAlign = 'right'; g.fillText(e.toFixed(1), L - 6, py(e)); });
+  g.textAlign = 'center'; g.fillText('semi-major axis a (AU, log scale)', (L + w - Rt) / 2, h - 4);
+  g.save(); g.translate(10, (T + h - B) / 2); g.rotate(-Math.PI / 2); g.fillText('e', 0, 0); g.restore();
+  g.setLineDash([4, 4]); g.strokeStyle = '#f0824a'; g.beginPath(); let first = true;
+  for (let a = 1.3; a <= 1000; a *= 1.05) { const x = px(a), y = py(1 - 1.3 / a); first ? g.moveTo(x, y) : g.lineTo(x, y); first = false; } g.stroke();
+  [[5.2, 'Jupiter'], [30, 'Neptune']].forEach(([a, n]) => { g.strokeStyle = '#5b6b86'; g.beginPath(); g.moveTo(px(a), T); g.lineTo(px(a), h - B); g.stroke(); g.fillStyle = '#7f8da3'; g.textAlign = 'left'; g.fillText(n, px(a) + 4, T + 8); });
+  g.setLineDash([]);
+  for (const o of D) { if (o.hyp) continue; const on = visible(o); g.beginPath(); g.arc(px(o.a), py(o.e), o.id === st.sel ? 6 : 3.6, 0, TAU); g.fillStyle = on ? TYPES[o.t][1] : TYPES[o.t][1] + '44'; g.fill();
+    if (o.id === st.sel) { g.strokeStyle = '#fff'; g.lineWidth = 1.5; g.stroke(); } o.ax = px(o.a); o.ay = py(o.e); }
+}
+
+/* ---- text ---- */
+const EXP = {
+  mba: ['Main-belt asteroids orbit between Mars and Jupiter, roughly 2.1–3.3 AU from the Sun. Jupiter’s gravity stirred up the leftover material so it never grew into a planet. They are mostly rocky or metallic, with dark carbon-rich C-types dominating the outer belt.',
+    ['Low to moderate eccentricity, so their orbits rarely cross a planet’s.', 'Kirkwood gaps open at resonances with Jupiter, such as the 3:1 at about 2.5 AU.', 'The whole belt weighs only a few per cent of the Moon; Ceres holds roughly a third of it.']],
+  nea: ['Near-Earth asteroids have perihelion below 1.3 AU. Three subclasses depend on how the orbit sits relative to Earth’s.',
+    ['Aten: a below 1 AU, aphelion above 0.983 AU, so mostly inside Earth’s orbit.', 'Apollo: a above 1 AU, perihelion below 1.017 AU, so Earth-crossing.', 'Amor: perihelion between 1.017 and 1.3 AU, so they approach but don’t cross.', 'Potentially hazardous: larger than about 140 m and passing within 0.05 AU (7.5 million km) of Earth’s orbit.']],
+  trojan: ['Jupiter Trojans share Jupiter’s orbit (a ≈ 5.2 AU), trapped near the L4 point 60° ahead of the planet and the L5 point 60° behind. They drift slowly around those stable points.',
+    ['Thought to be as numerous as main-belt asteroids above 1 km, to within an order of magnitude.', 'NASA’s Lucy mission, launched in 2021, is visiting several Trojans.']],
+  centaur: ['Centaurs orbit between Jupiter and Neptune (a ≈ 5–30 AU) on unstable, planet-crossing paths. Encounters rearrange their orbits within a few million years, so they are probably escaped Kuiper belt objects heading to become Jupiter-family comets.',
+    ['Some grow a coma (Chiron), which blurs the line between asteroid and comet.', 'Chariklo’s rings show that small bodies can have ring systems.']],
+  kbo: ['Kuiper belt objects orbit beyond Neptune, mostly at 30–50 AU. Classical objects sit near 42–48 AU on gentle orbits; resonant ones are locked to Neptune (Pluto in the 3:2); scattered-disc objects have high e with perihelion near Neptune; detached objects such as Sedna are beyond its reach.',
+    ['The scattered disc and Kuiper belt are the likely source of Jupiter-family comets.', 'Sedna’s perihelion (about 76 AU) is too far out to be explained by Neptune alone.']],
+  spc: ['Short-period comets have periods under 200 years. Jupiter-family comets (under 20 years, Tisserand parameter 2–3) have low inclinations and are thought to come from the scattered disc. Halley-type comets (20–200 years, Tisserand parameter below 2) can be steeply tilted or retrograde.',
+    ['Each perihelion pass sheds ice and dust, so these comets are short-lived on astronomical timescales.', 'Jupiter’s gravity keeps reshaping their orbits.']],
+  lpc: ['Long-period comets have periods over 200 years, extremely elongated orbits and any inclination. They are thought to come from the Oort cloud, a roughly spherical shell of icy bodies from about 2,000 to beyond 100,000 AU, nudged inward by passing stars and the galactic tide.',
+    ['Their random inclinations, retrograde ones included, point to a spherical rather than flattened source.', 'Kreutz sungrazers such as Ikeya–Seki are fragments of a larger parent comet.', 'C/2012 S1 (ISON), a near-parabolic Oort cloud comet, broke up near perihelion in November 2013.', 'The Oort cloud has never been observed directly; it is inferred from these orbits.']],
+  ism: ['Interstellar objects aren’t bound to the Sun. Their orbits are hyperbolic (e above 1), and they arrive from outside the Solar System with speed to spare. Their semi-major axis is negative by convention.',
+    ['Three are known: ʻOumuamua (2017), Borisov (2019) and ATLAS (2025).', 'The path shown is only the stretch inside the map; the object keeps going in both directions.', 'The orbital elements are fitted values and shift slightly between solutions.']]
+};
+function update() {
+  const o = D[st.sel], ph = o.hyp ? 'Unbound (hyperbolic)' : o.P < 1 ? `${Math.round(o.P * 365.25)} days` : o.P < 100 ? `${o.P.toFixed(1)} years` : `${(Math.round(o.P / (o.P > 1000 ? 100 : 10)) * (o.P > 1000 ? 100 : 10)).toLocaleString('en-GB')} years`;
+  const f = (x) => x < 10 ? x.toFixed(2) : x < 100 ? x.toFixed(1) : Math.round(x).toLocaleString('en-GB'), T = tisserand(o);
+  const rows = [['Class', `<span class="sw" style="background:${TYPES[o.t][1]}"></span>${o.cl}`, ''], ['Semi-major axis a', o.hyp ? `${o.a.toFixed(2)} AU (unbound)` : `${f(o.a)} AU`, ''],
+    ['Eccentricity e', o.e < 0.99 ? o.e.toFixed(3) : o.e.toFixed(4), ''], ['Inclination i', `${o.i.toFixed(1)}°${o.i > 90 ? ' · retrograde' : ''}`, o.i > 90 ? 'dn' : ''],
+    ['Perihelion q = a(1 − e)', `${o.q < 1 ? o.q.toFixed(3) : f(o.q)} AU`, ''], ['Aphelion Q = a(1 + e)', o.hyp ? '—' : `${f(o.Q)} AU`, ''], ['Orbital period', ph, ''],
+    ['Tisserand parameter (Jupiter)', T === null ? '—' : T.toFixed(2), '']];
+  $('resH').textContent = o.name;
+  $('tbl').innerHTML = '<tr><th>Quantity</th><th>Value</th></tr>' + rows.map((r) => `<tr><td>${r[0]}</td><td class="${r[2]}">${r[1]}</td></tr>`).join('');
+  $('desc').textContent = o.d;
+  const e = EXP[o.t];
+  $('exp').innerHTML = `<h2>${TYPES[o.t][0]}</h2><p>${e[0]}</p><ul>${e[1].map((x) => `<li>${x}</li>`).join('')}</ul>
+<h2>Reading the orbital elements</h2><ul><li><b>a</b> sets the size and period: P² = a³, with P in years and a in AU.</li><li><b>e</b> sets the shape: 0 is a circle, between 0 and 1 an ellipse, and 1 or more an open path.</li><li><b>i</b> is the tilt against the ecliptic. Above 90° the orbit is retrograde.</li><li><b>Tisserand parameter</b> separates the families: above 3 for most asteroids, 2–3 for Jupiter-family comets, below 2 for Halley-type and long-period comets.</li></ul>`;
+  $('obj').value = st.sel; $('map').setAttribute('aria-label', `Top-down map of the Solar System showing the orbit of ${o.name}`);
+  document.querySelectorAll('[data-o]').forEach((b) => b.setAttribute('aria-pressed', String(+b.dataset.o === st.sel)));
+  document.querySelectorAll('[data-t]').forEach((b) => { const on = st.on.has(b.dataset.t); b.setAttribute('aria-pressed', String(on)); b.classList.toggle('off', !on); });
+  $('exp').scrollTop = 0;
+}
+const changed = () => { update(); dirty = true; };
+const select = (id) => { st.sel = id; st.on.add(D[id].t); changed(); };
+
+/* ---- build UI ---- */
+$('flt').innerHTML = Object.entries(TYPES).map(([k, v]) => `<button type="button" data-t="${k}" aria-pressed="true"><span class="sw" style="background:${v[1]}"></span>${v[0]}</button>`).join('');
+$('obj').innerHTML = Object.entries(TYPES).map(([k, v]) => `<optgroup label="${v[0]}">${D.filter((o) => o.t === k).map((o) => `<option value="${o.id}">${o.name}</option>`).join('')}</optgroup>`).join('');
+$('ex').innerHTML = Object.entries(TYPES).map(([k, v]) => `<div class="grp"><span class="lbl"><span class="sw" style="background:${v[1]}"></span>${v[0]}</span><div class="btns">${D.filter((o) => o.t === k).map((o) => `<button type="button" data-o="${o.id}" title="${o.cl}">${o.name}</button>`).join('')}</div></div>`).join('');
+document.querySelectorAll('[data-t]').forEach((b) => b.onclick = () => { const k = b.dataset.t; st.on.has(k) ? st.on.delete(k) : st.on.add(k); changed(); });
+document.querySelectorAll('[data-o]').forEach((b) => b.onclick = () => select(+b.dataset.o));
+$('obj').onchange = (e) => select(+e.target.value);
+$('view').onchange = (e) => { st.view = e.target.value; dirty = true; };
+$('spd').onchange = (e) => { st.speed = +e.target.value; };
+const tog = (id, key) => { $(id).onclick = () => { st[key] = !st[key]; $(id).setAttribute('aria-pressed', String(st[key])); dirty = true; }; };
+tog('tPl', 'planets'); tog('tBe', 'belts');
+$('play').onclick = () => { st.playing = !st.playing; $('play').textContent = st.playing ? 'Pause' : 'Play'; $('play').setAttribute('aria-pressed', String(st.playing)); };
+if (!st.playing) { $('play').textContent = 'Play'; $('play').setAttribute('aria-pressed', 'false'); }
+const pick = (c, pts, ev) => { const r = c.getBoundingClientRect(), x = ev.clientX - r.left, y = ev.clientY - r.top; let best = null, bd = 18;
+  for (const o of D) { const px = pts[0](o), py = pts[1](o); if (px == null || !visible(o)) continue; const d = Math.hypot(px - x, py - y); if (d < bd) { bd = d; best = o; } } if (best) select(best.id); };
+$('map').addEventListener('click', (ev) => pick($('map'), [(o) => o.sx, (o) => o.sy], ev));
+$('ae').addEventListener('click', (ev) => pick($('ae'), [(o) => o.ax, (o) => o.ay], ev));
+window.addEventListener('resize', () => { dirty = true; });
+
+let last = 0;
+function frame(ts) {
+  const dt = Math.min(0.05, (ts - last) / 1000 || 0); last = ts;
+  if (st.playing) { st.t += dt * st.speed * 0.015 * Math.pow(viewR(), 1.5); dirty = true; }
+  if (dirty) { dirty = false; drawMap(); drawAE(); }
+  requestAnimationFrame(frame);
+}
+update(); requestAnimationFrame(frame);
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { dirty = true; });
+</script>
+</body></html>

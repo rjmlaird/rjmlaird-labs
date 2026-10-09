@@ -1,0 +1,6 @@
+{
+  "name": "labs-__SLUG__",
+  "compatibility_date": "2026-10-01",
+  "assets": { "directory": "./dist" },
+  "routes": [{ "pattern": "__SLUG__.labs.rjmlaird.co.uk", "custom_domain": true }]
+}

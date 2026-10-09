@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Interactive BCG Growth-Share Matrix for product and business portfolio planning." />
+  <meta name="color-scheme" content="dark" />
+  <title>BCG Growth-Share Matrix · Marketing Labs</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="../../assets/css/tokens.css" />
+  <link rel="stylesheet" href="../../assets/css/components.css" />
+  <link rel="stylesheet" href="../../assets/css/labs/bcg-growth-share-matrix.css" />
+  <link rel="stylesheet" href="../../assets/css/print.css" media="print" />
+</head>
+<body data-lab="bcg-growth-share-matrix">
+  <a class="ml-skip" href="#main">Skip to content</a>
+  <header class="ml-header">
+    <div class="wrap ml-header-inner">
+      <a class="ml-brand" href="../../index.html"><span class="ml-mark" aria-hidden="true">ML</span>Marketing Labs</a>
+      <nav class="ml-nav" aria-label="Lab navigation">
+        <a href="../../index.html">All labs</a>
+        <a rel="prev" href="../ansoff-growth-strategy-matrix/index.html" title="Ansoff Growth Strategy Matrix">← Previous</a>
+        <a rel="next" href="../porters-five-forces/index.html" title="Porter’s Five Forces">Next →</a>
+      </nav>
+    </div>
+  </header>
+  <div class="wrap ml-labbar">
+    <div class="ml-labid"><span class="ml-mark" aria-hidden="true">BCG</span><div><p>Strategy &amp; growth</p><strong>BCG Growth-Share Matrix</strong></div></div>
+    <div class="ml-actions" role="toolbar" aria-label="Lab tools">
+      <a class="ml-btn primary" href="../../assets/pdf/bcg-growth-share-matrix.pdf" download>Download PDF guide</a>
+      <button class="ml-btn" type="button" data-action="save">Save inputs</button>
+      <button class="ml-btn" type="button" data-action="load">Load inputs</button>
+      <button class="ml-btn" type="button" data-action="share">Copy share link</button>
+      <button class="ml-btn" type="button" data-action="print">Print</button>
+      <button class="ml-btn" type="button" data-action="reset">Reset</button>
+      <input id="ml-file" type="file" accept="application/json" hidden />
+    </div>
+  </div>
+
+  <main id="main">
+    <section class="hero wrap">
+      <p class="eyebrow">Interactive portfolio-strategy prototype</p>
+
+      <h1>See where each offer sits before deciding where to invest.</h1>
+
+      <p class="hero-copy">
+        Plot products, brands or business units against market growth and relative market share.
+        The matrix can make portfolio conversations more concrete: which offers may deserve
+        investment, which can fund development, which need a deliberate decision and which may
+        need repositioning, harvesting or exit.
+      </p>
+
+      <div class="notice">
+        <span class="notice-icon" aria-hidden="true">!</span>
+        <div>
+          <strong>Use the BCG matrix as a prompt, not an automatic strategy.</strong>
+          Share and growth are imperfect proxies for cash generation, attractiveness and strategic
+          value. Consider profitability, customer need, capability, risk, competitive dynamics,
+          mission, switching costs and future scenarios—especially in smaller or digital businesses.
+        </div>
+      </div>
+    </section>
+
+    <section class="wrap app-shell" aria-label="BCG Growth-Share Matrix tool">
+      <form class="panel planner" id="bcg-form">
+        <div class="panel-heading">
+          <h2>Plot a portfolio item</h2>
+          <p>
+            Add a product, brand or business unit. The chart uses relative market share and market
+            growth as directional inputs; set thresholds to suit the industry and avoid treating
+            rough estimates as precise strategic facts.
+          </p>
+        </div>
+
+        <div class="field-set">
+          <div class="field">
+            <label for="item-name">Product, brand or business unit</label>
+            <input
+              id="item-name"
+              name="item-name"
+              type="text"
+              value="Collaborative impact-planning workspace"
+              placeholder="For example: Enterprise service, product line or business unit"
+            />
+          </div>
+
+          <div class="field">
+            <label for="item-note">Strategic note</label>
+            <textarea
+              id="item-note"
+              name="item-note"
+              placeholder="Capture the context behind the numbers: customer value, competitive advantage, constraints or strategic rationale."
+            >Early-stage offer in a growing category. It requires evidence of repeat use and willingness to pay before significant investment in acquisition or product expansion.</textarea>
+          </div>
+
+          <div class="range-row">
+            <div class="range-label">
+              <label for="market-growth">Market growth rate</label>
+              <output class="range-value" id="market-growth-value">14%</output>
+            </div>
+            <input id="market-growth" name="market-growth" type="range" min="-10" max="40" step="1" value="14" />
+            <p class="field-help">Use overall market growth, not the individual product’s revenue growth.</p>
+          </div>
+
+          <div class="range-row">
+            <div class="range-label">
+              <label for="relative-share">Relative market share</label>
+              <output class="range-value" id="relative-share-value">0.70x</output>
+            </div>
+            <input id="relative-share" name="relative-share" type="range" min="0.1" max="2.5" step="0.1" value="0.7" />
+            <p class="field-help">A useful convention is your market share divided by the largest competitor’s share; above 1.0 indicates leadership.</p>
+          </div>
+
+          <div class="two-columns">
+            <div class="field">
+              <label for="growth-threshold">High-growth threshold</label>
+              <input id="growth-threshold" name="growth-threshold" type="number" min="-10" max="40" step="1" value="10" />
+            </div>
+
+            <div class="field">
+              <label for="share-threshold">High-share threshold</label>
+              <input id="share-threshold" name="share-threshold" type="number" min="0.1" max="2.5" step="0.1" value="1.0" />
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="demo-picker">Load an example portfolio</label>
+            <select id="demo-picker" name="demo-picker">
+              <option value="">Choose a demo…</option>
+              <option value="software">Research-planning software portfolio</option>
+              <option value="consumer">Consumer products portfolio</option>
+              <option value="services">Professional-services portfolio</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="action-row">
+          <button class="button button-primary" type="submit">Add or update item</button>
+          <button class="button button-secondary" id="remove-item" type="button">Remove selected</button>
+          <button class="button button-secondary button-wide" id="copy-portfolio" type="button">
+            Copy portfolio view
+          </button>
+        </div>
+      </form>
+
+      <section class="panel matrix-panel" aria-labelledby="matrix-title">
+        <div class="matrix-header">
+          <div>
+            <h2 id="matrix-title">Portfolio growth-share map</h2>
+            <p id="matrix-subtitle">
+              Select a portfolio bubble to inspect the assumptions, strategic note and possible decision prompts.
+            </p>
+          </div>
+
+          <div class="portfolio-badge">
+            <div>
+              <strong id="portfolio-count">4</strong>
+              <span>Items plotted</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="matrix-body">
+          <div class="matrix-legend" aria-label="Portfolio quadrant legend">
+            <span class="legend-item"><span class="legend-dot" style="color: var(--purple)"></span>Star: invest to sustain leadership</span>
+            <span class="legend-item"><span class="legend-dot" style="color: var(--teal)"></span>Question Mark: choose to invest or exit</span>
+            <span class="legend-item"><span class="legend-dot" style="color: var(--amber)"></span>Cash Cow: sustain and fund priorities</span>
+            <span class="legend-item"><span class="legend-dot" style="color: var(--red)"></span>Dog: harvest, reposition or divest</span>
+          </div>
+
+          <div class="matrix-scroll">
+            <div class="matrix-layout">
+              <div class="y-axis-label">Market growth rate</div>
+
+              <div class="matrix-grid" id="matrix-grid">
+                <span class="axis-high axis-high-growth">High growth</span>
+                <span class="axis-low axis-low-growth">Low growth</span>
+
+                <article class="quadrant star" data-quadrant="star">
+                  <span class="quadrant-kicker">High growth · High share</span>
+                  <h3>Stars</h3>
+                  <p>Protect and develop leadership; growing markets can still require substantial investment.</p>
+                </article>
+
+                <article class="quadrant question" data-quadrant="question">
+                  <span class="quadrant-kicker">High growth · Low share</span>
+                  <h3>Question Marks</h3>
+                  <p>Choose selectively: invest to build a credible position, reposition or exit.</p>
+                </article>
+
+                <article class="quadrant cash" data-quadrant="cash">
+                  <span class="quadrant-kicker">Low growth · High share</span>
+                  <h3>Cash Cows</h3>
+                  <p>Maintain health and cash generation while funding other strategic priorities.</p>
+                </article>
+
+                <article class="quadrant dog" data-quadrant="dog">
+                  <span class="quadrant-kicker">Low growth · Low share</span>
+                  <h3>Dogs</h3>
+                  <p>Consider harvesting, redesigning, repositioning, partnering or exiting—based on wider value.</p>
+                </article>
+              </div>
+
+              <div class="x-axis-label">Relative market share: high (left) to low (right)</div>
+            </div>
+          </div>
+
+          <section class="detail-card" aria-live="polite">
+            <div>
+              <h3 id="detail-title">Select a portfolio item</h3>
+              <p id="detail-note">
+                Click a bubble to inspect its market-growth and relative-share assumptions, strategic note and decision prompts.
+              </p>
+            </div>
+            <div class="detail-meta">
+              <div class="meta-box"><small>Quadrant</small><strong id="detail-quadrant">—</strong></div>
+              <div class="meta-box"><small>Market growth / share</small><strong id="detail-position">—</strong></div>
+              <div class="meta-box"><small>Strategic note</small><strong id="detail-strategy-note">—</strong></div>
+              <div class="meta-box"><small>Decision prompt</small><strong id="detail-prompt">—</strong></div>
+            </div>
+          </section>
+          <div class="portfolio-summary" aria-label="Portfolio summary">
+            <article class="summary-card"><small>Stars</small><strong id="count-star">0</strong></article>
+            <article class="summary-card"><small>Question Marks</small><strong id="count-question">0</strong></article>
+            <article class="summary-card"><small>Cash Cows</small><strong id="count-cash">0</strong></article>
+            <article class="summary-card"><small>Dogs</small><strong id="count-dog">0</strong></article>
+          </div>
+          <section class="guidance-panel">
+            <h3>Using the growth-share matrix well</h3>
+            <ul class="guidance-list" id="guidance-list"></ul>
+          </section>
+        </div>
+      </section>
+    </section>
+  </main>
+  <footer class="site-footer">
+    <div class="wrap">
+      <p>
+        This prototype is a strategic-planning aid, not investment advice. Portfolio decisions affect
+        customers, staff, partners and communities. Test assumptions with evidence, consider profitability,
+        capability and risk beyond two axes, and validate material commitments before acting.
+      </p>
+    </div>
+  </footer>
+
+  <nav class="ml-more" aria-label="More labs"><div class="wrap"><h2>More Marketing Labs</h2><ul><li><a href="../ansoff-growth-strategy-matrix/index.html"><strong>Ansoff Growth Strategy Matrix</strong><small>Strategy &amp; growth</small></a></li><li><a href="../porters-five-forces/index.html"><strong>Porter’s Five Forces</strong><small>Strategy &amp; growth</small></a></li><li><a href="../lean-analytics-stages/index.html"><strong>Lean Analytics Stages</strong><small>Strategy &amp; growth</small></a></li></ul></div></nav>
+  <div class="ml-toast" id="ml-toast" role="status" aria-live="polite"></div>
+  <script src="../../assets/js/labs/bcg-growth-share-matrix.js" defer></script>
+  <script src="../../assets/js/shared.js" defer></script>
+</body>
+</html>

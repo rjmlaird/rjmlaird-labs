@@ -1,0 +1,332 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Cosmic Distance Ladder Visualiser</title>
+<style>
+:root{--bg:#050a14;--panel:#0d192b;--edge:#294563;--text:#eef6ff;--muted:#adbed3;--cyan:#72d8ff;--gold:#ffd56b;--violet:#b69cff}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(circle at 78% 0,#19395b,transparent 45%),var(--bg);color:var(--text);font:15px system-ui,-apple-system,Segoe UI,sans-serif}
+main{max-width:1180px;margin:auto;padding:28px 18px 44px}
+h1{font-size:clamp(30px,5vw,48px);letter-spacing:-.045em;line-height:1.04;margin:5px 0 9px}
+h2{font-size:20px;margin:0 0 10px}
+h3{font-size:16px;margin:0 0 5px;color:var(--cyan)}
+p{line-height:1.5;color:var(--muted);margin:7px 0}
+.tag{display:inline-block;background:var(--cyan);color:#06101b;font-size:12px;font-weight:800;letter-spacing:.09em;padding:4px 9px;border-radius:99px;text-transform:uppercase}
+.lede{max-width:790px;font-size:17px}
+.layout{display:grid;grid-template-columns:360px 1fr;gap:18px;margin-top:22px}
+.card{background:linear-gradient(140deg,#101f34,#091323);border:1px solid var(--edge);border-radius:17px;padding:18px;box-shadow:0 16px 38px #0005}
+.ladder{position:relative;padding-left:30px;margin:12px 0 4px}
+.ladder:before{content:"";position:absolute;left:9px;top:11px;bottom:11px;width:4px;border-radius:5px;background:linear-gradient(var(--cyan),var(--violet),var(--gold))}
+.rung{position:relative;width:100%;margin:8px 0;padding:11px 10px;border:1px solid #304e6b;border-radius:10px;background:#081423;color:var(--text);text-align:left;cursor:pointer}
+.rung:before{content:"";position:absolute;left:-27px;top:50%;width:25px;height:3px;background:#7cccec}
+.rung b{display:block}
+.rung small{color:var(--muted)}
+.rung.active{background:#164269;border-color:var(--cyan);box-shadow:0 0 0 1px #72d8ff55}
+.range{margin-top:12px;background:#071221;border-radius:9px;padding:10px;font-size:12px;color:#bbd4e9}
+.visual{min-height:420px;display:grid;grid-template-rows:auto 1fr auto}
+.schematic{position:relative;overflow:hidden;min-height:330px;border-radius:12px;background:radial-gradient(circle at 50% 50%,#112843,#030713 72%)}
+canvas{display:block;width:100%;height:330px}
+.details{margin-top:15px;border-left:3px solid var(--cyan);padding-left:12px}
+.facts{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:15px}
+.fact{padding:11px;background:#071221;border-radius:10px}
+.fact small{display:block;color:var(--muted);font-size:11px}
+.fact b{display:block;color:var(--gold);margin-top:3px;font-size:14px}
+.demo{margin-top:16px}
+.demo label{display:flex;justify-content:space-between;color:var(--muted);font-size:13px}
+.demo output{color:var(--gold)}
+input[type=range]{width:100%;accent-color:var(--cyan);margin-top:6px}
+.explain{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:18px}
+.foot{font-size:12px;color:#8297af;margin-top:17px}
+@media(max-width:800px){
+  .layout{grid-template-columns:1fr}
+  .facts,.explain{grid-template-columns:1fr}
+  .schematic,canvas{min-height:300px;height:300px}
+}
+</style>
+</head>
+<body>
+<main>
+<span class="tag">Interactive astronomy</span>
+<h1>Cosmic distance ladder visualiser</h1>
+<p class="lede">Distance is measured step by step: nearby geometric measurements calibrate increasingly luminous “standard candles”, which in turn calibrate distances on cosmological scales.</p>
+
+<section class="layout">
+  <aside class="card">
+    <h2>Choose a rung</h2>
+    <div class="ladder" id="ladder"></div>
+    <div class="range" id="rangeText"></div>
+    <p class="foot">Ranges are deliberately approximate. Real reach depends on instrumentation, wavelength, crowding, calibration and the objects available.</p>
+  </aside>
+
+  <section class="card visual">
+    <div>
+      <h2 id="title">Parallax — geometric baseline</h2>
+      <p id="subtitle"></p>
+    </div>
+    <div class="schematic">
+      <canvas id="scene" aria-label="Interactive distance-ladder schematic"></canvas>
+    </div>
+    <div class="demo" id="demo">
+      <label>Earth’s orbital position <output id="orbitOut"></output></label>
+      <input id="orbit" type="range" min="0" max="360" step="1" value="20">
+    </div>
+    <div class="facts">
+      <div class="fact">
+        <small>Typical scale</small>
+        <b id="scale"></b>
+      </div>
+      <div class="fact">
+        <small>Example object</small>
+        <b id="example"></b>
+      </div>
+      <div class="fact">
+        <small>Key uncertainty</small>
+        <b id="uncertainty"></b>
+      </div>
+    </div>
+    <p class="details" id="details"></p>
+  </section>
+</section>
+
+<section class="explain">
+  <article class="card">
+    <h3>Why a ladder?</h3>
+    <p>No single technique spans the Universe. Each rung overlaps with the next so astronomers can transfer a calibration outward.</p>
+  </article>
+  <article class="card">
+    <h3>Standard candles</h3>
+    <p>Cepheid variables, the tip of the red-giant branch and calibrated Type Ia supernovae connect brightness measurements to distance.</p>
+  </article>
+  <article class="card">
+    <h3>Redshift distances</h3>
+    <p>At sufficiently large distances, the expansion of the Universe relates redshift to distance through a cosmological model calibrated by lower rungs.</p>
+  </article>
+</section>
+
+<p class="foot">Educational schematic, not a precision cosmology calculator. Distance ranges are order-of-magnitude guideposts rather than hard physical boundaries.</p>
+</main>
+
+<script>
+const $ = x => document.getElementById(x);
+const data = {
+  parallax: {
+    label: 'Parallax',
+    title: 'Parallax — geometric baseline',
+    range: 'Solar neighbourhood to a few kiloparsecs',
+    scale: '~1 pc to a few kpc',
+    example: 'Nearby stars; Cepheid calibrators',
+    uncertainty: 'Tiny angular shifts',
+    subtitle: 'Move Earth around its orbit to see a nearby star shift against distant background stars.',
+    details: 'Earth’s orbit supplies a known baseline. The apparent angle of a nearby star against much more distant stars becomes smaller with distance: in parsecs, d ≈ 1 / p when p is in arcseconds.'
+  },
+  cepheid: {
+    label: 'Cepheids',
+    title: 'Cepheid variables — period and luminosity',
+    range: 'Roughly kiloparsecs to tens of megaparsecs',
+    scale: '~1–50 Mpc',
+    example: 'Magellanic Clouds; nearby galaxies',
+    uncertainty: 'Dust and calibration',
+    subtitle: 'Their pulsation period reveals a calibrated intrinsic luminosity.',
+    details: 'Cepheids vary predictably. Measure the period, infer an absolute luminosity from the period–luminosity relation, then compare it with apparent brightness to obtain a distance.'
+  },
+  trgb: {
+    label: 'TRGB',
+    title: 'TRGB — tip of the red-giant branch',
+    range: 'Nearby galaxies to tens of megaparsecs',
+    scale: '~1–20 Mpc',
+    example: 'Resolved stellar populations',
+    uncertainty: 'Population and dust effects',
+    subtitle: 'The brightest red giants reach a useful, calibrated luminosity limit before helium ignition.',
+    details: 'In an old, resolved stellar population, the top of the red-giant branch gives a distance indicator. It is especially useful where Cepheids are absent or difficult to measure.'
+  },
+  snia: {
+    label: 'Type Ia SNe',
+    title: 'Type Ia supernovae — luminous calibrated candles',
+    range: 'Nearby galaxies to cosmological distances',
+    scale: '~1–1000+ Mpc',
+    example: 'Distant host galaxies',
+    uncertainty: 'Calibration, dust, selection',
+    subtitle: 'After light-curve and colour standardisation, Type Ia supernovae are powerful relative-distance indicators.',
+    details: 'A Type Ia supernova can be observed far beyond the reach of individual Cepheids. Nearby hosts containing both Cepheids or TRGB stars and SNe Ia connect this rung to geometric distances.'
+  },
+  redshift: {
+    label: 'Redshift',
+    title: 'Cosmological redshift — expansion scale',
+    range: 'Hundreds of megaparsecs to the observable Universe',
+    scale: '~100 Mpc to Gpc',
+    example: 'Galaxy surveys and quasars',
+    uncertainty: 'Cosmological model; velocities',
+    subtitle: 'Spectral lines shift to longer wavelengths as the Universe expands.',
+    details: 'For sufficiently distant galaxies, redshift combined with a calibrated expansion history yields a cosmological distance. At small distances, local “peculiar” velocities complicate the simple Hubble-law picture.'
+  }
+};
+
+let key = 'parallax';
+const ladder = $('#ladder');
+ladder.innerHTML = Object.entries(data).map(([k,d]) =>
+  `<button class="rung" data-key="${k}"><b>${d.label}</b><small>${d.range}</small></button>`
+).join('');
+
+const cv = $('#scene'), ctx = cv.getContext('2d');
+
+function txt(t, x, y, size=14, col='#e9f5ff') {
+  ctx.fillStyle = col;
+  ctx.font = `${size}px system-ui`;
+  ctx.fillText(t, x, y);
+}
+function star(x, y, r, col='#f7e3a1', a=1) {
+  ctx.globalAlpha = a;
+  ctx.fillStyle = col;
+  ctx.beginPath();
+  ctx.arc(x, y, r, 0, 6.283);
+  ctx.fill();
+  ctx.globalAlpha = 1;
+}
+function line(x1, y1, x2, y2, c='#6ec9ff', w=1, dash=[]) {
+  ctx.strokeStyle = c;
+  ctx.lineWidth = w;
+  ctx.setLineDash(dash);
+  ctx.beginPath();
+  ctx.moveTo(x1, y1);
+  ctx.lineTo(x2, y2);
+  ctx.stroke();
+  ctx.setLineDash([]);
+}
+
+function graph() {
+  let W = cv.clientWidth, H = cv.clientHeight;
+  ctx.clearRect(0, 0, W, H);
+
+  // Background stars
+  for (let i = 0; i < 95; i++) {
+    star((i*67) % W, (i*103) % H, 0.4, '#cde4ff', 0.4);
+  }
+
+  if (key === 'parallax') {
+    let a = +orbit.value * Math.PI / 180;
+    let cx = W * 0.5, cy = H * 0.56;
+    let rx = Math.min(W * 0.24, 140), ry = rx * 0.42;
+    let ex = cx + Math.cos(a) * rx, ey = cy + Math.sin(a) * ry;
+
+    // Orbit
+    ctx.strokeStyle = '#386283';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.ellipse(cx, cy, rx, ry, 0, 0, 6.283);
+    ctx.stroke();
+
+    star(cx, cy, 12, '#ffd05d');
+    star(ex, ey, 6, '#65caff');
+    txt('Sun', cx - 15, cy + 30, 12, '#ffd05d');
+    txt('Earth', ex + 8, ey - 8, 12, '#72d8ff');
+
+    let nearX = W * 0.78, nearY = H * 0.30;
+    star(nearX, nearY, 7, '#ffe7ad');
+    let bgX = W * 0.84, bgY = H * 0.13;
+    star(bgX, bgY, 3, '#dbe9ff');
+
+    line(ex, ey, nearX, nearY, '#72d8ff', 1, [5,4]);
+    line(ex, ey, bgX, bgY, '#8b9eb5', 1, [3,5]);
+    line(cx, cy, nearX, nearY, '#ffd56b', 1, [3,4]);
+
+    txt('nearby star', nearX - 34, nearY + 25, 12);
+    txt('distant background star', bgX - 105, bgY - 10, 12, '#b4c6d9');
+
+    let shift = Math.sin(a) * 18;
+    ctx.fillStyle = '#ff8ec7';
+    ctx.beginPath();
+    ctx.arc(nearX, nearY + shift, 4, 0, 6.283);
+    ctx.fill();
+    txt('apparent position', nearX - 42, nearY + shift + 22, 11, '#ffb3d8');
+
+    orbitOut.textContent = Math.round(+orbit.value) + '°';
+    return;
+  }
+
+  $('#demo').style.display = 'none';
+
+  if (key === 'cepheid') {
+    txt('Period–luminosity relation', W * 0.08, H * 0.12, 16, '#72d8ff');
+    line(W * 0.14, H * 0.80, W * 0.88, H * 0.80);
+    line(W * 0.14, H * 0.80, W * 0.14, H * 0.20);
+    for (let i = 0; i < 9; i++) {
+      let px = W * 0.22 + i * W * 0.07;
+      let py = H * 0.70 - i * H * 0.052 + Math.sin(i * 2) * 8;
+      star(px, py, 4, '#ffd56b');
+    }
+    line(W * 0.20, H * 0.72, W * 0.82, H * 0.27, '#72d8ff', 2);
+    txt('Longer period → intrinsically brighter', W * 0.23, H * 0.91, 12);
+    txt('brightness', W * 0.03, H * 0.23, 12);
+    return;
+  }
+
+  if (key === 'trgb') {
+    txt('Resolved stellar population', W * 0.08, H * 0.12, 16, '#72d8ff');
+    line(W * 0.16, H * 0.82, W * 0.90, H * 0.82);
+    line(W * 0.16, H * 0.82, W * 0.16, H * 0.18);
+    for (let i = 0; i < 70; i++) {
+      let px = W * 0.22 + ((i * 47) % Math.floor(W * 0.60));
+      let py = H * 0.74 - Math.pow((i * 31) % 100 / 100, 1.9) * H * 0.48;
+      star(px, py, 1.8, i % 6 ? '#ffcf91' : '#a2d8ff', 0.8);
+    }
+    line(W * 0.17, H * 0.29, W * 0.89, H * 0.29, '#ff8ec7', 1, [5,4]);
+    txt('tip of red-giant branch', W * 0.48, H * 0.24, 12, '#ffb6d8');
+    return;
+  }
+
+  if (key === 'snia') {
+    star(W * 0.5, H * 0.5, 28, '#fff1bd');
+    for (let i = 1; i < 7; i++) {
+      ctx.strokeStyle = `rgba(114,216,255,${0.34 - i * 0.035})`;
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.arc(W * 0.5, H * 0.5, i * 23, 0, 6.283);
+      ctx.stroke();
+    }
+    txt('Type Ia supernova', W * 0.5 - 65, H * 0.18, 16, '#ffd56b');
+    txt('bright, standardised peak', W * 0.5 - 79, H * 0.83, 13);
+    return;
+  }
+
+  if (key === 'redshift') {
+    txt('Observed wavelength', W * 0.07, H * 0.15, 16, '#72d8ff');
+    for (let i = 0; i < 5; i++) {
+      let y = H * 0.28 + i * H * 0.11;
+      line(W * 0.13, y, W * 0.38, y, '#7697bb', 2);
+      line(W * 0.53, y, W * 0.87, y, '#f18cae', 2);
+      txt('rest', W * 0.14, y - 8, 11, '#aec3d9');
+      txt('redshifted', W * 0.70, y - 8, 11, '#ffb7cd');
+      line(W * 0.40, y, W * 0.52, y, '#ffd56b', 1, [3,3]);
+    }
+    txt('expanding space stretches wavelengths', W * 0.22, H * 0.90, 13, '#d8e9fb');
+  }
+}
+
+function select(k) {
+  key = k;
+  let d = data[k];
+  $('#title').textContent = d.title;
+  $('#subtitle').textContent = d.subtitle;
+  $('#rangeText').textContent = 'Typical usable range: ' + d.range;
+  $('#scale').textContent = d.scale;
+  $('#example').textContent = d.example;
+  $('#uncertainty').textContent = d.uncertainty;
+  $('#details').textContent = d.details;
+  document.querySelectorAll('.rung').forEach(e =>
+    e.classList.toggle('active', e.dataset.key === k)
+  );
+  $('#demo').style.display = k === 'parallax' ? 'block' : 'none';
+  graph();
+}
+
+document.querySelectorAll('.rung').forEach(e =>
+  e.onclick = () => select(e.dataset.key)
+);
+orbit.oninput = graph;
+window.onresize = graph;
+select('parallax');
+</script>
+</body>
+</html>

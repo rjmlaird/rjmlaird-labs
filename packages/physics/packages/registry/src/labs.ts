@@ -1,0 +1,96 @@
+import type { LabManifest } from "./types";
+
+/**
+ * Single source of truth for every lab. The hub index, per-lab navigation,
+ * sitemap and theme/font selection are all generated from this list.
+ * `pnpm new:lab` inserts new entries above the marker at the bottom.
+ */
+export const labs: LabManifest[] = [
+  {
+    slug: "mechanics",
+    title: "Mechanics Lab",
+    summary: "Forces, friction, collisions, projectiles and stopping distances, worked out live with SUVAT and conservation laws.",
+    topic: "mechanics",
+    level: "a-level",
+    theme: "navy",
+    kind: "astro-react",
+    status: "live",
+    experiments: [
+      { id: "ramp", label: "Ramp", href: "/ramp", eyebrow: "Forces & friction", summary: "Static vs. kinetic friction, air resistance, and block-on-block collisions on an incline." },
+      { id: "newtonscradle", label: "Newton's Cradle", href: "/newtonscradle", eyebrow: "Collisions", summary: "Real pendulum physics — pull back one or two balls and watch momentum and energy transfer through the row." },
+      { id: "projectile", label: "Projectile", href: "/projectile", eyebrow: "Kinematics", summary: "Launch speed, angle, and height, with independent horizontal and vertical SUVAT equations." },
+      { id: "stoppingdistance", label: "Stopping Distances", href: "/stoppingdistance", eyebrow: "Real-world physics", summary: "Reaction distance plus SUVAT-derived braking distance, across speeds and road conditions." },
+    ],
+  },
+  {
+    slug: "orbital-mechanics",
+    title: "N-Body Orbital Sandbox",
+    summary: "Gravitational N-body simulation with presets, energy tracking and orbital-element estimates.",
+    topic: "space",
+    level: "explore",
+    theme: "navy",
+    kind: "astro-react",
+    status: "wip",
+  },
+  {
+    slug: "electricity",
+    title: "Electricity Lab",
+    summary: "Ohm's law, I–V characteristics, networks, power, Coulomb's law and RC circuits.",
+    topic: "electricity",
+    level: "gcse",
+    theme: "forest",
+    kind: "static-html",
+    status: "live",
+  },
+  {
+    slug: "magnetic-fields",
+    title: "Magnetic Fields",
+    summary: "A-level magnetic field explorer.",
+    topic: "magnetism",
+    level: "a-level",
+    theme: "slate",
+    kind: "static-html",
+    status: "wip",
+  },
+  {
+    slug: "rocket-types",
+    title: "Rocket Types & Launch Physics",
+    summary: "Compare rocket types, ascent profiles, fuel budgets and escape velocity.",
+    topic: "space",
+    level: "a-level",
+    theme: "slate",
+    kind: "static-html",
+    status: "wip",
+  },
+  {
+    slug: "cfd",
+    title: "Flow Around Objects",
+    summary: "Illustrative fluid-flow visualiser: aerofoil vs square, air vs water.",
+    topic: "fluids",
+    level: "explore",
+    theme: "paper",
+    kind: "vite-react",
+    status: "wip",
+  },
+  {
+    slug: "lagrange-explorer",
+    title: "Lagrange Explorer",
+    summary: "Lagrange points, perturbations and station-keeping.",
+    topic: "space",
+    level: "explore",
+    theme: "navy",
+    kind: "vite-react",
+    status: "wip",
+  },
+  {
+    slug: "relativity-playground",
+    title: "Relativity Playground",
+    summary: "Moving train, light clock, length contraction and relativistic mass.",
+    topic: "relativity",
+    level: "a-level",
+    theme: "navy",
+    kind: "vite-react",
+    status: "wip",
+  },
+  // @new-lab (scripts/new-lab.mjs inserts above this line)
+];

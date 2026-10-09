@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>HR diagram explorer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Familjen+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{--bg:#eceef2;--panel:#f9fafb;--field:#eef1f5;--ink:#16202c;--muted:#566274;--line:#d0d7e0;--accent:#8f5f10;--on-accent:#fff;--sky:#0a1020;--display:'Familjen Grotesk',system-ui,-apple-system,'Segoe UI',sans-serif;--mono:'IBM Plex Mono',ui-monospace,Menlo,Consolas,monospace;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0a0e17;--panel:#111826;--field:#0c121e;--ink:#e6ebf3;--muted:#93a0b4;--line:#243046;--accent:#e0a844;--on-accent:#1a1100;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0a0e17;--panel:#111826;--field:#0c121e;--ink:#e6ebf3;--muted:#93a0b4;--line:#243046;--accent:#e0a844;--on-accent:#1a1100;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 var(--display);padding:20px 16px 36px}
+.wrap{max-width:1120px;margin-inline:auto;display:flex;flex-direction:column;gap:16px}
+h1{margin:0;font-size:1.7rem;letter-spacing:-.015em}.top p{margin:2px 0 0;color:var(--muted);max-width:66ch}
+h2{margin:0 0 8px;font-size:1.02rem;font-weight:600}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px;min-width:0}
+.layout{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(0,1fr);gap:16px;align-items:start}
+@media(max-width:860px){.layout{grid-template-columns:minmax(0,1fr)}}
+.col{display:flex;flex-direction:column;gap:16px;min-width:0}
+.stage{position:relative;border-radius:6px;overflow:hidden;background:var(--sky);border:1px solid var(--line)}
+#hr{display:block;width:100%;touch-action:manipulation}
+#tip{position:absolute;pointer-events:none;padding:4px 8px;border-radius:6px;background:var(--panel);color:var(--ink);border:1px solid var(--line);font:.74rem var(--mono);white-space:nowrap;transform:translate(-50%,-100%)}
+.opts{display:flex;flex-wrap:wrap;gap:6px 18px;margin-top:12px}
+.chk{display:inline-flex;align-items:center;gap:6px;font-size:.88rem}.chk input{accent-color:var(--accent);width:15px;height:15px;margin:0}
+.note{margin:12px 0 0;color:var(--muted);font-size:.8rem;max-width:72ch}
+button,input[type=number],input[type=text]{font:inherit;font-size:.86rem;color:var(--ink);background:var(--field);border:1px solid var(--line);border-radius:6px;padding:6px 10px}
+button{cursor:pointer}button:hover{border-color:var(--muted)}
+button.primary{background:var(--accent);color:var(--on-accent);border-color:transparent;font-weight:600}
+button:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.form{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:end}
+.form label{display:flex;flex-direction:column;gap:3px;font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.07em}
+.form input{width:110px;font-family:var(--mono)}.form input[type=text]{width:130px}
+.sw{width:12px;height:12px;border-radius:50%;display:inline-block;flex:none}
+.rows{display:flex;flex-direction:column;gap:2px;max-height:330px;overflow:auto}
+.row{display:grid;grid-template-columns:14px minmax(0,1fr) 58px 62px;gap:8px;align-items:center;width:100%;text-align:left;padding:6px 8px;border:1px solid transparent;background:transparent;font:.78rem var(--mono)}
+.row:hover{background:var(--field);border-color:var(--line)}.row[aria-pressed=true]{background:var(--field);border-color:var(--accent)}
+.row .nm{font:500 .92rem var(--display)}.row span:nth-child(n+3){text-align:right}
+.info h3{margin:0;font-size:1.25rem;display:flex;align-items:center;gap:8px}
+dl.facts{display:grid;grid-template-columns:auto minmax(0,1fr);gap:8px 16px;margin:12px 0 0;align-items:baseline}
+dl.facts dt{color:var(--muted);font-size:.72rem;text-transform:uppercase;letter-spacing:.07em}
+dl.facts dd{margin:0;font:.84rem var(--mono);overflow-wrap:anywhere}
+.fact{margin:12px 0 0;font-size:.9rem}
+</style></head><body>
+<main class="wrap">
+<header class="top"><h1>HR diagram explorer</h1>
+<p>Stars plotted by surface temperature and luminosity. Circle size is the star's radius, worked out from the other two, and colour follows temperature. Hover or click a star, or add your own.</p></header>
+<div class="layout">
+<section class="card" aria-label="Hertzsprung–Russell diagram">
+<div class="stage" id="stage"><canvas id="hr" role="img" aria-label="Hertzsprung–Russell diagram: stars by temperature (hot on the left) and luminosity"></canvas><div id="tip" hidden></div></div>
+<div class="opts">
+<label class="chk"><input type="checkbox" id="oB" checked> Brightest stars</label>
+<label class="chk"><input type="checkbox" id="oN" checked> Nearest stars</label>
+<label class="chk"><input type="checkbox" id="oR" checked> Radius lines</label>
+<label class="chk"><input type="checkbox" id="oG" checked> Regions</label>
+<label class="chk"><input type="checkbox" id="oL" checked> Labels</label></div>
+<p class="note">Hot stars are on the left, as is tradition. Along any dashed line the radius is the same, so a star above and to the right of another is bigger. Luminosity is in solar units and absolute magnitude is shown on the right.</p>
+</section>
+<div class="col">
+<section class="card info" id="info" aria-live="polite" aria-label="Star details"></section>
+<section class="card" aria-label="Add a star"><h2>Add your own star</h2>
+<form class="form" id="form" onsubmit="return false">
+<label>Name<input type="text" id="fN" value="My star" maxlength="24"></label>
+<label>Temp (K)<input type="number" id="fT" value="9000" min="2000" max="50000" step="100"></label>
+<label>Luminosity (☉)<input type="number" id="fL" value="20" min="0.00001" max="10000000" step="any"></label>
+<button type="submit" class="primary" id="add">Plot</button><button type="button" id="clr">Clear</button></form>
+<p class="note" id="fMsg">Try 3500 K and 100,000 for a supergiant, or 15,000 K and 0.01 for a white dwarf.</p></section>
+<section class="card" aria-label="Stars shown"><h2>Stars shown</h2><div class="rows" id="rows"></div></section>
+</div></div></main>
+<script>
+const SUN = 5772, $ = (id) => document.getElementById(id);
+const rad = (T, L) => Math.sqrt(L) * Math.pow(SUN / T, 2);
+// name, spectral type, temperature K, luminosity (Sun = 1), distance ly, set: s Sun, b brightest, n nearest
+const DATA = [
+['Sun','G2V',5772,1,0,'s'],['Sirius A','A1V',9940,25.4,8.6,'bn'],['Canopus','A9II',7350,10700,310,'b'],['Arcturus','K0III',4290,170,37,'b'],
+['Alpha Centauri A','G2V',5790,1.52,4.37,'bn'],['Alpha Centauri B','K1V',5260,0.50,4.37,'n'],['Vega','A0V',9600,40,25,'b'],['Capella Aa','G8III',4940,78.7,43,'b'],
+['Rigel','B8Ia',12100,120000,860,'b'],['Procyon A','F5IV-V',6530,6.9,11.5,'bn'],['Betelgeuse','M1Ia',3600,126000,550,'b'],['Achernar','B6V',15000,3150,139,'b'],
+['Altair','A7V',7600,10.6,16.7,'b'],['Aldebaran','K5III',3900,439,65,'b'],['Antares','M1Ib',3400,75900,550,'b'],['Spica','B1III-IV',25300,12100,250,'b'],
+['Pollux','K0III',4865,43,34,'b'],['Fomalhaut','A3V',8590,16.6,25,'b'],['Deneb','A2Ia',8525,196000,2600,'b'],['Regulus','B8IVn',12460,288,79,'b'],
+['Proxima Centauri','M5.5Ve',3042,0.0017,4.24,'n'],["Barnard's Star",'M4Ve',3134,0.0035,5.96,'n'],['Wolf 359','M6.5Ve',2800,0.00137,7.9,'n'],
+['Lalande 21185','M2V',3601,0.026,8.3,'n'],['Sirius B','DA2',25200,0.025,8.6,'n'],['Epsilon Eridani','K2V',5084,0.34,10.5,'n'],
+['Procyon B','DQZ',7740,0.00049,11.5,'n'],['61 Cygni A','K5V',4655,0.15,11.4,'n'],['Tau Ceti','G8V',5344,0.52,11.9,'n'],['Epsilon Indi','K5V',4630,0.22,11.9,'n'],
+['40 Eridani B','DA',16500,0.013,16.3,'n']
+].map(([name, type, T, L, d, set]) => ({ name, type, T, L, d, set, R: rad(T, L) }));
+const MS = [[2800,.0008],[3000,.0015],[3500,.02],[4000,.1],[5000,.35],[5800,1],[6500,3.5],[7500,16],[10000,40],[15000,700],[25000,1e4],[40000,2e5]];
+const BANDS = [[50000,'O'],[30000,'B'],[10000,'A'],[7500,'F'],[6000,'G'],[5200,'K'],[3700,'M']];
+const COLS = [[2500,[255,90,42]],[3500,[255,140,66]],[4500,[255,178,107]],[5800,[255,226,154]],[7000,[255,244,220]],[9000,[230,238,255]],[12000,[196,215,255]],[20000,[157,184,255]],[50000,[138,165,255]]];
+const WORD = { O:'blue', B:'blue-white', A:'white', F:'yellow-white', G:'yellow', K:'orange', M:'red' };
+const lg = Math.log10, esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' }[c]));
+function colour(T) {
+  let i = 0; while (i < COLS.length - 2 && T > COLS[i + 1][0]) i++;
+  const [a, b] = [COLS[i], COLS[i + 1]], f = Math.max(0, Math.min(1, (lg(T) - lg(a[0])) / (lg(b[0]) - lg(a[0]))));
+  return 'rgb(' + a[1].map((v, k) => Math.round(v + (b[1][k] - v) * f)).join(',') + ')';
+}
+const letter = (T) => { for (const [t, c] of [[30000,'O'],[10000,'B'],[7500,'A'],[6000,'F'],[5200,'G'],[3700,'K']]) if (T >= t) return c; return 'M'; };
+function lms(T) {
+  let i = 0; while (i < MS.length - 2 && T > MS[i + 1][0]) i++;
+  const [a, b] = [MS[i], MS[i + 1]], f = (lg(T) - lg(a[0])) / (lg(b[0]) - lg(a[0]));
+  return lg(a[1]) + f * (lg(b[1]) - lg(a[1]));
+}
+function kind(s) {
+  const dev = lg(s.L) - lms(s.T);
+  if (dev < -1.5 && s.R < 0.05) return 'White dwarf';
+  if (dev < -0.9) return 'Subdwarf, below the main sequence';
+  if (dev <= 0.9) return s.T < 3900 ? 'Red dwarf (main sequence)' : 'Main sequence';
+  return s.L > 1e4 && s.R > 30 ? 'Supergiant' : 'Giant';
+}
+const fmt = (v) => v >= 1000 ? Math.round(v).toLocaleString() : v >= 0.1 ? +v.toPrecision(3) + '' : v.toPrecision(2);
+const absMag = (L) => 4.74 - 2.5 * lg(L);
+const state = { sel: 'Sun', B: true, N: true, R: true, G: true, L: true }, custom = [];
+const shown = () => DATA.filter((s) => s.set === 's' || (state.B && s.set.includes('b')) || (state.N && s.set.includes('n'))).concat(custom);
+
+/* ---- list and info ---- */
+function renderRows() {
+  const box = $('rows'); box.innerHTML = '';
+  for (const s of shown().sort((a, b) => b.T - a.T)) {
+    const b = document.createElement('button'); b.type = 'button'; b.className = 'row'; b.setAttribute('aria-pressed', String(s.name === state.sel));
+    b.innerHTML = '<span class="sw" style="background:' + colour(s.T) + '"></span><span class="nm">' + esc(s.name) + '</span><span>' + esc(s.type) + '</span><span>' + Math.round(s.T) + ' K</span>';
+    b.onclick = () => select(s.name); box.appendChild(b);
+  }
+}
+function renderInfo() {
+  const s = shown().find((q) => q.name === state.sel) || DATA[0], R = s.R, k = kind(s);
+  $('info').innerHTML = '<h3><span class="sw" style="background:' + colour(s.T) + '"></span>' + esc(s.name) + '</h3><dl class="facts">' +
+    '<dt>Kind</dt><dd>' + k + '</dd><dt>Spectral type</dt><dd>' + esc(s.type) + ' (' + WORD[letter(s.T)] + ')</dd>' +
+    '<dt>Temperature</dt><dd>' + Math.round(s.T).toLocaleString() + ' K</dd><dt>Luminosity</dt><dd>' + fmt(s.L) + ' × Sun</dd>' +
+    '<dt>Radius</dt><dd>' + fmt(R) + ' × Sun' + (R < 0.1 ? ' (≈ ' + (R * 109.1).toFixed(1) + ' Earths)' : '') + '</dd>' +
+    '<dt>Absolute mag.</dt><dd>' + absMag(s.L).toFixed(1) + '</dd><dt>Distance</dt><dd>' + (s.d === undefined ? 'n/a' : s.d ? s.d.toLocaleString() + ' light years' : 'here') + '</dd></dl>' +
+    '<p class="fact">Size follows from brightness and temperature: R = √L ÷ (T ÷ 5772 K)² = √' + fmt(s.L) + ' ÷ ' + (s.T / SUN).toFixed(2) + '² = ' + fmt(R) + ' R☉.</p>';
+}
+function select(n) { state.sel = n; renderRows(); renderInfo(); draw(); }
+
+/* ---- drawing ---- */
+const cv = $('hr'), ctx = cv.getContext('2d'), M = { l: 62, r: 52, t: 30, b: 48 };
+let W = 600, H = 460, dpr = 1, ymin = -4, ymax = 6, pos = [];
+const TMAX = 50000, TMIN = 2000;
+const X = (T) => M.l + (lg(TMAX) - lg(T)) / (lg(TMAX) - lg(TMIN)) * (W - M.l - M.r);
+const Y = (l) => M.t + (ymax - l) / (ymax - ymin) * (H - M.t - M.b);
+const sup = (n) => String(n).replace(/[-0-9]/g, (c) => '⁻⁰¹²³⁴⁵⁶⁷⁸⁹'['-0123456789'.indexOf(c)]);
+function halo(c, s, x, y, al, col) { c.font = '11px "IBM Plex Mono",monospace'; c.textAlign = al; c.textBaseline = 'middle'; c.lineWidth = 3; c.lineJoin = 'round'; c.strokeStyle = 'rgba(10,16,32,.85)'; c.strokeText(s, x, y); c.fillStyle = col; c.fillText(s, x, y); }
+function size() {
+  const w = $('stage').clientWidth; if (!w) return;
+  W = w; H = Math.round(Math.max(380, Math.min(620, w * 0.78))); dpr = Math.min(window.devicePixelRatio || 1, 2);
+  cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr); cv.style.height = H + 'px'; draw();
+}
+function draw() {
+  const c = ctx, vis = shown(), ink = 'rgba(190,205,235,';
+  ymin = Math.min(-4, Math.floor(Math.min(...vis.map((s) => lg(s.L))) - 0.3)); ymax = Math.max(6, Math.ceil(Math.max(...vis.map((s) => lg(s.L))) + 0.3));
+  c.setTransform(dpr, 0, 0, dpr, 0, 0); c.clearRect(0, 0, W, H);
+  c.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--sky').trim(); c.fillRect(0, 0, W, H);
+  c.font = '10.5px "IBM Plex Mono",monospace'; c.textBaseline = 'middle'; c.lineWidth = 1;
+  c.save(); c.beginPath(); c.rect(M.l, M.t, W - M.l - M.r, H - M.t - M.b); c.clip();
+  // grid
+  c.strokeStyle = ink + '.10)';
+  for (let k = ymin; k <= ymax; k++) { c.beginPath(); c.moveTo(M.l, Y(k)); c.lineTo(W - M.r, Y(k)); c.stroke(); }
+  for (const t of [3000, 4000, 5000, 7000, 10000, 20000, 30000]) { c.beginPath(); c.moveTo(X(t), M.t); c.lineTo(X(t), H - M.b); c.stroke(); }
+  for (const [t] of BANDS.slice(1)) { c.strokeStyle = ink + '.22)'; c.beginPath(); c.moveTo(X(t), M.t); c.lineTo(X(t), H - M.b); c.stroke(); }
+  if (state.R) { // lines of constant radius
+    c.setLineDash([4, 5]); c.strokeStyle = 'rgba(255,194,71,.32)';
+    for (const r of [0.01, 0.1, 1, 10, 100, 1000]) {
+      const L = (T) => 2 * lg(r) + 4 * lg(T / SUN), a = TMIN, b = TMAX;
+      c.beginPath(); c.moveTo(X(a), Y(L(a))); c.lineTo(X(b), Y(L(b))); c.stroke();
+      let t = TMIN * 1.12; if (L(t) < ymin + 0.35) t = SUN * Math.pow(10, (ymin + 0.35 - 2 * lg(r)) / 4);
+      if (L(t) <= ymax - 0.3 && t < TMAX) { c.setLineDash([]); halo(c, (r < 1 ? r : r.toLocaleString()) + ' R☉', X(t) - 4, Y(L(t)) - 9, 'right', 'rgba(255,205,110,.9)'); c.setLineDash([4, 5]); }
+    }
+    c.setLineDash([]);
+  }
+  if (state.G) {
+    c.beginPath(); MS.forEach(([t, l], i) => i ? c.lineTo(X(t), Y(lg(l))) : c.moveTo(X(t), Y(lg(l))));
+    c.lineCap = 'round'; c.lineJoin = 'round'; c.lineWidth = 24; c.strokeStyle = 'rgba(140,175,255,.12)'; c.stroke(); c.lineWidth = 1;
+    c.fillStyle = ink + '.5)'; c.font = '600 12px "Familjen Grotesk",sans-serif'; c.textAlign = 'center';
+    for (const [s, t, l] of [['MAIN SEQUENCE', 13000, 1.1], ['GIANTS', 3300, 2.5], ['SUPERGIANTS', 9000, 5.6], ['WHITE DWARFS', 16000, -3.2], ['RED DWARFS', 3000, -1.3]]) c.fillText(s, X(t), Y(l));
+  }
+  c.restore();
+  // spectral strip
+  c.textAlign = 'center'; c.fillStyle = ink + '.8)'; c.font = '600 12px "Familjen Grotesk",sans-serif';
+  BANDS.forEach(([t], i) => { const t2 = i < BANDS.length - 1 ? BANDS[i + 1][0] : TMIN; c.fillText(t, (X(t) + X(t2)) / 2, M.t - 14); });
+  // axes
+  c.font = '10.5px "IBM Plex Mono",monospace'; c.fillStyle = ink + '.75)'; c.textAlign = 'right';
+  for (let k = ymin; k <= ymax; k++) c.fillText('10' + sup(k), M.l - 6, Y(k));
+  c.textAlign = 'left';
+  for (let m = -15; m <= 20; m += 5) { const l = (4.74 - m) / 2.5; if (l >= ymin && l <= ymax) c.fillText(m, W - M.r + 6, Y(l)); }
+  c.textAlign = 'center';
+  for (const t of [40000, 20000, 10000, 7000, 5000, 4000, 3000]) c.fillText(t / 1000 + 'k', X(t), H - M.b + 13);
+  c.fillText('Surface temperature (K)  ·  hotter ←  → cooler', (M.l + W - M.r) / 2, H - 10);
+  c.save(); c.translate(14, (M.t + H - M.b) / 2); c.rotate(-Math.PI / 2); c.fillText('Luminosity (Sun = 1)', 0, 0); c.restore();
+  c.save(); c.translate(W - 12, (M.t + H - M.b) / 2); c.rotate(Math.PI / 2); c.fillText('Absolute magnitude', 0, 0); c.restore();
+  // stars, biggest first so small ones stay visible
+  const k = Math.max(0.6, Math.min(1.1, W / 760)); pos = [];
+  for (const s of vis.slice().sort((a, b) => b.R - a.R)) {
+    const x = X(s.T), y = Y(lg(s.L)), r = Math.max(2.5, (2.5 + 3.2 * (lg(s.R) + 2.2)) * k), col = colour(s.T);
+    pos.push({ s, x, y, r });
+    const g = c.createRadialGradient(x, y, r * 0.3, x, y, r * 2.2); g.addColorStop(0, col.replace('rgb', 'rgba').replace(')', ',.35)')); g.addColorStop(1, col.replace('rgb', 'rgba').replace(')', ',0)'));
+    c.fillStyle = g; c.beginPath(); c.arc(x, y, r * 2.2, 0, 6.2832); c.fill();
+    c.fillStyle = col; c.beginPath(); c.arc(x, y, r, 0, 6.2832); c.fill();
+    if (custom.includes(s)) { c.strokeStyle = '#fff'; c.setLineDash([3, 3]); c.beginPath(); c.arc(x, y, r + 3, 0, 6.2832); c.stroke(); c.setLineDash([]); }
+    if (s.name === state.sel) { c.strokeStyle = '#fff'; c.lineWidth = 1.5; c.beginPath(); c.arc(x, y, r + 5, 0, 6.2832); c.stroke(); c.lineWidth = 1; }
+  }
+  if (state.L) for (const p of pos) halo(c, p.s.name, p.x + p.r + 5, p.y - p.r * 0.4 - 3, 'left', '#e1e8f4');
+}
+
+/* ---- interaction ---- */
+function hit(e) {
+  const r = cv.getBoundingClientRect(), x = e.clientX - r.left, y = e.clientY - r.top; let best = null, bd = 1e9;
+  for (const p of pos) { const d = Math.hypot(p.x - x, p.y - y); if (d <= p.r + 8 && d < bd) { best = p; bd = d; } }
+  return best;
+}
+const tip = $('tip');
+cv.addEventListener('pointermove', (e) => {
+  const p = hit(e); cv.style.cursor = p ? 'pointer' : 'default';
+  if (!p) { tip.hidden = true; return; }
+  tip.textContent = p.s.name + ' · ' + p.s.type + ' · ' + Math.round(p.s.T) + ' K · ' + fmt(p.s.L) + ' L☉';
+  tip.style.left = Math.max(80, Math.min(W - 80, p.x)) + 'px'; tip.style.top = (p.y - p.r - 8) + 'px'; tip.hidden = false;
+});
+cv.addEventListener('pointerleave', () => { tip.hidden = true; });
+cv.addEventListener('click', (e) => { const p = hit(e); if (p) select(p.s.name); });
+for (const [id, key] of [['oB', 'B'], ['oN', 'N'], ['oR', 'R'], ['oG', 'G'], ['oL', 'L']])
+  $(id).addEventListener('change', (e) => { state[key] = e.target.checked; if (!shown().some((s) => s.name === state.sel)) state.sel = 'Sun'; renderRows(); renderInfo(); draw(); });
+$('form').addEventListener('submit', () => {
+  const T = Math.max(2000, Math.min(50000, parseFloat($('fT').value))), L = Math.max(1e-5, Math.min(1e7, parseFloat($('fL').value)));
+  if (!isFinite(T) || !isFinite(L)) { $('fMsg').textContent = 'Enter a temperature and a luminosity.'; return; }
+  let name = ($('fN').value.trim() || 'My star'); while (shown().some((s) => s.name === name)) name += ' ’';
+  const s = { name, type: letter(T) + ' (custom)', T, L, set: 'c', R: rad(T, L) }; custom.push(s);
+  $('fMsg').textContent = name + ' is a ' + kind(s).toLowerCase() + ': about ' + fmt(s.R) + ' times the Sun’s radius.';
+  state.sel = name; renderRows(); renderInfo(); draw();
+});
+$('clr').addEventListener('click', () => { custom.length = 0; if (!shown().some((s) => s.name === state.sel)) state.sel = 'Sun'; $('fMsg').textContent = 'Custom stars cleared.'; renderRows(); renderInfo(); draw(); });
+if ('ResizeObserver' in window) new ResizeObserver(size).observe($('stage')); else addEventListener('resize', size);
+try { matchMedia('(prefers-color-scheme: dark)').addEventListener('change', draw); } catch (_) {}
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(draw);
+renderRows(); renderInfo(); size();
+</script></body></html>

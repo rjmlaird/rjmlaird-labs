@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Doppler shift and redshift visualiser</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Familjen+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{--bg:#eceef2;--panel:#f9fafb;--field:#eef1f5;--ink:#16202c;--muted:#566274;--line:#d0d7e0;--accent:#8f5f10;--on-accent:#fff;--sky:#070b17;--red:#c0402c;--blue:#2a68b8;--display:'Familjen Grotesk',system-ui,-apple-system,'Segoe UI',sans-serif;--mono:'IBM Plex Mono',ui-monospace,Menlo,Consolas,monospace;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0a0e17;--panel:#111826;--field:#0c121e;--ink:#e6ebf3;--muted:#93a0b4;--line:#243046;--accent:#e0a844;--on-accent:#1a1100;--red:#e0624b;--blue:#5a9be8;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0a0e17;--panel:#111826;--field:#0c121e;--ink:#e6ebf3;--muted:#93a0b4;--line:#243046;--accent:#e0a844;--on-accent:#1a1100;--red:#e0624b;--blue:#5a9be8;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}*{box-sizing:border-box}[hidden]{display:none!important}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 var(--display);padding:20px 16px 36px}
+.wrap{max-width:1120px;margin-inline:auto;display:flex;flex-direction:column;gap:16px}
+h1{margin:0;font-size:1.7rem;letter-spacing:-.015em}.top p{margin:2px 0 0;color:var(--muted);max-width:68ch}
+h2{margin:0 0 8px;font-size:1.02rem;font-weight:600}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px;min-width:0}
+.layout{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:16px;align-items:start}
+@media(max-width:860px){.layout{grid-template-columns:minmax(0,1fr)}}
+.col{display:flex;flex-direction:column;gap:16px;min-width:0}
+.cw{border:1px solid var(--line);border-radius:6px;overflow:hidden;background:var(--sky)}.cw canvas{display:block;width:100%}
+button,input,select{font:inherit;font-size:.86rem;color:var(--ink);background:var(--field);border:1px solid var(--line);border-radius:6px;padding:6px 10px}
+button{cursor:pointer}button:hover{border-color:var(--muted)}button[aria-pressed=true]{border-color:var(--accent);background:var(--panel);font-weight:600}
+button.primary{background:var(--accent);color:var(--on-accent);border-color:transparent;font-weight:600;min-width:78px}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+input[type=range]{width:100%;padding:0;accent-color:var(--accent);margin:6px 0 0}
+.btns{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:10px}
+.btns .lbl{color:var(--muted);font-size:.8rem}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 16px;margin-top:12px}
+@media(max-width:560px){.grid{grid-template-columns:minmax(0,1fr)}}
+.sl label{display:flex;justify-content:space-between;gap:8px;font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.07em}
+.sl output{font:.82rem var(--mono);color:var(--ink);text-transform:none;letter-spacing:0;text-align:right}
+.live{margin:8px 0 0;font:.82rem var(--mono);color:var(--muted)}
+.note{margin:10px 0 0;color:var(--muted);font-size:.8rem;max-width:72ch}
+table{width:100%;border-collapse:collapse}td,th{padding:6px 0;border-top:1px solid var(--line);font:.84rem var(--mono);text-align:right}
+th{font-size:.68rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);border-top:0;font-weight:400}
+td:first-child,th:first-child{text-align:left;font-family:var(--display);font-size:.92rem;color:var(--muted)}
+td.dn{color:var(--red)}td.bl{color:var(--blue)}td.dn,td.bl{font-weight:500}
+.sw{display:inline-block;width:12px;height:12px;border-radius:50%;margin-right:7px;vertical-align:-1px;border:1px solid var(--line)}
+.sw.off{background:repeating-linear-gradient(45deg,var(--field) 0 3px,var(--line) 3px 5px)}
+.exp{font-size:.92rem}.exp p{margin:0 0 8px}.exp ul{margin:0;padding-left:18px;color:var(--muted);font-size:.88rem}.exp li{margin-bottom:4px}
+</style></head><body>
+<main class="wrap">
+<header class="top"><h1>Doppler shift and redshift visualiser</h1>
+<p>A light source moves past an observer. Watch its wavefronts bunch up ahead and stretch out behind, and see how a spectral line slides along the spectrum. Switch to cosmological redshift to see a different cause: space itself stretching the light.</p></header>
+<div class="layout">
+<div class="col">
+<section class="card" aria-label="Wavefront animation">
+<div class="btns" style="margin:0 0 10px"><button type="button" id="mDop" aria-pressed="true">Doppler shift</button><button type="button" id="mCos" aria-pressed="false">Cosmological redshift</button></div>
+<div class="cw"><canvas id="scene" role="img" aria-label="Animation of wavefronts from a light source"></canvas></div>
+<p class="live" id="live"></p>
+<div class="btns"><button type="button" class="primary" id="play" aria-pressed="true">Pause</button><button type="button" id="rst">Restart</button>
+<select id="spd" aria-label="Animation speed"><option value="0.35">Slow</option><option value="1" selected>Normal</option><option value="1.8">Fast</option></select></div>
+<div class="grid">
+<div class="sl" id="gB"><label for="b">Source velocity <output id="bOut"></output></label><input type="range" id="b" min="-0.95" max="0.95" step="0.01" value="0.3"></div>
+<div class="sl" id="gZ" hidden><label for="z">Redshift z <output id="zOut"></output></label><input type="range" id="z" min="0" max="2.5" step="0.01" value="0.5"></div>
+<div class="sl"><label for="lam">Emitted wavelength <output id="lOut"></output></label><input type="range" id="lam" min="380" max="750" step="1" value="656"></div>
+</div>
+<div class="btns" id="pB"><span class="lbl">Velocity:</span><button type="button" data-b="0">At rest</button><button type="button" data-b="0.1">Toward 0.1c</button><button type="button" data-b="0.5">Toward 0.5c</button><button type="button" data-b="-0.1">Away 0.1c</button><button type="button" data-b="-0.5">Away 0.5c</button></div>
+<div class="btns" id="pZ" hidden><span class="lbl">Redshift:</span><button type="button" data-z="0">z = 0</button><button type="button" data-z="0.1">z = 0.1</button><button type="button" data-z="1">z = 1</button><button type="button" data-z="2">z = 2</button></div>
+<div class="btns"><span class="lbl">Spectral line:</span><button type="button" data-l="393.4">Ca K</button><button type="button" data-l="486.1">H&beta;</button><button type="button" data-l="589">Na D</button><button type="button" data-l="656.3">H&alpha;</button></div>
+<p class="note" id="note1"></p>
+</section>
+<section class="card" aria-label="Spectrum"><h2>Spectrum</h2>
+<div class="cw"><canvas id="spec" role="img" aria-label="Spectrum showing the rest and observed positions of a spectral line"></canvas></div>
+<p class="note" id="specNote"></p></section>
+</div>
+<div class="col">
+<section class="card" aria-label="Results"><h2 id="resH">Readout</h2><table id="tbl"></table><p class="note" id="tblNote"></p></section>
+<section class="card exp" aria-label="Explanation" id="exp"></section>
+</div></div></main>
+<script>
+const TAU = Math.PI * 2, C = 299792.458, $ = (id) => document.getElementById(id);
+const OBS = 930, XMIN = 80, XMAX = 720, XS_COS = 130, CV = 280;
+const st = { mode: 'dop', b: 0.3, z: 0.5, lam: 656.3, speed: 1, playing: !(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) };
+const sim = { t: 0, x: XMIN, acc: 0, rings: [], flash: 0 };
+let dirty = true;
+
+/* ---- physics ---- */
+const gamma = () => 1 / Math.sqrt(1 - st.b * st.b);
+const ratio = () => st.mode === 'dop' ? Math.sqrt((1 - st.b) / (1 + st.b)) : 1 + st.z;   // observed / rest wavelength
+const lamVis = () => 26 + (st.lam - 380) / 370 * 34;                                       // wavelength drawn in the animation (scaled up)
+const Hc = () => st.z * CV / (OBS - XS_COS);                                               // expansion rate so that rings arrive stretched by exactly 1+z
+
+/* ---- colour ---- */
+function wl2rgb(w) {
+  let r = 0, g = 0, b = 0;
+  if (w < 380) return [120, 100, 205, 0.4];
+  if (w > 750) return [175, 80, 80, 0.4];
+  if (w < 440) { r = -(w - 440) / 60; b = 1; } else if (w < 490) { g = (w - 440) / 50; b = 1; } else if (w < 510) { g = 1; b = -(w - 510) / 20; }
+  else if (w < 580) { r = (w - 510) / 70; g = 1; } else if (w < 645) { r = 1; g = -(w - 645) / 65; } else { r = 1; }
+  let f = 1; if (w < 420) f = 0.3 + 0.7 * (w - 380) / 40; else if (w > 700) f = 0.3 + 0.7 * (750 - w) / 50;
+  const q = (v) => Math.round(255 * Math.pow(v * f, 0.8));
+  return [q(r), q(g), q(b), 1];
+}
+const rgba = (q) => `rgba(${q[0]},${q[1]},${q[2]},${q[3]})`;
+const mix = (a, b, t) => a.map((v, i) => Math.round(v + (b[i] - v) * t));
+function cont(l) {
+  if (l >= 380 && l <= 750) return wl2rgb(l);
+  if (l < 380) return mix([70, 56, 128], [20, 16, 36], Math.min(1, (380 - l) / 180));
+  return mix([112, 40, 40], [24, 12, 12], Math.min(1, (l - 750) / 500));
+}
+const STARS = (() => { let s = 7; const r = () => (s = (s * 16807) % 2147483647) / 2147483647; return Array.from({ length: 70 }, () => [r(), r(), 0.15 + r() * 0.45, 0.6 + r() * 1.1]); })();
+
+/* ---- simulation ---- */
+function radius(r, H) { const age = sim.t - r.te; if (st.mode !== 'cos') return CV * age; return H > 1e-6 ? CV * (Math.exp(H * age) - 1) / H : CV * age; }
+function step(dt) {
+  sim.t += dt;
+  const dop = st.mode === 'dop', v = dop ? st.b * CV : 0;
+  let T;
+  if (dop) { sim.x += v * dt; if (sim.x > XMAX) sim.x = XMIN; else if (sim.x < XMIN) sim.x = XMAX; T = gamma() * lamVis() / CV; }
+  else { sim.x = XS_COS; T = lamVis() / CV; }
+  sim.acc += dt;
+  while (sim.acc >= T) { sim.acc -= T; sim.rings.push({ x: sim.x - v * sim.acc, te: sim.t - sim.acc, hit: false, R: 0 }); }
+  const H = Hc();
+  for (const r of sim.rings) { r.R = radius(r, H); if (!r.hit && r.R >= Math.abs(OBS - r.x)) { r.hit = true; sim.flash = 1; } }
+  sim.rings = sim.rings.filter((r) => r.R < 1250);
+  sim.flash = Math.max(0, sim.flash - dt * 3);
+}
+function reset() {
+  sim.t = 0; sim.acc = 0; sim.rings = []; sim.flash = 0; sim.x = st.b < 0 ? XMAX : XMIN;
+  for (let i = 0; i < 220; i++) step(0.016);
+  sim.flash = 0; dirty = true;
+}
+
+/* ---- drawing helpers ---- */
+function fit(cv, h) {
+  const w = cv.parentElement.clientWidth; if (!w) return null; const d = Math.min(window.devicePixelRatio || 1, 2);
+  if (cv.width !== Math.round(w * d) || cv.height !== Math.round(h * d)) { cv.width = Math.round(w * d); cv.height = Math.round(h * d); cv.style.height = h + 'px'; }
+  const c = cv.getContext('2d'); c.setTransform(d, 0, 0, d, 0, 0); return { c, w, h };
+}
+function halo(c, s, x, y, al, col) { c.font = '11px "IBM Plex Mono",monospace'; c.textAlign = al; c.textBaseline = 'middle'; c.lineWidth = 3; c.lineJoin = 'round'; c.strokeStyle = 'rgba(7,11,23,.88)'; c.strokeText(s, x, y); c.fillStyle = col; c.fillText(s, x, y); }
+function arrow(c, x0, y0, dx, dy, col, w) { const L = Math.hypot(dx, dy); if (L < 2) return; c.strokeStyle = col; c.fillStyle = col; c.lineWidth = w || 2; c.beginPath(); c.moveTo(x0, y0); c.lineTo(x0 + dx, y0 + dy); c.stroke(); const a = Math.atan2(dy, dx), h = Math.min(9, L * 0.4); c.beginPath(); c.moveTo(x0 + dx, y0 + dy); c.lineTo(x0 + dx - h * Math.cos(a - 0.4), y0 + dy - h * Math.sin(a - 0.4)); c.lineTo(x0 + dx - h * Math.cos(a + 0.4), y0 + dy - h * Math.sin(a + 0.4)); c.fill(); }
+const sgn = (x, d) => { const s = Math.abs(x).toFixed(d); return (+s === 0 ? '' : x > 0 ? '+' : '−') + s; };
+const sgnInt = (x) => { const s = Math.round(Math.abs(x)).toLocaleString('en-GB'); return (s === '0' ? '' : x > 0 ? '+' : '−') + s; };
+const f1 = (x) => x >= 1000 ? x.toFixed(0) : x.toFixed(1);
+
+/* ---- animation panel ---- */
+function drawScene() {
+  const cv = $('scene'), w0 = cv.parentElement.clientWidth, f = fit(cv, Math.round(Math.max(210, Math.min(330, w0 * 0.4)))); if (!f) return;
+  const { c, w, h } = f, s = w / 1000, cy = h / 2, dop = st.mode === 'dop', b = st.b, H = Hc();
+  c.fillStyle = '#070b17'; c.fillRect(0, 0, w, h);
+  for (const q of STARS) { c.fillStyle = `rgba(220,230,255,${q[2]})`; c.fillRect(q[0] * w, q[1] * h, q[3], q[3]); }
+  c.setLineDash([2, 6]); c.strokeStyle = 'rgba(190,205,235,.25)'; c.lineWidth = 1; c.beginPath(); c.moveTo(0, cy); c.lineTo(w, cy); c.stroke(); c.setLineDash([]);
+  // wavefronts
+  let stops = null;
+  if (dop && c.createConicGradient) { stops = []; const g = gamma(); for (let i = 0; i <= 24; i++) { const th = TAU * i / 24; stops.push([i / 24, rgba(wl2rgb(st.lam * g * (1 - b * Math.cos(th))))]); } }
+  const restCol = rgba(wl2rgb(st.lam)); c.lineWidth = 1.5;
+  for (const r of sim.rings) {
+    r.R = radius(r, H); const R = r.R * s; if (R < 1) continue; const X = r.x * s;
+    c.globalAlpha = Math.pow(Math.max(0, 1 - r.R / 1250), 0.8) * 0.95;
+    if (dop) { if (stops) { const gr = c.createConicGradient(0, X, cy); stops.forEach((q) => gr.addColorStop(q[0], q[1])); c.strokeStyle = gr; } else c.strokeStyle = restCol; }
+    else c.strokeStyle = rgba(wl2rgb(st.lam * (H > 1e-6 ? Math.exp(H * (sim.t - r.te)) : 1)));
+    c.beginPath(); c.arc(X, cy, R, 0, TAU); c.stroke();
+  }
+  c.globalAlpha = 1;
+  // source
+  const sx = (dop ? sim.x : XS_COS) * s, sc = wl2rgb(st.lam), gl = c.createRadialGradient(sx, cy, 1, sx, cy, 24);
+  gl.addColorStop(0, `rgba(${sc[0]},${sc[1]},${sc[2]},.65)`); gl.addColorStop(1, `rgba(${sc[0]},${sc[1]},${sc[2]},0)`);
+  c.fillStyle = gl; c.fillRect(sx - 24, cy - 24, 48, 48);
+  c.fillStyle = `rgb(${sc[0]},${sc[1]},${sc[2]})`; c.strokeStyle = '#fff'; c.lineWidth = 1.2; c.beginPath(); c.arc(sx, cy, 6, 0, TAU); c.fill(); c.stroke();
+  halo(c, dop ? 'Source' : 'Galaxy', sx, cy + 22, 'center', '#cfd8e8');
+  if (dop && Math.abs(b) > 0.01) {
+    arrow(c, sx, cy - 16, b * Math.min(100, w * 0.15), 0, '#ffd98a', 2);
+    halo(c, `v = ${b > 0 ? '+' : '−'}${Math.abs(b).toFixed(2)} c`, sx, cy - 30, 'center', '#ffd98a');
+    if (w >= 520 && Math.abs(b) > 0.08) {
+      const ax = Math.max(64, Math.min(w - 64, sx + Math.sign(b) * w * 0.12)), bx = Math.max(64, Math.min(w - 64, sx - Math.sign(b) * w * 0.12));
+      halo(c, 'squeezed · bluer', ax, cy + 44, 'center', '#8fb8ff'); halo(c, 'stretched · redder', bx, cy + 44, 'center', '#ff9a85');
+    }
+  }
+  // observer
+  const ox = OBS * s, oc = wl2rgb(st.lam * ratio());
+  if (sim.flash > 0) { c.strokeStyle = `rgba(${oc[0]},${oc[1]},${oc[2]},${sim.flash * 0.9})`; c.lineWidth = 2; c.beginPath(); c.arc(ox, cy, 9 + (1 - sim.flash) * 20, 0, TAU); c.stroke(); }
+  c.fillStyle = `rgba(${oc[0]},${oc[1]},${oc[2]},${oc[3] < 1 ? 0.55 : 1})`; c.strokeStyle = '#fff'; c.lineWidth = 1.5; c.beginPath(); c.arc(ox, cy, 8, 0, TAU); c.fill(); c.stroke();
+  halo(c, 'Observer', Math.min(ox, w - 34), cy + 22, 'center', '#cfd8e8');
+  if (w > 480) halo(c, dop ? 'ring colour = wavelength seen in that direction' : 'space stretches while the light travels', w / 2, 16, 'center', 'rgba(190,205,235,.75)');
+}
+
+/* ---- spectrum panel ---- */
+function drawSpec() {
+  const cv = $('spec'), f = fit(cv, 232); if (!f) return;
+  const { c, w, h } = f, dop = st.mode === 'dop', lo = dop ? 200 : 300, hi = dop ? 1200 : 2400, L = 14, W = w - 2 * L, X = (l) => L + (l - lo) / (hi - lo) * W;
+  const lam0 = st.lam, rt = ratio(), lamO = lam0 * rt, y1 = 26, hh = 44, y2 = 136, x0 = X(lam0), xo = X(lamO), inR = xo >= L + 2 && xo <= L + W - 2;
+  c.fillStyle = '#070b17'; c.fillRect(0, 0, w, h);
+  const sg0 = 2.6, sgO = Math.min(9, Math.max(1.6, 2.6 * rt));
+  for (let px = 0; px < W; px++) {
+    const l = lo + (px + 0.5) / W * (hi - lo), col = cont(l);
+    for (const [y, xl, sg] of [[y1, x0, sg0], [y2, xo, sgO]]) {
+      const d = (L + px + 0.5 - xl) / sg, k = 1 - 0.92 * Math.exp(-0.5 * d * d);
+      c.fillStyle = `rgb(${col[0] * k | 0},${col[1] * k | 0},${col[2] * k | 0})`; c.fillRect(L + px, y, 1, hh);
+    }
+  }
+  c.strokeStyle = 'rgba(190,205,235,.3)'; c.lineWidth = 1; c.strokeRect(L + 0.5, y1 + 0.5, W - 1, hh - 1); c.strokeRect(L + 0.5, y2 + 0.5, W - 1, hh - 1);
+  halo(c, 'REST FRAME · as emitted', L, 14, 'left', '#9db0cc'); halo(c, 'OBSERVED · as measured', L, 124, 'left', '#9db0cc');
+  for (const y of [y1, y2]) { if (X(380) - L > 44) halo(c, 'UV', (L + X(380)) / 2, y + 10, 'center', 'rgba(190,205,235,.6)'); if (L + W - X(750) > 44) halo(c, 'IR', (X(750) + L + W) / 2, y + 10, 'center', 'rgba(190,205,235,.6)'); }
+  // rest-position ghost and shift arrow
+  const xe = Math.max(L + 4, Math.min(L + W - 4, xo)), ay = 103;
+  c.setLineDash([3, 4]); c.strokeStyle = 'rgba(255,255,255,.55)'; c.lineWidth = 1;
+  c.beginPath(); c.moveTo(x0, y1 + hh); c.lineTo(x0, y2 + hh); c.stroke();
+  if (Math.abs(xe - x0) > 3) { c.beginPath(); c.moveTo(xe, ay); c.lineTo(xe, y2); c.stroke(); }
+  c.setLineDash([]);
+  if (Math.abs(xe - x0) > 3) {
+    arrow(c, x0, ay, xe - x0, 0, rt > 1 ? '#ff9a85' : '#8fb8ff', 2);
+    const dl = lamO - lam0, mid = (x0 + xe) / 2, tx = `Δλ = ${sgn(dl, dl > -100 && dl < 100 ? 1 : 0)} nm`;
+    c.font = '11px "IBM Plex Mono",monospace'; const tw = c.measureText(tx).width;
+    halo(c, tx, Math.max(L + tw / 2, Math.min(L + W - tw / 2, mid)), ay - 11, 'center', rt > 1 ? '#ff9a85' : '#8fb8ff');
+  }
+  const place = (txt, x, y) => { c.font = '11px "IBM Plex Mono",monospace'; const tw = c.measureText(txt).width; if (x + 9 + tw < L + W) halo(c, txt, x + 9, y, 'left', '#fff'); else halo(c, txt, x - 9, y, 'right', '#fff'); };
+  place(`λ₀ = ${f1(lam0)} nm`, x0, y1 + hh / 2 + 6);
+  if (inR) place(`λ = ${f1(lamO)} nm`, xo, y2 + hh / 2 + 6);
+  else {
+    const left = xo < L, ey = y2 + hh / 2; c.fillStyle = '#ffd98a'; c.beginPath();
+    if (left) { c.moveTo(L + 3, ey); c.lineTo(L + 12, ey - 6); c.lineTo(L + 12, ey + 6); } else { c.moveTo(L + W - 3, ey); c.lineTo(L + W - 12, ey - 6); c.lineTo(L + W - 12, ey + 6); }
+    c.fill(); halo(c, `λ = ${f1(lamO)} nm · off scale`, left ? L + 18 : L + W - 18, ey + 6, left ? 'left' : 'right', '#ffd98a');
+  }
+  // axis
+  const ya = y2 + hh + 8; c.strokeStyle = 'rgba(190,205,235,.5)'; c.lineWidth = 1; c.beginPath(); c.moveTo(L, ya); c.lineTo(L + W, ya); c.stroke();
+  const rb = c.createLinearGradient(X(380), 0, X(750), 0); for (let i = 0; i <= 12; i++) { const q = wl2rgb(380 + 370 * i / 12); rb.addColorStop(i / 12, `rgb(${q[0]},${q[1]},${q[2]})`); }
+  c.fillStyle = rb; c.fillRect(X(380), ya - 1, X(750) - X(380), 4);
+  const target = (hi - lo) / (W / 55), stp = [20, 25, 50, 100, 200, 250, 300, 500].find((v) => v >= target) || 500;
+  for (let l = Math.ceil(lo / stp) * stp; l <= hi; l += stp) { c.beginPath(); c.moveTo(X(l), ya); c.lineTo(X(l), ya + 5); c.stroke(); halo(c, String(l), X(l), ya + 16, 'center', '#9db0cc'); }
+  halo(c, 'wavelength (nm) · coloured bar = visible light', L + W, h - 8, 'right', 'rgba(190,205,235,.6)');
+}
+
+/* ---- text and readouts ---- */
+const EXP = {
+  dop: `<p><b>What you're seeing.</b> Each ring is a wavefront sent out by the source. Because the source keeps moving, the rings bunch up in front of it and spread out behind it. Ring colour shows the wavelength an observer in that direction would measure; the observer on the right sits on the line of motion.</p>
+<ul><li><b>Blueshift:</b> a source moving towards you has its waves squeezed, so the wavelength is shorter (bluer) and z is negative.</li>
+<li><b>Redshift:</b> a source moving away has its waves stretched, so the wavelength is longer (redder) and z is positive.</li>
+<li><b>Formula:</b> λ/λ₀ = √((1 + v/c) / (1 − v/c)), with v positive when receding. For v much smaller than c this is just Δλ/λ ≈ v/c.</li>
+<li><b>Radial velocity:</b> only motion along the line of sight shifts the line this way. Astronomers read the radial velocity of stars from line shifts; a star wobbling because of its planets moves by only metres per second, a shift of about one part in 10⁸, far too small to show here.</li>
+<li>Lines can slide out of the visible band into the ultraviolet or infrared.</li></ul>`,
+  cos: `<p><b>A different cause.</b> The redshift of distant galaxies is mostly not a Doppler effect. While the light travels, the space it crosses expands and stretches the wave with it. Here the galaxy stays put; the ring spacing grows as the light travels, and its colour reddens in flight.</p>
+<ul><li><b>Meaning of z:</b> 1 + z = (size of the universe now) ÷ (size when the light left). At z = 1 the universe was half its present size.</li>
+<li><b>Hubble's law:</b> at small z, c·z is roughly the recession speed, and v ≈ H₀d links redshift to distance (H₀ is about 70 km/s per megaparsec).</li>
+<li><b>Large z:</b> the Doppler formula no longer applies, so don't read z as a speed. Treat it as how much the universe has stretched.</li>
+<li><b>Not everything is redshifted:</b> nearby galaxies such as Andromeda are blueshifted, because their own motion (a true Doppler shift) beats the expansion over short distances.</li>
+<li>The ring edges speed up in the picture because the space between the source and the ring is itself stretching; locally the light still moves at c.</li></ul>`
+};
+function update() {
+  const dop = st.mode === 'dop', lam0 = st.lam, rt = ratio(), lamO = lam0 * rt, dl = lamO - lam0, z = rt - 1, q = wl2rgb(lamO), vis = q[3] === 1;
+  const kind = Math.abs(z) < 5e-4 ? 'No shift' : z > 0 ? 'Redshift' : 'Blueshift', cls = kind === 'Redshift' ? 'dn' : kind === 'Blueshift' ? 'bl' : '';
+  $('bOut').textContent = Math.abs(st.b) < 0.005 ? '0.00 c · at rest' : `${st.b > 0 ? '+' : '−'}${Math.abs(st.b).toFixed(2)} c · ${st.b > 0 ? 'toward' : 'away'}`;
+  $('zOut').textContent = `z = ${st.z.toFixed(2)}`;
+  $('lOut').textContent = `${lam0.toFixed(1)} nm · ${(C / lam0).toFixed(0)} THz`;
+  const sw = `<span class="sw${vis ? '' : ' off'}" style="${vis ? `background:rgb(${q[0]},${q[1]},${q[2]})` : ''}"></span>`, out = vis ? '' : (lamO < 380 ? ' (UV)' : ' (infrared)');
+  const rows = dop ? [
+    ['Rest wavelength λ₀', `${f1(lam0)} nm`, ''], ['Observed wavelength λ', `${sw}${f1(lamO)} nm${out}`, ''], ['Shift Δλ', `${sgn(dl, 1)} nm`, ''],
+    ['Δλ / λ₀  (= z)', sgn(z, 3), cls], ['Observed frequency', `${(C / lamO).toFixed(0)} THz`, ''],
+    ['Radial velocity (+ = away)', `${sgnInt(-st.b * C) || '0'} km/s`, ''], ['Result', kind, cls]
+  ] : [
+    ['Rest wavelength λ₀', `${f1(lam0)} nm`, ''], ['Observed wavelength λ', `${sw}${f1(lamO)} nm${out}`, ''], ['Shift Δλ', `${sgn(dl, 1)} nm`, ''],
+    ['Redshift z = Δλ / λ₀', sgn(z, 3), cls], ['Stretch factor 1 + z', `×${rt.toFixed(2)}`, ''], ['Universe then ÷ now', (1 / rt).toFixed(2), ''],
+    ['Naive speed c·z (small z)', z <= 0.1 ? `${Math.round(C * z).toLocaleString('en-GB')} km/s` : '—', ''],
+    ['Hubble-law distance', z <= 0.1 ? `${Math.round(C * z / 70).toLocaleString('en-GB')} Mpc` : '—', ''], ['Result', kind, cls]
+  ];
+  $('tbl').innerHTML = '<tr><th>Quantity</th><th>Value</th></tr>' + rows.map((r) => `<tr><td>${r[0]}</td><td class="${r[2]}">${r[1]}</td></tr>`).join('');
+  $('resH').textContent = dop ? 'Doppler shift readout' : 'Cosmological redshift readout';
+  $('tblNote').textContent = dop ? 'Radial velocity is positive when the source is moving away (the astronomers’ convention), so a positive velocity goes with redshift. Δλ/λ₀ is the same as z.'
+    : 'Speed and distance from z only make sense for small z (about 0.1 or less, with H₀ = 70 km/s/Mpc). Beyond that, read z as how much the universe has stretched.';
+  $('live').textContent = dop ? `${kind}: ${f1(lam0)} → ${f1(lamO)} nm (Δλ/λ = ${sgn(z, 3)})` : `${kind}: ${f1(lam0)} → ${f1(lamO)} nm (z = ${z.toFixed(2)})`;
+  $('note1').textContent = dop ? 'Slide right and the source moves towards the observer (blueshift); slide left and it moves away (redshift). Wavelengths in the animation are scaled up so you can see them; the source loops back round so you can keep watching. The observer sits on the line of motion, so only the radial part of the velocity counts. Brightness changes from relativistic beaming are not shown.'
+    : 'The galaxy is fixed in place and the observer sees the light stretched by exactly 1 + z. Wavelengths in the animation are scaled up so you can see them.';
+  $('specNote').textContent = dop ? 'The dark line is the same spectral line in the source’s own frame (top) and in the observer’s measurement (bottom). The white dotted line marks where it would sit with no shift. Wavelengths outside 380–750 nm are invisible to the eye.'
+    : 'The line moves further to the right, towards the infrared, as z grows. Visible light from distant galaxies is shifted into the infrared, which is why telescopes such as JWST observe in those wavelengths.';
+  $('exp').innerHTML = EXP[st.mode];
+  $('scene').setAttribute('aria-label', dop ? `Animation of wavefronts from a source moving at ${st.b.toFixed(2)} c; waves bunch up ahead of it and spread out behind` : `Animation of wavefronts from a stationary galaxy, stretched by a redshift of ${st.z.toFixed(2)}`);
+  $('spec').setAttribute('aria-label', `Spectrum: a line at ${f1(lam0)} nm in the rest frame is observed at ${f1(lamO)} nm`);
+  document.querySelectorAll('[data-l]').forEach((b) => b.setAttribute('aria-pressed', String(Math.abs(+b.dataset.l - st.lam) < 0.05)));
+  document.querySelectorAll('[data-b]').forEach((b) => b.setAttribute('aria-pressed', String(Math.abs(+b.dataset.b - st.b) < 0.005)));
+  document.querySelectorAll('[data-z]').forEach((b) => b.setAttribute('aria-pressed', String(Math.abs(+b.dataset.z - st.z) < 0.005)));
+}
+function changed() { update(); drawSpec(); dirty = true; }
+
+/* ---- events ---- */
+function setMode(m) {
+  st.mode = m; $('mDop').setAttribute('aria-pressed', String(m === 'dop')); $('mCos').setAttribute('aria-pressed', String(m === 'cos'));
+  $('gB').hidden = $('pB').hidden = m !== 'dop'; $('gZ').hidden = $('pZ').hidden = m !== 'cos';
+  reset(); changed();
+}
+$('mDop').onclick = () => setMode('dop'); $('mCos').onclick = () => setMode('cos');
+$('b').addEventListener('input', (e) => { st.b = Math.abs(+e.target.value) < 0.005 ? 0 : +e.target.value; changed(); });
+$('z').addEventListener('input', (e) => { st.z = +e.target.value; changed(); });
+$('lam').addEventListener('input', (e) => { st.lam = +e.target.value; changed(); });
+document.querySelectorAll('[data-l]').forEach((b) => b.onclick = () => { st.lam = +b.dataset.l; $('lam').value = st.lam; changed(); });
+document.querySelectorAll('[data-b]').forEach((b) => b.onclick = () => { st.b = +b.dataset.b; $('b').value = st.b; changed(); });
+document.querySelectorAll('[data-z]').forEach((b) => b.onclick = () => { st.z = +b.dataset.z; $('z').value = st.z; changed(); });
+$('play').onclick = () => { st.playing = !st.playing; $('play').textContent = st.playing ? 'Pause' : 'Play'; $('play').setAttribute('aria-pressed', String(st.playing)); };
+$('rst').onclick = () => reset();
+$('spd').onchange = (e) => { st.speed = +e.target.value; };
+window.addEventListener('resize', () => { dirty = true; drawSpec(); });
+if (!st.playing) { $('play').textContent = 'Play'; $('play').setAttribute('aria-pressed', 'false'); }
+
+let last = 0;
+function frame(ts) {
+  const dt = Math.min(0.05, (ts - last) / 1000 || 0); last = ts;
+  if (st.playing) { step(dt * st.speed); dirty = true; }
+  if (dirty) { dirty = false; drawScene(); }
+  requestAnimationFrame(frame);
+}
+reset(); update(); drawSpec(); requestAnimationFrame(frame);
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { drawSpec(); dirty = true; });
+</script>
+</body></html>

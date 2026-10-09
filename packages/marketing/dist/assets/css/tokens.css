@@ -1,0 +1,24 @@
+/* Shared design tokens for every Marketing Lab. Override per lab only when needed. */
+:root {
+  --navy: #08111d;
+  --navy-raised: #101d30;
+  --teal: #00c2a8;
+  --blue: #7da9ff;
+  --purple: #b39cff;
+  --amber: #f4af31;
+  --green: #58d08b;
+  --red: #f08c8c;
+  --text-hi: #edf4f8;
+  --text-lo: #a8b6c4;
+  --text-dim: #748392;
+  --border: rgba(237, 244, 248, 0.11);
+  --border-strong: rgba(237, 244, 248, 0.22);
+  --shadow: 0 24px 70px rgba(0, 0, 0, 0.22);
+  --radius: 14px;
+  --font-display: "Space Grotesk", system-ui, sans-serif;
+  --font-body: "Inter", system-ui, sans-serif;
+  --max-width: 1540px;
+  --orange: #ee9b57;
+  --pink: #ed8ccf;
+  --navy-soft: #182d45;
+}

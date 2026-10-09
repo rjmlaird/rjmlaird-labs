@@ -1,0 +1,44 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>Sunline · Astronomy Labs</title><meta name="description" content="Track the Sun's path and daylight through the year."><link rel="canonical" href="https://astronomy.labs.rjmlaird.co.uk/labs/sunline/"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Familjen+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap"><script>
+      try { var t = localStorage.getItem('al-theme'); if (t) document.documentElement.dataset.theme = t; } catch (e) {}
+    </script><style>:root{--bg:#eceef2;--panel:#f9fafb;--field:#eef1f5;--ink:#16202c;--muted:#566274;--line:#d0d7e0;--accent:#8f5f10;--on-accent:#fff;--display:"Familjen Grotesk",system-ui,-apple-system,"Segoe UI",sans-serif;--mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace}@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0a0e17;--panel:#111826;--field:#0c121e;--ink:#e6ebf3;--muted:#93a0b4;--line:#243046;--accent:#e0a844;--on-accent:#1a1100;color-scheme:dark}}:root[data-theme=dark]{--bg:#0a0e17;--panel:#111826;--field:#0c121e;--ink:#e6ebf3;--muted:#93a0b4;--line:#243046;--accent:#e0a844;--on-accent:#1a1100;color-scheme:dark}*{box-sizing:border-box}body{background:var(--bg);color:var(--ink);font:15px/1.5 var(--display);flex-direction:column;min-height:100vh;margin:0;display:flex}a{color:var(--accent)}.site-header{border-bottom:1px solid var(--line);background:var(--panel);flex-wrap:wrap;align-items:center;gap:16px;padding:12px 16px;display:flex}.site-logo{color:var(--ink);letter-spacing:-.01em;font-size:1.05rem;font-weight:700;text-decoration:none}.site-nav{flex-wrap:wrap;flex:1;gap:4px 14px;display:flex}.site-nav a{color:var(--muted);font-size:.88rem;text-decoration:none}.site-nav a:hover,.site-nav a[aria-current=page]{color:var(--ink)}.theme-btn{font:inherit;color:var(--ink);background:var(--field);border:1px solid var(--line);cursor:pointer;border-radius:6px;padding:4px 10px;font-size:.82rem}main{flex:1;width:100%;max-width:1120px;margin-inline:auto;padding:24px 16px 40px}h1{letter-spacing:-.015em;margin:0 0 6px;font-size:1.8rem}.lede{color:var(--muted);max-width:68ch;margin:0 0 24px}h2{margin:28px 0 10px;font-size:1.1rem}.cards{grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;margin:0;padding:0;list-style:none;display:grid}.card{background:var(--panel);border:1px solid var(--line);height:100%;color:inherit;border-radius:10px;padding:14px;text-decoration:none;display:block}.card:hover{border-color:var(--accent)}.card h3{margin:0 0 4px;font-size:1rem}.card p{color:var(--muted);margin:0;font-size:.86rem}.tag{font:.7rem var(--mono);color:var(--muted);border:1px solid var(--line);border-radius:99px;margin:8px 4px 0 0;padding:1px 8px;display:inline-block}.crumbs{color:var(--muted);margin-bottom:10px;font-size:.82rem}.crumbs a{color:var(--muted)}.lab-frame{border:1px solid var(--line);background:var(--panel);border-radius:10px;width:100%;min-height:70vh;display:block}.about{max-width:72ch;margin-top:20px}.site-footer{border-top:1px solid var(--line);color:var(--muted);text-align:center;padding:16px;font-size:.82rem}
+</style></head><body><header class="site-header"><a href="/" class="site-logo">Astronomy Labs</a><nav class="site-nav" aria-label="Categories"><a href="/c/orbits/">Orbits</a><a href="/c/sky-and-time/">Sky</a><a href="/c/optics/">Optics</a><a href="/c/stars/">Stars</a><a href="/c/cosmology/">Galaxies</a><a href="/c/phenomena/">Astrophysical Phenomena</a><a href="/c/exoplanets/">Exoplanets</a></nav><button class="theme-btn" id="theme-btn" type="button">Theme</button></header><main><p class="crumbs"><a href="/">Astronomy Labs</a> / <a href="/c/sky-and-time/">Sky &amp; Time</a> / Sunline</p><h1>Sunline</h1><p class="lede">Track the Sun&#39;s path and daylight through the year.</p><iframe id="lab" class="lab-frame" src="/demos/sunline/index.html" title="Sunline" loading="eager"></iframe><div class="about"><p>Interactive demo: track the Sun’s path and daylight through the year.</p>
+<p>Use the controls in the demo above to explore. Source lives in <code>public/demos/sunline/</code>.</p>
+</div><p><a href="/demos/sunline/index.html">Open full screen ↗</a></p><script>
+    (function () {
+      var f = document.getElementById('lab');
+      function theme() { return document.documentElement.dataset.theme; }
+      function sync() {
+        try {
+          var d = f.contentDocument; if (!d) return;
+          var t = theme();
+          if (t) d.documentElement.setAttribute('data-theme', t); else d.documentElement.removeAttribute('data-theme');
+        } catch (e) {}
+      }
+      function fit() {
+        try {
+          var d = f.contentDocument; if (!d) return;
+          var h = Math.max(d.documentElement.scrollHeight, d.body ? d.body.scrollHeight : 0);
+          if (h) f.style.height = h + 'px';
+        } catch (e) {}
+      }
+      f.addEventListener('load', function () {
+        sync(); fit();
+        try {
+          new ResizeObserver(fit).observe(f.contentDocument.documentElement);
+          new ResizeObserver(fit).observe(f.contentDocument.body);
+        } catch (e) {}
+        setInterval(fit, 1500);
+      });
+      window.addEventListener('al-theme', sync);
+      window.addEventListener('resize', fit);
+    })();
+  </script></main><footer class="site-footer">© Ryan Laird · <a href="https://rjmlaird.co.uk">rjmlaird.co.uk</a></footer><script>
+      document.getElementById('theme-btn').addEventListener('click', function () {
+        var root = document.documentElement;
+        var cur = root.dataset.theme || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        var next = cur === 'dark' ? 'light' : 'dark';
+        root.dataset.theme = next;
+        try { localStorage.setItem('al-theme', next); } catch (e) {}
+        window.dispatchEvent(new CustomEvent('al-theme', { detail: next }));
+      });
+    </script></body></html>

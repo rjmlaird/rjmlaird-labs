@@ -1,0 +1,318 @@
+<!--SITE_HEADER-->
+
+  <main id="main">
+    <section class="hero wrap">
+      <p class="eyebrow">Science communication prototype</p>
+
+      <h1>Keep the evidence. Change the route into it.</h1>
+
+      <p class="hero-copy">
+        Turn technical source material into audience-aware communication drafts without losing
+        the facts, caveats or limits that make the work trustworthy. Use the output as a
+        structured first draft, then complete expert and editorial review before publishing.
+      </p>
+
+      <div class="principle">
+        <span class="principle-icon" aria-hidden="true">!</span>
+
+        <div>
+          <strong>Human review is required.</strong>
+          This tool does not verify science, assess evidence quality, identify missing context,
+          or approve claims. It only structures the facts, caveats and links that you provide
+          into communication-ready draft material.
+        </div>
+      </div>
+    </section>
+
+    <section class="wrap app-shell" aria-label="Science-to-Story Translator">
+      <form class="panel planner" id="translator-form">
+        <div class="panel-heading">
+          <h2>Source and audience</h2>
+          <p>
+            Add verified source material and decide exactly who needs to understand it, why, and
+            what they should do next.
+          </p>
+        </div>
+
+        <div class="field-set">
+          <div class="field">
+            <label for="project-name">Project, study or initiative name</label>
+
+            <input
+              id="project-name"
+              name="project-name"
+              type="text"
+              value="Urban heat and neighbourhood design"
+              placeholder="For example: Urban heat and neighbourhood design"
+            />
+          </div>
+
+          <div class="field">
+            <label for="source-text">Technical source text or abstract</label>
+
+            <textarea
+              id="source-text"
+              class="large"
+              name="source-text"
+              placeholder="Paste a verified abstract, project summary or technical description."
+            >This project examines how land cover, building density and tree canopy influence summer surface temperatures across neighbourhoods in Leicester. Using satellite-derived land surface temperature data and local geographic data from 2018 to 2024, the analysis identifies recurring areas of elevated daytime surface temperature. The results suggest that areas with lower canopy cover and a higher proportion of impervious surfaces often experience higher surface temperatures. The study does not measure indoor temperature, individual exposure, health outcomes or future climate impacts. Further local validation and community input are needed before findings are used to prioritise interventions.</textarea>
+
+            <p class="field-help">
+              Use only text that has already been checked by the relevant researcher, team or
+              source owner.
+            </p>
+          </div>
+
+          <div class="two-columns">
+            <div class="field">
+              <label for="audience">Intended audience</label>
+
+              <select id="audience" name="audience">
+                <option value="public">Public</option>
+                <option value="policy">Policy or public sector</option>
+                <option value="funder">Funder or partner</option>
+                <option value="customer">Customer or client</option>
+                <option value="journalist">Journalist or media contact</option>
+                <option value="technical">Technical peer</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="objective">Communication objective</label>
+
+              <select id="objective" name="objective">
+                <option value="awareness">Build awareness</option>
+                <option value="signup">Encourage sign-up</option>
+                <option value="download">Encourage download</option>
+                <option value="event">Drive event registration</option>
+                <option value="partnership">Start a partnership conversation</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="two-columns">
+            <div class="field">
+              <label for="tone">Tone</label>
+
+              <select id="tone" name="tone">
+                <option value="clear">Clear and calm</option>
+                <option value="practical">Practical and direct</option>
+                <option value="curious">Curious and inviting</option>
+                <option value="formal">Formal and concise</option>
+                <option value="urgent">Purposeful, not alarmist</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="reading-level">Reading level</label>
+
+              <select id="reading-level" name="reading-level">
+                <option value="general">General public</option>
+                <option value="informed">Interested non-specialist</option>
+                <option value="professional">Professional audience</option>
+                <option value="technical">Technical specialist</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="required-facts">Required facts or claims to retain</label>
+
+            <textarea
+              id="required-facts"
+              name="required-facts"
+              placeholder="Add one verified fact or claim per line."
+            >The study uses satellite-derived land surface temperature data.
+The analysis covers Leicester neighbourhoods between 2018 and 2024.
+Lower tree canopy and more impervious surfaces are associated with higher daytime surface temperatures.</textarea>
+
+            <p class="field-help">
+              These are treated as protected facts in the generated drafts. Verify wording before
+              use.
+            </p>
+          </div>
+
+          <div class="field">
+            <label for="caveats">Required caveats and limitations</label>
+
+            <textarea
+              id="caveats"
+              name="caveats"
+              placeholder="Add one caveat or limitation per line."
+            >The study measures surface temperature, not indoor temperature.
+It does not measure individual exposure, health outcomes or future climate impacts.
+Further local validation and community input are needed before prioritising interventions.</textarea>
+          </div>
+
+          <div class="field">
+            <label for="links">Required links or sources</label>
+
+            <textarea
+              id="links"
+              name="links"
+              placeholder="Add one link or source label per line."
+            >Full methodology
+Interactive map
+Project contact</textarea>
+          </div>
+
+          <div class="field">
+            <label for="example-picker">Load an example</label>
+
+            <select id="example-picker" name="example-picker">
+              <option value="">Choose an example…</option>
+              <option value="urban-heat">Urban heat and neighbourhood design</option>
+              <option value="air-quality">Air-quality forecast communication</option>
+              <option value="space-data">Satellite data for coastal monitoring</option>
+              <option value="health-study">Health research recruitment study</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="action-row">
+          <button class="button button-primary" type="submit">
+            Create communication plan
+          </button>
+
+          <button class="button button-secondary" id="reset-form" type="button">
+            Reset example
+          </button>
+
+          <button class="button button-secondary button-wide" id="copy-output" type="button">
+            Copy all drafts
+          </button>
+        </div>
+      </form>
+
+      <section class="panel output" aria-labelledby="output-title">
+        <div class="output-header">
+          <div>
+            <h2 id="output-title">Communication draft pack</h2>
+            <p id="output-subtitle">
+              Draft language for a public audience, designed for expert review.
+            </p>
+          </div>
+
+          <div class="review-badge" aria-label="Human review required">
+            <div>
+              <strong>Review<br />required</strong>
+              <span>Before publishing</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="output-body">
+          <section class="output-section">
+            <h3>Brief summary</h3>
+
+            <div class="data-grid">
+              <div class="data-card">
+                <small>Audience</small>
+                <p id="output-audience">Public</p>
+              </div>
+
+              <div class="data-card">
+                <small>Objective</small>
+                <p id="output-objective">Build awareness</p>
+              </div>
+
+              <div class="data-card">
+                <small>Tone</small>
+                <p id="output-tone">Clear and calm</p>
+              </div>
+
+              <div class="data-card">
+                <small>Reading level</small>
+                <p id="output-level">General public</p>
+              </div>
+            </div>
+          </section>
+
+          <section class="output-section">
+            <h3>One-line value proposition</h3>
+
+            <div class="message-box">
+              <p id="output-proposition">
+                A clearer view of how neighbourhood design can shape summer heat, helping local
+                conversations focus on where evidence and further action are needed.
+              </p>
+            </div>
+          </section>
+
+          <section class="output-section">
+            <h3>Plain-English summary</h3>
+
+            <div class="message-box">
+              <p id="output-summary"></p>
+            </div>
+          </section>
+
+          <section class="output-section">
+            <h3>Three messaging pillars</h3>
+
+            <ol class="pillars" id="output-pillars"></ol>
+          </section>
+
+          <section class="output-section">
+            <h3>LinkedIn draft</h3>
+
+            <div class="copy-box">
+              <p id="output-linkedin"></p>
+            </div>
+          </section>
+
+          <section class="output-section">
+            <h3>Webpage introduction</h3>
+
+            <div class="copy-box">
+              <p id="output-web-intro"></p>
+            </div>
+          </section>
+
+          <section class="output-section">
+            <h3>Email draft</h3>
+
+            <h4>Subject lines</h4>
+            <ul class="subject-lines" id="output-subjects"></ul>
+
+            <h4>Short email copy</h4>
+            <div class="copy-box">
+              <p id="output-email"></p>
+            </div>
+          </section>
+
+          <section class="output-section">
+            <h3>What this does not prove</h3>
+
+            <div class="limitation-box">
+              <strong>Interpret with care</strong>
+              <p id="output-limitations"></p>
+            </div>
+          </section>
+
+          <section class="output-section">
+            <h3>Human-review checklist</h3>
+
+            <ul class="review-list" id="output-review"></ul>
+
+            <p class="review-note">
+              Review the source, all retained facts, caveats, figures, terminology, audience
+              implications, links, permissions and calls to action. Do not publish the draft as
+              verified scientific advice, policy guidance or evidence of causation unless a
+              qualified reviewer has confirmed it.
+            </p>
+          </section>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <p>
+        This communication-planning prototype does not browse sources, validate claims, assess
+        research quality, calculate risk, or replace scientific, legal, medical, policy or
+        editorial review. It formats supplied material into adaptable draft language only.
+      </p>
+    </div>
+  </footer>

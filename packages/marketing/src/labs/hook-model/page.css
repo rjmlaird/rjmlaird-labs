@@ -1,0 +1,348 @@
+body {
+      min-width: 320px;
+      min-height: 100vh;
+      margin: 0;
+      background:
+        radial-gradient(circle at 7% 8%, rgba(0, 194, 168, 0.13), transparent 32rem),
+        radial-gradient(circle at 94% 82%, rgba(179, 156, 255, 0.1), transparent 34rem),
+        var(--navy);
+    }
+
+.hero-copy {
+      max-width: 82ch;
+      margin: 0;
+      color: var(--text-lo);
+      font-size: 1.03rem;
+      line-height: 1.72;
+    }
+
+.notice {
+      display: flex;
+      gap: 0.75rem;
+      max-width: 1040px;
+      margin-top: 1.6rem;
+      padding: 1rem 1.1rem;
+      border: 1px solid rgba(244, 175, 49, 0.35);
+      border-radius: 12px;
+      background: rgba(244, 175, 49, 0.06);
+      color: var(--text-lo);
+      font-size: 0.88rem;
+      line-height: 1.6;
+    }
+
+.ethics-badge {
+      display: grid;
+      flex: 0 0 auto;
+      min-width: 7.5rem;
+      min-height: 4.8rem;
+      place-items: center;
+      padding: 0.5rem;
+      border: 1px solid rgba(88, 208, 139, 0.45);
+      border-radius: 10px;
+      background: rgba(88, 208, 139, 0.08);
+      text-align: center;
+    }
+
+.ethics-badge strong {
+      display: block;
+      color: var(--green);
+      font-family: var(--font-display);
+      font-size: 0.82rem;
+      line-height: 1.1;
+      text-transform: uppercase;
+    }
+
+.ethics-badge span {
+      display: block;
+      margin-top: 0.28rem;
+      color: var(--text-lo);
+      font-size: 0.64rem;
+      line-height: 1.2;
+    }
+
+.hook-map {
+      position: relative;
+      display: grid;
+      min-height: 600px;
+      place-items: center;
+      overflow: hidden;
+      padding: 1rem;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background:
+        radial-gradient(circle at 50% 50%, rgba(0, 194, 168, 0.12), transparent 14rem),
+        rgba(5, 12, 22, 0.42);
+    }
+
+.hook-map::before {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        radial-gradient(circle, rgba(237, 244, 248, 0.17) 0.75px, transparent 0.85px);
+      background-size: 42px 42px;
+      content: "";
+      opacity: 0.27;
+    }
+
+.hook-diagram {
+      position: relative;
+      z-index: 1;
+      width: min(100%, 750px);
+      aspect-ratio: 1 / 0.82;
+      min-height: 500px;
+    }
+
+.loop-ring {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 54%;
+      aspect-ratio: 1;
+      transform: translate(-50%, -50%);
+      border: 2px dashed rgba(168, 182, 196, 0.28);
+      border-radius: 50%;
+    }
+
+.loop-arrow {
+      position: absolute;
+      z-index: 0;
+      color: var(--text-dim);
+      font-size: 1.35rem;
+      line-height: 1;
+    }
+
+.loop-arrow.one { top: 18%; left: 63%; }
+
+.loop-arrow.two { top: 53%; right: 11%; }
+
+.loop-arrow.three { right: 47%; bottom: 10%; }
+
+.loop-arrow.four { bottom: 50%; left: 10%; }
+
+.hook-node,
+    .hook-centre {
+      position: absolute;
+      z-index: 1;
+      border: 1px solid var(--node-color);
+      background: rgba(16, 29, 48, 0.96);
+      color: var(--text-hi);
+      transition: transform 180ms ease, opacity 180ms ease, border-color 180ms ease;
+    }
+
+.hook-node {
+      display: grid;
+      width: 174px;
+      min-height: 140px;
+      place-items: center;
+      padding: 0.9rem;
+      border-radius: 50%;
+      text-align: center;
+    }
+
+.hook-node,
+    .hook-centre {
+      transform: translate(-50%, -50%);
+    }
+
+.hook-node:hover {
+      transform: translate(-50%, -50%) scale(1.04);
+      border-color: var(--text-hi);
+    }
+
+.hook-node[aria-pressed="true"] {
+      border-width: 3px;
+      box-shadow: 0 0 0 2px rgba(237, 244, 248, 0.1), 0 0 28px color-mix(in srgb, var(--node-color) 32%, transparent);
+    }
+
+.hook-node.dimmed,
+    .hook-centre.dimmed,
+    .loop-ring.dimmed,
+    .loop-arrow.dimmed {
+      opacity: 0.21;
+    }
+
+.hook-node[data-step="trigger"] {
+      --node-color: var(--blue);
+      top: 17%;
+      left: 50%;
+    }
+
+.hook-node[data-step="action"] {
+      --node-color: var(--teal);
+      top: 50%;
+      left: 83%;
+    }
+
+.hook-node[data-step="reward"] {
+      --node-color: var(--purple);
+      top: 83%;
+      left: 50%;
+    }
+
+.hook-node[data-step="investment"] {
+      --node-color: var(--amber);
+      top: 50%;
+      left: 17%;
+    }
+
+.node-kicker {
+      display: block;
+      margin-bottom: 0.3rem;
+      color: var(--node-color);
+      font-family: var(--font-display);
+      font-size: 0.62rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+.hook-node strong {
+      display: block;
+      font-family: var(--font-display);
+      font-size: 0.92rem;
+      line-height: 1.12;
+    }
+
+.hook-node small {
+      display: block;
+      margin-top: 0.38rem;
+      color: var(--text-lo);
+      font-size: 0.64rem;
+      line-height: 1.35;
+    }
+
+.hook-centre {
+      top: 50%;
+      left: 50%;
+      display: grid;
+      width: 185px;
+      min-height: 185px;
+      place-items: center;
+      padding: 1rem;
+      border: 2px solid var(--red);
+      border-radius: 50%;
+      background: rgba(240, 140, 140, 0.1);
+      text-align: center;
+    }
+
+.hook-centre span {
+      display: block;
+      color: var(--red);
+      font-family: var(--font-display);
+      font-size: 0.63rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+.hook-centre strong {
+      display: block;
+      margin-top: 0.4rem;
+      color: var(--text-hi);
+      font-family: var(--font-display);
+      font-size: 1rem;
+      line-height: 1.15;
+    }
+
+.hook-centre small {
+      display: block;
+      max-width: 19ch;
+      margin-top: 0.55rem;
+      color: var(--text-lo);
+      font-size: 0.69rem;
+      line-height: 1.38;
+    }
+
+.ethics-panel {
+      padding: 1rem;
+      border: 1px solid rgba(88, 208, 139, 0.4);
+      border-radius: 10px;
+      background: rgba(88, 208, 139, 0.055);
+    }
+
+.ethics-panel h3 {
+      margin-bottom: 0.7rem;
+      color: var(--green);
+      font-size: 1rem;
+    }
+
+.ethics-list {
+      display: grid;
+      gap: 0.6rem;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+.ethics-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.58rem;
+      color: var(--text-lo);
+      font-size: 0.83rem;
+      line-height: 1.5;
+    }
+
+.ethics-icon {
+      display: grid;
+      flex: 0 0 auto;
+      width: 1.25rem;
+      height: 1.25rem;
+      place-items: center;
+      margin-top: 0.02rem;
+      border: 1px solid rgba(88, 208, 139, 0.7);
+      border-radius: 50%;
+      color: var(--green);
+      font-size: 0.68rem;
+      font-weight: 700;
+    }
+
+@media (max-width: 1120px) {
+      .app-shell {
+        grid-template-columns: 1fr;
+      }
+
+      .planner {
+        position: static;
+      }
+    }
+
+@media (max-width: 760px) {
+      .header-note {
+        display: none;
+      }
+
+      .canvas-header,
+      .detail-card,
+      .insights-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+      }
+
+      .detail-meta,
+      .two-columns {
+        grid-template-columns: 1fr;
+      }
+
+      .hook-map {
+        min-height: 710px;
+        overflow-x: auto;
+        justify-content: start;
+      }
+
+      .hook-diagram {
+        width: 700px;
+        min-width: 700px;
+      }
+    }
+
+@media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation: none !important;
+        scroll-behavior: auto !important;
+        transition: none !important;
+      }
+    }

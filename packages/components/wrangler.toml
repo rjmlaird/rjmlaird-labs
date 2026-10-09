@@ -1,0 +1,7 @@
+name = "component-sandbox"
+compatibility_date = "2026-09-01"
+
+# Static Storybook build. Run `pnpm build` first (`pnpm deploy` does both).
+[assets]
+directory = "./storybook-static"
+not_found_handling = "404-page"

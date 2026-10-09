@@ -1,0 +1,311 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Evidence Strength Ladder: assess what research evidence supports, what cannot yet be claimed and what is needed to progress toward corroborated impact." />
+  <meta name="color-scheme" content="dark" />
+  <title>Evidence Strength Ladder · Marketing Labs</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="../../assets/css/tokens.css" />
+  <link rel="stylesheet" href="../../assets/css/components.css" />
+  <link rel="stylesheet" href="../../assets/css/labs/evidence-strength-ladder.css" />
+  <link rel="stylesheet" href="../../assets/css/print.css" media="print" />
+</head>
+<body data-lab="evidence-strength-ladder">
+  <a class="ml-skip" href="#main">Skip to content</a>
+  <header class="ml-header">
+    <div class="wrap ml-header-inner">
+      <a class="ml-brand" href="../../index.html"><span class="ml-mark" aria-hidden="true">ML</span>Marketing Labs</a>
+      <nav class="ml-nav" aria-label="Lab navigation">
+        <a href="../../index.html">All labs</a>
+        <a rel="prev" href="../impact-pathway-canvas/index.html" title="Impact Pathway Canvas">← Previous</a>
+        <a rel="next" href="../stakeholder-constellation/index.html" title="Stakeholder Constellation">Next →</a>
+      </nav>
+    </div>
+  </header>
+  <div class="wrap ml-labbar">
+    <div class="ml-labid"><span class="ml-mark" aria-hidden="true">↑</span><div><p>Impact &amp; research</p><strong>Evidence Strength Ladder</strong></div></div>
+    <div class="ml-actions" role="toolbar" aria-label="Lab tools">
+      <a class="ml-btn primary" href="../../assets/pdf/evidence-strength-ladder.pdf" download>Download PDF guide</a>
+      <button class="ml-btn" type="button" data-action="save">Save inputs</button>
+      <button class="ml-btn" type="button" data-action="load">Load inputs</button>
+      <button class="ml-btn" type="button" data-action="share">Copy share link</button>
+      <button class="ml-btn" type="button" data-action="print">Print</button>
+      <button class="ml-btn" type="button" data-action="reset">Reset</button>
+      <input id="ml-file" type="file" accept="application/json" hidden />
+    </div>
+  </div>
+
+  <main id="main">
+    <section class="hero wrap">
+      <p class="eyebrow">Research communication and impact prototype</p>
+
+      <h1>Say what the evidence supports—no more, no less.</h1>
+
+      <p class="hero-copy">
+        Place a research claim on a practical evidence ladder. See what can responsibly be said
+        now, what still cannot be claimed, what evidence would strengthen the case, and how to
+        write about it without turning activity or reach into proof of societal impact.
+      </p>
+
+      <div class="notice">
+        <span class="notice-icon" aria-hidden="true">!</span>
+
+        <div>
+          <strong>Evidence of activity is not automatically evidence of impact.</strong>
+          A publication, dataset, media mention, event, download or positive comment may matter,
+          but it does not alone demonstrate that research changed policy, practice, behaviour or
+          wider outcomes.
+        </div>
+      </div>
+    </section>
+
+    <section class="wrap app-shell" aria-label="Evidence Strength Ladder tool">
+      <form class="panel planner" id="ladder-form">
+        <div class="panel-heading">
+          <h2>Assess a claim</h2>
+          <p>
+            Add a precise claim and indicate evidence you currently hold. The tool recommends a
+            conservative starting stage; reviewers should still check the conclusion.
+          </p>
+        </div>
+
+        <div class="field-set">
+          <div class="field">
+            <label for="project-name">Project, research or initiative</label>
+            <input
+              id="project-name"
+              name="project-name"
+              type="text"
+              value="Urban heat and neighbourhood design"
+              placeholder="For example: Urban heat and neighbourhood design"
+            />
+          </div>
+
+          <div class="field">
+            <label for="claim">Claim you want to make</label>
+            <textarea
+              id="claim"
+              class="large"
+              name="claim"
+              placeholder="Use a specific, evidence-based claim."
+            >Analysis of Leicester neighbourhoods suggests that lower tree canopy and more impervious surfaces are associated with higher daytime land surface temperatures.</textarea>
+
+            <p class="field-help">
+              Avoid adding causal language unless you have appropriate evidence for causation.
+            </p>
+          </div>
+
+          <div class="field">
+            <label for="audience">Primary use</label>
+            <select id="audience" name="audience">
+              <option value="proposal">Funding proposal or impact plan</option>
+              <option value="report">Research report or evaluation</option>
+              <option value="webpage">Public-facing webpage</option>
+              <option value="case-study">Impact case study</option>
+              <option value="briefing">Policy or partner briefing</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label>Evidence currently available</label>
+
+            <div class="evidence-checklist">
+              <label class="check-row">
+                <input id="data-evidence" type="checkbox" checked />
+                <span>Approved data, research output, method or documented observation</span>
+              </label>
+
+              <label class="check-row">
+                <input id="pattern-evidence" type="checkbox" checked />
+                <span>Analysis showing a pattern, association, comparison or trend</span>
+              </label>
+
+              <label class="check-row">
+                <input id="contribution-evidence" type="checkbox" />
+                <span>A credible pathway explaining how the research could contribute to a decision or change</span>
+              </label>
+
+              <label class="check-row">
+                <input id="use-evidence" type="checkbox" />
+                <span>Documented use by a partner, practitioner, decision-maker or community organisation</span>
+              </label>
+
+              <label class="check-row">
+                <input id="change-evidence" type="checkbox" />
+                <span>Evidence of changed understanding, capability, practice, policy, behaviour or service</span>
+              </label>
+
+              <label class="check-row">
+                <input id="corroboration-evidence" type="checkbox" />
+                <span>Independent external corroboration of a specific impact claim</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="existing-notes">Evidence notes or sources</label>
+            <textarea
+              id="existing-notes"
+              name="existing-notes"
+              placeholder="Add outputs, partner feedback, records, references, metrics or sources you have."
+            >Satellite-derived land surface temperature analysis
+Local geographic and canopy-cover data
+Methods note and interactive map</textarea>
+          </div>
+
+          <div class="field">
+            <label for="limitations">Known caveats or limits</label>
+            <textarea
+              id="limitations"
+              name="limitations"
+              placeholder="Add assumptions, uncertainty, scope limitations or alternative explanations."
+            >The analysis measures land surface temperature, not indoor temperature or individual heat exposure.
+The findings are associative and do not establish direct causation.
+Further local validation and community input are needed before prioritising interventions.</textarea>
+          </div>
+
+          <div class="field">
+            <label for="example-picker">Load a demo</label>
+            <select id="example-picker" name="example-picker">
+              <option value="">Choose a demo…</option>
+              <option value="urban-heat">Observed pattern: urban heat</option>
+              <option value="coastal-use">Documented use: coastal monitoring</option>
+              <option value="service-change">Evidence of change: service access research</option>
+              <option value="corroborated-impact">Corroborated impact: policy adoption</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="action-row">
+          <button class="button button-primary" type="submit">Assess evidence stage</button>
+          <button class="button button-secondary" id="reset-form" type="button">Reset demo</button>
+          <button class="button button-secondary button-wide" id="copy-output" type="button">
+            Copy review summary
+          </button>
+        </div>
+      </form>
+
+      <section class="panel output" aria-labelledby="output-title">
+        <div class="output-header">
+          <div>
+            <h2 id="output-title">Evidence position</h2>
+            <p id="output-subtitle">
+              The current evidence supports an observed pattern or association.
+            </p>
+          </div>
+
+          <div class="stage-badge">
+            <div>
+              <strong id="badge-stage">Stage 2</strong>
+              <span id="badge-label">Pattern</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="output-body">
+          <div class="ladder-wrap">
+            <div class="ladder" id="ladder" aria-label="Evidence strength stages">
+              <button class="ladder-stage" data-stage="1" type="button" aria-pressed="false">
+                <span class="stage-number">01</span>
+                <strong>Observed data</strong>
+                <small>Documented measurement, output or observation</small>
+              </button>
+
+              <button class="ladder-stage" data-stage="2" type="button" aria-pressed="true">
+                <span class="stage-number">02</span>
+                <strong>Pattern or association</strong>
+                <small>Trend, relationship or comparison identified</small>
+              </button>
+
+              <button class="ladder-stage" data-stage="3" type="button" aria-pressed="false">
+                <span class="stage-number">03</span>
+                <strong>Plausible contribution</strong>
+                <small>Credible pathway to use or change</small>
+              </button>
+
+              <button class="ladder-stage" data-stage="4" type="button" aria-pressed="false">
+                <span class="stage-number">04</span>
+                <strong>Documented use</strong>
+                <small>Research is demonstrably used beyond the team</small>
+              </button>
+
+              <button class="ladder-stage" data-stage="5" type="button" aria-pressed="false">
+                <span class="stage-number">05</span>
+                <strong>Evidence of change</strong>
+                <small>Practice, capacity, policy or behaviour has changed</small>
+              </button>
+
+              <button class="ladder-stage" data-stage="6" type="button" aria-pressed="false">
+                <span class="stage-number">06</span>
+                <strong>Corroborated impact</strong>
+                <small>External evidence supports a specific benefit claim</small>
+              </button>
+            </div>
+          </div>
+
+          <section class="section-card claim-box">
+            <h3>Responsible current claim</h3>
+            <p id="responsible-claim"></p>
+          </section>
+
+          <section class="detail-grid">
+            <article class="detail-card can-say">
+              <h4>What can responsibly be said</h4>
+              <p id="can-say"></p>
+            </article>
+
+            <article class="detail-card cannot-say">
+              <h4>What cannot yet be claimed</h4>
+              <p id="cannot-say"></p>
+            </article>
+
+            <article class="detail-card evidence-needed">
+              <h4>Evidence needed to progress</h4>
+              <p id="evidence-needed"></p>
+            </article>
+
+            <article class="detail-card example-wording">
+              <h4>Example wording</h4>
+              <p id="example-wording"></p>
+            </article>
+          </section>
+
+          <section class="section-card">
+            <h3>Reviewer questions</h3>
+            <ul class="review-list" id="reviewer-questions"></ul>
+          </section>
+
+          <section class="section-card">
+            <h3>Next evidence steps</h3>
+            <ul class="progress-list" id="next-steps"></ul>
+          </section>
+
+          <section class="warning-box">
+            <strong>Interpretation safeguard</strong>
+            <p id="limitations-output"></p>
+          </section>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <p>
+        This prototype is a responsible-communication and impact-planning aid. It does not assess
+        research quality, prove causation, validate data, determine REF eligibility, or replace
+        expert, ethical, legal, funder or institutional review. Any impact claim should be
+        proportionate to the evidence and capable of credible corroboration.
+      </p>
+    </div>
+  </footer>
+
+  <nav class="ml-more" aria-label="More labs"><div class="wrap"><h2>More Marketing Labs</h2><ul><li><a href="../theory-of-change/index.html"><strong>Theory of Change Mapper</strong><small>Impact &amp; research</small></a></li><li><a href="../impact-pathway-canvas/index.html"><strong>Impact Pathway Canvas</strong><small>Impact &amp; research</small></a></li><li><a href="../stakeholder-constellation/index.html"><strong>Stakeholder Constellation</strong><small>Impact &amp; research</small></a></li></ul></div></nav>
+  <div class="ml-toast" id="ml-toast" role="status" aria-live="polite"></div>
+  <script src="../../assets/js/labs/evidence-strength-ladder.js" defer></script>
+  <script src="../../assets/js/shared.js" defer></script>
+</body>
+</html>

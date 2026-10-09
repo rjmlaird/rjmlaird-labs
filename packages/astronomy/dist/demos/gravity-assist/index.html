@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Gravity assist visualiser</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Familjen+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{--bg:#eceef2;--panel:#f9fafb;--field:#eef1f5;--ink:#16202c;--muted:#566274;--line:#d0d7e0;--accent:#8f5f10;--on-accent:#fff;--sky:#070b17;--display:'Familjen Grotesk',system-ui,-apple-system,'Segoe UI',sans-serif;--mono:'IBM Plex Mono',ui-monospace,Menlo,Consolas,monospace;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0a0e17;--panel:#111826;--field:#0c121e;--ink:#e6ebf3;--muted:#93a0b4;--line:#243046;--accent:#e0a844;--on-accent:#1a1100;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0a0e17;--panel:#111826;--field:#0c121e;--ink:#e6ebf3;--muted:#93a0b4;--line:#243046;--accent:#e0a844;--on-accent:#1a1100;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 var(--display);padding:20px 16px 36px}
+.wrap{max-width:1120px;margin-inline:auto;display:flex;flex-direction:column;gap:16px}
+h1{margin:0;font-size:1.7rem;letter-spacing:-.015em}.top p{margin:2px 0 0;color:var(--muted);max-width:68ch}
+h2{margin:0 0 8px;font-size:1.02rem;font-weight:600}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px;min-width:0}
+.layout{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:16px;align-items:start}
+@media(max-width:860px){.layout{grid-template-columns:minmax(0,1fr)}}
+.col{display:flex;flex-direction:column;gap:16px;min-width:0}
+.cw{border:1px solid var(--line);border-radius:6px;overflow:hidden;background:var(--sky)}.cw canvas{display:block;width:100%}
+button,input,select{font:inherit;font-size:.86rem;color:var(--ink);background:var(--field);border:1px solid var(--line);border-radius:6px;padding:6px 10px}
+button{cursor:pointer}button:hover{border-color:var(--muted)}button[aria-pressed=true]{border-color:var(--accent);background:var(--panel);font-weight:600}
+button.primary{background:var(--accent);color:var(--on-accent);border-color:transparent;font-weight:600;min-width:78px}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+input[type=range]{width:100%;padding:0;accent-color:var(--accent);margin:6px 0 0}
+.btns{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:10px}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 16px;margin-top:12px}
+@media(max-width:560px){.grid{grid-template-columns:minmax(0,1fr)}}
+.sl label{display:flex;justify-content:space-between;gap:8px;font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.07em}
+.sl output{font:.82rem var(--mono);color:var(--ink);text-transform:none;letter-spacing:0}
+.live{margin:8px 0 0;font:.82rem var(--mono);color:var(--muted)}
+.note{margin:10px 0 0;color:var(--muted);font-size:.8rem;max-width:72ch}
+table{width:100%;border-collapse:collapse}td,th{padding:6px 0;border-top:1px solid var(--line);font:.84rem var(--mono);text-align:right}
+th{font-size:.68rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);border-top:0;font-weight:400}
+td:first-child,th:first-child{text-align:left;font-family:var(--display);font-size:.92rem;color:var(--muted)}
+td.up{color:#2f9e5b}td.dn{color:#d2563f}
+.exp{font-size:.92rem}.exp p{margin:0 0 8px}.exp ul{margin:0;padding-left:18px;color:var(--muted);font-size:.88rem}
+</style></head><body>
+<main class="wrap">
+<header class="top"><h1>Gravity assist visualiser</h1>
+<p>A spacecraft swings past a planet. In the planet's own frame it arrives and leaves at the same speed, but in the Sun's frame it can come out much faster or slower. Switch frames to see why.</p></header>
+<div class="layout">
+<section class="card" aria-label="Flyby animation">
+<div class="btns" style="margin:0 0 10px"><button type="button" id="fSun" aria-pressed="true">Sun's frame</button><button type="button" id="fPl" aria-pressed="false">Planet's frame</button></div>
+<div class="cw"><canvas id="scene" role="img" aria-label="Animation of a spacecraft flying past a planet"></canvas></div>
+<p class="live" id="live"></p>
+<div class="sl"><label for="tl">Time <output id="tlOut"></output></label><input type="range" id="tl" min="0" max="1000" value="0"></div>
+<div class="btns"><button type="button" class="primary" id="play" aria-pressed="true">Pause</button><button type="button" id="rst">Restart</button>
+<select id="spd" aria-label="Animation length"><option value="30">Slow</option><option value="16" selected>Normal</option><option value="8">Fast</option></select>
+<span style="color:var(--muted);font-size:.8rem">Presets:</span><button type="button" id="p1">Speed up</button><button type="button" id="p2">Slow down</button><button type="button" id="p3">Venus</button></div>
+<div class="grid">
+<div class="sl"><label for="pl">Planet</label><select id="pl" style="width:100%"><option value="jupiter">Jupiter</option><option value="saturn">Saturn</option><option value="earth">Earth</option><option value="venus">Venus</option></select></div>
+<div class="sl"><label for="k">Planet mass <output id="kOut"></output></label><input type="range" id="k" min="-1" max="1" step="0.05" value="0"></div>
+<div class="sl"><label for="v0">Spacecraft speed (Sun frame) <output id="v0Out"></output></label><input type="range" id="v0" min="3" max="70" step="0.5" value="10"></div>
+<div class="sl"><label for="th">Approach direction <output id="thOut"></output></label><input type="range" id="th" min="-180" max="180" step="1" value="-80"></div>
+<div class="sl"><label for="rp">Closest approach <output id="rpOut"></output></label><input type="range" id="rp" min="1.05" max="25" step="0.05" value="3"></div>
+<div class="sl"><label>Which side of the planet</label><div class="btns" style="margin:6px 0 0"><button type="button" id="sL" aria-pressed="true">Planet on left ↺</button><button type="button" id="sR" aria-pressed="false">Planet on right ↻</button></div></div>
+</div>
+<p class="note">Approach direction is the spacecraft's heading in the Sun's frame, measured from the planet's own direction of travel: 0° is the same way, −90° is straight away from the Sun, +90° is towards it. Up in the picture is towards the Sun, which is far off; the planet's orbit is curved only slightly over this short stretch, so it is drawn straight. Distances are to scale within each view, the Sun is not.</p>
+</section>
+<div class="col">
+<section class="card" aria-label="Results"><h2>Before and after</h2>
+<table id="tbl"></table><p class="note" id="tblNote"></p></section>
+<section class="card" aria-label="Speed against time"><h2>Speed through the flyby</h2>
+<div class="cw"><canvas id="chart" role="img" aria-label="Spacecraft speed in the Sun's frame and in the planet's frame during the flyby"></canvas></div></section>
+<section class="card" aria-label="Velocity diagram"><h2>Adding the velocities</h2>
+<div class="cw"><canvas id="vel" role="img" aria-label="Velocity vector diagram showing the planet's velocity and the spacecraft's velocity before and after"></canvas></div>
+<p class="note">The spacecraft's velocity relative to the planet (blue) is turned like a clock hand, keeping its length. Add the planet's velocity (orange) back on and the result (yellow) can be longer or shorter than before. The white curve is the actual velocity during the flyby.</p></section>
+<section class="card exp" aria-label="Explanation" id="exp"></section>
+</div></div></main>
+<script>
+const RAD = Math.PI / 180, TAU = Math.PI * 2, G = 6.674e-20, $ = (id) => document.getElementById(id);
+const PL = { jupiter: { n: 'Jupiter', GM: 1.26687e8, R: 71492, V: 13.07, col: '#cfa275' }, saturn: { n: 'Saturn', GM: 3.7931e7, R: 60268, V: 9.69, col: '#dcc88f' }, earth: { n: 'Earth', GM: 398600, R: 6371, V: 29.78, col: '#4a86dc' }, venus: { n: 'Venus', GM: 324859, R: 6052, V: 35.02, col: '#dcaa62' } };
+const st = { pl: 'jupiter', k: 0, v0: 10, th: -80, rp: 3, s: 1, frame: 'sun', tau: 0, playing: !(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) };
+let M = null;
+const f1 = (x) => (Math.abs(x) >= 100 ? x.toFixed(0) : x.toFixed(1)), sg = (x) => (x >= 0 ? '+' : '−') + f1(Math.abs(x));
+function solveH(m) { let H = Math.asinh(m / M.e); for (let i = 0; i < 40; i++) { const d = (M.e * Math.sinh(H) - H - m) / (M.e * Math.cosh(H) - 1); H -= d; if (Math.abs(d) < 1e-12) break; } return H; }
+function rel(H) {
+  const { a, e, s, phi } = M, sq = Math.sqrt(e * e - 1), Hd = M.n / (e * Math.cosh(H) - 1), x = a * (e - Math.cosh(H)), y = s * a * sq * Math.sinh(H), vx = -a * Math.sinh(H) * Hd, vy = s * a * sq * Math.cosh(H) * Hd, c = Math.cos(phi), sn = Math.sin(phi);
+  return { p: [c * x - sn * y, sn * x + c * y], v: [c * vx - sn * vy, sn * vx + c * vy] };
+}
+function pt(H) { const m = M.e * Math.sinh(H) - H, t = m / M.n, r = rel(H); return { tau: (m / M.Mm + 1) / 2, t, p: r.p, v: r.v, pl: [M.Vp * t, 0], sc: [M.Vp * t + r.p[0], r.p[1]], vs: [r.v[0] + M.Vp, r.v[1]], sp: Math.hypot(r.v[0] + M.Vp, r.v[1]), sr: Math.hypot(r.v[0], r.v[1]) }; }
+function solve() {
+  const P = PL[st.pl], mu = P.GM * Math.pow(10, st.k), Vp = P.V, th = st.th * RAD, vin = [st.v0 * Math.cos(th), st.v0 * Math.sin(th)], vi = [vin[0] - Vp, vin[1]];
+  const raw = Math.hypot(vi[0], vi[1]), vc = Math.max(raw, 0.3), ain = Math.atan2(vi[1], vi[0]), a = mu / (vc * vc), rp = st.rp * P.R, e = 1 + rp / a, finf = Math.acos(-1 / e), delta = 2 * finf - Math.PI, s = st.s;
+  const phi = s > 0 ? ain - Math.PI + finf : ain + Math.PI - finf, aout = ain + s * delta, vo = [vc * Math.cos(aout) + Vp, vc * Math.sin(aout)], b = a * Math.sqrt(e * e - 1), n = Math.sqrt(mu / (a * a * a));
+  const rfar = 2.8 * Math.max(b, 1.5 * rp), Hm = Math.acosh((rfar / a + 1) / e), Mm = e * Math.sinh(Hm) - Hm;
+  M = { P, mu, Vp, vin, vi, vinf: vc, tiny: raw < 0.3, ain, a, rp, e, delta, s, phi, aout, vo, b, n, rfar, Hm, Mm, spin: Math.hypot(vin[0], vin[1]), spout: Math.hypot(vo[0], vo[1]) };
+  M.S = Array.from({ length: 481 }, (_, i) => pt(-Hm + 2 * Hm * i / 480));
+  M.vmax = Math.max.apply(null, M.S.map((q) => Math.max(q.sp, q.sr)));
+  M.sunMax = Math.max.apply(null, M.S.map((q) => q.sp)); M.relMax = Math.max.apply(null, M.S.map((q) => q.sr));
+}
+const at = (tau) => { const m = M.Mm * (2 * tau - 1); return pt(solveH(m)); };
+
+/* ---- drawing helpers ---- */
+function fit(cv, h) {
+  const w = cv.parentElement.clientWidth; if (!w) return null; const d = Math.min(window.devicePixelRatio || 1, 2);
+  if (cv.width !== Math.round(w * d) || cv.height !== Math.round(h * d)) { cv.width = Math.round(w * d); cv.height = Math.round(h * d); cv.style.height = h + 'px'; }
+  const c = cv.getContext('2d'); c.setTransform(d, 0, 0, d, 0, 0); return { c, w, h };
+}
+function halo(c, s, x, y, al, col) { c.font = '11px "IBM Plex Mono",monospace'; c.textAlign = al; c.textBaseline = 'middle'; c.lineWidth = 3; c.lineJoin = 'round'; c.strokeStyle = 'rgba(7,11,23,.88)'; c.strokeText(s, x, y); c.fillStyle = col; c.fillText(s, x, y); }
+function arrow(c, x0, y0, dx, dy, col, w) { const L = Math.hypot(dx, dy); if (L < 2) return; c.strokeStyle = col; c.fillStyle = col; c.lineWidth = w || 2; c.beginPath(); c.moveTo(x0, y0); c.lineTo(x0 + dx, y0 + dy); c.stroke(); const a = Math.atan2(dy, dx), h = Math.min(9, L * 0.4); c.beginPath(); c.moveTo(x0 + dx, y0 + dy); c.lineTo(x0 + dx - h * Math.cos(a - 0.4), y0 + dy - h * Math.sin(a - 0.4)); c.lineTo(x0 + dx - h * Math.cos(a + 0.4), y0 + dy - h * Math.sin(a + 0.4)); c.fill(); }
+const path = (c, pts, X, Y) => { c.beginPath(); pts.forEach((p, i) => i ? c.lineTo(X(p[0]), Y(p[1])) : c.moveTo(X(p[0]), Y(p[1]))); c.stroke(); };
+const fmtT = (t) => { const h = t / 3600; return Math.abs(h) < 48 ? sg(h) + ' h' : sg(h / 24) + ' d'; };
+
+/* ---- main scene ---- */
+function drawScene() {
+  const f = fit($('scene'), Math.round(Math.max(300, Math.min(500, $('scene').parentElement.clientWidth * 0.78)))); if (!f) return;
+  const { c, w, h } = f, sun = st.frame === 'sun', cur = at(st.tau), S = M.S, P = M.P;
+  c.fillStyle = '#070b17'; c.fillRect(0, 0, w, h);
+  let sc, ox, oy; const pad = 34;
+  if (sun) {
+    let x0 = 1e30, x1 = -1e30, y0 = 1e30, y1 = -1e30; for (const q of S) for (const p of [q.pl, q.sc]) { x0 = Math.min(x0, p[0]); x1 = Math.max(x1, p[0]); y0 = Math.min(y0, p[1]); y1 = Math.max(y1, p[1]); }
+    y1 = Math.max(y1, 0.12 * (x1 - x0)); sc = Math.min((w - 2 * pad) / (x1 - x0), (h - 2 * pad - 20) / (y1 - y0)); ox = w / 2 - (x0 + x1) / 2 * sc; oy = h / 2 + 8 + (y0 + y1) / 2 * sc;
+  } else { sc = Math.min(w, h) / 2 / (M.rfar * 1.08); ox = w / 2; oy = h / 2; }
+  const X = (x) => ox + x * sc, Y = (y) => oy - y * sc, key = sun ? 'sc' : 'p', ghost = sun ? S[0].sc : S[0].p, gv = sun ? M.vin : M.vi, tt = S[S.length - 1].t - S[0].t, t0 = S[0].t;
+  // toward-Sun cue
+  const sg0 = c.createRadialGradient(w / 2, -30, 5, w / 2, -30, 110); sg0.addColorStop(0, 'rgba(255,196,70,.75)'); sg0.addColorStop(1, 'rgba(255,196,70,0)'); c.fillStyle = sg0; c.fillRect(0, 0, w, 120);
+  halo(c, '▲ towards the Sun', w / 2, 14, 'center', '#ffd98a');
+  if (sun) { c.setLineDash([2, 6]); c.strokeStyle = 'rgba(207,162,117,.5)'; c.lineWidth = 1; c.beginPath(); c.moveTo(0, Y(0)); c.lineTo(w, Y(0)); c.stroke(); c.setLineDash([]); halo(c, 'planet’s orbit →', 8, Y(0) - 10, 'left', 'rgba(220,190,150,.85)'); }
+  // path without the planet's pull
+  c.setLineDash([5, 5]); c.strokeStyle = 'rgba(190,205,235,.35)'; c.lineWidth = 1.2; c.beginPath(); c.moveTo(X(ghost[0]), Y(ghost[1])); c.lineTo(X(ghost[0] + gv[0] * tt), Y(ghost[1] + gv[1] * tt)); c.stroke(); c.setLineDash([]);
+  const past = S.filter((q) => q.tau <= st.tau).map((q) => q[key]), fut = S.filter((q) => q.tau > st.tau).map((q) => q[key]);
+  if (past.length) past.push(cur[key]); fut.unshift(cur[key]);
+  c.lineJoin = 'round'; c.setLineDash([3, 4]); c.strokeStyle = 'rgba(255,194,71,.4)'; c.lineWidth = 1.5; path(c, fut, X, Y); c.setLineDash([]); c.strokeStyle = '#ffc247'; c.lineWidth = 2.5; path(c, past, X, Y);
+  if (sun) { c.strokeStyle = 'rgba(207,162,117,.45)'; c.lineWidth = 2; path(c, S.filter((q) => q.tau <= st.tau).map((q) => q.pl), X, Y); }
+  const pp = sun ? cur.pl : [0, 0], pr = Math.max(6, P.R * sc), g = c.createRadialGradient(X(pp[0]), Y(pp[1]), pr * 0.3, X(pp[0]), Y(pp[1]), pr * 2.4); g.addColorStop(0, P.col + '88'); g.addColorStop(1, P.col + '00');
+  c.fillStyle = g; c.beginPath(); c.arc(X(pp[0]), Y(pp[1]), pr * 2.4, 0, TAU); c.fill(); c.fillStyle = P.col; c.beginPath(); c.arc(X(pp[0]), Y(pp[1]), pr, 0, TAU); c.fill();
+  halo(c, P.n, X(pp[0]), Y(pp[1]) + pr + 12, 'center', '#e6ebf3');
+  if (!sun) { const pe = rel(0).p; c.strokeStyle = '#fff'; c.lineWidth = 1; c.beginPath(); c.moveTo(X(pe[0]) - 4, Y(pe[1]) - 4); c.lineTo(X(pe[0]) + 4, Y(pe[1]) + 4); c.moveTo(X(pe[0]) + 4, Y(pe[1]) - 4); c.lineTo(X(pe[0]) - 4, Y(pe[1]) + 4); c.stroke(); halo(c, 'closest approach', X(pe[0]) + 8, Y(pe[1]) - 8, 'left', '#fff'); }
+  const sp = cur[key], v = sun ? cur.vs : cur.v, kA = 80 / (sun ? M.sunMax : M.relMax), vx = v[0] * kA, vy = -v[1] * kA;
+  arrow(c, X(sp[0]), Y(sp[1]), vx, vy, '#fff', 2);
+  c.fillStyle = '#fff'; c.beginPath(); c.arc(X(sp[0]), Y(sp[1]), 4.5, 0, TAU); c.fill();
+  halo(c, (sun ? cur.sp : cur.sr).toFixed(1) + ' km/s', X(sp[0]) + vx * 0.5 + (vy < 0 ? 8 : -8) * 0 + 10, Y(sp[1]) + vy * 0.5 - 12, 'left', '#fff');
+  halo(c, sun ? 'Sun’s frame: planet moves, spacecraft path bends' : 'Planet’s frame: planet fixed, speed in = speed out', 8, h - 12, 'left', 'rgba(190,205,235,.8)');
+}
+
+/* ---- speed chart ---- */
+function drawChart() {
+  const f = fit($('chart'), 170); if (!f) return; const { c, w, h } = f, m = { l: 38, r: 10, t: 12, b: 24 }, ymax = M.vmax * 1.12, X = (t) => m.l + t * (w - m.l - m.r), Y = (v) => h - m.b - v / ymax * (h - m.t - m.b);
+  c.fillStyle = '#070b17'; c.fillRect(0, 0, w, h); c.font = '10.5px "IBM Plex Mono",monospace'; c.textBaseline = 'middle'; c.lineWidth = 1;
+  const step = ymax > 40 ? 20 : ymax > 20 ? 10 : 5;
+  for (let v = 0; v <= ymax; v += step) { c.strokeStyle = 'rgba(190,205,235,.12)'; c.beginPath(); c.moveTo(m.l, Y(v)); c.lineTo(w - m.r, Y(v)); c.stroke(); c.fillStyle = 'rgba(190,205,235,.75)'; c.textAlign = 'right'; c.fillText(v, m.l - 5, Y(v)); }
+  c.fillStyle = 'rgba(190,205,235,.75)'; c.textAlign = 'center'; c.fillText('closest approach', X(0.5), h - 8); c.fillText('km/s', 14, m.t);
+  c.setLineDash([3, 4]); c.strokeStyle = 'rgba(255,194,71,.45)'; for (const v of [M.spin, M.spout]) { c.beginPath(); c.moveTo(m.l, Y(v)); c.lineTo(w - m.r, Y(v)); c.stroke(); } c.setLineDash([]);
+  const line = (k, col, wd) => { c.strokeStyle = col; c.lineWidth = wd; c.beginPath(); M.S.forEach((q, i) => i ? c.lineTo(X(q.tau), Y(q[k])) : c.moveTo(X(q.tau), Y(q[k]))); c.stroke(); };
+  line('sr', '#7fb0ff', 2); line('sp', '#ffc247', 2.5);
+  halo(c, 'Sun frame: ' + f1(M.spin) + ' → ' + f1(M.spout), m.l + 6, m.t + 6, 'left', '#ffc247'); halo(c, 'Planet frame: ' + f1(M.vinf) + ' in and out', m.l + 6, m.t + 22, 'left', '#7fb0ff');
+  c.strokeStyle = '#fff'; c.lineWidth = 1; c.beginPath(); c.moveTo(X(st.tau), m.t); c.lineTo(X(st.tau), h - m.b); c.stroke();
+}
+
+/* ---- velocity diagram ---- */
+function drawVel() {
+  const f = fit($('vel'), Math.round(Math.max(250, Math.min(340, $('vel').parentElement.clientWidth * 0.72)))); if (!f) return; const { c, w, h } = f, Vp = M.Vp, A = M.vin, B = M.vo, Pt = [Vp, 0], pad = 30;
+  const xs = [0, Vp, A[0], B[0], Vp - M.vinf, Vp + M.vinf], ys = [0, A[1], B[1], -M.vinf, M.vinf], x0 = Math.min(...xs), x1 = Math.max(...xs), y0 = Math.min(...ys), y1 = Math.max(...ys);
+  const sc = Math.min((w - 2 * pad) / (x1 - x0), (h - 2 * pad) / (y1 - y0)), ox = w / 2 - (x0 + x1) / 2 * sc, oy = h / 2 + (y0 + y1) / 2 * sc, X = (x) => ox + x * sc, Y = (y) => oy - y * sc;
+  c.fillStyle = '#070b17'; c.fillRect(0, 0, w, h); c.save(); c.beginPath(); c.rect(0, 0, w, h); c.clip();
+  c.setLineDash([3, 5]); c.lineWidth = 1; c.strokeStyle = 'rgba(127,176,255,.5)'; c.beginPath(); c.arc(X(Vp), Y(0), M.vinf * sc, 0, TAU); c.stroke();
+  c.strokeStyle = 'rgba(190,205,235,.4)'; c.beginPath(); c.arc(X(0), Y(0), M.spin * sc, 0, TAU); c.stroke(); c.strokeStyle = 'rgba(255,194,71,.6)'; c.beginPath(); c.arc(X(0), Y(0), M.spout * sc, 0, TAU); c.stroke(); c.setLineDash([]);
+  c.strokeStyle = 'rgba(255,255,255,.55)'; c.lineWidth = 1.2; path(c, M.S.map((q) => q.vs), X, Y);
+  const ar = (p, q, col, wd) => arrow(c, X(p[0]), Y(p[1]), (q[0] - p[0]) * sc, -(q[1] - p[1]) * sc, col, wd);
+  const Bo = [B[0] - Vp, B[1]], Ai = [A[0] - Vp, A[1]];
+  ar([0, 0], Pt, '#e39a4a', 2.5); ar(Pt, A, '#7fb0ff', 2); ar(Pt, B, '#7fb0ff', 2); ar([0, 0], A, 'rgba(235,240,255,.9)', 2); ar([0, 0], B, '#ffc247', 2.5);
+  halo(c, 'planet', X(Vp / 2), Y(0) + 14, 'center', '#e39a4a'); halo(c, 'before', X(A[0] / 2) - 6, Y(A[1] / 2), 'right', '#e6ebf3'); halo(c, 'after', X(B[0] / 2) + 6, Y(B[1] / 2), 'left', '#ffc247');
+  halo(c, 'relative in', X(Vp + Ai[0] * 0.5) + 6, Y(Ai[1] * 0.5), Ai[0] < 0 ? 'right' : 'left', '#7fb0ff'); halo(c, 'relative out', X(Vp + Bo[0] * 0.5) + 6, Y(Bo[1] * 0.5), Bo[0] < 0 ? 'right' : 'left', '#7fb0ff');
+  const q = at(st.tau); c.fillStyle = '#fff'; c.beginPath(); c.arc(X(q.vs[0]), Y(q.vs[1]), 4, 0, TAU); c.fill(); c.restore();
+}
+
+/* ---- numbers and words ---- */
+function results() {
+  const P = M.P, d = M.spout - M.spin, eIn = M.spin * M.spin / 2 - M.Vp * M.Vp, eOut = M.spout * M.spout / 2 - M.Vp * M.Vp, dEps = eOut - eIn, esc = Math.SQRT2 * M.Vp, dv = Math.hypot(M.vo[0] - M.vin[0], M.vo[1] - M.vin[1]);
+  const mP = P.GM * Math.pow(10, st.k) / G, rec = 1000 * dv * 1000 / mP, cls = d >= 0 ? 'up' : 'dn';
+  $('tbl').innerHTML = '<tr><th></th><th>Before</th><th>After</th><th>Change</th></tr>' +
+    '<tr><td>Speed, Sun frame</td><td>' + f1(M.spin) + '</td><td>' + f1(M.spout) + '</td><td class="' + cls + '">' + sg(d) + ' km/s</td></tr>' +
+    '<tr><td>Speed, planet frame</td><td>' + f1(M.vinf) + '</td><td>' + f1(M.vinf) + '</td><td>0.0 km/s</td></tr>' +
+    '<tr><td>Orbital energy (per kg)</td><td>' + f1(eIn) + '</td><td>' + f1(eOut) + '</td><td class="' + cls + '">' + sg(dEps) + ' MJ</td></tr>' +
+    '<tr><td>Direction of travel</td><td>' + Math.round(Math.atan2(M.vin[1], M.vin[0]) / RAD) + '°</td><td>' + Math.round(Math.atan2(M.vo[1], M.vo[0]) / RAD) + '°</td><td>' + sg(((Math.atan2(M.vo[1], M.vo[0]) - Math.atan2(M.vin[1], M.vin[0])) / RAD + 540) % 360 - 180).replace('.0', '') + '°</td></tr>' +
+    '<tr><td>Bent by (planet frame)</td><td colspan="3">' + f1(M.delta / RAD) + '°, eccentricity ' + M.e.toFixed(2) + '</td></tr>' +
+    '<tr><td>Closest approach</td><td colspan="3">' + Math.round(M.rp - P.R).toLocaleString() + ' km above the surface</td></tr>' +
+    '<tr><td>Solar escape speed here</td><td colspan="3">' + f1(esc) + ' km/s · ' + (M.spout > esc ? 'leaves the Solar System' : 'stays bound to the Sun') + '</td></tr>';
+  $('tblNote').textContent = M.tiny ? 'The spacecraft is almost at rest relative to the planet, so this is not a flyby; try changing the speed or direction.' : 'Orbital energy is ½v² − GM☉/r. The planet’s distance from the Sun is the same before and after, so only the speed term changes.';
+  const word = d > 0.05 ? 'speeds up' : d < -0.05 ? 'slows down' : 'barely changes speed';
+  $('exp').innerHTML = '<h2>What is happening</h2><p>Seen from ' + P.n + ', the spacecraft arrives and leaves at the same speed, ' + f1(M.vinf) + ' km/s. Gravity only turns its path by ' + f1(M.delta / RAD) + '°. But ' + P.n + ' is itself moving at ' + f1(M.Vp) + ' km/s around the Sun, so turning the relative velocity changes how it adds to the planet’s velocity. In the Sun’s frame the spacecraft ' + word + ': ' + f1(M.spin) + ' → ' + f1(M.spout) + ' km/s (' + sg(d) + ').</p>' +
+    '<ul><li>The energy is borrowed from the planet. Its orbit slows by about ' + rec.toExponential(0).replace('e-', ' × 10^−') + ' m/s per tonne of spacecraft, which is nothing.</li><li>A stronger planet or a closer pass bends the path more, which can change the speed more. The flyby cannot go below the surface.</li><li>Swinging behind the planet generally speeds a probe up; swinging in front slows it. Try both sides.</li><li>Real missions chain flybys: Voyager 2 used Jupiter, Saturn and Uranus, and BepiColombo uses Venus and Mercury to slow down.</li></ul>';
+}
+function render() {
+  drawScene(); drawChart(); drawVel(); const q = at(st.tau);
+  $('live').textContent = 'Time from closest approach ' + fmtT(q.t) + ' · speed now: ' + q.sp.toFixed(1) + ' km/s (Sun frame), ' + q.sr.toFixed(1) + ' km/s (planet frame)';
+  $('tl').value = Math.round(st.tau * 1000); $('tlOut').textContent = fmtT(q.t);
+  $('play').textContent = st.playing ? 'Pause' : 'Play'; $('play').setAttribute('aria-pressed', String(st.playing));
+}
+function readouts() {
+  const P = PL[st.pl], mm = P.GM * Math.pow(10, st.k) / 398600;
+  $('kOut').textContent = '× ' + Math.pow(10, st.k).toFixed(2) + ' (' + (mm >= 100 ? Math.round(mm) : mm.toFixed(1)) + ' Earths)'; $('v0Out').textContent = st.v0.toFixed(1) + ' km/s';
+  $('thOut').textContent = st.th + '°'; $('rpOut').textContent = st.rp.toFixed(1) + ' radii'; $('sL').setAttribute('aria-pressed', String(st.s > 0)); $('sR').setAttribute('aria-pressed', String(st.s < 0));
+  $('fSun').setAttribute('aria-pressed', String(st.frame === 'sun')); $('fPl').setAttribute('aria-pressed', String(st.frame === 'planet'));
+}
+function change(restart) { readouts(); solve(); results(); if (restart) st.tau = 0; render(); }
+for (const [id, key, fn] of [['k', 'k', parseFloat], ['v0', 'v0', parseFloat], ['th', 'th', parseFloat], ['rp', 'rp', parseFloat]]) $(id).oninput = () => { st[key] = fn($(id).value); change(false); };
+$('pl').onchange = () => { st.pl = $('pl').value; change(true); };
+$('sL').onclick = () => { st.s = 1; change(false); }; $('sR').onclick = () => { st.s = -1; change(false); };
+$('fSun').onclick = () => { st.frame = 'sun'; readouts(); render(); }; $('fPl').onclick = () => { st.frame = 'planet'; readouts(); render(); };
+$('tl').oninput = () => { st.tau = $('tl').value / 1000; st.playing = false; render(); };
+$('play').onclick = () => { if (!st.playing && st.tau >= 0.999) st.tau = 0; st.playing = !st.playing; render(); }; $('rst').onclick = () => { st.tau = 0; render(); };
+function preset(o) { Object.assign(st, o, { tau: 0 }); $('pl').value = st.pl; $('k').value = st.k; $('v0').value = st.v0; $('th').value = st.th; $('rp').value = st.rp; change(true); }
+$('p1').onclick = () => preset({ pl: 'jupiter', k: 0, v0: 10, th: -80, rp: 3, s: 1 }); $('p2').onclick = () => preset({ pl: 'jupiter', k: 0, v0: 10, th: -80, rp: 10, s: -1 }); $('p3').onclick = () => preset({ pl: 'venus', k: 0, v0: 38, th: -20, rp: 1.2, s: -1 });
+let last = 0;
+function frame(ts) {
+  const dt = Math.min(0.1, (ts - last) / 1000 || 0); last = ts;
+  if (st.playing) { st.tau += dt / parseFloat($('spd').value); if (st.tau >= 1) st.tau = 0; render(); }
+  requestAnimationFrame(frame);
+}
+if ('ResizeObserver' in window) { const ro = new ResizeObserver(() => M && render()); for (const id of ['scene', 'chart', 'vel']) ro.observe($(id).parentElement); }
+try { matchMedia('(prefers-color-scheme: dark)').addEventListener('change', render); } catch (_) {}
+change(true); requestAnimationFrame(frame);
+</script></body></html>

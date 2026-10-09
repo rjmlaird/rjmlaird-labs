@@ -1,0 +1,124 @@
+/*
+ * Design tokens for every lab. One semantic vocabulary, four themes.
+ * Switch theme with <html data-theme="navy|forest|paper|slate">.
+ * Components and lab CSS must only use these names (never raw hex).
+ */
+
+:root,
+:root[data-theme="navy"] {
+  color-scheme: dark;
+  /* surfaces */
+  --bg: #0b0f1a;
+  --bg-raised: #121826;
+  --bg-inset: #0f1520;
+  --surface-gradient: linear-gradient(180deg, rgba(18, 24, 38, 0.95), rgba(11, 15, 26, 0.98));
+  --page-glow:
+    radial-gradient(circle at 15% 20%, rgba(0, 194, 168, 0.06), transparent 40%),
+    radial-gradient(circle at 85% 75%, rgba(245, 166, 35, 0.05), transparent 45%);
+  /* text */
+  --text-hi: #eef2f6;
+  --text-lo: #9aa5b1;
+  --text-faint: #748191;
+  /* lines */
+  --border: rgba(238, 242, 246, 0.08);
+  --border-strong: rgba(238, 242, 246, 0.14);
+  /* accents */
+  --accent: #00c2a8;
+  --accent-2: #f5a623;
+  --danger: #f87171;
+  --on-accent: #0b0f1a;
+  /* canvas / simulation stage background */
+  --stage-bg: #0b0f1a;
+  --shadow: 0 18px 40px rgba(0, 0, 0, 0.24);
+  /* type */
+  --font-display: "Space Grotesk", system-ui, sans-serif;
+  --font-body: "Inter", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+}
+
+/* Electricity Lab (was electricity-lab.html) */
+:root[data-theme="forest"] {
+  color-scheme: dark;
+  --bg: #0b1210;
+  --bg-raised: #10201b;
+  --bg-inset: #142720;
+  --surface-gradient: linear-gradient(180deg, #10201b, #0d1a16);
+  --page-glow: none;
+  --text-hi: #edeae3;
+  --text-lo: #9fb0aa;
+  --text-faint: #7d8f89;
+  --border: #1f3730;
+  --border-strong: #2c4a41;
+  --accent: #c87f4b; /* copper */
+  --accent-2: #e8b34a; /* gold */
+  --danger: #e0654f;
+  --on-accent: #0b1210;
+  --stage-bg: #0b1210;
+  --shadow: 0 18px 40px rgba(0, 0, 0, 0.28);
+  --font-display: "Space Grotesk", system-ui, sans-serif;
+  --font-body: "Inter", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
+}
+
+/* Fluid flow / CFD (was fluid-flow.html, cfd/index.html) */
+:root[data-theme="paper"] {
+  color-scheme: light;
+  --bg: #f4f1ea;
+  --bg-raised: #ffffff;
+  --bg-inset: #faf8f3;
+  --surface-gradient: #ffffff;
+  --page-glow: none;
+  --text-hi: #17202a;
+  --text-lo: #66707a;
+  --text-faint: #8a939c;
+  --border: #d9d4ca;
+  --border-strong: #c4beb1;
+  --accent: #d85c38;
+  --accent-2: #3f83c5;
+  --danger: #c0402c;
+  --on-accent: #ffffff;
+  --stage-bg: #102333;
+  --shadow: 0 12px 35px rgba(20, 30, 40, 0.12);
+  --font-display: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-body: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: ui-monospace, Menlo, Consolas, monospace;
+}
+
+/* A-level explorers (Magnetic fields, Rocket types) */
+:root[data-theme="slate"] {
+  color-scheme: light;
+  --bg: #eceef2;
+  --bg-raised: #f9fafb;
+  --bg-inset: #eef1f5;
+  --surface-gradient: #f9fafb;
+  --page-glow: none;
+  --text-hi: #16202c;
+  --text-lo: #566274;
+  --text-faint: #7a8696;
+  --border: #d0d7e0;
+  --border-strong: #b9c2ce;
+  --accent: #8f5f10;
+  --accent-2: #2a68b8;
+  --danger: #c0402c;
+  --on-accent: #ffffff;
+  --stage-bg: #070b17;
+  --shadow: 0 10px 28px rgba(22, 32, 44, 0.1);
+  --font-display: "Familjen Grotesk", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-body: "Familjen Grotesk", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+}
+
+/* Layout scale, shared by all themes */
+:root {
+  --page-gutter: clamp(0.65rem, 1.6vw, 1rem);
+  --section-gap: clamp(0.75rem, 1.5vw, 1rem);
+  --radius-lg: 18px;
+  --radius-md: 14px;
+  --radius-sm: 10px;
+  --max-shell: 1360px;
+  --max-content: 1100px;
+  /* Back-compat aliases so existing mechanics CSS keeps working during migration */
+  --teal: var(--accent);
+  --amber: var(--accent-2);
+  --red: var(--danger);
+}

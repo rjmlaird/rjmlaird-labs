@@ -1,0 +1,19 @@
+.notice {
+  border-left: 4px solid var(--accent);
+  background: var(--surface);
+  color: var(--text);
+  padding: 0.7rem 1rem;
+  border-radius: 0 var(--r) var(--r) 0;
+}
+.notice--warn {
+  border-color: var(--warn);
+}
+.notice--danger {
+  border-color: var(--danger);
+}
+.notice--success {
+  border-color: var(--success);
+}
+.notice__heading {
+  display: block;
+}

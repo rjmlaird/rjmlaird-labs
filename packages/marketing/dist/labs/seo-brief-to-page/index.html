@@ -1,0 +1,362 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="An interactive SEO brief planner for useful, people-first articles, services, tools and campaign pages." />
+  <meta name="color-scheme" content="dark" />
+  <title>SEO Brief-to-Page Lab · Marketing Labs</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="../../assets/css/tokens.css" />
+  <link rel="stylesheet" href="../../assets/css/components.css" />
+  <link rel="stylesheet" href="../../assets/css/labs/seo-brief-to-page.css" />
+  <link rel="stylesheet" href="../../assets/css/print.css" media="print" />
+</head>
+<body data-lab="seo-brief-to-page">
+  <a class="ml-skip" href="#main">Skip to content</a>
+  <header class="ml-header">
+    <div class="wrap ml-header-inner">
+      <a class="ml-brand" href="../../index.html"><span class="ml-mark" aria-hidden="true">ML</span>Marketing Labs</a>
+      <nav class="ml-nav" aria-label="Lab navigation">
+        <a href="../../index.html">All labs</a>
+        <a rel="prev" href="../science-to-story/index.html" title="Science-to-Story Translator">← Previous</a>
+        <a rel="next" href="../theory-of-change/index.html" title="Theory of Change Mapper">Next →</a>
+      </nav>
+    </div>
+  </header>
+  <div class="wrap ml-labbar">
+    <div class="ml-labid"><span class="ml-mark" aria-hidden="true">↗</span><div><p>Content &amp; communications</p><strong>SEO Brief-to-Page Lab</strong></div></div>
+    <div class="ml-actions" role="toolbar" aria-label="Lab tools">
+      <a class="ml-btn primary" href="../../assets/pdf/seo-brief-to-page.pdf" download>Download PDF guide</a>
+      <button class="ml-btn" type="button" data-action="save">Save inputs</button>
+      <button class="ml-btn" type="button" data-action="load">Load inputs</button>
+      <button class="ml-btn" type="button" data-action="share">Copy share link</button>
+      <button class="ml-btn" type="button" data-action="print">Print</button>
+      <button class="ml-btn" type="button" data-action="reset">Reset</button>
+      <input id="ml-file" type="file" accept="application/json" hidden />
+    </div>
+  </div>
+
+  <main id="main">
+    <section class="hero wrap">
+      <p class="eyebrow">Marketing & communications prototype</p>
+
+      <h1>Plan a page that helps someone do something.</h1>
+
+      <p class="hero-copy">
+        Build a practical brief for an article, service, tool, event, course, campaign or
+        portfolio page. Start with audience need and page purpose; then use search, structure,
+        linking, metadata and structured data to make that useful page easier to discover.
+      </p>
+
+      <div class="principle">
+        <span class="principle-icon" aria-hidden="true">◎</span>
+        <div>
+          <strong>SEO is useful information design.</strong>
+          The aim is not to force keywords into a page. It is to help the right audience find
+          clear, accurate, credible information and take an appropriate next step.
+        </div>
+      </div>
+    </section>
+
+    <section class="wrap app-shell" aria-label="SEO page planning tool">
+      <form class="panel planner" id="brief-form">
+        <div class="panel-heading">
+          <h2>Page inputs</h2>
+          <p>Choose a page type, then describe the audience need. The plan updates as you work.</p>
+        </div>
+
+        <div class="field-set">
+          <div class="field">
+            <label for="page-type">Page type</label>
+
+            <select id="page-type" name="page-type">
+              <option value="service">Service page</option>
+              <option value="article">Article or guide</option>
+              <option value="resource">Resource or download</option>
+              <option value="case-study">Case study</option>
+              <option value="landing-page">Campaign landing page</option>
+              <option value="product">Product or paid digital offer</option>
+              <option value="event">Event or webinar page</option>
+              <option value="course">Course or workshop page</option>
+              <option value="portfolio">Portfolio project page</option>
+              <option value="about">About or expertise page</option>
+              <option value="location">Location or local-service page</option>
+              <option value="comparison">Comparison or alternatives page</option>
+              <option value="faq">FAQ or help-centre page</option>
+              <option value="data-story">Data story or research explainer</option>
+              <option value="tool-page">Interactive tool page</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="topic">Topic, offer or project</label>
+
+            <input
+              id="topic"
+              name="topic"
+              type="text"
+              value="Science communication consultancy"
+              placeholder="For example: Science communication consultancy"
+            />
+
+            <p class="field-help">Describe the page subject as specifically as possible.</p>
+          </div>
+
+          <div class="two-columns">
+            <div class="field">
+              <label for="intent">Search intent</label>
+
+              <select id="intent" name="intent">
+                <option value="commercial">Commercial investigation</option>
+                <option value="informational">Informational</option>
+                <option value="transactional">Transactional</option>
+                <option value="navigational">Navigational</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="conversion">Primary conversion</label>
+
+              <select id="conversion" name="conversion">
+                <option value="enquiry">Send an enquiry</option>
+                <option value="call">Book a call</option>
+                <option value="download">Download a resource</option>
+                <option value="newsletter">Join the newsletter</option>
+                <option value="tool">Use a related tool</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="primary-query">Primary query</label>
+
+            <input
+              id="primary-query"
+              name="primary-query"
+              type="text"
+              value="science communication consultant"
+              placeholder="For example: science communication consultant"
+            />
+
+            <p class="field-help">
+              Use the clearest phrase a person could use to find this page, rather than a long
+              list of variations.
+            </p>
+          </div>
+
+          <div class="field">
+            <label for="audience">Primary audience</label>
+
+            <input
+              id="audience"
+              name="audience"
+              type="text"
+              value="Research organisations and science-led teams"
+              placeholder="Who is the page primarily for?"
+            />
+          </div>
+
+          <div class="field">
+            <label for="user-task">User task</label>
+
+            <textarea
+              id="user-task"
+              name="user-task"
+              placeholder="What should a visitor understand, decide or do after reading?"
+            >Decide whether specialist communication support is relevant, understand the available help, and choose a sensible next step.</textarea>
+          </div>
+
+          <div class="field">
+            <label for="questions">Related questions to answer</label>
+
+            <textarea
+              id="questions"
+              name="questions"
+              placeholder="Add one meaningful question per line"
+            >What does a science communication consultant do?
+How do you make technical research understandable?
+When should a research team bring in communications support?</textarea>
+
+            <p class="field-help">
+              Include questions that would help a real visitor complete the task, not thin keyword
+              variations.
+            </p>
+          </div>
+
+          <div class="field">
+            <label for="example-picker">Load a page-type example</label>
+
+            <select id="example-picker" name="example-picker">
+              <option value="">Choose an example…</option>
+              <option value="service">Service page</option>
+              <option value="article">Article or guide</option>
+              <option value="resource">Resource or tool</option>
+              <option value="case-study">Case study</option>
+              <option value="landing-page">Campaign landing page</option>
+              <option value="product">Product or digital offer</option>
+              <option value="event">Event or webinar</option>
+              <option value="course">Course or workshop</option>
+              <option value="portfolio">Portfolio project</option>
+              <option value="about">About or expertise</option>
+              <option value="location">Local service page</option>
+              <option value="comparison">Comparison page</option>
+              <option value="faq">FAQ or help centre</option>
+              <option value="data-story">Data story</option>
+              <option value="tool-page">Interactive tool</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="action-row">
+          <button class="button button-primary" type="submit">
+            Refresh page plan
+          </button>
+
+          <button class="button button-secondary" id="reset-form" type="button">
+            Reset example
+          </button>
+
+          <button class="button button-secondary button-wide" id="copy-brief" type="button">
+            Copy brief
+          </button>
+        </div>
+      </form>
+
+      <section class="panel output" aria-labelledby="brief-output-title">
+        <div class="output-header">
+          <div>
+            <h2 id="brief-output-title">Page plan</h2>
+            <p id="output-subtitle">A practical brief based on the current page inputs.</p>
+          </div>
+
+          <div class="readiness-score" aria-label="Planning readiness score">
+            <div>
+              <strong id="score-value">7/8</strong>
+              <span>Ready</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="output-body">
+          <section class="output-section">
+            <h3>Search and user need</h3>
+
+            <div class="data-grid">
+              <div class="data-card">
+                <small>Primary query</small>
+                <p id="output-query">science communication consultant</p>
+              </div>
+
+              <div class="data-card">
+                <small>Intent</small>
+                <p id="output-intent">Commercial investigation</p>
+              </div>
+
+              <div class="data-card">
+                <small>Audience</small>
+                <p id="output-audience">Research organisations and science-led teams</p>
+              </div>
+
+              <div class="data-card">
+                <small>Reader task</small>
+                <p id="output-task">
+                  Decide whether specialist communication support is relevant.
+                </p>
+              </div>
+            </div>
+
+            <h4>Related questions</h4>
+            <ul class="tag-list" id="output-questions"></ul>
+          </section>
+
+          <section class="output-section">
+            <h3>Recommended page structure</h3>
+            <ol class="outline-list" id="output-structure"></ol>
+          </section>
+
+          <section class="output-section">
+            <h3>Internal-link opportunities</h3>
+            <ul class="link-list" id="output-links"></ul>
+          </section>
+
+          <section class="output-section">
+            <h3>Search-result preview</h3>
+
+            <div class="meta-preview">
+              <div class="meta-url" id="output-url">example.com/services/science-communication</div>
+              <div class="meta-title" id="output-title">
+                Science Communication Consultancy | Specialist Support
+              </div>
+              <div class="meta-description" id="output-description">
+                Practical science communication support for research organisations: clarify
+                complex work, create useful content and help the right audiences act.
+              </div>
+            </div>
+
+            <p class="length-note" id="meta-lengths">
+              Title: 59 characters. Description: 157 characters.
+            </p>
+          </section>
+
+          <section class="output-section">
+            <h3>Schema recommendation</h3>
+
+            <p id="output-schema"></p>
+
+            <p class="validation-note">
+              Structured data should describe content visible to readers. Validate Google-eligible
+              markup with the
+              <a
+                href="https://search.google.com/test/rich-results"
+                target="_blank"
+                rel="noopener"
+              >Rich Results Test</a>,
+              and use the
+              <a
+                href="https://validator.schema.org/"
+                target="_blank"
+                rel="noopener"
+              >Schema Markup Validator</a>
+              for broader Schema.org validation.
+            </p>
+          </section>
+
+          <section class="output-section">
+            <h3>CTA and conversion path</h3>
+
+            <div class="callout">
+              <strong id="output-cta">Primary CTA: Discuss your project</strong>
+              <p id="output-path">
+                Page → relevant evidence → concise contact form → acknowledgement with a clear
+                response expectation.
+              </p>
+            </div>
+          </section>
+
+          <section class="output-section">
+            <h3>Editorial checks before publication</h3>
+            <ul class="check-list" id="output-checks"></ul>
+          </section>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <p>
+        This prototype creates a planning framework, not a ranking prediction. Publish only
+        accurate, useful content; validate technical implementation; and use appropriate human,
+        subject-matter and editorial review before publication.
+      </p>
+    </div>
+  </footer>
+
+  <nav class="ml-more" aria-label="More labs"><div class="wrap"><h2>More Marketing Labs</h2><ul><li><a href="../aida-model/index.html"><strong>AIDA Marketing Communications Model</strong><small>Content &amp; communications</small></a></li><li><a href="../stepps-framework/index.html"><strong>STEPPS Content Framework</strong><small>Content &amp; communications</small></a></li><li><a href="../science-to-story/index.html"><strong>Science-to-Story Translator</strong><small>Content &amp; communications</small></a></li></ul></div></nav>
+  <div class="ml-toast" id="ml-toast" role="status" aria-live="polite"></div>
+  <script src="../../assets/js/labs/seo-brief-to-page.js" defer></script>
+  <script src="../../assets/js/shared.js" defer></script>
+</body>
+</html>

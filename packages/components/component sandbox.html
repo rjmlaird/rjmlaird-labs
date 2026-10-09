@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Component Sandbox</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,600&family=Public+Sans:wght@400;600&display=swap">
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+--surface:#f5f6f8;--surface-raised:#fff;--text:#14182b;--text-muted:#4f5670;--border:#cdd2e0;--accent:#2648d8;--accent-text:#fff;--danger:#b3261e;--success:#17683f;--warn:#8a5a00;
+--font-ui:"Public Sans",system-ui,sans-serif;--font-read:"Newsreader",Georgia,serif;--r:6px;--dur:160ms}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--surface:#0d1120;--surface-raised:#161c33;--text:#e8ebf7;--text-muted:#a2aac8;--border:#2c3558;--accent:#8aa2ff;--accent-text:#0d1120;--danger:#ff8a80;--success:#6fd29a;--warn:#f0c060}}
+:root[data-theme="dark"]{--surface:#0d1120;--surface-raised:#161c33;--text:#e8ebf7;--text-muted:#a2aac8;--border:#2c3558;--accent:#8aa2ff;--accent-text:#0d1120;--danger:#ff8a80;--success:#6fd29a;--warn:#f0c060}
+:root[data-motion="reduce"]{--dur:0ms}
+*,*:before,*:after{box-sizing:inherit}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 4rem)}
+body{margin:0;background:var(--surface);color:var(--text);font:400 1rem/1.55 var(--font-ui)}
+a{color:var(--accent)}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+header.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:2;background:var(--surface);border-bottom:1px solid var(--border);padding:.6rem 1rem;display:flex;flex-wrap:wrap;gap:.5rem 1rem;align-items:center;justify-content:space-between}
+header.bar b{font-family:var(--font-read);font-size:1.15rem}
+.ctl{display:flex;flex-wrap:wrap;gap:.75rem;font-size:.85rem}
+.ctl label{display:flex;gap:.35rem;align-items:center}
+select{font:inherit;color:var(--text);background:var(--surface-raised);border:1px solid var(--border);border-radius:var(--r);padding:.2rem .4rem}
+main{max-width:64rem;margin:0 auto;padding:1.5rem 1rem 4rem}
+h1{font:600 clamp(2rem,6vw,3.2rem)/1.05 var(--font-read);margin:.5rem 0 .75rem;max-width:18ch}
+h2{font:600 1.6rem/1.2 var(--font-read);margin:3rem 0 .5rem}
+h3{font:600 1.05rem/1.3 var(--font-ui);margin:0}
+.lede{font:400 1.15rem/1.5 var(--font-read);color:var(--text-muted);max-width:56ch}
+.spec{border-top:1px solid var(--border);padding:1.25rem 0}
+.spec-head{display:flex;flex-wrap:wrap;gap:.5rem;align-items:baseline;justify-content:space-between}
+.spec p.note{margin:.25rem 0 .75rem;color:var(--text-muted);font-size:.9rem;max-width:62ch}
+.mat{font-size:.78rem;border:1px solid currentColor;border-radius:99px;padding:0 .55rem}
+.mat.stable{color:var(--success)}.mat.candidate{color:var(--warn)}.mat.experimental{color:var(--danger)}
+.stage{background:var(--surface-raised);border:1px solid var(--border);border-radius:var(--r);padding:1rem;overflow-x:auto}
+.stage>.frame{margin:0 auto;max-width:100%}
+body[data-width="narrow"] .stage>.frame{width:20rem}
+.row{display:flex;flex-wrap:wrap;gap:.6rem;align-items:center}
+.swatches{display:grid;grid-template-columns:repeat(auto-fill,minmax(8.5rem,1fr));gap:.6rem}
+.sw{border:1px solid var(--border);border-radius:var(--r);overflow:hidden;font-size:.8rem;background:var(--surface-raised)}
+.sw i{display:block;height:2.6rem}.sw span{display:block;padding:.35rem .5rem}
+table{border-collapse:collapse;width:100%;font-size:.9rem}
+th,td{text-align:left;padding:.4rem .5rem;border-bottom:1px solid var(--border);vertical-align:top}
+/* Button */
+.btn{font:600 .95rem var(--font-ui);padding:.55rem 1rem;border-radius:var(--r);border:1px solid var(--accent);background:var(--accent);color:var(--accent-text);cursor:pointer;min-height:2.75rem;transition:transform var(--dur)}
+.btn:active{transform:translateY(1px)}
+.btn.secondary{background:transparent;color:var(--accent)}
+.btn.danger{background:var(--danger);border-color:var(--danger);color:var(--surface)}
+.btn[disabled]{opacity:.5;cursor:not-allowed}
+/* Notice */
+.notice{border-left:4px solid var(--accent);background:var(--surface);padding:.7rem 1rem;border-radius:0 var(--r) var(--r) 0}
+.notice.warn{border-color:var(--warn)}.notice.danger{border-color:var(--danger)}.notice.success{border-color:var(--success)}
+.notice b{display:block}
+/* ArticleCard */
+.card{display:grid;gap:.4rem;border:1px solid var(--border);border-radius:var(--r);padding:1rem;background:var(--surface-raised)}
+.card .ph{aspect-ratio:16/7;background:repeating-linear-gradient(135deg,var(--surface),var(--surface) 8px,var(--border) 8px,var(--border) 9px);border-radius:4px;display:grid;place-items:center;color:var(--text-muted);font-size:.8rem}
+.card h3{font:600 1.3rem/1.2 var(--font-read);overflow-wrap:anywhere}
+.card .meta{font-size:.82rem;color:var(--text-muted)}
+.tags{display:flex;flex-wrap:wrap;gap:.3rem;padding:0;margin:0;list-style:none}
+.tags li{font-size:.78rem;border:1px solid var(--border);border-radius:4px;padding:0 .4rem}
+/* Metric + dataset */
+.metric{border:1px solid var(--border);border-radius:var(--r);padding:1rem;background:var(--surface-raised)}
+.metric .v{font:600 2.3rem/1 var(--font-read)}
+.metric .u{font-size:.9rem;color:var(--text-muted)}
+.stale{color:var(--warn);font-size:.82rem}
+dl.meta-list{display:grid;grid-template-columns:max-content 1fr;gap:.25rem 1rem;margin:0;font-size:.9rem}
+dl.meta-list dt{color:var(--text-muted)}dl.meta-list dd{margin:0;overflow-wrap:anywhere}
+figure{margin:0}figcaption{font-size:.85rem;color:var(--text-muted);margin-top:.4rem}
+details{margin-top:.5rem;font-size:.88rem}
+.cite{font:400 1rem/1.5 var(--font-read);border-left:2px solid var(--border);padding-left:.8rem}
+.cite small{font:400 .82rem var(--font-ui);color:var(--text-muted);display:block}
+footer{border-top:1px solid var(--border);padding-top:1rem;color:var(--text-muted);font-size:.88rem}
+</style>
+</head>
+<body data-width="full">
+<header class="bar">
+  <b>Component Sandbox</b>
+  <div class="ctl" role="group" aria-label="Preview controls">
+    <label>Theme <select id="theme"><option value="auto">System</option><option value="light">Light</option><option value="dark">Dark</option></select></label>
+    <label>Container <select id="width"><option value="full">Full</option><option value="narrow">Narrow (320px)</option></select></label>
+    <label>Content <select id="content"><option value="normal">Typical</option><option value="long">Long text</option><option value="empty">Missing data</option></select></label>
+    <label><input type="checkbox" id="motion"> Reduce motion</label>
+  </div>
+</header>
+<main>
+  <h1>Interface parts, tested before they ship.</h1>
+  <p class="lede">A working reference for the reusable components across the R. J. M. Laird sites. Switch theme, container width and content length above; every component below responds.</p>
+
+  <h2 id="foundations">Foundations</h2>
+  <div class="spec">
+    <div class="spec-head"><h3>Colour roles</h3><span class="mat stable">Stable</span></div>
+    <p class="note">Roles are named by purpose, not by hue, so another site can adopt a new identity without rewriting components.</p>
+    <div class="swatches" id="swatches"></div>
+  </div>
+  <div class="spec">
+    <div class="spec-head"><h3>Type</h3><span class="mat stable">Stable</span></div>
+    <p class="note">Newsreader for reading, Public Sans for interface. Body copy stays under 70 characters per line.</p>
+    <div class="stage"><div class="frame">
+      <p style="font:600 2rem/1.1 var(--font-read);margin:0">Headline, editorial 32/35</p>
+      <p style="font:400 1.15rem/1.5 var(--font-read);max-width:60ch">Standfirst in the reading face, used for article summaries and introductions.</p>
+      <p style="margin:0;font-size:.9rem">Interface text, 14/22, for controls, metadata and tables.</p>
+    </div></div>
+  </div>
+
+  <h2 id="components">Components</h2>
+  <div id="specs"></div>
+
+  <h2 id="maturity">Maturity and adoption</h2>
+  <div class="stage"><table>
+    <thead><tr><th>Label</th><th>Meaning</th><th>Adoption rule</th></tr></thead>
+    <tbody>
+      <tr><td><span class="mat experimental">Experimental</span></td><td>Idea under exploration</td><td>Keep inside the sandbox</td></tr>
+      <tr><td><span class="mat candidate">Candidate</span></td><td>Usable, API may change</td><td>Low-risk experiments only</td></tr>
+      <tr><td><span class="mat stable">Stable</span></td><td>Documented and tested</td><td>Safe for production</td></tr>
+    </tbody></table></div>
+
+  <h2 id="checks">Checks run on this page</h2>
+  <div class="stage"><p class="note" style="margin-top:0">Basic contrast, focus and name checks for every component in the current theme.</p>
+  <button class="btn secondary" id="runA11y">Run checks</button>
+  <ul id="a11yOut" aria-live="polite"></ul></div>
+
+  <footer><p>MVP v0.1. Next: move each component into Astro with Storybook stories, then add axe and Playwright screenshots in CI.</p></footer>
+</main>
+<script>
+(function(){
+var root=document.documentElement,body=document.body;
+var LONG="A deliberately long headline that checks whether the layout stays readable when real writing gets in the way";
+var content="normal";
+function T(){return content==="long"?LONG:content==="empty"?"":"Air quality above Leicester, layer by layer"}
+var comps=[
+{id:"Button",mat:"stable",note:"Actions use buttons; navigation uses links. Minimum target 44px.",
+ render:function(){return '<div class="row"><button class="btn">Save changes</button><button class="btn secondary">Cancel</button><button class="btn danger">Delete draft</button><button class="btn" disabled>Saving</button></div>'}},
+{id:"Notice",mat:"stable",note:"Four tones. Colour is never the only signal: every notice has a heading.",
+ render:function(){return ['','warn','danger','success'].map(function(t){var h={'':'Note',warn:'Provisional data',danger:'Could not load',success:'Published'}[t];return '<div class="notice '+t+'" role="'+(t==='danger'?'alert':'note')+'" style="margin-bottom:.5rem"><b>'+h+'</b>'+(content==="long"?LONG+". "+LONG+".":"The next update is due on the hour.")+'</div>'}).join('')}},
+{id:"ArticleCard",mat:"candidate",note:"Handles long titles, missing images and missing tags without breaking layout.",
+ render:function(){var t=T();return '<article class="card"><div class="ph" role="img" aria-label="Image placeholder">'+(content==="empty"?'No image':'Figure')+'</div><span class="meta">Earth observation, 6 min read</span><h3>'+(t||"Untitled draft")+'</h3><p style="margin:0;font-family:var(--font-read)">'+(content==="empty"?'':'How model output and ground stations disagree, and what that means for local air.')+'</p>'+(content==="empty"?'':'<ul class="tags"><li>Copernicus</li><li>AURN</li><li>Leicester</li></ul>')+'</article>'}},
+{id:"Citation",mat:"candidate",note:"Source, publisher, date and a persistent link. Link text describes the destination.",
+ render:function(){return '<p class="cite">'+(content==="long"?LONG:"Copernicus Atmosphere Monitoring Service, regional reanalysis")+'<small>ECMWF, updated 12 Sep 2026. <a href="#components">View source record</a></small></p>'}},
+{id:"MetricCard",mat:"candidate",note:"Value, unit, source and freshness always appear together. Missing values show a dash and a reason.",
+ render:function(){var e=content==="empty";return '<div class="metric"><div class="u">PM2.5, Leicester centre</div><div class="v">'+(e?'\u2014':'9.4')+' <span class="u">'+(e?'':'\u00b5g/m\u00b3')+'</span></div>'+(e?'<div class="stale">No reading from the station in the last 6 hours.</div>':'<div class="stale">Last updated 3 hours ago</div>')+'<div class="u">Source: '+(content==="long"?LONG:"AURN")+'</div></div>'}},
+{id:"DatasetMetadata",mat:"experimental",note:"Source, coverage, licence and processing notes in one predictable block.",
+ render:function(){var e=content==="empty";return '<dl class="meta-list"><dt>Source</dt><dd>'+(content==="long"?LONG:"CAMS European regional forecasts")+'</dd><dt>Coverage</dt><dd>'+(e?'Not stated':'Europe, hourly, 0\u2013500 m levels')+'</dd><dt>Licence</dt><dd>'+(e?'Not stated':'CC BY 4.0')+'</dd><dt>Processing</dt><dd>'+(e?'None recorded':'Interpolated to Leicester grid cell')+'</dd></dl>'}},
+{id:"ChartFrame",mat:"experimental",note:"Every chart ships with a text alternative, a data table, a source and a method link.",
+ render:function(){var d=[12,11,10,9,8,7.5,7];var pts=d.map(function(v,i){return (20+i*50)+','+(110-v*7)}).join(' ');
+  return '<figure><svg viewBox="0 0 340 130" role="img" aria-labelledby="ct cd" style="width:100%;height:auto"><title id="ct">PM2.5 by height</title><desc id="cd">Concentration falls from 12 to 7 micrograms per cubic metre between ground level and 300 metres.</desc><polyline fill="none" stroke="var(--accent)" stroke-width="3" points="'+pts+'"/>'+d.map(function(v,i){return '<circle cx="'+(20+i*50)+'" cy="'+(110-v*7)+'" r="4" fill="var(--accent)"/>'}).join('')+'<line x1="10" y1="118" x2="330" y2="118" stroke="var(--border)"/></svg><figcaption>'+(content==="long"?LONG:"PM2.5 (\u00b5g/m\u00b3) from ground to 300 m.")+' Source: CAMS. <a href="#components">Method</a></figcaption><details><summary>Data table</summary><table><tr><th>Height</th><th>PM2.5</th></tr>'+d.map(function(v,i){return '<tr><td>'+i*50+' m</td><td>'+v+'</td></tr>'}).join('')+'</table></details></figure>'}}
+];
+var specs=document.getElementById("specs");
+function draw(){
+ specs.innerHTML=comps.map(function(c){return '<section class="spec" aria-labelledby="h-'+c.id+'"><div class="spec-head"><h3 id="h-'+c.id+'">'+c.id+'</h3><span class="mat '+c.mat+'">'+c.mat[0].toUpperCase()+c.mat.slice(1)+'</span></div><p class="note">'+c.note+'</p><div class="stage"><div class="frame">'+c.render()+'</div></div></section>'}).join('');
+}
+var roles=["surface","surface-raised","text","text-muted","border","accent","danger","success"];
+function sw(){var cs=getComputedStyle(root);document.getElementById("swatches").innerHTML=roles.map(function(r){var v=cs.getPropertyValue("--"+r).trim();return '<div class="sw"><i style="background:'+v+'"></i><span>--'+r+'<br>'+v+'</span></div>'}).join('')}
+document.getElementById("theme").onchange=function(e){var v=e.target.value;if(v==="auto")root.removeAttribute("data-theme");else root.setAttribute("data-theme",v);sw()};
+document.getElementById("width").onchange=function(e){body.setAttribute("data-width",e.target.value)};
+document.getElementById("content").onchange=function(e){content=e.target.value;draw()};
+document.getElementById("motion").onchange=function(e){if(e.target.checked)root.setAttribute("data-motion","reduce");else root.removeAttribute("data-motion")};
+function lum(c){var m=c.match(/\d+(\.\d+)?/g);if(!m)return 0;var a=m.slice(0,3).map(function(x){x=x/255;return x<=.03928?x/12.92:Math.pow((x+.055)/1.055,2.4)});return .2126*a[0]+.7152*a[1]+.0722*a[2]}
+function ratio(a,b){var x=lum(a),y=lum(b);return (Math.max(x,y)+.05)/(Math.min(x,y)+.05)}
+document.getElementById("runA11y").onclick=function(){
+ var out=[],st=document.getElementById("specs");
+ st.querySelectorAll(".stage").forEach(function(s){
+  var name=s.parentNode.querySelector("h3").textContent;
+  var bg=getComputedStyle(s).backgroundColor,bad=0,n=0;
+  s.querySelectorAll("p,span,dd,dt,figcaption,button,a,b,summary,td").forEach(function(el){if(!el.textContent.trim())return;n++;if(ratio(getComputedStyle(el).color,bg)<4.5&&getComputedStyle(el).backgroundColor==="rgba(0, 0, 0, 0)")bad++});
+  var noname=[].filter.call(s.querySelectorAll("button,a"),function(b){return !b.textContent.trim()&&!b.getAttribute("aria-label")}).length;
+  var noalt=[].filter.call(s.querySelectorAll("svg"),function(v){return !v.getAttribute("role")}).length;
+  var ok=!bad&&!noname&&!noalt;
+  out.push('<li>'+name+': '+(ok?'passed':'needs review')+' ('+n+' text items, '+bad+' low contrast, '+noname+' unnamed controls, '+noalt+' graphics without role)</li>')});
+ document.getElementById("a11yOut").innerHTML=out.join('')};
+draw();sw();
+})();
+</script>
+</body>
+</html>

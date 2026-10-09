@@ -1,0 +1,353 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Galaxy Morphology Explorer</title>
+<style>
+:root{--bg:#050914;--card:#0d1728;--edge:#273e5c;--text:#eef5ff;--muted:#a6b8d1;--blue:#6ec9ff;--gold:#ffd36a;--pink:#ff8ec7}
+*{box-sizing:border-box}
+body{margin:0;color:var(--text);background:radial-gradient(circle at 78% 0,#172d4d,transparent 42%),var(--bg);font:15px system-ui,-apple-system,Segoe UI,sans-serif}
+main{max-width:1200px;margin:auto;padding:28px 18px 44px}
+h1{font-size:clamp(30px,5vw,48px);letter-spacing:-.045em;margin:4px 0 8px;line-height:1.05}
+h2{font-size:20px;margin:0 0 10px}
+p{color:var(--muted);line-height:1.5;margin:6px 0}
+.tag{font-size:12px;font-weight:800;letter-spacing:.1em;color:#05101d;background:var(--blue);border-radius:99px;padding:4px 9px;text-transform:uppercase}
+.lede{max-width:800px;font-size:17px}
+.grid{display:grid;grid-template-columns:330px 1fr;gap:18px;margin-top:22px}
+.card{background:linear-gradient(140deg,#101e32,#091322);border:1px solid var(--edge);border-radius:17px;padding:18px;box-shadow:0 15px 42px #0005}
+.sequence{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin:14px 0}
+.seq{font-size:11px;min-height:39px;padding:4px;border:1px solid #38506b;background:#081321;color:#b7c9df;border-radius:7px;cursor:pointer}
+.seq.active{background:#1d5277;border-color:var(--blue);color:#fff}
+.control{margin:18px 0}
+.control label{display:flex;justify-content:space-between;color:var(--muted);font-size:13px;margin-bottom:6px}
+.control output{color:var(--gold);font-variant-numeric:tabular-nums}
+.control input{width:100%;accent-color:var(--blue)}
+.toggles{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:16px}
+.toggle{display:flex;align-items:center;gap:8px;padding:9px;background:#081321;border:1px solid #29435e;border-radius:8px;color:#dceaff;cursor:pointer;font-size:13px}
+.toggle input{accent-color:var(--blue)}
+canvas{display:block;width:100%;height:520px;background:radial-gradient(circle at center,#0c1b31 0,#030711 75%);border-radius:12px}
+.caption{border-left:3px solid var(--blue);padding-left:12px;margin-top:15px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px}
+.stat{background:#071221;padding:11px;border-radius:10px}
+.stat small{color:var(--muted);display:block;font-size:11px}
+.stat b{color:var(--gold);display:block;margin-top:3px;font-size:16px}
+.fork{margin-top:15px;position:relative;height:110px}
+.fork svg{width:100%;height:100%;overflow:visible}
+.fork button{position:absolute;transform:translate(-50%,-50%);border:1px solid #46627f;border-radius:99px;background:#0a1726;color:#dbeaff;font-size:11px;padding:4px 7px;cursor:pointer}
+.fork button.active{background:var(--blue);color:#06101a;border-color:var(--blue);font-weight:800}
+.fork button:nth-of-type(1){left:6%;top:53%}
+.fork button:nth-of-type(2){left:20%;top:53%}
+.fork button:nth-of-type(3){left:34%;top:53%}
+.fork button:nth-of-type(4){left:48%;top:53%}
+.fork button:nth-of-type(5){left:61%;top:31%}
+.fork button:nth-of-type(6){left:74%;top:19%}
+.fork button:nth-of-type(7){left:90%;top:15%}
+.fork button:nth-of-type(8){left:61%;top:75%}
+.fork button:nth-of-type(9){left:74%;top:86%}
+.fork button:nth-of-type(10){left:90%;top:90%}
+.learning{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:18px}
+.learning h3{font-size:15px;color:var(--blue);margin:0 0 6px}
+.foot{font-size:12px;color:#7e93ac;margin-top:18px}
+@media(max-width:780px){
+  .grid{grid-template-columns:1fr}
+  canvas{height:390px}
+  .learning{grid-template-columns:1fr}
+  .stats{grid-template-columns:1fr}
+  .fork{height:120px}
+  .fork button{font-size:9px;padding:3px 5px}
+}
+</style>
+</head>
+<body>
+<main>
+<span class="tag">Interactive astronomy</span>
+<h1>Galaxy morphology explorer</h1>
+<p class="lede">Move through a simplified Hubble tuning fork and explore how apparent shape, central bulge, spiral-arm winding and bars change between galaxy classes.</p>
+
+<section class="grid">
+  <aside class="card">
+    <h2>Choose a class</h2>
+    <div class="sequence" id="sequence"></div>
+
+    <div class="control">
+      <label>Elliptical flattening <output id="flatOut"></output></label>
+      <input id="flatten" type="range" min="0" max="7" step="1" value="0">
+    </div>
+    <div class="control">
+      <label>Galaxy inclination <output id="incOut"></output></label>
+      <input id="incline" type="range" min="0" max="65" step="1" value="15">
+    </div>
+    <div class="control">
+      <label>Star-forming clumps <output id="clumpOut"></output></label>
+      <input id="clumps" type="range" min="0" max="28" step="1" value="10">
+    </div>
+
+    <div class="toggles">
+      <label class="toggle"><input id="bulge" type="checkbox" checked> Show bulge</label>
+      <label class="toggle"><input id="arms" type="checkbox" checked> Show arms</label>
+      <label class="toggle"><input id="bar" type="checkbox" checked> Show bar</label>
+      <label class="toggle"><input id="labels" type="checkbox" checked> Show guides</label>
+    </div>
+  </aside>
+
+  <section class="card">
+    <h2 id="typeTitle">E0 — nearly round elliptical</h2>
+    <canvas id="sky" aria-label="Rendered galaxy morphology"></canvas>
+
+    <div class="stats">
+      <div class="stat">
+        <small>Dominant structure</small>
+        <b id="struct"></b>
+      </div>
+      <div class="stat">
+        <small>Bulge prominence</small>
+        <b id="bulgeStat"></b>
+      </div>
+      <div class="stat">
+        <small>Gas / star formation</small>
+        <b id="gas"></b>
+      </div>
+    </div>
+    <p class="caption" id="note"></p>
+  </section>
+</section>
+
+<section class="card">
+  <h2>Hubble tuning fork</h2>
+  <div class="fork" id="fork">
+    <svg viewBox="0 0 100 100" preserveAspectRatio="none">
+      <path d="M4 50H48 Q60 50 94 15M48 50Q60 50 94 90" fill="none" stroke="#4c7498" stroke-width="2.5"/>
+    </svg>
+    <button data-t="E0">E0</button>
+    <button data-t="E3">E3</button>
+    <button data-t="E7">E7</button>
+    <button data-t="S0">S0</button>
+    <button data-t="Sa">Sa</button>
+    <button data-t="Sb">Sb</button>
+    <button data-t="Sc">Sc</button>
+    <button data-t="SBa">SBa</button>
+    <button data-t="SBb">SBb</button>
+    <button data-t="SBc">SBc</button>
+  </div>
+  <p>Ellipticals make the handle; unbarred and barred spirals form the upper and lower branches. Irregulars sit beyond this simplified diagram because they do not follow its regular structure.</p>
+</section>
+
+<section class="learning">
+  <article class="card">
+    <h3>Elliptical to S0</h3>
+    <p>Ellipticals are smooth, arm-free systems. Lenticulars retain a disc and prominent bulge but lack obvious spiral arms.</p>
+  </article>
+  <article class="card">
+    <h3>Spiral sequence</h3>
+    <p>From Sa to Sc, the illustrative bulge shrinks and the arms open. “Early” and “late” are morphological labels, not an evolutionary timetable.</p>
+  </article>
+  <article class="card">
+    <h3>Barred branch</h3>
+    <p>Barred spirals have an elongated stellar bar; their arms emerge from its ends rather than directly around the central bulge.</p>
+  </article>
+</section>
+
+<p class="foot">This renderer is a stylised teaching visualisation. Classification depends on observed appearance, which can be affected by viewing angle, dust, wavelength and image quality.</p>
+</main>
+
+<script>
+const $ = id => document.getElementById(id);
+const types = {
+  E0:  { name:'E0 — nearly round elliptical', kind:'elliptical', q:1,    bulge:1,   gas:'Very low', structure:'Smooth spheroid', note:'A smooth, nearly round light distribution with no disc or spiral arms. Ellipticals are commonly dominated by older stellar populations.' },
+  E3:  { name:'E3 — moderately elongated elliptical', kind:'elliptical', q:0.7, bulge:1,   gas:'Very low', structure:'Flattened spheroid', note:'The E number describes apparent flattening: higher values look more elongated in projection.' },
+  E7:  { name:'E7 — highly elongated elliptical', kind:'elliptical', q:0.35,bulge:1,   gas:'Very low', structure:'Highly flattened spheroid', note:'E7 is the highly flattened end of the classic elliptical sequence.' },
+  S0:  { name:'S0 — lenticular galaxy', kind:'s0',       q:0.78,bulge:0.58,gas:'Low',     structure:'Disc + bulge', note:'Lenticular galaxies have a disc and a large bulge but no conspicuous spiral arms.' },
+  Sa:  { name:'Sa — large bulge, tight arms', kind:'spiral',   q:0.85,bulge:0.48,wind:4.6, gas:'Moderate', structure:'Disc + tight arms', note:'Sa spirals have a relatively prominent central bulge and tightly wound arms.' },
+  Sb:  { name:'Sb — intermediate spiral', kind:'spiral',   q:0.85,bulge:0.30,wind:3.2, gas:'Moderate to high', structure:'Disc + open arms', note:'Sb galaxies occupy an illustrative middle ground in bulge prominence and arm winding.' },
+  Sc:  { name:'Sc — small bulge, open arms', kind:'spiral',   q:0.85,bulge:0.16,wind:2.25,gas:'High',     structure:'Disc + loose arms', note:'Sc spirals have a small bulge and loose, prominent arms with active star-forming regions.' },
+  SBa: { name:'SBa — barred, tight arms', kind:'barred',   q:0.85,bulge:0.43,wind:4.6, gas:'Moderate', structure:'Bar + disc + arms', note:'In barred spirals, arms begin at the ends of a central stellar bar.' },
+  SBb: { name:'SBb — barred intermediate spiral', kind:'barred',   q:0.85,bulge:0.27,wind:3.2, gas:'Moderate to high', structure:'Bar + disc + arms', note:'This visual model combines an intermediate bulge with a bar and moderately open arms.' },
+  SBc: { name:'SBc — barred, open arms', kind:'barred',   q:0.85,bulge:0.14,wind:2.25,gas:'High',     structure:'Bar + disc + arms', note:'SBc galaxies pair a small bulge with a long bar and open, clumpy spiral arms.' },
+  Irr: { name:'Irr — irregular galaxy', kind:'irr',      q:0.8, bulge:0,   gas:'High',     structure:'Asymmetric clumps', note:'Irregular galaxies lack the regular elliptical or spiral structure represented by the tuning fork.' }
+};
+
+let current = 'E0';
+const seq = ['E0','E3','E7','S0','Sa','Sb','Sc','SBa','SBb','SBc','Irr'];
+
+const sequence = $('#sequence');
+sequence.innerHTML = seq.map(t => `<button class="seq" data-t="${t}">${t}</button>`).join('');
+
+const c = $('#sky'), x = c.getContext('2d');
+
+function setType(t) {
+  current = t;
+  const d = types[t];
+  if (d.kind === 'elliptical') {
+    flatten.value = Math.round((1 - d.q) * 10);
+  }
+  bulge.checked = true;
+  arms.checked  = !['elliptical','s0','irr'].includes(d.kind);
+  bar.checked   = d.kind === 'barred';
+  document.querySelectorAll('[data-t]').forEach(b => b.classList.toggle('active', b.dataset.t === t));
+  draw();
+}
+
+function dot(px, py, r, col, a=1) {
+  x.globalAlpha = a;
+  x.fillStyle = col;
+  x.beginPath();
+  x.arc(px, py, r, 0, Math.PI*2);
+  x.fill();
+}
+
+function draw() {
+  let W = c.clientWidth * devicePixelRatio;
+  let H = c.clientHeight * devicePixelRatio;
+  c.width = W;
+  c.height = H;
+  x.setTransform(devicePixelRatio, 0, 0, devicePixelRatio, 0, 0);
+  W = c.clientWidth;
+  H = c.clientHeight;
+  x.clearRect(0, 0, W, H);
+
+  const d = types[current];
+  const cx = W/2, cy = H/2;
+  const R = Math.min(W,H) * 0.36;
+  const inc = +incline.value * Math.PI / 180;
+  const q = Math.cos(inc) * d.q;
+
+  flatOut.textContent = 'E' + flatten.value;
+  incOut.textContent  = incline.value + '°';
+  clumpOut.textContent = clumps.value;
+
+  $('#typeTitle').textContent = d.name;
+  $('#struct').textContent = d.structure;
+  $('#bulgeStat').textContent = d.bulge ? Math.round(d.bulge*100) + '%' : 'None';
+  $('#gas').textContent = d.gas;
+  $('#note').textContent = d.note;
+
+  // Background star field
+  for (let i = 0; i < 160; i++) {
+    const a = Math.random() * Math.PI * 2;
+    const rr = Math.pow(Math.random(), 0.48) * R;
+    const px = cx + Math.cos(a) * rr;
+    const py = cy + Math.sin(a) * rr * q;
+    dot(px, py, Math.random()*1.1 + 0.2, '#c6ddff', 0.12);
+  }
+
+  // Irregular: clumps only
+  if (d.kind === 'irr') {
+    for (let i = 0; i < +clumps.value + 8; i++) {
+      const a = Math.random() * 6.28;
+      const rr = Math.random() * R * 0.9;
+      const px = cx + Math.cos(a) * rr;
+      const py = cy + Math.sin(a) * rr * 0.62;
+      dot(px, py, 8 + Math.random()*19, i%3 ? '#70baff' : '#a9f5ff', 0.13);
+      dot(px, py, 1 + Math.random()*2, '#b5ddff', 0.9);
+    }
+    if (labels.checked) {
+      x.fillStyle = '#cde7ff';
+      x.font = '13px system-ui';
+      x.fillText('asymmetric star-forming clumps', cx - R*0.9, cy + R*0.85);
+    }
+    return;
+  }
+
+  function ellipse(rx, ry, col, alpha) {
+    const g = x.createRadialGradient(cx, cy, 1, cx, cy, rx);
+    g.addColorStop(0, col);
+    g.addColorStop(0.28, col);
+    g.addColorStop(1, 'transparent');
+    x.save();
+    x.translate(cx, cy);
+    x.scale(1, ry/rx);
+    x.globalAlpha = alpha;
+    x.fillStyle = g;
+    x.beginPath();
+    x.arc(0, 0, rx, 0, 6.283);
+    x.fill();
+    x.restore();
+  }
+
+  // Disc
+  ellipse(R, R*q, '#7cb9f2', 0.20);
+  ellipse(R*0.72, R*0.72*q, '#d4e5ff', 0.15);
+
+  // Spiral arms
+  if ((d.kind === 'spiral' || d.kind === 'barred') && arms.checked) {
+    x.save();
+    x.translate(cx, cy);
+    x.scale(1, q);
+    for (let arm = 0; arm < 2; arm++) {
+      x.beginPath();
+      for (let th = 0.2; th < Math.PI*4.2; th += 0.045) {
+        const rr = R * 0.055 * Math.exp(th / d.wind);
+        const a = th + arm * Math.PI;
+        const px = Math.cos(a) * rr;
+        const py = Math.sin(a) * rr;
+        if (th === 0.2) x.moveTo(px, py);
+        else x.lineTo(px, py);
+      }
+      x.strokeStyle = '#77a8d4';
+      x.globalAlpha = 0.72;
+      x.lineWidth = 10;
+      x.stroke();
+      x.strokeStyle = '#8ce0ff';
+      x.globalAlpha = 0.3;
+      x.lineWidth = 3;
+      x.stroke();
+    }
+    x.restore();
+
+    // Star-forming clumps along arms
+    for (let i = 0; i < +clumps.value; i++) {
+      const a = i * 2.4;
+      const rr = R*0.16 + ((i*37)%100)/100 * R*0.65;
+      dot(cx + Math.cos(a)*rr, cy + Math.sin(a)*rr*q, 1.2, '#b6eaff', 0.85);
+    }
+  }
+
+  // Bar
+  if (d.kind === 'barred' && bar.checked) {
+    x.save();
+    x.translate(cx, cy);
+    x.rotate(-0.1);
+    x.globalAlpha = 0.74;
+    x.fillStyle = '#ffd993';
+    x.fillRect(-R*0.43, -R*0.07, R*0.86, R*0.14);
+    x.restore();
+  }
+
+  // Bulge
+  if ((d.kind !== 'irr') && bulge.checked) {
+    ellipse(R * Math.max(0.12, d.bulge*0.52), R*q * Math.max(0.12, d.bulge*0.52), '#ffe0a0', 0.82);
+  }
+
+  // Elliptical override
+  if (d.kind === 'elliptical') {
+    const qq = Math.max(0.3, 1 - (+flatten.value * 0.09));
+    ellipse(R, R*qq, '#ffe3ae', 0.34);
+  }
+
+  // Guides
+  if (labels.checked) {
+    x.globalAlpha = 1;
+    x.strokeStyle = '#9bcdf7';
+    x.setLineDash([5,5]);
+    x.strokeRect(cx - R, cy - R*q, R*2, R*q*2);
+    x.setLineDash([]);
+    x.fillStyle = '#cfe8ff';
+    x.font = '12px system-ui';
+    x.fillText('illustrative projected disc', cx - R, cy + R*q + 18);
+  }
+}
+
+['flatten','incline','clumps','bulge','arms','bar','labels'].forEach(id =>
+  $(id).addEventListener('input', draw)
+);
+
+document.querySelectorAll('[data-t]').forEach(b =>
+  b.addEventListener('click', () => setType(b.dataset.t))
+);
+
+window.addEventListener('resize', draw);
+setType('E0');
+</script>
+</body>
+</html>

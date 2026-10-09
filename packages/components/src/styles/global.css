@@ -1,0 +1,34 @@
+:root {
+  box-sizing: border-box;
+  --surface: #f5f6f8;
+  --surface-raised: #fff;
+  --text: #14182b;
+  --text-muted: #4f5670;
+  --border: #cdd2e0;
+  --accent: #2648d8;
+  --accent-text: #fff;
+  --danger: #b3261e;
+  --success: #17683f;
+  --warn: #8a5a00;
+  --font-ui: "Public Sans", system-ui, sans-serif;
+  --font-read: "Newsreader", Georgia, serif;
+  --r: 6px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surface: #0d1120;
+    --surface-raised: #161c33;
+    --text: #e8ebf7;
+    --text-muted: #a2aac8;
+    --border: #2c3558;
+    --accent: #8aa2ff;
+    --accent-text: #0d1120;
+    --danger: #ff8a80;
+    --success: #6fd29a;
+    --warn: #f0c060;
+  }
+}
+
+*, *:before, *:after { box-sizing: inherit; }
+body { margin: 0; background: var(--surface); color: var(--text); font: 400 1rem/1.55 var(--font-ui); }

@@ -2,21 +2,35 @@
 import "../styles/global.css";
 
 interface Props {
-  title: string;
+  title?: string;
   description?: string;
 }
 
-const { title, description = "Experiments and prototypes from rjmlaird.co.uk." } = Astro.props;
+const {
+  title = "Labs",
+  description = "Experiments and prototypes from rjmlaird.co.uk.",
+} = Astro.props;
+
+const pageTitle = `${title} · labs.rjmlaird.co.uk`;
 ---
+
 <!doctype html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{title} · labs.rjmlaird.co.uk</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>{pageTitle}</title>
     <meta name="description" content={description} />
+
+    <meta name="theme-color" content="#0b0f1a" />
+    <meta name="color-scheme" content="dark" />
+
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <slot name="head" />
   </head>
+
   <body>
     <slot />
   </body>

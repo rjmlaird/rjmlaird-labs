@@ -1,0 +1,341 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Interactive STP Marketing Model canvas for Segmentation, Targeting and Positioning." />
+  <meta name="color-scheme" content="dark" />
+  <title>STP Marketing Model · Marketing Labs</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="../../assets/css/tokens.css" />
+  <link rel="stylesheet" href="../../assets/css/components.css" />
+  <link rel="stylesheet" href="../../assets/css/labs/stp-marketing-model.css" />
+  <link rel="stylesheet" href="../../assets/css/print.css" media="print" />
+</head>
+<body data-lab="stp-marketing-model">
+  <a class="ml-skip" href="#main">Skip to content</a>
+  <header class="ml-header">
+    <div class="wrap ml-header-inner">
+      <a class="ml-brand" href="../../index.html"><span class="ml-mark" aria-hidden="true">ML</span>Marketing Labs</a>
+      <nav class="ml-nav" aria-label="Lab navigation">
+        <a href="../../index.html">All labs</a>
+        <a rel="prev" href="../lean-analytics-stages/index.html" title="Lean Analytics Stages">← Previous</a>
+        <a rel="next" href="../brand-positioning-map/index.html" title="Brand Positioning Map">Next →</a>
+      </nav>
+    </div>
+  </header>
+  <div class="wrap ml-labbar">
+    <div class="ml-labid"><span class="ml-mark" aria-hidden="true">STP</span><div><p>Positioning &amp; marketing mix</p><strong>STP Marketing Model</strong></div></div>
+    <div class="ml-actions" role="toolbar" aria-label="Lab tools">
+      <a class="ml-btn primary" href="../../assets/pdf/stp-marketing-model.pdf" download>Download PDF guide</a>
+      <button class="ml-btn" type="button" data-action="save">Save inputs</button>
+      <button class="ml-btn" type="button" data-action="load">Load inputs</button>
+      <button class="ml-btn" type="button" data-action="share">Copy share link</button>
+      <button class="ml-btn" type="button" data-action="print">Print</button>
+      <button class="ml-btn" type="button" data-action="reset">Reset</button>
+      <input id="ml-file" type="file" accept="application/json" hidden />
+    </div>
+  </div>
+
+  <main id="main">
+    <section class="hero wrap">
+      <p class="eyebrow">Interactive audience-strategy prototype</p>
+
+      <h1>Move from a broad market to a message that matters.</h1>
+
+      <p class="hero-copy">
+        Segment the wider audience into meaningful groups, choose the people you can serve best,
+        then position your offer around a specific need, benefit and reason to believe. STP helps
+        replace one-size-fits-all marketing with focused, useful communication.
+      </p>
+
+      <div class="notice">
+        <span class="notice-icon" aria-hidden="true">!</span>
+        <div>
+          <strong>Segments are hypotheses, not stereotypes.</strong>
+          Build them from relevant needs, contexts and behaviours—not vague labels alone. Test
+          whether a group is real, reachable, meaningful and appropriate for your offer before
+          investing in a campaign.
+        </div>
+      </div>
+    </section>
+
+    <section class="wrap app-shell" aria-label="STP Marketing Model canvas">
+      <form class="panel planner" id="stp-form">
+        <div class="panel-heading">
+          <h2>Build the strategy</h2>
+          <p>
+            Add audience segments, assess their priority, and write a positioning statement for
+            the selected target. The canvas updates as you make decisions.
+          </p>
+        </div>
+
+        <div class="field-set">
+          <div class="field">
+            <label for="offer-name">Offer, product or service</label>
+            <input
+              id="offer-name"
+              name="offer-name"
+              type="text"
+              value="Earth-observation storytelling and engagement services"
+              placeholder="For example: A sustainable product range, software tool or professional service"
+            />
+          </div>
+
+          <div class="field">
+            <label for="planning-stage">STP stage</label>
+            <select id="planning-stage" name="planning-stage">
+              <option value="segment">Segmentation — add an audience group</option>
+              <option value="target">Targeting — evaluate a segment</option>
+              <option value="position">Positioning — define the message</option>
+            </select>
+          </div>
+
+          <div id="segment-fields">
+            <div class="field">
+              <label for="segment-name">Segment name</label>
+              <input
+                id="segment-name"
+                name="segment-name"
+                type="text"
+                value="Public-sector climate and place teams"
+                placeholder="For example: Sustainability-focused early-career professionals"
+              />
+            </div>
+
+            <div class="field">
+              <label for="segment-description">Shared need, context or behaviour</label>
+              <textarea
+                id="segment-description"
+                name="segment-description"
+                placeholder="Describe what makes this group meaningfully distinct and relevant."
+              >Teams working on climate adaptation, public engagement or local place decisions who need to make complex environmental evidence accessible and useful.</textarea>
+            </div>
+
+            <div class="field">
+              <label for="segment-insight">Audience insight</label>
+              <textarea
+                id="segment-insight"
+                name="segment-insight"
+                placeholder="What job are they trying to do, barrier do they face or outcome do they value?"
+              >They need credible, practical evidence and engaging materials that can support collaboration across technical, policy and community contexts.</textarea>
+            </div>
+          </div>
+
+          <div id="target-fields" hidden>
+            <div class="field">
+              <label for="target-segment">Segment to evaluate</label>
+              <select id="target-segment" name="target-segment"></select>
+            </div>
+
+            <div class="two-columns">
+              <div class="field">
+                <label for="target-attractiveness">Attractiveness</label>
+                <select id="target-attractiveness">
+                  <option value="1">1 — Very low</option>
+                  <option value="2">2 — Low</option>
+                  <option value="3">3 — Moderate</option>
+                  <option value="4" selected>4 — High</option>
+                  <option value="5">5 — Very high</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <label for="target-fit">Ability to serve</label>
+                <select id="target-fit">
+                  <option value="1">1 — Very low</option>
+                  <option value="2">2 — Low</option>
+                  <option value="3">3 — Moderate</option>
+                  <option value="4" selected>4 — High</option>
+                  <option value="5">5 — Very high</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="target-rationale">Targeting rationale</label>
+              <textarea
+                id="target-rationale"
+                placeholder="Why is this segment valuable, reachable, appropriate and a good fit for your capability?"
+              >This segment has a clear need for evidence translation and stakeholder engagement, while the offer combines relevant subject literacy, communication design and participatory tools.</textarea>
+            </div>
+          </div>
+
+          <div id="position-fields" hidden>
+            <div class="field">
+              <label for="position-segment">Target segment</label>
+              <select id="position-segment" name="position-segment"></select>
+            </div>
+
+            <div class="field">
+              <label for="position-statement">Positioning statement</label>
+              <textarea
+                id="position-statement"
+                placeholder="For [target], [offer] is the [category] that [key benefit] because [reason to believe]."
+              >For public-sector climate and place teams, this service is an evidence-to-engagement partner that turns complex Earth-observation insight into credible, accessible and decision-ready communication because it combines domain literacy, interactive design and locally grounded facilitation.</textarea>
+            </div>
+
+            <div class="field">
+              <label for="position-proof">Reason to believe</label>
+              <textarea
+                id="position-proof"
+                placeholder="What proof, capability, methodology, experience or evidence makes the position credible?"
+              >Relevant Earth-observation and research-communication experience, practical interactive tools, transparent methods and collaborative delivery with domain partners.</textarea>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="demo-picker">Load a demo strategy</label>
+            <select id="demo-picker" name="demo-picker">
+              <option value="">Choose a demo…</option>
+              <option value="eo-services">EO and climate communication service</option>
+              <option value="eco-products">Eco-friendly consumer product range</option>
+              <option value="research-software">Research-impact software tool</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="action-row">
+          <button class="button button-primary" type="submit" id="save-button">Save segment</button>
+          <button class="button button-secondary" type="button" id="clear-entry">Clear entry</button>
+          <button class="button button-secondary button-wide" type="button" id="copy-strategy">
+            Copy STP strategy
+          </button>
+        </div>
+      </form>
+
+      <section class="panel canvas" aria-labelledby="canvas-title">
+        <div class="canvas-header">
+          <div>
+            <h2 id="canvas-title">STP strategy flow</h2>
+            <p id="canvas-subtitle">
+              Move from a broad market to carefully defined segments, selected targets and a clear positioning statement.
+            </p>
+          </div>
+
+          <div class="focus-badge">
+            <div>
+              <strong id="focus-score">0</strong>
+              <span id="focus-score-label">Target segments selected</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="canvas-body">
+          <div class="legend" aria-label="STP strategy legend">
+            <span class="legend-item"><span class="legend-swatch" style="color: var(--blue)"></span>Segment by needs and context</span>
+            <span class="legend-item"><span class="legend-swatch" style="color: var(--teal)"></span>Target for fit and opportunity</span>
+            <span class="legend-item"><span class="legend-swatch" style="color: var(--amber)"></span>Position with value and proof</span>
+          </div>
+
+          <div class="stp-flow">
+            <section class="stage segment-stage">
+              <div class="stage-heading">
+                <span>Step 1</span>
+                <strong>Segmentation</strong>
+                <small>Identify meaningful groups with distinct needs, contexts or behaviours.</small>
+              </div>
+
+              <div class="stage-content" id="segments-list"></div>
+            </section>
+
+            <div class="flow-arrow" aria-hidden="true">→</div>
+
+            <section class="stage target-stage">
+              <div class="stage-heading">
+                <span>Step 2</span>
+                <strong>Targeting</strong>
+                <small>Prioritise segments based on attractiveness and your ability to serve them well.</small>
+              </div>
+
+              <div class="stage-content" id="targets-list"></div>
+            </section>
+
+            <div class="flow-arrow" aria-hidden="true">→</div>
+
+            <section class="stage position-stage">
+              <div class="stage-heading">
+                <span>Step 3</span>
+                <strong>Positioning</strong>
+                <small>State how the chosen audience should understand your offer compared with alternatives.</small>
+              </div>
+
+              <div class="stage-content" id="positioning-list"></div>
+            </section>
+          </div>
+
+          <section class="detail-card" aria-live="polite">
+            <div>
+              <h3 id="detail-title">Select a segment or target</h3>
+              <p id="detail-description">
+                Click a card to inspect the audience insight, strategic priority and positioning implications.
+              </p>
+            </div>
+
+            <div class="detail-meta">
+              <div class="meta-box">
+                <small>Audience insight</small>
+                <strong id="detail-insight">—</strong>
+              </div>
+
+              <div class="meta-box">
+                <small>Target score</small>
+                <strong id="detail-score">—</strong>
+              </div>
+
+              <div class="meta-box">
+                <small>Target rationale</small>
+                <strong id="detail-rationale">—</strong>
+              </div>
+
+              <div class="meta-box">
+                <small>Positioning implication</small>
+                <strong id="detail-position">—</strong>
+              </div>
+            </div>
+          </section>
+
+          <div class="insights-grid">
+            <article class="insight-card">
+              <small>Audience focus</small>
+              <p id="focus-insight">Add segments, then choose which groups deserve focused attention.</p>
+            </article>
+
+            <article class="insight-card">
+              <small>Message relevance</small>
+              <p id="message-insight">Add a positioning statement for each priority segment rather than using one generic message.</p>
+            </article>
+
+            <article class="insight-card">
+              <small>Evidence check</small>
+              <p id="evidence-insight">Use research and real behaviour data to validate segments, rather than relying on assumptions.</p>
+            </article>
+          </div>
+
+          <section class="review-panel">
+            <h3>STP review prompts</h3>
+            <ul class="review-list" id="review-list"></ul>
+          </section>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <p>
+        This prototype supports marketing planning and workshop facilitation. It does not replace
+        customer research, accessibility research, market sizing, legal compliance or campaign
+        testing. Avoid using sensitive characteristics to unfairly exclude, exploit or discriminate
+        against people; validate segments through ethically gathered evidence.
+      </p>
+    </div>
+  </footer>
+
+  <nav class="ml-more" aria-label="More labs"><div class="wrap"><h2>More Marketing Labs</h2><ul><li><a href="../brand-positioning-map/index.html"><strong>Brand Positioning Map</strong><small>Positioning &amp; marketing mix</small></a></li><li><a href="../7ps-marketing-mix/index.html"><strong>7Ps Marketing Mix Canvas</strong><small>Positioning &amp; marketing mix</small></a></li><li><a href="../ansoff-growth-strategy-matrix/index.html"><strong>Ansoff Growth Strategy Matrix</strong><small>Strategy &amp; growth</small></a></li></ul></div></nav>
+  <div class="ml-toast" id="ml-toast" role="status" aria-live="polite"></div>
+  <script src="../../assets/js/labs/stp-marketing-model.js" defer></script>
+  <script src="../../assets/js/shared.js" defer></script>
+</body>
+</html>

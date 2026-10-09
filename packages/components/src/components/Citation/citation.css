@@ -1,0 +1,12 @@
+.cite {
+  margin: 0;
+  font: 400 1rem/1.5 var(--font-read);
+  color: var(--text);
+  border-left: 2px solid var(--border);
+  padding-left: 0.8rem;
+}
+.cite__detail {
+  display: block;
+  font: 400 0.82rem var(--font-ui);
+  color: var(--text-muted);
+}

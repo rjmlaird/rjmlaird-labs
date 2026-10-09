@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Life of a star</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Familjen+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{--bg:#eceef2;--panel:#f9fafb;--field:#eef1f5;--ink:#16202c;--muted:#566274;--line:#d0d7e0;--accent:#8f5f10;--on-accent:#fff;--sky:#070b17;--display:'Familjen Grotesk',system-ui,-apple-system,'Segoe UI',sans-serif;--mono:'IBM Plex Mono',ui-monospace,Menlo,Consolas,monospace;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0a0e17;--panel:#111826;--field:#0c121e;--ink:#e6ebf3;--muted:#93a0b4;--line:#243046;--accent:#e0a844;--on-accent:#1a1100;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0a0e17;--panel:#111826;--field:#0c121e;--ink:#e6ebf3;--muted:#93a0b4;--line:#243046;--accent:#e0a844;--on-accent:#1a1100;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 var(--display);padding:20px 16px 36px}
+.wrap{max-width:1120px;margin-inline:auto;display:flex;flex-direction:column;gap:16px}
+h1{margin:0;font-size:1.7rem;letter-spacing:-.015em}.top p{margin:2px 0 0;color:var(--muted);max-width:68ch}
+h2{margin:0 0 8px;font-size:1.02rem;font-weight:600}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px;min-width:0}
+.layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:16px;align-items:start}
+@media(max-width:860px){.layout{grid-template-columns:minmax(0,1fr)}}
+.col{display:flex;flex-direction:column;gap:16px;min-width:0}
+.cw{position:relative;border:1px solid var(--line);border-radius:6px;overflow:hidden;background:var(--sky)}.cw canvas{display:block;width:100%}
+#tip{position:absolute;pointer-events:none;padding:4px 8px;border-radius:6px;background:var(--panel);color:var(--ink);border:1px solid var(--line);font:.74rem var(--mono);white-space:nowrap;transform:translate(-50%,-120%)}
+button,input,select{font:inherit;font-size:.86rem;color:var(--ink);background:var(--field);border:1px solid var(--line);border-radius:6px;padding:6px 10px}
+button{cursor:pointer}button:hover:not(:disabled){border-color:var(--muted)}button:disabled{opacity:.45;cursor:not-allowed}
+button.primary{background:var(--accent);color:var(--on-accent);border-color:transparent;font-weight:600;min-width:84px}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+input[type=range]{width:100%;padding:0;accent-color:var(--accent);margin:6px 0 0}
+.sl label{display:flex;justify-content:space-between;gap:8px;font-size:.74rem;color:var(--muted);text-transform:uppercase;letter-spacing:.07em}
+.sl output{font:.82rem var(--mono);color:var(--ink);text-transform:none;letter-spacing:0}
+.ticks{display:flex;justify-content:space-between;font:.72rem var(--mono);color:var(--muted);padding:0 4px}
+.ctl{display:flex;flex-direction:column;gap:12px;margin-top:12px}
+.btns{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.chips{display:flex;flex-wrap:wrap;gap:5px}.chips button{padding:3px 8px;font-size:.76rem}.chips button[aria-pressed=true]{border-color:var(--accent);background:var(--panel);font-weight:600}
+dl.facts{display:grid;grid-template-columns:auto minmax(0,1fr);gap:6px 16px;margin:12px 0 0;align-items:baseline}
+dl.facts dt{color:var(--muted);font-size:.72rem;text-transform:uppercase;letter-spacing:.07em}
+dl.facts dd{margin:0;font:.84rem var(--mono);overflow-wrap:anywhere}
+.desc{margin:10px 0 0;font-size:.92rem}.note{margin:10px 0 0;color:var(--muted);font-size:.8rem;max-width:72ch}
+.chk{display:inline-flex;align-items:center;gap:6px;font-size:.88rem}.chk input{accent-color:var(--accent);width:15px;height:15px;margin:0;padding:0}
+.rows{display:flex;flex-direction:column;gap:2px;max-height:360px;overflow:auto}
+.rs{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:0 10px;text-align:left;width:100%;padding:6px 8px;border:1px solid transparent;background:transparent}
+.rs:hover{background:var(--field);border-color:var(--line)}.rs b{font-weight:600;font-size:.92rem}.rs span{font:.74rem var(--mono);color:var(--muted);text-align:right}.rs small{grid-column:1/-1;color:var(--muted);font-size:.78rem}
+</style></head><body>
+<main class="wrap">
+<header class="top"><h1>Life of a star</h1>
+<p>Choose a star's starting mass and play its life from gas cloud to remnant. Watch its size and colour change, and follow its path across the Hertzsprung–Russell diagram. A star's mass decides everything.</p></header>
+<div class="layout">
+<div class="col">
+<section class="card" aria-label="Star view">
+<div class="cw"><canvas id="star" role="img" aria-label="The star as it looks at the chosen stage of its life"></canvas></div>
+<dl class="facts"><dt>Stage</dt><dd id="rStage"></dd><dt>Age</dt><dd id="rAge"></dd><dt>Temperature</dt><dd id="rT"></dd><dt>Luminosity</dt><dd id="rL"></dd><dt>Radius</dt><dd id="rR"></dd><dt>Fate</dt><dd id="rFate"></dd></dl>
+<p class="desc" id="desc" aria-live="polite"></p>
+<div class="ctl">
+<div class="sl"><label for="mass">Starting mass <output id="massOut"></output></label><input type="range" id="mass" min="0" max="4" step="1" value="1"><div class="ticks"><span>0.2</span><span>1</span><span>5</span><span>20</span><span>40 M☉</span></div></div>
+<div class="sl"><label for="tl">Time through its life <output id="tlOut"></output></label><input type="range" id="tl" min="0" max="1000" step="1" value="0"></div>
+<div class="btns"><button type="button" class="primary" id="play" aria-pressed="false">Play</button><button type="button" id="rst">Restart</button>
+<select id="spd" aria-label="Speed"><option value="60">Slow</option><option value="30" selected>Normal</option><option value="12">Fast</option></select>
+<button type="button" id="boom">Trigger supernova</button></div>
+<div class="chips" id="chips"></div></div>
+<p class="note">The timeline gives every stage equal space, because a star spends nearly all its life on the main sequence and the rest passes in a blink. Sizes use a log scale; the dashed ring is the Sun.</p>
+</section></div>
+<div class="col">
+<section class="card" aria-label="Hertzsprung–Russell diagram"><h2>Its path on the HR diagram</h2>
+<div class="cw"><canvas id="hr" role="img" aria-label="Hertzsprung–Russell diagram with the star's evolutionary track"></canvas><div id="tip" hidden></div></div>
+<div class="btns" style="margin-top:10px"><label class="chk"><input type="checkbox" id="oReal" checked> Real stars</label><label class="chk"><input type="checkbox" id="oRad" checked> Radius lines</label></div>
+<p class="note">Hot is on the left. The bright line is where the star has been, the faint dashed line where it is going. Click a dot on the path or a real star to jump there. Objects too hot or bright for the chart are pinned to its edge.</p></section>
+<section class="card" aria-label="Real stars"><h2>Real stars at different stages</h2><div class="rows" id="real"></div></section>
+</div></div></main>
+<script>
+const SUN = 5772, TAU = Math.PI * 2, $ = (id) => document.getElementById(id), lg = Math.log10, cl = (v, a, b) => Math.max(a, Math.min(b, v));
+const W = (a) => a.map(([k, n, ag, T, L]) => ({ k, n, a: ag, T, L, R: T ? Math.sqrt(L) * Math.pow(SUN / T, 2) : 0 }));
+const TR = [
+{ m: 0.2, nm: 'Red dwarf', life: 'about 1 trillion years', fate: 'Helium white dwarf, about 0.2 M☉', w: W([['cloud', 'Collapsing cloud', 0], ['proto', 'Protostar', 1e6, 3000, 0.1], ['zams', 'Main sequence begins', 5e8, 3200, 0.0064], ['ms', 'Main sequence', 3e11, 3500, 0.009], ['bd', 'Blue dwarf (never yet seen)', 1e12, 5500, 0.02], ['wd', 'White dwarf', 1.05e12, 20000, 0.06], ['cool', 'Cooling white dwarf', 4e12, 4000, 1e-4]]) },
+{ m: 1, nm: 'Sun-like star', life: 'about 10 billion years', fate: 'Carbon–oxygen white dwarf, about 0.55 M☉', w: W([['cloud', 'Collapsing cloud', 0], ['proto', 'Protostar', 1e6, 4000, 8], ['zams', 'Main sequence begins', 5e7, 5600, 0.7], ['ms', 'Main sequence (the Sun today)', 4.6e9, 5772, 1], ['tams', 'End of the main sequence', 1e10, 5700, 2.2], ['sub', 'Subgiant', 1.1e10, 4900, 2.8], ['giant', 'Red giant', 1.21e10, 3100, 2700], ['hb', 'Helium burning', 1.22e10, 4800, 50], ['agb', 'Asymptotic giant branch', 1.225e10, 3200, 5000], ['pn', 'Planetary nebula', 1.2255e10, 1e5, 3000], ['wd', 'White dwarf', 1.226e10, 50000, 1], ['cool', 'Cooling white dwarf', 3e10, 4500, 5e-5]]) },
+{ m: 5, nm: 'Intermediate-mass star', life: 'about 100 million years', fate: 'White dwarf, about 0.9 M☉', w: W([['cloud', 'Collapsing cloud', 0], ['proto', 'Protostar', 1e5, 5000, 250], ['zams', 'Main sequence begins', 5e5, 16500, 550], ['ms', 'Main sequence', 4e7, 16000, 700], ['tams', 'End of the main sequence', 8e7, 12500, 1100], ['sub', 'Crossing the gap', 8.2e7, 7000, 1500], ['giant', 'Red giant', 8.5e7, 4300, 2000], ['hb', 'Helium burning', 9e7, 6500, 1800], ['agb', 'Asymptotic giant branch', 1e8, 3500, 8000], ['pn', 'Planetary nebula', 1.002e8, 1e5, 5000], ['wd', 'White dwarf', 1.003e8, 60000, 3], ['cool', 'Cooling white dwarf', 1e10, 5000, 1e-4]]) },
+{ m: 20, nm: 'Massive star', life: 'about 8 million years', fate: 'Neutron star, about 1.4 M☉', w: W([['cloud', 'Collapsing cloud', 0], ['proto', 'Protostar', 1e5, 8000, 2e4], ['zams', 'Main sequence begins', 3e5, 33000, 5e4], ['ms', 'Main sequence', 4e6, 30000, 8e4], ['tams', 'End of the main sequence', 8e6, 22000, 1.2e5], ['sub', 'Crossing to a supergiant', 8.3e6, 10000, 1.5e5], ['super', 'Red supergiant', 9e6, 3700, 1.5e5], ['super', 'Red supergiant, core nearly iron', 1e7, 3500, 1.2e5], ['sn', 'Core-collapse supernova', 1.0101e7, 8000, 2e9], ['ns', 'Young neutron star', 1.0102e7, 1e6, 0.2], ['nsold', 'Aging neutron star', 1e9, 1e5, 1e-5]]) },
+{ m: 40, nm: 'Very massive star', life: 'about 4 million years', fate: 'Black hole, roughly 10–15 M☉', w: W([['cloud', 'Collapsing cloud', 0], ['proto', 'Protostar', 1e5, 9000, 6e4], ['zams', 'Main sequence begins', 2e5, 42000, 3e5], ['ms', 'Main sequence', 2e6, 39000, 5e5], ['tams', 'End of the main sequence', 4e6, 30000, 8e5], ['sub', 'Luminous blue supergiant', 4.3e6, 12000, 1e6], ['wr', 'Wolf–Rayet star', 4.8e6, 80000, 6e5], ['sn', 'Collapse and hypernova', 5e6, 9000, 2e9], ['bh', 'Black hole', 5.001e6, 0, 0]]) }
+];
+TR[4].w[8].R = 6e-5;
+const DESC = {
+cloud: 'A cold cloud of gas and dust collapses under its own gravity. It heats up as it shrinks and fragments into stars.',
+proto: 'The core glows from the heat of contraction but is not yet fusing hydrogen. A disc of gas feeds the growing star and jets blast out along its poles.',
+zams: 'Hydrogen fusion switches on. Gravity and the pressure of fusion balance, and the star settles onto the main sequence.',
+ms: 'The long stable middle of a star\u2019s life, turning hydrogen into helium in the core. Heavier stars burn far hotter and brighter, and so die far sooner.',
+bd: 'A red dwarf slowly heats up as helium builds in its core. This takes longer than the Universe has existed, so no blue dwarf has ever formed.',
+tams: 'Hydrogen in the core runs out. The core contracts and heats while hydrogen burns in a shell around it.',
+sub: 'The outer layers swell and cool as the star leaves the main sequence. For massive stars this crossing is very quick.',
+giant: 'The envelope balloons to tens or hundreds of Suns\u2019 radii and the surface cools and reddens. Helium is about to ignite in the core.',
+super: 'A red supergiant, hundreds to a thousand times the Sun\u2019s radius, with shells of fusing elements wrapped around a growing iron core.',
+hb: 'Helium burns in the core, steadying the star at a smaller, hotter size than the giant it was.',
+agb: 'Helium and hydrogen shells burn around a carbon–oxygen core. The star swells and pulses, shedding mass in strong winds.',
+pn: 'The star puffs off its outer layers as a glowing planetary nebula, exposing the hot core inside.',
+wd: 'A white dwarf, an Earth-sized ember. Electron degeneracy pressure holds it up, and no fusion is left.',
+cool: 'With nothing left to burn, the white dwarf fades and cools over billions of years towards a cold black dwarf.',
+wr: 'A ferocious wind has stripped the hydrogen envelope, exposing a very hot Wolf–Rayet star on the brink of collapse.',
+sn: 'The iron core collapses in a fraction of a second and the star explodes, briefly rivalling an entire galaxy in brightness.',
+ns: 'A neutron star: 1.4 Suns packed into a ball about 20 km across. Spinning fast, its beams sweep past like a lighthouse, so we see it as a pulsar.',
+nsold: 'Over millions of years the neutron star slows down and cools.',
+bh: 'The core is too heavy for neutron pressure to hold. It collapses to a black hole, and nothing, not even light, escapes.'
+};
+// name, track, waypoint, T, L, note
+const REAL = [
+['Orion Nebula (M42)', 3, 0, 0, 0, 'A stellar nursery about 1,340 light years away where stars are forming now.'],
+['T Tauri', 1, 1, 5000, 9, 'The prototype young star, still contracting towards the main sequence.'],
+['Proxima Centauri', 0, 3, 3042, 0.0017, 'Our nearest star, a red dwarf of about 0.12 M☉ that will shine for trillions of years.'],
+["Barnard's Star", 0, 3, 3134, 0.0035, 'A red dwarf six light years away.'],
+['The Sun', 1, 3, 5772, 1, 'About halfway through its roughly 10 billion year main sequence.'],
+['Regulus A', 2, 4, 12460, 288, 'About 4 M☉, a hot blue-white star on the main sequence.'],
+['Arcturus', 1, 6, 4290, 170, 'An orange giant, a Sun-like star after it has swollen.'],
+['Aldebaran', 1, 6, 3900, 439, 'The red eye of Taurus, a giant a little heavier than the Sun.'],
+['Mira', 1, 8, 3000, 8400, 'A pulsing late giant that swells and fades over about 11 months.'],
+['Ring Nebula (M57)', 1, 9, 1e5, 200, 'A planetary nebula: the shed shell of a dying Sun-like star.'],
+['Sirius B', 2, 10, 25200, 0.025, 'A white dwarf as big as Earth, companion of Sirius.'],
+['Zeta Puppis', 4, 3, 40000, 8e5, 'A blue O-type star, about 40 M☉, living fast.'],
+['Rigel', 3, 5, 12100, 120000, 'A blue supergiant around 20 M☉ in Orion.'],
+['Betelgeuse', 3, 6, 3600, 126000, 'A red supergiant around 18 M☉ that will end as a supernova, sometime in the next 100,000 years or so.'],
+['SN 1987A', 3, 8, 0, 0, 'A supernova seen in 1987 in a neighbouring galaxy, from a blue supergiant.'],
+['Crab Pulsar', 3, 9, 0, 0, 'The neutron star left by the supernova people saw in 1054.'],
+['Cygnus X-1', 4, 8, 0, 0, 'A black hole of about 21 M☉ pulling gas off a companion star.']
+];
+const MS = [[2800, .0008], [3500, .02], [4000, .1], [5000, .35], [5800, 1], [6500, 3.5], [7500, 16], [10000, 40], [15000, 700], [25000, 1e4], [40000, 2e5], [1e5, 8e5]];
+const COLS = [[2500, [255, 90, 42]], [3500, [255, 140, 66]], [4500, [255, 178, 107]], [5800, [255, 226, 154]], [7000, [255, 244, 220]], [9000, [230, 238, 255]], [12000, [196, 215, 255]], [20000, [157, 184, 255]], [50000, [138, 165, 255]], [1e7, [125, 150, 255]]];
+function colRGB(T) {
+  let i = 0; while (i < COLS.length - 2 && T > COLS[i + 1][0]) i++;
+  const [a, b] = [COLS[i], COLS[i + 1]], f = cl((lg(T) - lg(a[0])) / (lg(b[0]) - lg(a[0])), 0, 1); return a[1].map((v, k) => Math.round(v + (b[1][k] - v) * f));
+}
+const rgba = (a, al) => 'rgba(' + a.join(',') + ',' + al + ')';
+const st = { ti: 1, u: 3 / 11, playing: false, hold: 0, boom: null };
+const trk = () => TR[st.ti];
+
+/* ---- model ---- */
+function at(tr, u) {
+  const w = tr.w, n = w.length - 1, x = cl(u * n, 0, n), i = Math.min(Math.floor(x), n - 1), f = x - i, a = w[i], b = w[i + 1], mix = (p, q) => p + (q - p) * f, o = { i, f, x };
+  if (a.k === 'cloud') { o.T = b.T; o.L = b.L; o.cloud = 1 - f; o.age = f * b.a; }
+  else if (b.k === 'bh') { o.T = a.T; o.L = a.L; o.age = mix(a.a, b.a); o.R = Math.exp(mix(Math.log(a.R), Math.log(b.R))); o.bh = f; }
+  else { o.T = Math.pow(10, mix(lg(a.T), lg(b.T))); o.L = Math.pow(10, mix(lg(a.L), lg(b.L))); o.age = a.a > 0 ? Math.pow(10, mix(lg(a.a), lg(b.a))) : mix(a.a, b.a); }
+  if (o.R === undefined) o.R = Math.sqrt(o.L) * Math.pow(SUN / o.T, 2);
+  o.w = f < 0.5 ? a : b; o.cloud = o.cloud || 0; o.bh = o.bh || 0; return o;
+}
+const fmtAge = (y) => y < 1e3 ? Math.round(y) + ' years' : y < 1e6 ? (y / 1e3).toPrecision(3) + ' thousand years' : y < 1e9 ? (y / 1e6).toPrecision(3) + ' million years' : y < 1e12 ? (y / 1e9).toPrecision(3) + ' billion years' : (y / 1e12).toPrecision(3) + ' trillion years';
+const fmtL = (L) => L >= 1e4 || L < 0.01 ? L.toExponential(1).replace('e+', ' × 10^').replace('e-', ' × 10^−') + ' L☉' : (L >= 100 ? Math.round(L).toLocaleString() : +L.toPrecision(2)) + ' L☉';
+const fmtR = (R) => R < 0.02 ? '≈ ' + Math.round(R * 696340).toLocaleString() + ' km' : R < 100 ? +R.toPrecision(2) + ' R☉' : Math.round(R).toLocaleString() + ' R☉';
+
+/* ---- canvas helpers ---- */
+function fit(cv, h) {
+  const w = cv.parentElement.clientWidth; if (!w) return null; const d = Math.min(window.devicePixelRatio || 1, 2);
+  if (cv.width !== Math.round(w * d) || cv.height !== Math.round(h * d)) { cv.width = Math.round(w * d); cv.height = Math.round(h * d); cv.style.height = h + 'px'; }
+  const c = cv.getContext('2d'); c.setTransform(d, 0, 0, d, 0, 0); return { c, w, h };
+}
+function halo(c, s, x, y, al, col, font) { c.font = font || '11px "IBM Plex Mono",monospace'; c.textAlign = al; c.textBaseline = 'middle'; c.lineWidth = 3; c.lineJoin = 'round'; c.strokeStyle = 'rgba(7,11,23,.85)'; c.strokeText(s, x, y); c.fillStyle = col; c.fillText(s, x, y); }
+let seed = 11; const rnd = () => { seed = (seed * 16807) % 2147483647; return seed / 2147483647; };
+const BG = Array.from({ length: 90 }, () => [rnd(), rnd(), 0.4 + rnd(), 0.15 + rnd() * 0.5]);
+
+/* ---- star view ---- */
+function boom(now) {
+  const S = 420; st.boom = { t0: now / 1000, p: Array.from({ length: 320 }, () => { const sp = 40 + Math.pow(rnd(), 1.6) * 360; return { a: rnd() * TAU, s: sp, z: 1 + rnd() * 2.2, c: rnd() < 0.2 ? [190, 215, 255] : rnd() < 0.6 ? [255, 190, 90] : [255, 120, 60] }; }) };
+  st.hold = now + 2800;
+}
+function drawStar(f, o, now) {
+  const { c, w: S } = f, cx = S / 2, cy = S / 2, tr = trk(), k = o.w.k, rpx = (R) => S * (0.03 + 0.41 * cl((lg(R) + 5) / 9.5, 0, 1));
+  c.fillStyle = '#070b17'; c.fillRect(0, 0, S, S);
+  for (const [x, y, s, a] of BG) { c.fillStyle = 'rgba(225,232,244,' + a + ')'; c.beginPath(); c.arc(x * S, y * S, s * 0.8, 0, TAU); c.fill(); }
+  const rs = rpx(1); c.setLineDash([3, 5]); c.strokeStyle = 'rgba(255,255,255,.22)'; c.lineWidth = 1; c.beginPath(); c.arc(cx, cy, rs, 0, TAU); c.stroke(); c.setLineDash([]);
+  halo(c, 'Sun’s size', cx + rs * 0.72 + 4, cy - rs * 0.72 - 4, 'left', 'rgba(255,255,255,.5)', '10px "IBM Plex Mono",monospace');
+  let pr = rpx(o.R); if (k === 'giant' || k === 'super' || k === 'agb') pr *= 1 + 0.03 * Math.sin(now * 2.4);
+  const col = colRGB(o.T || 5000), lite = col.map((v) => Math.min(255, v + 70)), dark = col.map((v) => Math.round(v * 0.62));
+  if (o.cloud > 0) { // collapsing gas cloud
+    const cr = S * 0.46 * o.cloud + pr * (1 - o.cloud) + 6;
+    for (const [dx, dy, r, col2] of [[0, 0, 1, [150, 90, 200]], [-0.3, 0.2, 0.7, [220, 90, 140]], [0.3, -0.25, 0.65, [90, 120, 220]]]) {
+      const g = c.createRadialGradient(cx + dx * cr, cy + dy * cr, 0, cx + dx * cr, cy + dy * cr, cr * r); g.addColorStop(0, rgba(col2, 0.5 * o.cloud)); g.addColorStop(1, rgba(col2, 0)); c.fillStyle = g; c.beginPath(); c.arc(cx, cy, cr * 1.2, 0, TAU); c.fill();
+    }
+    for (let i = 0; i < 140; i++) { const a = i * 2.399 + now * 0.25 * (1 + (i % 5) * 0.1), r = cr * (0.15 + 0.85 * ((i * 0.618) % 1)); c.fillStyle = 'rgba(255,225,235,' + 0.5 * o.cloud + ')'; c.beginPath(); c.arc(cx + r * Math.cos(a), cy + r * Math.sin(a) * 0.9, 1.2, 0, TAU); c.fill(); }
+  }
+  const kz = tr.w.findIndex((q) => q.k === 'zams'), kp = tr.w.findIndex((q) => q.k === 'pn');
+  if (o.x > 0.5 && o.x < kz) { // disc and jets
+    const s = (kz - o.x) / (kz - 0.5); c.save(); c.translate(cx, cy); c.rotate(-0.25); c.fillStyle = 'rgba(255,170,90,' + 0.3 * s + ')'; c.beginPath(); c.ellipse(0, 0, pr * 3.4 + 20, pr * 0.8 + 5, 0, 0, TAU); c.fill();
+    const jg = c.createLinearGradient(0, -S * 0.4, 0, S * 0.4); jg.addColorStop(0, 'rgba(180,210,255,0)'); jg.addColorStop(0.5, 'rgba(180,210,255,' + 0.5 * s + ')'); jg.addColorStop(1, 'rgba(180,210,255,0)'); c.fillStyle = jg; c.fillRect(-3, -S * 0.4, 6, S * 0.8); c.restore();
+  }
+  if (kp >= 0) { const d = o.x - kp; if (Math.abs(d) < 1.6) { // planetary nebula shell
+    const s = 1 - Math.abs(d) / 1.6, rr = S * (0.12 + 0.3 * (d + 1.6) / 3.2), g = c.createRadialGradient(cx, cy, 0, cx, cy, rr * 1.15);
+    g.addColorStop(0, 'rgba(0,0,0,0)'); g.addColorStop(0.62, 'rgba(0,0,0,0)'); g.addColorStop(0.78, 'rgba(110,235,205,' + 0.55 * s + ')'); g.addColorStop(0.9, 'rgba(235,110,200,' + 0.4 * s + ')'); g.addColorStop(1, 'rgba(0,0,0,0)'); c.fillStyle = g; c.beginPath(); c.arc(cx, cy, rr * 1.15, 0, TAU); c.fill(); } }
+  if (o.bh < 1 && o.T) { // the star itself
+    c.globalAlpha = 1 - o.bh; const gr = pr * 1.9 + S * 0.025, gg = c.createRadialGradient(cx, cy, pr * 0.5, cx, cy, gr); gg.addColorStop(0, rgba(col, 0.55)); gg.addColorStop(1, rgba(col, 0)); c.fillStyle = gg; c.beginPath(); c.arc(cx, cy, gr, 0, TAU); c.fill();
+    const sg = c.createRadialGradient(cx - pr * 0.3, cy - pr * 0.3, pr * 0.1, cx, cy, pr); sg.addColorStop(0, rgba(lite, 1)); sg.addColorStop(0.65, rgba(col, 1)); sg.addColorStop(1, rgba(dark, 1)); c.fillStyle = sg; c.beginPath(); c.arc(cx, cy, Math.max(pr, 2), 0, TAU); c.fill(); c.globalAlpha = 1;
+  }
+  if (k === 'ns' || k === 'nsold') { c.save(); c.translate(cx, cy); c.rotate(now * 6); for (const sgn of [1, -1]) { const g = c.createLinearGradient(0, 0, sgn * S * 0.45, 0); g.addColorStop(0, 'rgba(170,200,255,.7)'); g.addColorStop(1, 'rgba(170,200,255,0)'); c.fillStyle = g; c.beginPath(); c.moveTo(0, -3); c.lineTo(sgn * S * 0.45, -14); c.lineTo(sgn * S * 0.45, 14); c.lineTo(0, 3); c.fill(); } c.restore(); }
+  if (o.bh > 0) { // black hole with accretion disc
+    c.globalAlpha = o.bh; c.save(); c.translate(cx, cy); c.rotate(-0.3); const rr = Math.max(pr, 10);
+    for (let i = 0; i < 6; i++) { c.strokeStyle = i < 3 ? 'rgba(255,' + (150 + i * 30) + ',70,' + (0.7 - i * 0.12) + ')' : 'rgba(255,230,190,.3)'; c.lineWidth = rr * (0.5 - i * 0.07); c.beginPath(); c.ellipse(0, 0, rr * (2.6 + i * 0.25), rr * (0.75 + i * 0.06), 0, 0, TAU); c.stroke(); }
+    c.restore(); c.fillStyle = '#000'; c.beginPath(); c.arc(cx, cy, rr, 0, TAU); c.fill(); c.strokeStyle = 'rgba(255,215,160,.7)'; c.lineWidth = 1.5; c.beginPath(); c.arc(cx, cy, rr * 1.12, 0, TAU); c.stroke(); c.globalAlpha = 1;
+  }
+  const b = st.boom; if (b) { // supernova explosion
+    const t = now - b.t0; if (t > 4.5) st.boom = null; else {
+      const sc = S / 420, ring = S * 0.55 * (1 - Math.exp(-t * 1.3)); c.strokeStyle = 'rgba(255,200,140,' + Math.max(0, 0.8 - t / 3.2) + ')'; c.lineWidth = 3 + 6 * Math.max(0, 1 - t); c.beginPath(); c.arc(cx, cy, ring, 0, TAU); c.stroke();
+      for (const p of b.p) { const d = p.s * sc * (1 - Math.exp(-t * 1.1)) / 1.1, al = Math.max(0, 1 - t / 3.6); c.fillStyle = rgba(p.c, al); c.beginPath(); c.arc(cx + d * Math.cos(p.a), cy + d * Math.sin(p.a), p.z * sc, 0, TAU); c.fill(); }
+      c.fillStyle = 'rgba(255,255,255,' + Math.max(0, 0.9 - t / 0.7) + ')'; c.fillRect(0, 0, S, S);
+    }
+  }
+  halo(c, o.w.n, 14, 22, 'left', '#e6ebf3', '600 15px "Familjen Grotesk",sans-serif');
+}
+
+/* ---- HR diagram ---- */
+let hrPts = [], hover = null; const HM = { l: 48, r: 14, t: 12, b: 40 };
+function drawHR(f, o) {
+  const { c, w, h } = f, tr = trk(), n = tr.w.length - 1, X = (T) => HM.l + (5 - lg(cl(T, 2000, 1e5))) / (5 - lg(2000)) * (w - HM.l - HM.r), Y = (L) => HM.t + (7 - cl(lg(L), -5, 7)) / 12 * (h - HM.t - HM.b);
+  const off = (T, L) => T > 1e5 || lg(L) > 7 || lg(L) < -5;
+  c.fillStyle = '#070b17'; c.fillRect(0, 0, w, h); hrPts = []; c.font = '10.5px "IBM Plex Mono",monospace'; c.textBaseline = 'middle'; c.lineWidth = 1;
+  c.save(); c.beginPath(); c.rect(HM.l, HM.t, w - HM.l - HM.r, h - HM.t - HM.b); c.clip(); c.strokeStyle = 'rgba(190,205,235,.1)';
+  for (let k = -5; k <= 7; k++) { c.beginPath(); c.moveTo(HM.l, Y(Math.pow(10, k))); c.lineTo(w, Y(Math.pow(10, k))); c.stroke(); }
+  for (const t of [3000, 4000, 5000, 7000, 10000, 20000, 50000]) { c.beginPath(); c.moveTo(X(t), HM.t); c.lineTo(X(t), h); c.stroke(); }
+  c.beginPath(); MS.forEach(([t, l], i) => i ? c.lineTo(X(t), Y(l)) : c.moveTo(X(t), Y(l))); c.lineCap = 'round'; c.lineWidth = 20; c.strokeStyle = 'rgba(140,175,255,.1)'; c.stroke(); c.lineWidth = 1;
+  if ($('oRad').checked) { c.setLineDash([4, 5]); c.strokeStyle = 'rgba(255,194,71,.25)'; for (const r of [1e-4, 0.01, 1, 100, 1e4]) { const L = (T) => 2 * lg(r) + 4 * lg(T / SUN); c.beginPath(); c.moveTo(X(2000), Y(Math.pow(10, L(2000)))); c.lineTo(X(1e5), Y(Math.pow(10, L(1e5)))); c.stroke(); } c.setLineDash([]); }
+  const N = 260; let past = [], fut = [];
+  for (let i = 0; i <= N; i++) { const q = at(tr, i / N); if (q.cloud > 0.001) continue; const p = [X(q.T), Y(q.L)]; (i / N <= st.u ? past : fut).push(p); }
+  if (past.length && fut.length) fut.unshift(past[past.length - 1]);
+  const line = (a) => { c.beginPath(); a.forEach((p, i) => i ? c.lineTo(p[0], p[1]) : c.moveTo(p[0], p[1])); c.stroke(); };
+  c.lineJoin = 'round'; c.setLineDash([4, 4]); c.strokeStyle = 'rgba(190,205,235,.4)'; c.lineWidth = 1.5; line(fut); c.setLineDash([]); c.strokeStyle = '#ffc247'; c.lineWidth = 2.5; line(past);
+  c.restore();
+  tr.w.forEach((q, i) => { if (!q.T) return; const x = X(q.T), y = Y(q.L); c.fillStyle = '#070b17'; c.strokeStyle = '#ffc247'; c.lineWidth = 1.5; c.beginPath(); c.arc(x, y, 3.5, 0, TAU); c.fill(); c.stroke(); hrPts.push({ x, y, t: q.n, i, kind: 'wp' }); });
+  if ($('oReal').checked) REAL.forEach((r, i) => { if (!r[3]) return; const x = X(r[3]), y = Y(r[4]); c.strokeStyle = 'rgba(255,255,255,.85)'; c.lineWidth = 1.2; c.beginPath(); c.moveTo(x, y - 5); c.lineTo(x + 5, y); c.lineTo(x, y + 5); c.lineTo(x - 5, y); c.closePath(); c.stroke(); hrPts.push({ x, y, t: r[0], i, kind: 'real' }); if (hover && hover.kind === 'real' && hover.i === i) halo(c, r[0], x + 8, y - 8, x > w - 110 ? 'right' : 'left', '#fff'); });
+  c.textAlign = 'right'; c.fillStyle = 'rgba(190,205,235,.8)';
+  for (let k = -4; k <= 6; k += 2) c.fillText('10' + String(k).replace(/[-0-9]/g, (d) => '⁻⁰¹²³⁴⁵⁶⁷⁸⁹'['-0123456789'.indexOf(d)]), HM.l - 5, Y(Math.pow(10, k)));
+  c.textAlign = 'center'; for (const t of [50000, 20000, 10000, 5000, 3000]) c.fillText(t / 1000 + 'k', X(t), h - HM.b + 12);
+  c.fillText('Temperature (K), hotter ← → cooler', (HM.l + w - HM.r) / 2, h - 8);
+  c.save(); c.translate(11, (HM.t + h - HM.b) / 2); c.rotate(-Math.PI / 2); c.fillText('Luminosity (Sun = 1)', 0, 0); c.restore();
+  if (o.cloud < 0.5 && o.T && o.bh < 0.5) {
+    const x = X(o.T), y = Y(o.L), col = colRGB(o.T), edge = off(o.T, o.L), g = c.createRadialGradient(x, y, 0, x, y, 16); g.addColorStop(0, rgba(col, 0.8)); g.addColorStop(1, rgba(col, 0));
+    c.fillStyle = g; c.beginPath(); c.arc(x, y, 16, 0, TAU); c.fill(); c.fillStyle = rgba(col, 1); c.strokeStyle = '#fff'; c.lineWidth = 2; c.beginPath(); c.arc(x, y, 6, 0, TAU); c.fill(); c.stroke();
+    halo(c, (edge ? 'off the chart: ' : '') + o.w.n, x + (x > w * 0.6 ? -11 : 11), y + (y < 40 ? 16 : -12), x > w * 0.6 ? 'right' : 'left', '#fff');
+  } else halo(c, o.cloud >= 0.5 ? 'No star yet: a cold cloud is too faint for this chart' : 'Black hole: no light of its own', HM.l + 8, h - HM.b - 14, 'left', '#ffd98a');
+}
+const tip = $('tip');
+function hrHit(e) { const r = $('hr').getBoundingClientRect(), x = e.clientX - r.left, y = e.clientY - r.top; let b = null, bd = 12; for (const p of hrPts) { const d = Math.hypot(p.x - x, p.y - y); if (d < bd) { b = p; bd = d; } } return b; }
+$('hr').addEventListener('pointermove', (e) => { hover = hrHit(e); $('hr').style.cursor = hover ? 'pointer' : 'default'; if (!hover) { tip.hidden = true; return; } tip.textContent = hover.t; tip.style.left = hover.x + 'px'; tip.style.top = hover.y + 'px'; tip.hidden = false; });
+$('hr').addEventListener('pointerleave', () => { hover = null; tip.hidden = true; });
+$('hr').addEventListener('click', (e) => { const p = hrHit(e); if (!p) return; if (p.kind === 'wp') goto(st.ti, p.i); else goto(REAL[p.i][1], REAL[p.i][2]); });
+
+/* ---- controls and readouts ---- */
+function goto(ti, i) { st.ti = ti; $('mass').value = ti; st.u = i / (TR[ti].w.length - 1); st.playing = false; st.hold = 0; setChips(); render(); }
+function setChips() {
+  $('chips').innerHTML = ''; trk().w.forEach((q, i) => { const b = document.createElement('button'); b.type = 'button'; b.textContent = q.n.replace(/ \(.*\)/, ''); b.onclick = () => goto(st.ti, i); b.dataset.i = i; $('chips').appendChild(b); });
+  $('boom').disabled = trk().m < 8; $('boom').title = trk().m < 8 ? 'Only stars above about 8 M☉ explode as supernovae' : '';
+}
+function render() {
+  const tr = trk(), o = at(tr, st.u), now = performance.now() / 1000;
+  $('massOut').textContent = tr.m + ' M☉ · ' + tr.nm; $('tl').value = Math.round(st.u * 1000); $('play').textContent = st.playing ? 'Pause' : 'Play'; $('play').setAttribute('aria-pressed', String(st.playing));
+  const bhs = o.bh > 0.5 || o.w.k === 'bh';
+  $('rStage').textContent = o.w.n; $('rAge').textContent = fmtAge(o.age);
+  $('rT').textContent = o.cloud > 0.5 ? 'about 10–30 K, too cold to glow' : bhs ? 'no light escapes' : Math.round(o.T).toLocaleString() + ' K';
+  $('rL').textContent = o.cloud > 0.5 ? 'none yet' : bhs ? 'none' : fmtL(o.L); $('rR').textContent = o.cloud > 0.5 ? 'light years across' : bhs ? 'event horizon ≈ 40 km' : fmtR(o.R);
+  $('rFate').textContent = tr.fate + ' · main sequence lasts ' + tr.life; $('tlOut').textContent = Math.round(st.u * 100) + '%';
+  $('desc').textContent = DESC[o.w.k]; $('chips').querySelectorAll('button').forEach((b) => b.setAttribute('aria-pressed', String(+b.dataset.i === Math.round(st.u * (tr.w.length - 1)))));
+  let f = fit($('star'), Math.round(Math.min(520, $('star').parentElement.clientWidth))); if (f) drawStar(f, o, now);
+  f = fit($('hr'), Math.round(Math.max(300, Math.min(440, $('hr').parentElement.clientWidth * 0.8)))); if (f) drawHR(f, o);
+}
+$('mass').oninput = () => { const k = at(trk(), st.u).w.k; st.ti = +$('mass').value; const i = trk().w.findIndex((q) => q.k === k); st.u = i >= 0 ? i / (trk().w.length - 1) : st.u; st.boom = null; setChips(); render(); };
+$('tl').oninput = () => { st.u = $('tl').value / 1000; st.playing = false; render(); };
+$('play').onclick = () => { if (!st.playing && st.u >= 1) st.u = 0; st.playing = !st.playing; render(); };
+$('rst').onclick = () => { st.u = 0; st.playing = false; st.boom = null; render(); };
+$('boom').onclick = () => { const tr = trk(), i = tr.w.findIndex((q) => q.k === 'sn'); st.u = i / (tr.w.length - 1); st.playing = true; boom(performance.now()); render(); };
+$('oReal').onchange = $('oRad').onchange = render;
+const rows = $('real'); REAL.forEach((r) => { const b = document.createElement('button'); b.type = 'button'; b.className = 'rs'; b.innerHTML = '<b>' + r[0] + '</b><span>' + TR[r[1]].w[r[2]].n + '</span><small>' + r[5] + '</small>'; b.onclick = () => goto(r[1], r[2]); rows.appendChild(b); });
+
+let last = 0;
+function frame(ts) {
+  const dt = Math.min(0.1, (ts - last) / 1000 || 0); last = ts;
+  if (st.playing && ts > st.hold) {
+    const tr = trk(), n = tr.w.length - 1, sn = tr.w.findIndex((q) => q.k === 'sn'), nu = st.u + dt / parseFloat($('spd').value);
+    if (sn >= 0 && st.u < sn / n - 1e-6 && nu >= sn / n) { st.u = sn / n; boom(ts); } else st.u = Math.min(1, nu);
+    if (st.u >= 1) st.playing = false;
+  }
+  render(); requestAnimationFrame(frame);
+}
+if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) $('spd').value = '60';
+setChips(); requestAnimationFrame(frame);
+</script></body></html>

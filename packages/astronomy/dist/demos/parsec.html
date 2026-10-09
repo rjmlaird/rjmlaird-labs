@@ -1,0 +1,492 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Parsec</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&family=Spline+Sans+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a tall top-view drawing on the left; controls, the sky strip with readouts, and a distance ladder stacked on the right. */
+:root {
+  --bg: #edf0f4;
+  --panel: #fafbfc;
+  --field: #f0f3f7;
+  --ink: #14202e;
+  --muted: #566475;
+  --line: #cfd8e2;
+  --accent: #b8360f;
+  --on-accent: #ffffff;
+  --star: #d2461e;
+  --earth: #1f6fd1;
+  --sun: #e39a0c;
+  --display: 'Hanken Grotesk', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --mono: 'Spline Sans Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0a0f18;
+    --panel: #111925;
+    --field: #0c131e;
+    --ink: #e8edf4;
+    --muted: #94a2b5;
+    --line: #25324a;
+    --accent: #ff8a5c;
+    --on-accent: #1a0b04;
+    --star: #ff7a4d;
+    --earth: #5aa0ff;
+    --sun: #f5b73b;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0a0f18;
+  --panel: #111925;
+  --field: #0c131e;
+  --ink: #e8edf4;
+  --muted: #94a2b5;
+  --line: #25324a;
+  --accent: #ff8a5c;
+  --on-accent: #1a0b04;
+  --star: #ff7a4d;
+  --earth: #5aa0ff;
+  --sun: #f5b73b;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--display);
+  font-size: 15px;
+  line-height: 1.45;
+  padding-inline: 16px;
+  padding-block: 20px 36px;
+}
+.wrap { max-width: 1120px; margin-inline: auto; display: flex; flex-direction: column; gap: 16px; }
+.top h1 { margin: 0; font-size: 1.7rem; font-weight: 700; letter-spacing: -0.015em; }
+.top p { margin: 2px 0 0; color: var(--muted); font-size: 0.95rem; max-width: 66ch; }
+.card { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 14px; min-width: 0; }
+.layout { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 16px; align-items: start; }
+@media (max-width: 880px) { .layout { grid-template-columns: minmax(0, 1fr); } }
+.col { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+h2 { margin: 0; font-size: 1.02rem; font-weight: 600; }
+.hd { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 2px 12px; margin-bottom: 10px; }
+.hd span { color: var(--muted); font-size: 0.8rem; }
+.stage { border: 1px solid var(--line); border-radius: 6px; overflow: hidden; background: var(--field); }
+canvas { display: block; width: 100%; }
+#top { touch-action: pan-y; }
+.note { margin: 10px 0 0; color: var(--muted); font-size: 0.8rem; max-width: 70ch; }
+
+.sl label { display: flex; justify-content: space-between; gap: 8px; font-size: 0.74rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.07em; }
+.sl output { font-family: var(--mono); color: var(--ink); text-transform: none; letter-spacing: 0; font-size: 0.82rem; }
+input[type="range"] { width: 100%; accent-color: var(--accent); margin: 6px 0 0; }
+.stack { display: flex; flex-direction: column; gap: 14px; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.btns { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+button {
+  font: inherit; font-size: 0.84rem; color: var(--ink); background: var(--field);
+  border: 1px solid var(--line); border-radius: 6px; padding: 5px 10px; cursor: pointer;
+}
+button:hover { border-color: var(--muted); }
+button:focus-visible, input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+button[aria-pressed="true"].chip { border-color: var(--accent); }
+button.primary { background: var(--accent); color: var(--on-accent); border-color: transparent; font-weight: 600; min-width: 78px; padding: 6px 12px; }
+.sub { margin: 0 0 8px; color: var(--muted); font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.07em; }
+
+dl.rd { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 8px 14px; margin: 12px 0 0; align-items: baseline; }
+dl.rd dt { color: var(--muted); font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.06em; }
+dl.rd dd { margin: 0; font-family: var(--mono); font-size: 0.86rem; overflow-wrap: anywhere; }
+dl.rd dd.big { font-size: 1.05rem; font-weight: 500; }
+.foot { margin: 0; color: var(--muted); font-size: 0.82rem; max-width: 80ch; }
+.msg { margin: 8px 0 0; font-size: 0.86rem; }
+</style>
+
+<main class="wrap">
+  <header class="top">
+    <h1>Parsec</h1>
+    <p>As Earth swings round the Sun, a nearby star seems to wobble against the distant stars. The size of that wobble gives the star's distance.</p>
+  </header>
+
+  <div class="layout">
+    <section class="card" aria-label="Top view of Earth's orbit and a nearby star">
+      <div class="hd"><h2>Top view</h2><span>Drag Earth round its orbit, or press Play</span></div>
+      <div class="stage" id="stageTop"><canvas id="top" role="img" aria-label="Top-down diagram: the Sun, Earth's orbit, a nearby star and the distant background stars, with sight lines from two positions of Earth"></canvas></div>
+      <p class="note" id="exag"></p>
+    </section>
+
+    <div class="col">
+      <section class="card" aria-label="Controls">
+        <div class="stack">
+          <div class="sl">
+            <label for="dS">Distance to the star <output id="dOut"></output></label>
+            <input type="range" id="dS" min="0" max="1000" step="1" value="0">
+          </div>
+          <div class="chips" id="chips"></div>
+          <div class="sl">
+            <label for="thS">Earth's position <output id="thOut"></output></label>
+            <input type="range" id="thS" min="0" max="360" step="1" value="120">
+          </div>
+          <div class="btns">
+            <button type="button" class="primary" id="playBtn" aria-pressed="true">Pause</button>
+            <button type="button" id="firstBtn">Back to first observation</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="card" aria-label="Sky view and measurements">
+        <div class="hd"><h2>Sky view</h2><span>Where the star appears among the distant stars</span></div>
+        <div class="stage"><canvas id="sky" role="img" aria-label="Strip of sky showing the nearby star shifting against fixed background stars"></canvas></div>
+        <dl class="rd">
+          <dt>Time since first look</dt><dd id="rdT"></dd>
+          <dt>Baseline B</dt><dd id="rdB"></dd>
+          <dt>Shift of the star, Δ</dt><dd id="rdDelta"></dd>
+          <dt>Parallax p = Δ ÷ B</dt><dd id="rdP" class="big"></dd>
+          <dt>Distance d = 1 ÷ p</dt><dd id="rdD" class="big"></dd>
+        </dl>
+      </section>
+
+      <section class="card" aria-label="Distance ladder">
+        <div class="hd"><h2>How far can parallax reach?</h2><span>Distance in parsecs, log scale</span></div>
+        <div class="stage"><canvas id="lad" role="img" aria-label="Logarithmic distance axis from 1 to 1000 parsecs showing the reach of Hipparcos and Gaia and the position of this star"></canvas></div>
+        <p class="msg" id="ladMsg"></p>
+      </section>
+    </div>
+  </div>
+
+  <p class="foot">A parsec is the distance at which one astronomical unit (the Earth–Sun distance) spans one arcsecond: 1 pc is about 206,265 AU, or 3.26 light-years. Parallax is the first rung of the cosmic distance ladder. Brightness-based methods such as Cepheid variables are calibrated against it and take over where parallax runs out.</p>
+</main>
+
+<script>
+const $ = (id) => document.getElementById(id);
+const PC_AU = 206264.806, LY = 3.26156;
+const PRESETS = [
+  ['Proxima Centauri', 1.302], ['Barnard’s Star', 1.828], ['Sirius', 2.637], ['Vega', 7.68], ['Arcturus', 11.26]
+];
+const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const state = { d: 1.302, name: 'Proxima Centauri', th: 2.1, playing: !reduce };
+const TAU = Math.PI * 2;
+const rootStyle = getComputedStyle(document.documentElement);
+const col = (n) => rootStyle.getPropertyValue(n).trim();
+const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+const MONO = '"Spline Sans Mono", ui-monospace, Menlo, monospace';
+
+function fmtMas(m) {
+  if (m >= 1000) return (m / 1000).toPrecision(3) + '″';
+  if (m >= 100) return Math.round(m) + ' mas';
+  if (m >= 10) return m.toFixed(1) + ' mas';
+  if (m >= 1) return m.toFixed(2) + ' mas';
+  return m.toFixed(3) + ' mas';
+}
+function fmtPc(d) { return (d < 10 ? d.toFixed(2) : d < 100 ? d.toFixed(1) : Math.round(d).toLocaleString()) + ' pc'; }
+function nice(x) {
+  const e = Math.floor(Math.log10(x)), f = x / Math.pow(10, e);
+  return (f < 1.5 ? 1 : f < 3.5 ? 2 : f < 7.5 ? 5 : 10) * Math.pow(10, e);
+}
+function fit(cv, w, h) {
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr);
+  cv.style.height = h + 'px';
+  const c = cv.getContext('2d'); c.setTransform(dpr, 0, 0, dpr, 0, 0);
+  return c;
+}
+function text(c, s, x, y, size, fill, align, halo) {
+  c.font = size + 'px ' + MONO; c.textAlign = align || 'left'; c.textBaseline = 'middle';
+  if (halo) { c.lineWidth = 3.5; c.lineJoin = 'round'; c.strokeStyle = halo; c.strokeText(s, x, y); }
+  c.fillStyle = fill; c.fillText(s, x, y);
+}
+
+/* ---------- fixed background stars ---------- */
+let seed = 11;
+const rnd = () => { seed = (seed * 16807) % 2147483647; return seed / 2147483647; };
+const bgTop = [], bgSky = [];
+for (let i = 0; i < 70; i++) bgTop.push({ u: rnd(), s: 0.7 + rnd() * 1.4, a: 0.35 + rnd() * 0.5, dy: (rnd() - 0.5) * 14 });
+for (let i = 0; i < 46; i++) bgSky.push({ u: rnd() * 2 - 1, v: 0.1 + rnd() * 0.62, s: 0.8 + rnd() * 1.8, a: 0.35 + rnd() * 0.55 });
+
+/* ---------- top view ---------- */
+const topCv = $('top');
+let TW = 300, TH = 400, dirty = true;
+let geo = null;
+function sizeTop() {
+  const w = $('stageTop').clientWidth; if (!w) return;
+  TW = w; TH = Math.round(clamp(w * 1.02, 380, 660));
+  fit(topCv, TW, TH); dirty = true;
+}
+function drawTop() {
+  const c = topCv.getContext('2d'), W = TW, H = TH;
+  const ink = col('--ink'), muted = col('--muted'), field = col('--field');
+  const star = col('--star'), earth = col('--earth'), sun = col('--sun');
+  c.clearRect(0, 0, W, H);
+  c.fillStyle = field; c.fillRect(0, 0, W, H);
+
+  const R = Math.min(72, W * 0.12), cx = W / 2, sunY = H - R - 64, bandY = 38;
+  const LsMin = 1.7 * R, LsMax = sunY - bandY - 40;
+  const t = clamp(Math.log10(state.d) / 3, 0, 1);
+  const Ls = LsMin + t * (LsMax - LsMin);
+  const S = { x: cx, y: sunY - Ls };
+  const th = state.th;
+  const E = { x: cx + R * Math.cos(th), y: sunY - R * Math.sin(th) };
+  const E0 = { x: cx + R, y: sunY };
+  const hitX = (P) => P.x + (S.x - P.x) * (P.y - bandY) / (P.y - S.y);
+  geo = { E, R };
+
+  // distant stars band
+  c.strokeStyle = muted; c.globalAlpha = 0.5; c.lineWidth = 1;
+  c.beginPath(); c.moveTo(14, bandY); c.lineTo(W - 14, bandY); c.stroke(); c.globalAlpha = 1;
+  for (const b of bgTop) { c.fillStyle = ink; c.globalAlpha = b.a; c.beginPath(); c.arc(14 + b.u * (W - 28), bandY + b.dy, b.s, 0, TAU); c.fill(); }
+  c.globalAlpha = 1;
+  text(c, 'distant background stars', 14, 16, 11, muted, 'left');
+
+  // orbit
+  c.strokeStyle = muted; c.globalAlpha = 0.65; c.lineWidth = 1.2;
+  c.beginPath(); c.arc(cx, sunY, R, 0, TAU); c.stroke(); c.globalAlpha = 1;
+
+  // sun to star axis
+  c.save(); c.setLineDash([2, 5]); c.strokeStyle = muted; c.globalAlpha = 0.7;
+  c.beginPath(); c.moveTo(cx, sunY); c.lineTo(S.x, S.y); c.stroke(); c.restore();
+  text(c, 'd = ' + fmtPc(state.d), cx + 8, (sunY + S.y) / 2 + 24, 11, muted, 'left', field);
+  text(c, '(not to scale)', cx + 8, (sunY + S.y) / 2 + 40, 10, muted, 'left', field);
+
+  // sight lines
+  const h0 = hitX(E0), h1 = hitX(E);
+  c.save(); c.setLineDash([6, 5]); c.strokeStyle = muted; c.lineWidth = 1.4;
+  c.beginPath(); c.moveTo(E0.x, E0.y); c.lineTo(h0, bandY); c.stroke(); c.restore();
+  c.strokeStyle = earth; c.lineWidth = 2;
+  c.beginPath(); c.moveTo(E.x, E.y); c.lineTo(h1, bandY); c.stroke();
+  // apparent positions on the band
+  c.lineWidth = 2; c.strokeStyle = star; c.fillStyle = field;
+  c.beginPath(); c.arc(h0, bandY, 5, 0, TAU); c.fill(); c.stroke();
+  c.fillStyle = star; c.beginPath(); c.arc(h1, bandY, 5, 0, TAU); c.fill();
+
+  // baseline bracket
+  const by = sunY + R + 30;
+  c.strokeStyle = ink; c.lineWidth = 1.4;
+  c.save(); c.setLineDash([2, 4]); c.globalAlpha = 0.5;
+  c.beginPath(); c.moveTo(E0.x, E0.y); c.lineTo(E0.x, by); c.moveTo(E.x, E.y); c.lineTo(E.x, by); c.stroke(); c.restore();
+  c.beginPath(); c.moveTo(E0.x, by); c.lineTo(E.x, by);
+  c.moveTo(E0.x, by - 5); c.lineTo(E0.x, by + 5); c.moveTo(E.x, by - 5); c.lineTo(E.x, by + 5); c.stroke();
+  const B = 1 - Math.cos(th);
+  text(c, 'baseline B = ' + B.toFixed(2) + ' AU', (E0.x + E.x) / 2, by + 16, 11, ink, 'center');
+
+  // sun
+  const g = c.createRadialGradient(cx, sunY, 2, cx, sunY, 20);
+  g.addColorStop(0, 'rgba(245,183,59,0.55)'); g.addColorStop(1, 'rgba(245,183,59,0)');
+  c.fillStyle = g; c.beginPath(); c.arc(cx, sunY, 20, 0, TAU); c.fill();
+  c.fillStyle = sun; c.beginPath(); c.arc(cx, sunY, 7, 0, TAU); c.fill();
+  text(c, 'Sun', cx - 12, sunY + 4, 11, ink, 'right', field);
+
+  // first-observation ghost, then Earth
+  c.strokeStyle = earth; c.lineWidth = 1.6; c.fillStyle = field;
+  c.beginPath(); c.arc(E0.x, E0.y, 6, 0, TAU); c.fill(); c.stroke();
+  text(c, '1st look', E0.x + 10, E0.y - 12, 11, ink, 'left', field);
+  c.fillStyle = earth; c.strokeStyle = field; c.lineWidth = 2;
+  c.beginPath(); c.arc(E.x, E.y, 7, 0, TAU); c.fill(); c.stroke();
+  if (Math.hypot(E.x - E0.x, E.y - E0.y) > 24) text(c, 'Earth', E.x - 12, E.y - 12, 11, ink, 'right', field);
+
+  // angle at the star between the two sight lines
+  const a1 = Math.atan2(E0.y - S.y, E0.x - S.x), a2 = Math.atan2(E.y - S.y, E.x - S.x);
+  const diff = Math.atan2(Math.sin(a2 - a1), Math.cos(a2 - a1));
+  if (Math.abs(diff) > 0.015) {
+    const r = Math.min(52, Ls * 0.55);
+    c.strokeStyle = star; c.lineWidth = 2;
+    c.beginPath(); c.arc(S.x, S.y, r, a1, a1 + diff, diff < 0); c.stroke();
+    const am = a1 + diff / 2;
+    text(c, 'Δ', S.x + Math.cos(am) * (r + 11), S.y + Math.sin(am) * (r + 11), 13, star, 'center', field);
+  }
+  // star
+  c.fillStyle = star; c.strokeStyle = field; c.lineWidth = 2;
+  c.beginPath();
+  for (let i = 0; i < 10; i++) { const rr = i % 2 ? 4.5 : 10, a = -Math.PI / 2 + i * Math.PI / 5; c.lineTo(S.x + rr * Math.cos(a), S.y + rr * Math.sin(a)); }
+  c.closePath(); c.fill(); c.stroke();
+  text(c, state.name || 'Nearby star', S.x + 16, S.y - 2, 12, ink, 'left', field);
+
+  // exaggeration note
+  const pDraw = Math.atan(R / Ls), pTrue = 1 / (state.d * PC_AU);
+  const f = pDraw / pTrue;
+  $('exag').textContent = 'Not to scale. The real star is about ' + Math.round(state.d * PC_AU).toLocaleString() + ' times farther away than Earth’s orbit is wide, so the angles drawn here are exaggerated roughly ' + Number(f.toPrecision(2)).toLocaleString() + ' times. The measured numbers on the right are real.';
+}
+
+/* ---------- sky strip ---------- */
+const skyCv = $('sky');
+let SW = 300; const SH = 170;
+function sizeSky() { const w = $('sky').parentElement.clientWidth; if (!w) return; SW = w; fit(skyCv, SW, SH); dirty = true; }
+function drawSky() {
+  const c = skyCv.getContext('2d'), W = SW, H = SH;
+  const ink = col('--ink'), muted = col('--muted'), field = col('--field'), star = col('--star');
+  c.clearRect(0, 0, W, H); c.fillStyle = field; c.fillRect(0, 0, W, H);
+  const p = 1000 / state.d, F = p * 1.5, m = 34;
+  const X = (v) => W / 2 + (v / F) * (W / 2 - m);
+  const starY = H * 0.44, axY = H - 30;
+  for (const b of bgSky) { c.fillStyle = ink; c.globalAlpha = b.a; c.beginPath(); c.arc(W / 2 + b.u * (W / 2 - m), 14 + b.v * (axY - 40), b.s, 0, TAU); c.fill(); }
+  c.globalAlpha = 1;
+  // axis
+  const useAs = F >= 500, unit = useAs ? 1000 : 1;
+  const step = nice((2 * F / unit) / 6), dec = Math.max(0, -Math.floor(Math.log10(step)));
+  c.strokeStyle = muted; c.lineWidth = 1;
+  c.beginPath(); c.moveTo(X(-F), axY); c.lineTo(X(F), axY); c.stroke();
+  for (let v = Math.ceil((-F / unit) / step) * step; v <= F / unit + 1e-9; v += step) {
+    const x = X(v * unit);
+    c.beginPath(); c.moveTo(x, axY); c.lineTo(x, axY + 5); c.stroke();
+    text(c, (Math.abs(v) < step / 1e3 ? 0 : v).toFixed(dec), x, axY + 15, 10, muted, 'center');
+  }
+  text(c, useAs ? 'arcseconds (″) from the Sun’s view' : 'milliarcseconds (mas) from the Sun’s view', W / 2, H - 5, 10, muted, 'center');
+  // year-long path
+  c.strokeStyle = star; c.globalAlpha = 0.4; c.lineWidth = 2;
+  c.beginPath(); c.moveTo(X(-p), starY); c.lineTo(X(p), starY);
+  c.moveTo(X(-p), starY - 6); c.lineTo(X(-p), starY + 6); c.moveTo(X(p), starY - 6); c.lineTo(X(p), starY + 6); c.stroke();
+  c.globalAlpha = 1;
+  const x0 = -p, x1 = -p * Math.cos(state.th);
+  // first observation ghost
+  c.strokeStyle = star; c.lineWidth = 1.8; c.fillStyle = field;
+  c.beginPath(); c.arc(X(x0), starY, 7, 0, TAU); c.fill(); c.stroke();
+  // current
+  c.fillStyle = star; c.strokeStyle = field; c.lineWidth = 2;
+  c.beginPath(); c.arc(X(x1), starY, 7, 0, TAU); c.fill(); c.stroke();
+  // dimension
+  const delta = x1 - x0;
+  if (delta > p * 0.02) {
+    const dy = starY - 24;
+    c.strokeStyle = ink; c.lineWidth = 1.4;
+    c.beginPath(); c.moveTo(X(x0), dy); c.lineTo(X(x1), dy);
+    c.moveTo(X(x0), dy - 4); c.lineTo(X(x0), dy + 4); c.moveTo(X(x1), dy - 4); c.lineTo(X(x1), dy + 4); c.stroke();
+    text(c, 'Δ = ' + fmtMas(delta), (X(x0) + X(x1)) / 2, dy - 11, 11, ink, 'center', field);
+  }
+  text(c, '1st look', X(x0), starY + 22, 10, muted, 'center', field);
+}
+
+/* ---------- ladder ---------- */
+const ladCv = $('lad');
+let LW = 300; const LH = 112;
+function sizeLad() { const w = $('lad').parentElement.clientWidth; if (!w) return; LW = w; fit(ladCv, LW, LH); dirty = true; }
+function drawLad() {
+  const c = ladCv.getContext('2d'), W = LW, H = LH, mg = 22;
+  const ink = col('--ink'), muted = col('--muted'), field = col('--field'), star = col('--star'), earth = col('--earth');
+  c.clearRect(0, 0, W, H); c.fillStyle = field; c.fillRect(0, 0, W, H);
+  const X = (d) => mg + (Math.log10(d) / 3) * (W - 2 * mg);
+  const axY = 84;
+  c.fillStyle = earth; c.globalAlpha = 0.75;
+  c.fillRect(X(1), 26, X(100) - X(1), 10);
+  c.globalAlpha = 0.4; c.fillRect(X(1), 50, W - mg - X(1), 10); c.globalAlpha = 1;
+  // arrow head for Gaia
+  c.fillStyle = earth; c.globalAlpha = 0.4; c.beginPath(); c.moveTo(W - mg, 46); c.lineTo(W - mg + 10, 55); c.lineTo(W - mg, 64); c.fill(); c.globalAlpha = 1;
+  text(c, 'Hipparcos: to about 100 pc', X(1) + 2, 17, 10, ink, 'left');
+  text(c, 'Gaia: thousands of pc', X(1) + 2, 71, 10, ink, 'left');
+  c.strokeStyle = muted; c.lineWidth = 1;
+  c.beginPath(); c.moveTo(X(1), axY); c.lineTo(X(1000), axY); c.stroke();
+  for (const [d, lab] of [[1, '1'], [10, '10'], [100, '100'], [1000, '1,000']]) {
+    c.beginPath(); c.moveTo(X(d), axY); c.lineTo(X(d), axY + 6); c.stroke();
+    text(c, lab, clamp(X(d), mg + 6, W - mg - 8), axY + 17, 10, muted, 'center');
+  }
+  for (const d of [3, 30, 300]) { c.beginPath(); c.moveTo(X(d), axY); c.lineTo(X(d), axY + 3); c.stroke(); }
+  // 61 Cygni
+  c.fillStyle = ink; c.save(); c.translate(X(3.5), axY); c.rotate(Math.PI / 4); c.fillRect(-3, -3, 6, 6); c.restore();
+  text(c, '61 Cygni, 1838', X(3.5) + 8, axY - 8, 10, muted, 'left', field);
+  // this star
+  const x = X(clamp(state.d, 1, 1000));
+  c.strokeStyle = star; c.lineWidth = 2;
+  c.beginPath(); c.moveTo(x, 8); c.lineTo(x, axY); c.stroke();
+  c.fillStyle = star; c.beginPath(); c.moveTo(x - 6, axY + 1); c.lineTo(x + 6, axY + 1); c.lineTo(x, axY - 8); c.fill();
+  const p = 1000 / state.d;
+  $('ladMsg').textContent = p >= 10
+    ? 'About ' + fmtMas(p) + ': Hipparcos could measure this to roughly 10% or better.'
+    : p >= 0.3
+      ? 'About ' + fmtMas(p) + ': too small for Hipparcos, but within reach of Gaia.'
+      : 'About ' + fmtMas(p) + ': a very faint signal, so even Gaia gives only a rough distance. Astronomers move on to other methods here.';
+}
+
+/* ---------- readouts ---------- */
+function renderReadout() {
+  const p = 1000 / state.d, B = 1 - Math.cos(state.th), delta = p * B;
+  $('dOut').textContent = (state.name ? state.name + ' · ' : '') + fmtPc(state.d);
+  $('thOut').textContent = (state.th / TAU * 12).toFixed(1) + ' months in';
+  $('rdT').textContent = (state.th / TAU * 12).toFixed(1) + ' months';
+  $('rdB').textContent = B.toFixed(2) + ' AU across the line of sight';
+  $('rdDelta').textContent = B < 0.001 ? '0' : fmtMas(delta);
+  if (B < 0.06) {
+    $('rdP').textContent = 'move Earth away from the first look';
+    $('rdD').textContent = '—';
+  } else {
+    const pm = delta / B;
+    $('rdP').textContent = fmtMas(pm);
+    const dm = 1000 / pm;
+    $('rdD').textContent = fmtPc(dm) + ' (' + (dm * LY).toFixed(dm * LY < 100 ? 2 : 0) + ' light-years)';
+  }
+}
+function syncControls() {
+  $('thS').value = Math.round(state.th / TAU * 360) % 361;
+  $('dS').value = Math.round(Math.log10(state.d) / 3 * 1000);
+  document.querySelectorAll('.chip').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.name === state.name)));
+}
+
+/* ---------- interaction ---------- */
+const chips = $('chips');
+for (const [n, d] of PRESETS) {
+  const b = document.createElement('button');
+  b.type = 'button'; b.className = 'chip'; b.dataset.name = n; b.textContent = n; b.setAttribute('aria-pressed', 'false');
+  b.addEventListener('click', () => { state.name = n; state.d = d; syncControls(); renderReadout(); dirty = true; });
+  chips.appendChild(b);
+}
+$('dS').addEventListener('input', () => {
+  state.d = Math.pow(10, parseInt($('dS').value, 10) / 1000 * 3); state.name = '';
+  document.querySelectorAll('.chip').forEach((b) => b.setAttribute('aria-pressed', 'false'));
+  renderReadout(); dirty = true;
+});
+$('thS').addEventListener('input', () => { setPlaying(false); state.th = parseInt($('thS').value, 10) / 360 * TAU; renderReadout(); dirty = true; });
+$('firstBtn').addEventListener('click', () => { setPlaying(false); state.th = 0; syncControls(); renderReadout(); dirty = true; });
+function setPlaying(v) {
+  state.playing = v; last = 0;
+  $('playBtn').textContent = v ? 'Pause' : 'Play';
+  $('playBtn').setAttribute('aria-pressed', String(v));
+}
+$('playBtn').addEventListener('click', () => setPlaying(!state.playing));
+
+let dragging = false;
+function pointer(e) {
+  const r = topCv.getBoundingClientRect();
+  return { x: e.clientX - r.left, y: e.clientY - r.top };
+}
+topCv.addEventListener('pointerdown', (e) => {
+  if (!geo) return;
+  const q = pointer(e);
+  if (Math.hypot(q.x - geo.E.x, q.y - geo.E.y) > 40) return;
+  dragging = true; setPlaying(false);
+  try { topCv.setPointerCapture(e.pointerId); } catch (_) {}
+});
+topCv.addEventListener('pointermove', (e) => {
+  const q = pointer(e);
+  if (!dragging) { if (geo) topCv.style.cursor = Math.hypot(q.x - geo.E.x, q.y - geo.E.y) <= 40 ? 'grab' : 'default'; return; }
+  const sunY = TH - geo.R - 64;
+  let a = Math.atan2(sunY - q.y, q.x - TW / 2);
+  if (a < 0) a += TAU;
+  state.th = a; syncControls(); renderReadout(); dirty = true;
+});
+const endDrag = () => { dragging = false; };
+topCv.addEventListener('pointerup', endDrag);
+topCv.addEventListener('pointercancel', endDrag);
+document.addEventListener('keydown', (e) => {
+  if (e.key !== ' ') return;
+  const t = e.target.tagName;
+  if (t === 'BUTTON' || t === 'INPUT') return;
+  e.preventDefault(); setPlaying(!state.playing);
+});
+
+/* ---------- loop and boot ---------- */
+let last = 0;
+function frame(ts) {
+  if (state.playing) {
+    if (last) state.th = (state.th + Math.min(0.1, (ts - last) / 1000) * TAU / 10) % TAU;
+    last = ts; syncControls(); renderReadout(); dirty = true;
+  }
+  if (dirty) { dirty = false; drawTop(); drawSky(); drawLad(); }
+  requestAnimationFrame(frame);
+}
+function sizeAll() { sizeTop(); sizeSky(); sizeLad(); }
+if ('ResizeObserver' in window) new ResizeObserver(sizeAll).observe(document.body); else window.addEventListener('resize', sizeAll);
+const redraw = () => { dirty = true; };
+try { window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', redraw); } catch (_) {}
+new MutationObserver(redraw).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(redraw);
+if (!state.playing) { $('playBtn').textContent = 'Play'; $('playBtn').setAttribute('aria-pressed', 'false'); }
+syncControls(); renderReadout(); sizeAll();
+requestAnimationFrame(frame);
+</script>
+
+</body></html>

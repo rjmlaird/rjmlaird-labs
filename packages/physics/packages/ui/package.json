@@ -1,0 +1,26 @@
+{
+  "name": "@labs/ui",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./styles.css": "./src/styles.css",
+    "./LabLayout.astro": "./src/astro/LabLayout.astro",
+    "./LabNav.astro": "./src/astro/LabNav.astro",
+    "./LabCard.astro": "./src/astro/LabCard.astro"
+  },
+  "scripts": { "typecheck": "tsc --noEmit -p ." },
+  "dependencies": {
+    "@labs/registry": "workspace:*",
+    "@labs/sim-core": "workspace:*",
+    "@labs/tokens": "workspace:*",
+    "katex": "^0.16.22"
+  },
+  "peerDependencies": { "react": "^18.3.0", "react-dom": "^18.3.0" },
+  "devDependencies": {
+    "@types/react": "^18.3.0",
+    "react": "^18.3.0",
+    "typescript": "^5.6.0"
+  }
+}

@@ -1,0 +1,1555 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Board Blueprint — Floorplan Designer</title>
+
+  <style>
+    @import url("https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap");
+
+    :root {
+      --ink: #071e35;
+      --blue-950: #061629;
+      --blue-900: #082b50;
+      --blue-800: #0a3f73;
+      --blue-700: #075d9e;
+      --cyan: #27d4ff;
+      --cyan-soft: #9aeaff;
+      --white: #effbff;
+      --muted: #9cc1d9;
+      --line: rgba(154, 234, 255, 0.18);
+      --line-strong: rgba(154, 234, 255, 0.36);
+      --panel: rgba(6, 29, 53, 0.9);
+      --danger: #ff8585;
+      --success: #61e5a8;
+      --warning: #ffc766;
+      --font-display: "Space Grotesk", system-ui, sans-serif;
+      --font-mono: "DM Mono", ui-monospace, monospace;
+      --radius: 13px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      min-width: 320px;
+      min-height: 100vh;
+      margin: 0;
+      overflow: hidden;
+      color: var(--white);
+      font-family: var(--font-display);
+      background: var(--blue-950);
+    }
+
+    button,
+    input,
+    select {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    button:focus-visible,
+    input:focus-visible,
+    select:focus-visible {
+      outline: 3px solid var(--warning);
+      outline-offset: 2px;
+    }
+
+    .app {
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      min-height: 100vh;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      min-height: 4.4rem;
+      padding: 0.7rem 1.1rem;
+      border-bottom: 1px solid var(--line);
+      background: rgba(5, 20, 37, 0.95);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      min-width: max-content;
+    }
+
+    .brand-mark {
+      display: grid;
+      width: 2.1rem;
+      height: 2.1rem;
+      place-items: center;
+      border: 1px solid var(--cyan);
+      border-radius: 7px;
+      color: var(--cyan);
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      font-weight: 500;
+    }
+
+    .brand h1 {
+      margin: 0;
+      font-size: 1rem;
+      letter-spacing: -0.02em;
+    }
+
+    .brand p {
+      margin: 0.15rem 0 0;
+      color: var(--muted);
+      font-family: var(--font-mono);
+      font-size: 0.66rem;
+    }
+
+    .topbar-actions {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 0.45rem;
+    }
+
+    .button {
+      min-height: 2.25rem;
+      padding: 0.48rem 0.72rem;
+      border: 1px solid var(--line-strong);
+      border-radius: 7px;
+      background: rgba(10, 63, 115, 0.34);
+      color: var(--cyan-soft);
+      font-size: 0.74rem;
+      font-weight: 600;
+    }
+
+    .button:hover {
+      border-color: var(--cyan);
+      background: rgba(39, 212, 255, 0.12);
+      color: var(--white);
+    }
+
+    .button.primary {
+      border-color: var(--cyan);
+      background: var(--cyan);
+      color: var(--blue-950);
+    }
+
+    .button.primary:hover {
+      background: #72e4ff;
+    }
+
+    .button.danger {
+      border-color: rgba(255, 133, 133, 0.55);
+      color: var(--danger);
+    }
+
+    .workspace {
+      display: grid;
+      grid-template-columns: 16.5rem minmax(0, 1fr) 17.5rem;
+      min-height: 0;
+    }
+
+    .sidebar {
+      z-index: 3;
+      overflow-y: auto;
+      padding: 1rem;
+      border-right: 1px solid var(--line);
+      background: var(--panel);
+    }
+
+    .inspector {
+      border-right: 0;
+      border-left: 1px solid var(--line);
+    }
+
+    .panel-title {
+      margin: 0 0 0.8rem;
+      color: var(--cyan-soft);
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+    }
+
+    .tool-section {
+      padding-bottom: 1rem;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .tool-section:last-child {
+      border-bottom: 0;
+    }
+
+    .tool-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.48rem;
+    }
+
+    .tool-button {
+      display: grid;
+      min-height: 4.7rem;
+      align-content: center;
+      justify-items: center;
+      gap: 0.35rem;
+      padding: 0.5rem;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(10, 63, 115, 0.21);
+      color: var(--muted);
+      text-align: center;
+    }
+
+    .tool-button:hover,
+    .tool-button.active {
+      border-color: var(--cyan);
+      background: rgba(39, 212, 255, 0.1);
+      color: var(--white);
+    }
+
+    .tool-icon {
+      color: var(--cyan);
+      font-family: var(--font-mono);
+      font-size: 1.15rem;
+      line-height: 1;
+    }
+
+    .tool-label {
+      font-size: 0.67rem;
+      font-weight: 600;
+      line-height: 1.2;
+    }
+
+    .template-list {
+      display: grid;
+      gap: 0.5rem;
+    }
+
+    .template-button {
+      width: 100%;
+      padding: 0.68rem;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(10, 63, 115, 0.21);
+      color: var(--cyan-soft);
+      font-size: 0.73rem;
+      font-weight: 600;
+      text-align: left;
+    }
+
+    .template-button:hover {
+      border-color: var(--cyan);
+      background: rgba(39, 212, 255, 0.1);
+      color: var(--white);
+    }
+
+    .canvas-area {
+      position: relative;
+      min-width: 0;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 52% 38%, rgba(39, 212, 255, 0.11), transparent 33rem),
+        var(--blue-900);
+    }
+
+    .canvas-toolbar {
+      position: absolute;
+      z-index: 5;
+      top: 1rem;
+      left: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.4rem;
+      border: 1px solid var(--line);
+      border-radius: 9px;
+      background: rgba(5, 20, 37, 0.87);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.22);
+    }
+
+    .canvas-toolbar button {
+      display: grid;
+      width: 2rem;
+      height: 2rem;
+      place-items: center;
+      padding: 0;
+      border: 1px solid transparent;
+      border-radius: 5px;
+      background: transparent;
+      color: var(--cyan-soft);
+      font-family: var(--font-mono);
+      font-size: 0.95rem;
+    }
+
+    .canvas-toolbar button:hover {
+      border-color: var(--line-strong);
+      background: rgba(39, 212, 255, 0.1);
+    }
+
+    .zoom-readout {
+      min-width: 3.5rem;
+      color: var(--cyan);
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      text-align: center;
+    }
+
+    .board-viewport {
+      position: absolute;
+      inset: 0;
+      overflow: auto;
+      cursor: crosshair;
+    }
+
+    .board {
+      position: relative;
+      width: 1500px;
+      height: 1000px;
+      margin: 4.4rem auto;
+      overflow: hidden;
+      transform-origin: top left;
+      background-color: #0a4f87;
+      background-image:
+        linear-gradient(rgba(180, 238, 255, 0.12) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(180, 238, 255, 0.12) 1px, transparent 1px),
+        linear-gradient(rgba(180, 238, 255, 0.23) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(180, 238, 255, 0.23) 1px, transparent 1px);
+      background-size: 20px 20px, 20px 20px, 100px 100px, 100px 100px;
+      box-shadow:
+        inset 0 0 0 2px rgba(154, 234, 255, 0.35),
+        0 30px 90px rgba(0, 0, 0, 0.32);
+    }
+
+    .board::before {
+      position: absolute;
+      top: 1rem;
+      left: 1.1rem;
+      color: rgba(230, 250, 255, 0.5);
+      content: "BOARD / FLOORPLAN / REV 01";
+      font-family: var(--font-mono);
+      font-size: 0.64rem;
+      letter-spacing: 0.12em;
+      pointer-events: none;
+    }
+
+    .board::after {
+      position: absolute;
+      right: 1.1rem;
+      bottom: 1rem;
+      color: rgba(230, 250, 255, 0.5);
+      content: "GRID: 1 UNIT = 1 FT";
+      font-family: var(--font-mono);
+      font-size: 0.64rem;
+      letter-spacing: 0.1em;
+      pointer-events: none;
+    }
+
+    .element {
+      position: absolute;
+      display: grid;
+      user-select: none;
+      touch-action: none;
+    }
+
+    .room {
+      place-items: center;
+      border: 4px solid var(--white);
+      background: rgba(8, 43, 80, 0.34);
+      box-shadow: inset 0 0 0 1px rgba(39, 212, 255, 0.45);
+      color: var(--white);
+      cursor: grab;
+    }
+
+    .room:hover {
+      background: rgba(39, 212, 255, 0.12);
+    }
+
+    .room.selected,
+    .furniture.selected {
+      outline: 3px solid var(--warning);
+      outline-offset: 4px;
+      z-index: 10;
+    }
+
+    .room.dragging,
+    .furniture.dragging {
+      cursor: grabbing;
+      opacity: 0.9;
+    }
+
+    .room-label {
+      max-width: 95%;
+      padding: 0.32rem 0.5rem;
+      color: var(--white);
+      font-family: var(--font-mono);
+      font-size: 0.73rem;
+      font-weight: 500;
+      line-height: 1.3;
+      text-align: center;
+      text-shadow: 0 1px 1px rgba(0, 0, 0, 0.55);
+    }
+
+    .room-area {
+      display: block;
+      margin-top: 0.22rem;
+      color: var(--cyan-soft);
+      font-size: 0.58rem;
+      letter-spacing: 0.04em;
+    }
+
+    .furniture {
+      place-items: center;
+      border: 2px solid var(--cyan-soft);
+      background: rgba(8, 43, 80, 0.82);
+      color: var(--cyan-soft);
+      cursor: grab;
+    }
+
+    .furniture::before {
+      position: absolute;
+      inset: 0.34rem;
+      border: 1px solid rgba(154, 234, 255, 0.42);
+      content: "";
+      pointer-events: none;
+    }
+
+    .furniture-label {
+      z-index: 1;
+      padding: 0.18rem;
+      font-family: var(--font-mono);
+      font-size: 0.55rem;
+      text-align: center;
+      text-transform: uppercase;
+    }
+
+    .furniture[data-type="table"] {
+      border-radius: 50%;
+    }
+
+    .furniture[data-type="sofa"]::before {
+      border-width: 4px 1px 1px;
+    }
+
+    .furniture[data-type="desk"]::before {
+      border-width: 1px 1px 4px;
+    }
+
+    .furniture[data-type="bed"]::before {
+      border-width: 6px 1px 1px;
+    }
+
+    .furniture[data-type="door"] {
+      overflow: hidden;
+      border: 0;
+      background: transparent;
+    }
+
+    .furniture[data-type="door"]::before {
+      position: absolute;
+      inset: auto auto 0 0;
+      width: 100%;
+      height: 100%;
+      border: 2px solid var(--cyan-soft);
+      border-top: 0;
+      border-left: 0;
+      border-radius: 0 100% 0 0;
+      content: "";
+    }
+
+    .furniture[data-type="door"] .furniture-label {
+      display: none;
+    }
+
+    .furniture[data-type="window"] {
+      min-height: 10px !important;
+      border-color: var(--cyan);
+      background: rgba(39, 212, 255, 0.5);
+    }
+
+    .furniture[data-type="window"]::before,
+    .furniture[data-type="window"] .furniture-label {
+      display: none;
+    }
+
+    .resize-handle {
+      position: absolute;
+      right: -7px;
+      bottom: -7px;
+      display: none;
+      width: 14px;
+      height: 14px;
+      border: 2px solid var(--blue-950);
+      border-radius: 2px;
+      background: var(--warning);
+      cursor: nwse-resize;
+    }
+
+    .selected .resize-handle {
+      display: block;
+    }
+
+    .north-arrow {
+      position: absolute;
+      top: 4rem;
+      right: 2rem;
+      display: grid;
+      justify-items: center;
+      gap: 0.2rem;
+      color: var(--white);
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      pointer-events: none;
+    }
+
+    .north-arrow .arrow {
+      color: var(--cyan);
+      font-size: 2rem;
+      line-height: 1;
+    }
+
+    .scale-bar {
+      position: absolute;
+      bottom: 2rem;
+      left: 2rem;
+      width: 120px;
+      height: 18px;
+      border-top: 3px solid var(--white);
+      border-right: 3px solid var(--white);
+      border-left: 3px solid var(--white);
+      color: var(--white);
+      font-family: var(--font-mono);
+      font-size: 0.55rem;
+      text-align: center;
+      pointer-events: none;
+    }
+
+    .scale-bar span {
+      position: relative;
+      top: 0.5rem;
+    }
+
+    .inspector-empty {
+      padding: 0.85rem;
+      border: 1px dashed var(--line-strong);
+      border-radius: 9px;
+      color: var(--text-muted);
+      font-size: 0.78rem;
+      line-height: 1.55;
+    }
+
+    .property-group {
+      display: grid;
+      gap: 0.7rem;
+      margin-bottom: 1rem;
+    }
+
+    .property-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.55rem;
+    }
+
+    .property-field {
+      display: grid;
+      gap: 0.35rem;
+    }
+
+    .property-field label {
+      color: var(--muted);
+      font-family: var(--font-mono);
+      font-size: 0.61rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .property-field input,
+    .property-field select {
+      min-width: 0;
+      min-height: 2.3rem;
+      padding: 0.45rem 0.5rem;
+      border: 1px solid var(--line-strong);
+      border-radius: 6px;
+      background: rgba(5, 20, 37, 0.78);
+      color: var(--white);
+      font-size: 0.74rem;
+    }
+
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.52rem;
+      margin-top: 1rem;
+    }
+
+    .stat {
+      padding: 0.68rem;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(10, 63, 115, 0.2);
+    }
+
+    .stat strong {
+      display: block;
+      color: var(--cyan);
+      font-family: var(--font-mono);
+      font-size: 0.86rem;
+    }
+
+    .stat span {
+      display: block;
+      margin-top: 0.22rem;
+      color: var(--muted);
+      font-size: 0.64rem;
+      line-height: 1.25;
+    }
+
+    .hint-list {
+      display: grid;
+      gap: 0.62rem;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .hint-list li {
+      display: flex;
+      gap: 0.5rem;
+      color: var(--muted);
+      font-size: 0.72rem;
+      line-height: 1.45;
+    }
+
+    .hint-list b {
+      color: var(--cyan);
+      font-family: var(--font-mono);
+      font-weight: 500;
+    }
+
+    .footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      min-height: 2.35rem;
+      padding: 0.45rem 1rem;
+      border-top: 1px solid var(--line);
+      background: rgba(5, 20, 37, 0.95);
+      color: var(--muted);
+      font-family: var(--font-mono);
+      font-size: 0.62rem;
+    }
+
+    .footer strong {
+      color: var(--success);
+      font-weight: 500;
+    }
+
+    @media (max-width: 1100px) {
+      body {
+        overflow: auto;
+      }
+
+      .workspace {
+        grid-template-columns: 14rem minmax(0, 1fr);
+      }
+
+      .inspector {
+        display: none;
+      }
+    }
+
+    @media (max-width: 760px) {
+      .topbar {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .topbar-actions {
+        justify-content: flex-start;
+      }
+
+      .workspace {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .tool-section {
+        display: inline-block;
+        width: 100%;
+      }
+
+      .canvas-area {
+        min-height: 70vh;
+      }
+
+      .footer {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-mark">BRD</div>
+        <div>
+          <h1>Board Blueprint</h1>
+          <p>Interactive Floorplan Designer / 2D</p>
+        </div>
+      </div>
+
+      <div class="topbar-actions">
+        <button class="button" id="undo-button" type="button">Undo</button>
+        <button class="button" id="redo-button" type="button">Redo</button>
+        <button class="button" id="clear-button" type="button">Clear board</button>
+        <button class="button primary" id="export-button" type="button">Export PNG</button>
+      </div>
+    </header>
+
+    <main class="workspace">
+      <aside class="sidebar" aria-label="Floorplan tools">
+        <section class="tool-section">
+          <h2 class="panel-title">Draw & place</h2>
+
+          <div class="tool-grid">
+            <button class="tool-button active" type="button" data-tool="select">
+              <span class="tool-icon">⌖</span>
+              <span class="tool-label">Select</span>
+            </button>
+
+            <button class="tool-button" type="button" data-tool="room">
+              <span class="tool-icon">□</span>
+              <span class="tool-label">Room</span>
+            </button>
+
+            <button class="tool-button" type="button" data-tool="door">
+              <span class="tool-icon">◜</span>
+              <span class="tool-label">Door</span>
+            </button>
+
+            <button class="tool-button" type="button" data-tool="window">
+              <span class="tool-icon">═</span>
+              <span class="tool-label">Window</span>
+            </button>
+          </div>
+        </section>
+
+        <section class="tool-section">
+          <h2 class="panel-title">Furniture library</h2>
+
+          <div class="tool-grid">
+            <button class="tool-button" type="button" data-tool="desk">
+              <span class="tool-icon">▤</span>
+              <span class="tool-label">Desk</span>
+            </button>
+
+            <button class="tool-button" type="button" data-tool="table">
+              <span class="tool-icon">◯</span>
+              <span class="tool-label">Table</span>
+            </button>
+
+            <button class="tool-button" type="button" data-tool="sofa">
+              <span class="tool-icon">▰</span>
+              <span class="tool-label">Sofa</span>
+            </button>
+
+            <button class="tool-button" type="button" data-tool="bed">
+              <span class="tool-icon">▱</span>
+              <span class="tool-label">Bed</span>
+            </button>
+
+            <button class="tool-button" type="button" data-tool="chair">
+              <span class="tool-icon">⊓</span>
+              <span class="tool-label">Chair</span>
+            </button>
+
+            <button class="tool-button" type="button" data-tool="plant">
+              <span class="tool-icon">✦</span>
+              <span class="tool-label">Plant</span>
+            </button>
+          </div>
+        </section>
+
+        <section class="tool-section">
+          <h2 class="panel-title">Starter boards</h2>
+
+          <div class="template-list">
+            <button class="template-button" type="button" data-template="office">
+              Small team office
+            </button>
+
+            <button class="template-button" type="button" data-template="apartment">
+              Studio apartment
+            </button>
+
+            <button class="template-button" type="button" data-template="blank">
+              Blank blueprint
+            </button>
+          </div>
+        </section>
+      </aside>
+
+      <section class="canvas-area" aria-label="Blue gridded floorplan board">
+        <div class="canvas-toolbar">
+          <button id="zoom-out" type="button" aria-label="Zoom out">−</button>
+          <span class="zoom-readout" id="zoom-readout">100%</span>
+          <button id="zoom-in" type="button" aria-label="Zoom in">+</button>
+          <button id="fit-board" type="button" aria-label="Fit board to view">⤢</button>
+        </div>
+
+        <div class="board-viewport" id="board-viewport">
+          <div class="board" id="board">
+            <div class="north-arrow">
+              <span>N</span>
+              <span class="arrow">↑</span>
+            </div>
+
+            <div class="scale-bar"><span>10 FT</span></div>
+          </div>
+        </div>
+      </section>
+
+      <aside class="sidebar inspector" aria-label="Properties inspector">
+        <section class="tool-section">
+          <h2 class="panel-title">Selected object</h2>
+
+          <div class="inspector-empty" id="inspector-empty">
+            Choose an item on the board to edit its label, position and dimensions.
+          </div>
+
+          <div id="inspector-fields" hidden>
+            <div class="property-group">
+              <div class="property-field">
+                abel for="property-name">Label</label>
+                <input id="property-name" type="text" />
+              </div>
+
+              <div class="property-row">
+                <div class="property-field">
+                  abel for="property-x">X position</label>
+                  <input id="property-x" type="number" min="0" step="20" />
+                </div>
+
+                <div class="property-field">
+                  abel for="property-y">Y position</label>
+                  <input id="property-y" type="number" min="0" step="20" />
+                </div>
+              </div>
+
+              <div class="property-row">
+                <div class="property-field">
+                  abel for="property-width">Width</label>
+                  <input id="property-width" type="number" min="20" step="20" />
+                </div>
+
+                <div class="property-field">
+                  abel for="property-height">Height</label>
+                  <input id="property-height" type="number" min="20" step="20" />
+                </div>
+              </div>
+
+              <div class="property-field">
+                abel for="property-rotation">Rotation</label>
+                <select id="property-rotation">
+                  <option value="0">0°</option>
+                  <option value="90">90°</option>
+                  <option value="180">180°</option>
+                  <option value="270">270°</option>
+                </select>
+              </div>
+
+              <button class="button danger" id="delete-selected" type="button">
+                Delete selected
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <section class="tool-section">
+          <h2 class="panel-title">Board metrics</h2>
+
+          <div class="stat-grid">
+            <div class="stat">
+              <strong id="room-count">0</strong>
+              <span>Rooms</span>
+            </div>
+
+            <div class="stat">
+              <strong id="furniture-count">0</strong>
+              <span>Objects</span>
+            </div>
+
+            <div class="stat">
+              <strong id="floor-area">0</strong>
+              <span>Approx. sq ft</span>
+            </div>
+
+            <div class="stat">
+              <strong id="selected-name">—</strong>
+              <span>Selection</span>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 class="panel-title">Controls</h2>
+
+          <ul class="hint-list">
+            ><b>Click</b><span>Select an object or place the selected tool.</span></li>
+            ><b>Drag</b><span>Move rooms and furniture with grid snapping.</span></li>
+            ><b>Handle</b><span>Resize a selected room or object.</span></li>
+            ><b>Delete</b><span>Remove the selected object with Delete or Backspace.</span></li>
+            ><b>Grid</b><span>One small square represents one planning unit.</span></li>
+          </ul>
+        </section>
+      </aside>
+    </main>
+
+    <footer class="footer">
+      <span><strong>LIVE BOARD</strong> / Snap grid enabled / Blueprint units are illustrative</span>
+      <span id="status-text">Select an object to begin editing.</span>
+    </footer>
+  </div>
+
+  <script>
+    const board = document.querySelector("#board");
+    const viewport = document.querySelector("#board-viewport");
+    const statusText = document.querySelector("#status-text");
+    const zoomReadout = document.querySelector("#zoom-readout");
+
+    const inspectorEmpty = document.querySelector("#inspector-empty");
+    const inspectorFields = document.querySelector("#inspector-fields");
+
+    const propertyInputs = {
+      name: document.querySelector("#property-name"),
+      x: document.querySelector("#property-x"),
+      y: document.querySelector("#property-y"),
+      width: document.querySelector("#property-width"),
+      height: document.querySelector("#property-height"),
+      rotation: document.querySelector("#property-rotation")
+    };
+
+    const state = {
+      tool: "select",
+      selectedId: null,
+      zoom: 1,
+      idCounter: 1,
+      objects: [],
+      history: [],
+      historyIndex: -1,
+      drag: null
+    };
+
+    const GRID = 20;
+    const BOARD_WIDTH = 1500;
+    const BOARD_HEIGHT = 1000;
+
+    const furnitureDefaults = {
+      desk: { label: "Desk", width: 120, height: 60 },
+      table: { label: "Table", width: 100, height: 100 },
+      sofa: { label: "Sofa", width: 160, height: 70 },
+      bed: { label: "Bed", width: 140, height: 190 },
+      chair: { label: "Chair", width: 50, height: 50 },
+      plant: { label: "Plant", width: 50, height: 50 },
+      door: { label: "Door", width: 80, height: 80 },
+      window: { label: "Window", width: 110, height: 12 }
+    };
+
+    const snap = (value) => Math.round(value / GRID) * GRID;
+    const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
+
+    const deepCopy = (data) => JSON.parse(JSON.stringify(data));
+
+    const saveHistory = () => {
+      const snapshot = deepCopy(state.objects);
+      state.history = state.history.slice(0, state.historyIndex + 1);
+      state.history.push(snapshot);
+      state.historyIndex += 1;
+
+      if (state.history.length > 60) {
+        state.history.shift();
+        state.historyIndex -= 1;
+      }
+
+      updateHistoryButtons();
+    };
+
+    const updateHistoryButtons = () => {
+      document.querySelector("#undo-button").disabled = state.historyIndex <= 0;
+      document.querySelector("#redo-button").disabled =
+        state.historyIndex >= state.history.length - 1;
+    };
+
+    const restoreHistory = (index) => {
+      if (index < 0 || index >= state.history.length) return;
+      state.historyIndex = index;
+      state.objects = deepCopy(state.history[index]);
+      state.selectedId = null;
+      render();
+      updateHistoryButtons();
+    };
+
+    const createObject = (type, x, y, overrides = {}) => {
+      const isRoom = type === "room";
+      const base = isRoom
+        ? { label: "New Room", width: 260, height: 200 }
+        : furnitureDefaults[type];
+
+      const width = overrides.width ?? base.width;
+      const height = overrides.height ?? base.height;
+
+      return {
+        id: `board-${state.idCounter++}`,
+        type,
+        label: overrides.label ?? base.label,
+        x: snap(overrides.x ?? x),
+        y: snap(overrides.y ?? y),
+        width: snap(width),
+        height: snap(height),
+        rotation: overrides.rotation ?? 0
+      };
+    };
+
+    const addObject = (type, x, y, overrides = {}) => {
+      const item = createObject(type, x, y, overrides);
+
+      item.x = clamp(item.x, 0, BOARD_WIDTH - item.width);
+      item.y = clamp(item.y, 0, BOARD_HEIGHT - item.height);
+
+      state.objects.push(item);
+      state.selectedId = item.id;
+      saveHistory();
+      render();
+      setStatus(`${item.label} placed on board.`);
+    };
+
+    const selectedObject = () =>
+      state.objects.find((item) => item.id === state.selectedId) || null;
+
+    const setStatus = (message) => {
+      statusText.textContent = message;
+    };
+
+    const selectObject = (id) => {
+      state.selectedId = id;
+      render();
+      const item = selectedObject();
+      if (item) setStatus(`${item.label} selected. Drag to move or use the inspector.`);
+    };
+
+    const deleteSelected = () => {
+      const item = selectedObject();
+      if (!item) return;
+
+      state.objects = state.objects.filter((object) => object.id !== item.id);
+      state.selectedId = null;
+      saveHistory();
+      render();
+      setStatus(`${item.label} deleted.`);
+    };
+
+    const updateObject = (id, updates) => {
+      const index = state.objects.findIndex((item) => item.id === id);
+      if (index === -1) return;
+
+      state.objects[index] = {
+        ...state.objects[index],
+        ...updates
+      };
+
+      const item = state.objects[index];
+
+      item.width = clamp(snap(Number(item.width) || GRID), GRID, BOARD_WIDTH);
+      item.height = clamp(snap(Number(item.height) || GRID), GRID, BOARD_HEIGHT);
+      item.x = clamp(snap(Number(item.x) || 0), 0, BOARD_WIDTH - item.width);
+      item.y = clamp(snap(Number(item.y) || 0), 0, BOARD_HEIGHT - item.height);
+      item.rotation = Number(item.rotation) || 0;
+
+      render();
+    };
+
+    const roomArea = (item) => {
+      const roomWidthFeet = item.width / GRID;
+      const roomHeightFeet = item.height / GRID;
+      return Math.round(roomWidthFeet * roomHeightFeet);
+    };
+
+    const renderObject = (item) => {
+      const element = document.createElement("div");
+      const isRoom = item.type === "room";
+
+      element.className = `element ${isRoom ? "room" : "furniture"} ${
+        state.selectedId === item.id ? "selected" : ""
+      }`;
+
+      element.dataset.id = item.id;
+      element.dataset.type = item.type;
+
+      element.style.left = `${item.x}px`;
+      element.style.top = `${item.y}px`;
+      element.style.width = `${item.width}px`;
+      element.style.height = `${item.height}px`;
+      element.style.transform = `rotate(${item.rotation}deg)`;
+
+      if (isRoom) {
+        element.innerHTML = `
+          <span class="room-label">
+            ${escapeHtml(item.label)}
+            <span class="room-area">${roomArea(item)} SQ FT</span>
+          </span>
+          <span class="resize-handle" aria-label="Resize ${escapeHtml(item.label)}"></span>
+        `;
+      } else {
+        element.innerHTML = `
+          <span class="furniture-label">${escapeHtml(item.label)}</span>
+          <span class="resize-handle" aria-label="Resize ${escapeHtml(item.label)}"></span>
+        `;
+      }
+
+      element.addEventListener("pointerdown", startObjectDrag);
+      element.querySelector(".resize-handle").addEventListener("pointerdown", startResize);
+
+      board.appendChild(element);
+    };
+
+    const escapeHtml = (text) =>
+      String(text)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
+    const renderInspector = () => {
+      const item = selectedObject();
+
+      inspectorEmpty.hidden = Boolean(item);
+      inspectorFields.hidden = !item;
+
+      if (!item) return;
+
+      propertyInputs.name.value = item.label;
+      propertyInputs.x.value = item.x;
+      propertyInputs.y.value = item.y;
+      propertyInputs.width.value = item.width;
+      propertyInputs.height.value = item.height;
+      propertyInputs.rotation.value = item.rotation;
+    };
+
+    const renderMetrics = () => {
+      const rooms = state.objects.filter((item) => item.type === "room");
+      const furniture = state.objects.filter((item) => item.type !== "room");
+      const selected = selectedObject();
+
+      document.querySelector("#room-count").textContent = rooms.length;
+      document.querySelector("#furniture-count").textContent = furniture.length;
+      document.querySelector("#floor-area").textContent = rooms
+        .reduce((sum, room) => sum + roomArea(room), 0)
+        .toLocaleString();
+
+      document.querySelector("#selected-name").textContent = selected
+        ? selected.label.slice(0, 12)
+        : "—";
+    };
+
+    const render = () => {
+      board.querySelectorAll(".element").forEach((item) => item.remove());
+      state.objects.forEach(renderObject);
+      renderInspector();
+      renderMetrics();
+      applyZoom();
+    };
+
+    const applyZoom = () => {
+      board.style.transform = `scale(${state.zoom})`;
+      zoomReadout.textContent = `${Math.round(state.zoom * 100)}%`;
+    };
+
+    const setTool = (tool) => {
+      state.tool = tool;
+
+      document.querySelectorAll("[data-tool]").forEach((button) => {
+        button.classList.toggle("active", button.dataset.tool === tool);
+      });
+
+      board.style.cursor = tool === "select" ? "default" : "crosshair";
+      setStatus(
+        tool === "select"
+          ? "Selection tool active."
+          : `${tool.charAt(0).toUpperCase() + tool.slice(1)} tool active. Click the board to place.`
+      );
+    };
+
+    const startObjectDrag = (event) => {
+      if (event.target.classList.contains("resize-handle")) return;
+
+      const element = event.currentTarget;
+      const id = element.dataset.id;
+      const item = state.objects.find((object) => object.id === id);
+
+      if (!item) return;
+
+      event.stopPropagation();
+      selectObject(id);
+
+      state.drag = {
+        mode: "move",
+        id,
+        startPointerX: event.clientX,
+        startPointerY: event.clientY,
+        startX: item.x,
+        startY: item.y
+      };
+
+      element.classList.add("dragging");
+      element.setPointerCapture(event.pointerId);
+    };
+
+    const startResize = (event) => {
+      event.stopPropagation();
+
+      const element = event.currentTarget.closest(".element");
+      const id = element.dataset.id;
+      const item = state.objects.find((object) => object.id === id);
+
+      if (!item) return;
+
+      selectObject(id);
+
+      state.drag = {
+        mode: "resize",
+        id,
+        startPointerX: event.clientX,
+        startPointerY: event.clientY,
+        startWidth: item.width,
+        startHeight: item.height
+      };
+
+      element.classList.add("dragging");
+      element.setPointerCapture(event.pointerId);
+    };
+
+    const handlePointerMove = (event) => {
+      if (!state.drag) return;
+
+      const item = state.objects.find((object) => object.id === state.drag.id);
+      if (!item) return;
+
+      const dx = (event.clientX - state.drag.startPointerX) / state.zoom;
+      const dy = (event.clientY - state.drag.startPointerY) / state.zoom;
+
+      if (state.drag.mode === "move") {
+        item.x = clamp(snap(state.drag.startX + dx), 0, BOARD_WIDTH - item.width);
+        item.y = clamp(snap(state.drag.startY + dy), 0, BOARD_HEIGHT - item.height);
+      }
+
+      if (state.drag.mode === "resize") {
+        item.width = clamp(snap(state.drag.startWidth + dx), GRID, BOARD_WIDTH - item.x);
+        item.height = clamp(snap(state.drag.startHeight + dy), GRID, BOARD_HEIGHT - item.y);
+      }
+
+      render();
+    };
+
+    const handlePointerUp = () => {
+      if (!state.drag) return;
+
+      const element = board.querySelector(`[data-id="${state.drag.id}"]`);
+      if (element) element.classList.remove("dragging");
+
+      saveHistory();
+      setStatus("Board updated.");
+      state.drag = null;
+    };
+
+    const boardCoordinates = (event) => {
+      const rect = board.getBoundingClientRect();
+
+      return {
+        x: snap((event.clientX - rect.left) / state.zoom),
+        y: snap((event.clientY - rect.top) / state.zoom)
+      };
+    };
+
+    const handleBoardClick = (event) => {
+      if (event.target !== board) return;
+
+      if (state.tool === "select") {
+        state.selectedId = null;
+        render();
+        setStatus("No object selected.");
+        return;
+      }
+
+      const { x, y } = boardCoordinates(event);
+      addObject(state.tool, x, y);
+    };
+
+    const updateFromInspector = () => {
+      const item = selectedObject();
+      if (!item) return;
+
+      updateObject(item.id, {
+        label: propertyInputs.name.value || item.label,
+        x: propertyInputs.x.value,
+        y: propertyInputs.y.value,
+        width: propertyInputs.width.value,
+        height: propertyInputs.height.value,
+        rotation: propertyInputs.rotation.value
+      });
+    };
+
+    const commitInspectorChange = () => {
+      updateFromInspector();
+      saveHistory();
+      setStatus("Properties updated.");
+    };
+
+    const loadTemplate = (name) => {
+      const templates = {
+        blank: [],
+
+        office: [
+          { type: "room", label: "Welcome / Reception", x: 140, y: 160, width: 280, height: 220 },
+          { type: "room", label: "Collaboration", x: 440, y: 160, width: 420, height: 220 },
+          { type: "room", label: "Focus Workspace", x: 140, y: 400, width: 460, height: 320 },
+          { type: "room", label: "Meeting Room", x: 620, y: 400, width: 240, height: 320 },
+          { type: "desk", label: "Desk", x: 210, y: 490, width: 120, height: 60 },
+          { type: "desk", label: "Desk", x: 390, y: 490, width: 120, height: 60 },
+          { type: "table", label: "Team Table", x: 560, y: 220, width: 140, height: 140 },
+          { type: "sofa", label: "Visitor Sofa", x: 190, y: 240, width: 150, height: 70 },
+          { type: "table", label: "Meeting Table", x: 670, y: 490, width: 140, height: 140 },
+          { type: "door", label: "Door", x: 420, y: 340, width: 80, height: 80 },
+          { type: "door", label: "Door", x: 600, y: 580, width: 80, height: 80 },
+          { type: "window", label: "Window", x: 240, y: 150, width: 120, height: 12 },
+          { type: "plant", label: "Plant", x: 820, y: 330, width: 50, height: 50 }
+        ],
+
+        apartment: [
+          { type: "room", label: "Living / Dining", x: 160, y: 140, width: 500, height: 320 },
+          { type: "room", label: "Kitchen", x: 680, y: 140, width: 260, height: 320 },
+          { type: "room", label: "Bedroom", x: 160, y: 480, width: 420, height: 290 },
+          { type: "room", label: "Bathroom", x: 600, y: 480, width: 200, height: 180 },
+          { type: "room", label: "Storage", x: 820, y: 480, width: 120, height: 180 },
+          { type: "sofa", label: "Sofa", x: 260, y: 230, width: 170, height: 70 },
+          { type: "table", label: "Dining", x: 510, y: 270, width: 110, height: 110 },
+          { type: "desk", label: "Kitchen Unit", x: 720, y: 190, width: 180, height: 60 },
+          { type: "bed", label: "Bed", x: 260, y: 520, width: 140, height: 190 },
+          { type: "table", label: "Bath", x: 630, y: 520, width: 130, height: 70 },
+          { type: "door", label: "Door", x: 580, y: 390, width: 80, height: 80 },
+          { type: "door", label: "Door", x: 570, y: 590, width: 80, height: 80 },
+          { type: "window", label: "Window", x: 280, y: 130, width: 140, height: 12 },
+          { type: "window", label: "Window", x: 710, y: 130, width: 120, height: 12 }
+        ]
+      };
+
+      state.objects = templates[name].map((item) => {
+        const created = createObject(item.type, item.x, item.y, item);
+        return created;
+      });
+
+      state.selectedId = null;
+      saveHistory();
+      render();
+      setStatus(`${name.charAt(0).toUpperCase() + name.slice(1)} template loaded.`);
+    };
+
+    const clearBoard = () => {
+      if (!state.objects.length) return;
+
+      const confirmed = window.confirm("Clear every room and object from the board?");
+      if (!confirmed) return;
+
+      state.objects = [];
+      state.selectedId = null;
+      saveHistory();
+      render();
+      setStatus("Board cleared.");
+    };
+
+    const exportBoard = () => {
+      const canvas = document.createElement("canvas");
+      canvas.width = BOARD_WIDTH;
+      canvas.height = BOARD_HEIGHT;
+      const ctx = canvas.getContext("2d");
+
+      ctx.fillStyle = "#0a4f87";
+      ctx.fillRect(0, 0, BOARD_WIDTH, BOARD_HEIGHT);
+
+      ctx.strokeStyle = "rgba(180, 238, 255, 0.12)";
+      ctx.lineWidth = 1;
+
+      for (let x = 0; x <= BOARD_WIDTH; x += 20) {
+        ctx.beginPath();
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x, BOARD_HEIGHT);
+        ctx.stroke();
+      }
+
+      for (let y = 0; y <= BOARD_HEIGHT; y += 20) {
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        ctx.lineTo(BOARD_WIDTH, y);
+        ctx.stroke();
+      }
+
+      ctx.strokeStyle = "rgba(180, 238, 255, 0.25)";
+
+      for (let x = 0; x <= BOARD_WIDTH; x += 100) {
+        ctx.beginPath();
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x, BOARD_HEIGHT);
+        ctx.stroke();
+      }
+
+      for (let y = 0; y <= BOARD_HEIGHT; y += 100) {
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        ctx.lineTo(BOARD_WIDTH, y);
+        ctx.stroke();
+      }
+
+      ctx.fillStyle = "rgba(230, 250, 255, 0.62)";
+      ctx.font = "14px monospace";
+      ctx.fillText("BOARD / FLOORPLAN / REV 01", 20, 28);
+      ctx.fillText("GRID: 1 UNIT = 1 FT", BOARD_WIDTH - 205, BOARD_HEIGHT - 18);
+
+      state.objects.forEach((item) => {
+        ctx.save();
+        ctx.translate(item.x + item.width / 2, item.y + item.height / 2);
+        ctx.rotate((item.rotation * Math.PI) / 180);
+        ctx.translate(-item.width / 2, -item.height / 2);
+
+        if (item.type === "room") {
+          ctx.fillStyle = "rgba(8, 43, 80, 0.34)";
+          ctx.fillRect(0, 0, item.width, item.height);
+          ctx.strokeStyle = "#effbff";
+          ctx.lineWidth = 4;
+          ctx.strokeRect(0, 0, item.width, item.height);
+
+          ctx.fillStyle = "#effbff";
+          ctx.textAlign = "center";
+          ctx.font = "15px monospace";
+          ctx.fillText(item.label, item.width / 2, item.height / 2 - 5);
+          ctx.fillStyle = "#9aeaff";
+          ctx.font = "11px monospace";
+          ctx.fillText(`${roomArea(item)} SQ FT`, item.width / 2, item.height / 2 + 16);
+        } else if (item.type === "window") {
+          ctx.fillStyle = "rgba(39, 212, 255, 0.5)";
+          ctx.fillRect(0, 0, item.width, item.height);
+          ctx.strokeStyle = "#27d4ff";
+          ctx.strokeRect(0, 0, item.width, item.height);
+        } else if (item.type === "door") {
+          ctx.strokeStyle = "#9aeaff";
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.arc(0, item.height, item.width, Math.PI * 1.5, Math.PI * 2);
+          ctx.stroke();
+        } else {
+          ctx.fillStyle = "rgba(8, 43, 80, 0.82)";
+          ctx.fillRect(0, 0, item.width, item.height);
+          ctx.strokeStyle = "#9aeaff";
+          ctx.lineWidth = 2;
+          ctx.strokeRect(0, 0, item.width, item.height);
+          ctx.fillStyle = "#9aeaff";
+          ctx.font = "10px monospace";
+          ctx.textAlign = "center";
+          ctx.fillText(item.label.toUpperCase(), item.width / 2, item.height / 2 + 3);
+        }
+
+        ctx.restore();
+      });
+
+      const link = document.createElement("a");
+      link.download = "board-floorplan-blueprint.png";
+      link.href = canvas.toDataURL("image/png");
+      link.click();
+
+      setStatus("Blueprint exported as PNG.");
+    };
+
+    document.querySelectorAll("[data-tool]").forEach((button) => {
+      button.addEventListener("click", () => setTool(button.dataset.tool));
+    });
+
+    document.querySelectorAll("[data-template]").forEach((button) => {
+      button.addEventListener("click", () => loadTemplate(button.dataset.template));
+    });
+
+    document.querySelector("#undo-button").addEventListener("click", () => {
+      restoreHistory(state.historyIndex - 1);
+      setStatus("Undo applied.");
+    });
+
+    document.querySelector("#redo-button").addEventListener("click", () => {
+      restoreHistory(state.historyIndex + 1);
+      setStatus("Redo applied.");
+    });
+
+    document.querySelector("#clear-button").addEventListener("click", clearBoard);
+    document.querySelector("#export-button").addEventListener("click", exportBoard);
+    document.querySelector("#delete-selected").addEventListener("click", deleteSelected);
+
+    document.querySelector("#zoom-in").addEventListener("click", () => {
+      state.zoom = Math.min(1.5, Number((state.zoom + 0.1).toFixed(2)));
+      applyZoom();
+    });
+
+    document.querySelector("#zoom-out").addEventListener("click", () => {
+      state.zoom = Math.max(0.5, Number((state.zoom - 0.1).toFixed(2)));
+      applyZoom();
+    });
+
+    document.querySelector("#fit-board").addEventListener("click", () => {
+      const horizontalFit = (viewport.clientWidth - 50) / BOARD_WIDTH;
+      const verticalFit = (viewport.clientHeight - 90) / BOARD_HEIGHT;
+      state.zoom = Math.max(0.45, Math.min(1, horizontalFit, verticalFit));
+      applyZoom();
+      setStatus("Board fitted to viewport.");
+    });
+
+    Object.values(propertyInputs).forEach((input) => {
+      input.addEventListener("input", updateFromInspector);
+      input.addEventListener("change", commitInspectorChange);
+    });
+
+    board.addEventListener("click", handleBoardClick);
+    window.addEventListener("pointermove", handlePointerMove);
+    window.addEventListener("pointerup", handlePointerUp);
+
+    window.addEventListener("keydown", (event) => {
+      const tag = document.activeElement?.tagName?.toLowerCase();
+      const isTyping = tag === "input" || tag === "textarea" || tag === "select";
+
+      if (isTyping) return;
+
+      if (event.key === "Delete" || event.key === "Backspace") {
+        event.preventDefault();
+        deleteSelected();
+      }
+
+      if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "z") {
+        event.preventDefault();
+        restoreHistory(event.shiftKey ? state.historyIndex + 1 : state.historyIndex - 1);
+      }
+    });
+
+    loadTemplate("office");
+  </script>
+</body>
+</html>

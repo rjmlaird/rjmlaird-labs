@@ -1,0 +1,256 @@
+<!--SITE_HEADER-->
+
+  <main id="main">
+    <section class="hero wrap">
+      <p class="eyebrow">Visual stakeholder-mapping prototype</p>
+
+      <h1>See who matters, how relationships work, and where engagement is needed.</h1>
+
+      <p class="hero-copy">
+        Place a research finding at the centre of a visual constellation. Map stakeholder groups
+        by influence, expected benefit, involvement, relationship strength, engagement need and
+        exclusion risk—then identify where to listen, collaborate or build trust first.
+      </p>
+
+      <div class="notice">
+        <span class="notice-icon" aria-hidden="true">!</span>
+        <div>
+          <strong>Use this as a planning prompt, not a complete stakeholder analysis.</strong>
+          Scores are subjective and should be discussed with relevant partners and communities.
+          Do not use the tool to justify excluding groups from decisions that affect them.
+        </div>
+      </div>
+    </section>
+
+    <section class="wrap app-shell" aria-label="Stakeholder Constellation tool">
+      <form class="panel planner" id="constellation-form">
+        <div class="panel-heading">
+          <h2>Add a stakeholder</h2>
+          <p>
+            Adjust the criteria, then add the group to the constellation. Node size, distance and
+            connections update automatically.
+          </p>
+        </div>
+
+        <div class="field-set">
+          <div class="field">
+            <label for="research-title">Research finding at the centre</label>
+            <textarea id="research-title" name="research-title">Urban heat research: lower tree canopy and more impervious surfaces are associated with higher daytime land surface temperatures in Leicester neighbourhoods.</textarea>
+            <p class="field-help">
+              Keep this factual and appropriately qualified. It becomes the centre node.
+            </p>
+          </div>
+
+          <div class="field">
+            <label for="stakeholder-name">Stakeholder group</label>
+            <input
+              id="stakeholder-name"
+              name="stakeholder-name"
+              type="text"
+              value="Neighbourhood organisations"
+              placeholder="For example: Neighbourhood organisations"
+            />
+          </div>
+
+          <div class="field">
+            <label for="stakeholder-purpose">Why this group matters</label>
+            <textarea
+              id="stakeholder-purpose"
+              name="stakeholder-purpose"
+              placeholder="Describe their likely role, perspective, decision, benefit or concern."
+            >Bring lived experience, local knowledge and priorities that may not be visible in satellite or geographic data.</textarea>
+          </div>
+
+          <div class="range-grid" aria-label="Stakeholder scoring criteria">
+            <div class="range-field">
+              <label for="influence">Influence over a decision</label>
+              <input id="influence" type="range" min="1" max="5" value="3" />
+              <output class="range-value" id="influence-value">3</output>
+            </div>
+
+            <div class="range-field">
+              <label for="benefit">Likely benefit from the research</label>
+              <input id="benefit" type="range" min="1" max="5" value="5" />
+              <output class="range-value" id="benefit-value">5</output>
+            </div>
+
+            <div class="range-field">
+              <label for="involvement">Degree of involvement</label>
+              <input id="involvement" type="range" min="1" max="5" value="4" />
+              <output class="range-value" id="involvement-value">4</output>
+            </div>
+
+            <div class="range-field">
+              <label for="relationship">Existing relationship strength</label>
+              <input id="relationship" type="range" min="1" max="5" value="2" />
+              <output class="range-value" id="relationship-value">2</output>
+            </div>
+
+            <div class="range-field">
+              <label for="engagement-need">Need for engagement or consultation</label>
+              <input id="engagement-need" type="range" min="1" max="5" value="5" />
+              <output class="range-value" id="engagement-need-value">5</output>
+            </div>
+
+            <div class="range-field">
+              <label for="exclusion-risk">Potential risk if excluded</label>
+              <input id="exclusion-risk" type="range" min="1" max="5" value="5" />
+              <output class="range-value" id="exclusion-risk-value">5</output>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="collaboration-status">Collaboration status</label>
+            <select id="collaboration-status" name="collaboration-status">
+              <option value="proposed">Proposed relationship</option>
+              <option value="consultation">Consultation needed</option>
+              <option value="active">Active collaboration</option>
+              <option value="co-production">Co-production / shared decision-making</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="example-picker">Load a demo constellation</label>
+            <select id="example-picker" name="example-picker">
+              <option value="">Choose a demo…</option>
+              <option value="urban-heat">Urban heat and neighbourhood design</option>
+              <option value="air-quality">Air-quality forecast communication</option>
+              <option value="coastal-monitoring">Satellite coastal monitoring</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="action-row">
+          <button class="button button-primary" type="submit">Add stakeholder</button>
+          <button class="button button-secondary" id="clear-form" type="button">Clear fields</button>
+          <button class="button button-secondary button-wide" id="copy-map" type="button">
+            Copy engagement priorities
+          </button>
+        </div>
+      </form>
+
+      <section class="panel visual-panel" aria-labelledby="visual-title">
+        <div class="visual-header">
+          <div>
+            <h2 id="visual-title">Constellation view</h2>
+            <p>
+              Click any node to inspect it. Lines show the collaboration status; larger nodes
+              indicate greater overall relevance.
+            </p>
+          </div>
+
+          <div class="view-toggle" aria-label="Constellation controls">
+            <button id="show-all" type="button" aria-pressed="true">All nodes</button>
+            <button id="show-priority" type="button" aria-pressed="false">Priority only</button>
+          </div>
+        </div>
+
+        <div class="visual-body">
+          <div class="legend" aria-label="Visual legend">
+            <span class="legend-item">
+              <span class="legend-dot" style="color: var(--teal)"></span>
+              Node size: relevance
+            </span>
+            <span class="legend-item">
+              <span class="legend-line" style="color: var(--teal)"></span>
+              Active collaboration
+            </span>
+            <span class="legend-item">
+              <span class="legend-line dashed" style="color: var(--amber)"></span>
+              Consultation / proposed
+            </span>
+            <span class="legend-item">
+              <span class="legend-line dotted" style="color: var(--purple)"></span>
+              Co-production
+            </span>
+            <span class="legend-item">
+              <span style="color: var(--text-dim)">Closer node: stronger relationship</span>
+            </span>
+          </div>
+
+          <div class="constellation-wrap">
+            <svg
+              id="constellation"
+              viewBox="0 0 900 630"
+              role="img"
+              aria-label="Interactive stakeholder constellation with research at the centre"
+            ></svg>
+          </div>
+
+          <section class="node-card" aria-live="polite">
+            <div>
+              <h3 id="selected-name">Select a stakeholder</h3>
+              <p id="selected-description">
+                Click a stakeholder node to see its role, engagement priority and scoring profile.
+              </p>
+
+              <div class="status-box">
+                <strong id="selected-status-label">Collaboration status:</strong>
+                <span id="selected-status">No stakeholder selected.</span>
+              </div>
+            </div>
+
+            <div class="metrics" id="selected-metrics">
+              <div class="metric">
+                <small>Influence</small>
+                <strong>—</strong>
+              </div>
+              <div class="metric">
+                <small>Benefit</small>
+                <strong>—</strong>
+              </div>
+              <div class="metric">
+                <small>Involvement</small>
+                <strong>—</strong>
+              </div>
+              <div class="metric">
+                <small>Relationship</small>
+                <strong>—</strong>
+              </div>
+              <div class="metric">
+                <small>Engagement</small>
+                <strong>—</strong>
+              </div>
+              <div class="metric">
+                <small>Exclusion risk</small>
+                <strong>—</strong>
+              </div>
+            </div>
+          </section>
+
+          <div class="insights-grid">
+            <article class="insight-card">
+              <small>Highest priority</small>
+              <p id="highest-priority">Add stakeholders to generate an engagement priority.</p>
+            </article>
+
+            <article class="insight-card">
+              <small>Relationship gap</small>
+              <p id="relationship-gap">Add stakeholders to identify groups that need trust-building.</p>
+            </article>
+
+            <article class="insight-card">
+              <small>Inclusion prompt</small>
+              <p id="inclusion-prompt">Add stakeholders to assess who may be harmed by exclusion.</p>
+            </article>
+          </div>
+
+          <section class="list-section">
+            <h3>Suggested engagement priorities</h3>
+            <ol class="priority-list" id="priority-list"></ol>
+          </section>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <p>
+        This prototype is a communication and engagement-planning aid. It does not determine who
+        has legitimacy, who must be consulted, what legal duties apply, or whether a proposed
+        process is ethically sufficient. Validate the map with people who are affected by, can use
+        or may be excluded from the research and its decisions.
+      </p>
+    </div>
+  </footer>

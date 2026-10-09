@@ -1,0 +1,48 @@
+---
+import "@labs/tokens/tokens.css";
+import "@labs/tokens/base.css";
+import "../styles.css";
+import { fontsHref } from "@labs/tokens/fonts";
+import { getLab } from "@labs/registry";
+import LabNav from "./LabNav.astro";
+
+interface Props {
+  /** Registry slug. Drives theme, fonts, nav and default title/description. */
+  lab: string;
+  /** Experiment id for the active nav tab, or "index". */
+  current?: string;
+  title?: string;
+  description?: string;
+}
+
+const { lab: slug, current = "index", title, description } = Astro.props;
+const lab = getLab(slug);
+const pageTitle = title ?? lab.title;
+---
+
+<!doctype html>
+<html lang="en" data-theme={lab.theme}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description ?? lab.summary} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href={fontsHref(lab.theme)} />
+    <title>{pageTitle}</title>
+  </head>
+  <body>
+    <div class="dashboard-shell">
+      <header class="dashboard__header">
+        <div class="wrap dashboard__header-inner">
+          <div class="dashboard__title"><a class="dashboard__brand" href="/">{lab.title}</a></div>
+          <LabNav lab={slug} current={current} />
+        </div>
+      </header>
+      <main class="dashboard__main">
+        <div class="wrap dashboard__main-inner"><slot /></div>
+      </main>
+    </div>
+  </body>
+</html>

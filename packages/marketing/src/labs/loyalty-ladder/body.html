@@ -1,0 +1,318 @@
+<!--SITE_HEADER-->
+
+  <main id="main">
+    <section class="hero wrap">
+      <p class="eyebrow">Interactive loyalty-model prototype</p>
+
+      <h1>Design for customer value before, during and after the first purchase.</h1>
+
+      <p class="hero-copy">
+        A loyalty ladder helps teams plan the customer relationship from initial interest through
+        first purchase, repeat use, support and voluntary advocacy. Use it to identify friction,
+        create genuinely helpful engagement and improve lifetime value through sustained customer
+        value—not pressure or manipulation.
+      </p>
+
+      <div class="notice">
+        <span class="notice-icon" aria-hidden="true">!</span>
+        <div>
+          <strong>Loyalty is earned, not engineered through dark patterns.</strong>
+          Customers do not move in a straight line, and not every satisfied customer wants to
+          advocate publicly. Make communications relevant, consent-based and easy to control;
+          treat re-engagement as an invitation to restore value rather than a reason to create
+          urgency, guilt or friction around leaving.
+        </div>
+      </div>
+    </section>
+
+    <section class="wrap app-shell" aria-label="Customer loyalty ladder planner">
+      <form class="panel planner" id="loyalty-form">
+        <div class="panel-heading">
+          <h2>Plan a customer stage</h2>
+          <p>
+            Choose a stage, define the customer outcome, then plan a helpful activity, a fair
+            measure and a boundary. The strongest loyalty work improves the underlying experience,
+            not merely the volume of messages sent.
+          </p>
+        </div>
+
+        <div class="field-set">
+          <div class="field">
+            <label for="brand-name">Brand, product or service</label>
+            <input
+              id="brand-name"
+              name="brand-name"
+              type="text"
+              value="Collaborative research-impact planning platform"
+              placeholder="For example: Service, product line or organisation"
+            />
+          </div>
+
+          <div class="field">
+            <label for="stage-selector">Loyalty stage</label>
+            <select id="stage-selector" name="stage-selector">
+              <option value="prospect">Prospect</option>
+              <option value="customer">Customer</option>
+              <option value="client">Client</option>
+              <option value="supporter">Supporter</option>
+              <option value="advocate">Advocate</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="outcome">Customer outcome</label>
+            <textarea
+              id="outcome"
+              name="outcome"
+              placeholder="What should become easier, clearer, safer or more valuable for the customer?"
+            >Understand whether the platform is relevant to their planning challenge and make an informed decision without unnecessary form-filling or pressure.</textarea>
+          </div>
+
+          <div class="field">
+            <label for="activity">Helpful experience or activity</label>
+            <textarea
+              id="activity"
+              name="activity"
+              placeholder="Describe the customer experience, service improvement or communication."
+            >Offer practical examples, accessible product information and an optional short discovery session focused on the customer’s own planning context.</textarea>
+          </div>
+
+          <div class="two-columns">
+            <div class="field">
+              <label for="measure">Meaningful measure</label>
+              <input
+                id="measure"
+                name="measure"
+                type="text"
+                value="Qualified enquiry quality, helpful-content completion and voluntary follow-up"
+                placeholder="For example: Task success, retention, repeat purchase or referral"
+              />
+            </div>
+
+            <div class="field">
+              <label for="race-stage">RACE lifecycle link</label>
+              <select id="race-stage" name="race-stage">
+                <option value="reach">Reach</option>
+                <option value="act">Act</option>
+                <option value="convert">Convert</option>
+                <option value="engage">Engage</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="boundary">Ethical or customer-experience boundary</label>
+            <textarea
+              id="boundary"
+              name="boundary"
+              placeholder="What should your organisation avoid, and what customer control should be protected?"
+            >Avoid gating essential decision information, pre-ticked marketing consent and misleading urgency. Make data use clear and give people straightforward choices.</textarea>
+          </div>
+
+          <div class="field">
+            <label for="demo-picker">Load an example lifecycle plan</label>
+            <select id="demo-picker" name="demo-picker">
+              <option value="">Choose a demo…</option>
+              <option value="platform">Research-planning platform</option>
+              <option value="ecommerce">Repeat-purchase ecommerce brand</option>
+              <option value="services">Professional-services business</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="action-row">
+          <button class="button button-primary" type="submit">Save stage plan</button>
+          <button class="button button-secondary" id="clear-stage" type="button">Clear entry</button>
+          <button class="button button-secondary button-wide" id="copy-ladder" type="button">
+            Copy loyalty ladder
+          </button>
+        </div>
+      </form>
+
+      <section class="panel ladder-panel" aria-labelledby="ladder-title">
+        <div class="ladder-header">
+          <div>
+            <h2 id="ladder-title">Customer loyalty journey</h2>
+            <p id="ladder-subtitle">
+              Select a rung to inspect the intended customer outcome, activity, measure and experience boundary.
+            </p>
+          </div>
+
+          <div class="stage-badge">
+            <div>
+              <strong id="stage-count">5/5</strong>
+              <span>Stages mapped</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="ladder-body">
+          <div class="legend" aria-label="Loyalty ladder legend">
+            <span class="legend-item"><span class="legend-dot" style="color: var(--blue)"></span>Potential relationship</span>
+            <span class="legend-item"><span class="legend-dot" style="color: var(--teal)"></span>First value exchange</span>
+            <span class="legend-item"><span class="legend-dot" style="color: var(--purple)"></span>Repeat relationship</span>
+            <span class="legend-item"><span class="legend-dot" style="color: var(--pink)"></span>Voluntary support</span>
+            <span class="legend-item"><span class="legend-dot" style="color: var(--amber)"></span>Voluntary advocacy</span>
+          </div>
+
+          <div class="ladder-scroll">
+            <div class="ladder">
+              <button class="rung" type="button" data-stage="prospect" aria-pressed="false">
+                <span>
+                  <span class="rung-number">01</span>
+                  <span class="rung-kicker">Considering</span>
+                  <h3>Prospect</h3>
+                  <p id="prospect-summary">No stage plan added.</p>
+                </span>
+                <span class="rung-status" id="prospect-status">Not planned</span>
+              </button>
+
+              <button class="rung" type="button" data-stage="customer" aria-pressed="false">
+                <span>
+                  <span class="rung-number">02</span>
+                  <span class="rung-kicker">First purchase</span>
+                  <h3>Customer</h3>
+                  <p id="customer-summary">No stage plan added.</p>
+                </span>
+                <span class="rung-status" id="customer-status">Not planned</span>
+              </button>
+
+              <button class="rung" type="button" data-stage="client" aria-pressed="false">
+                <span>
+                  <span class="rung-number">03</span>
+                  <span class="rung-kicker">Repeat value</span>
+                  <h3>Client</h3>
+                  <p id="client-summary">No stage plan added.</p>
+                </span>
+                <span class="rung-status" id="client-status">Not planned</span>
+              </button>
+
+              <button class="rung" type="button" data-stage="supporter" aria-pressed="false">
+                <span>
+                  <span class="rung-number">04</span>
+                  <span class="rung-kicker">Voluntary support</span>
+                  <h3>Supporter</h3>
+                  <p id="supporter-summary">No stage plan added.</p>
+                </span>
+                <span class="rung-status" id="supporter-status">Not planned</span>
+              </button>
+
+              <button class="rung" type="button" data-stage="advocate" aria-pressed="false">
+                <span>
+                  <span class="rung-number">05</span>
+                  <span class="rung-kicker">Voluntary recommendation</span>
+                  <h3>Advocate</h3>
+                  <p id="advocate-summary">No stage plan added.</p>
+                </span>
+                <span class="rung-status" id="advocate-status">Not planned</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="lapse-loop">
+            <span class="lapse-icon" aria-hidden="true">↺</span>
+            <span>
+              <strong>Loyalty is not linear.</strong> Customers can reduce usage, pause or lapse
+              after any stage. Use insight to remove friction and invite re-engagement where
+              appropriate; respect choices to disengage and do not equate silence with consent.
+            </span>
+          </div>
+
+          <section class="detail-card" aria-live="polite">
+            <div>
+              <h3 id="detail-title">Select a customer stage</h3>
+              <p id="detail-outcome">
+                Click a ladder rung to inspect the planned customer outcome and experience.
+              </p>
+            </div>
+
+            <div class="detail-meta">
+              <div class="meta-box">
+                <small>Helpful activity</small>
+                <strong id="detail-activity">—</strong>
+              </div>
+
+              <div class="meta-box">
+                <small>Meaningful measure</small>
+                <strong id="detail-measure">—</strong>
+              </div>
+
+              <div class="meta-box">
+                <small>RACE lifecycle link</small>
+                <strong id="detail-race">—</strong>
+              </div>
+
+              <div class="meta-box">
+                <small>Experience boundary</small>
+                <strong id="detail-boundary">—</strong>
+              </div>
+            </div>
+          </section>
+
+          <section class="race-panel">
+            <h3>RACE customer lifecycle connection</h3>
+            <p>
+              RACE connects the loyalty ladder to a broader marketing lifecycle: build awareness,
+              prompt useful interaction, enable conversion and sustain customer value through
+              engagement.
+            </p>
+
+            <div class="race-grid">
+              <article class="race-card">
+                <strong>Reach</strong>
+                <p>Build relevant awareness and make the offer discoverable for potential prospects.</p>
+              </article>
+
+              <article class="race-card">
+                <strong>Act</strong>
+                <p>Enable meaningful interactions such as content use, enquiries, trials or product exploration.</p>
+              </article>
+
+              <article class="race-card">
+                <strong>Convert</strong>
+                <p>Make a first purchase, commitment or next step clear, accessible and proportionate.</p>
+              </article>
+
+              <article class="race-card">
+                <strong>Engage</strong>
+                <p>Support successful use, retention, repeat value and voluntary advocacy over time.</p>
+              </article>
+            </div>
+          </section>
+
+          <div class="insights-grid">
+            <article class="insight-card">
+              <small>Lifecycle coverage</small>
+              <p id="coverage-insight">Map every stage, then identify the most important friction point rather than trying to optimise all activity at once.</p>
+            </article>
+
+            <article class="insight-card">
+              <small>Customer value</small>
+              <p id="value-insight">The goal is to increase customer value and trust; a larger message volume is not itself evidence of loyalty.</p>
+            </article>
+
+            <article class="insight-card">
+              <small>Re-engagement</small>
+              <p id="engagement-insight">Lapsed customers may return when a renewed offer addresses a real need, restores trust or removes prior friction.</p>
+            </article>
+          </div>
+
+          <section class="guidance-panel">
+            <h3>Using a loyalty ladder well</h3>
+            <ul class="guidance-list" id="guidance-list"></ul>
+          </section>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <p>
+        This planner supports customer-experience and marketing discussions; it does not replace
+        customer research, consent management, accessibility work or legal review. Handle
+        behavioural and personal data lawfully, minimise collection, protect customer choice and
+        avoid tactics that manufacture dependency, obstruct cancellation or exploit vulnerability.
+      </p>
+    </div>
+  </footer>

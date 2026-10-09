@@ -1,0 +1,701 @@
+/* @labs/ui — shared component styles. Generated from mechanics CSS, themed via @labs/tokens. */
+
+.page {
+  display: grid;
+  gap: 1rem;
+}
+
+.hero,
+.page-head,
+.page-notes {
+  width: 100%;
+  max-width: var(--max-content);
+}
+
+.hero {
+  display: grid;
+  gap: 0.55rem;
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1rem;
+}
+
+.card {
+  display: grid;
+  gap: 0.5rem;
+  align-content: start;
+  padding: 1.1rem 1.2rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface-gradient);
+  box-shadow: var(--shadow);
+  text-decoration: none;
+  color: inherit;
+}
+
+.card__eyebrow {
+  margin: 0;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--accent);
+}
+
+.card__title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  color: var(--text-hi);
+}
+
+.card__description {
+  margin: 0;
+  color: var(--text-lo);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.card__link {
+  margin-top: 0.3rem;
+  color: var(--accent);
+  font-weight: 600;
+  font-size: 0.88rem;
+  text-decoration: none;
+}
+
+.card__link:hover {
+  text-decoration: underline;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.6rem 1.1rem;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-decoration: none;
+  border: 1px solid transparent;
+  cursor: pointer;
+}
+
+.btn--primary {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+.btn--secondary {
+  background: color-mix(in srgb, var(--text-hi) 4%, transparent);
+  color: var(--text-hi);
+  border-color: var(--border-strong);
+}
+
+.btn--ghost {
+  background: transparent;
+  color: var(--text-lo);
+  border-color: var(--border);
+}
+
+.katex {
+  font-size: 1em;
+  color: var(--text-hi);
+}
+
+.katex-display {
+  overflow-x: auto;
+  overflow-y: hidden;
+  margin: 0.4rem 0;
+}
+
+.katex-display > .katex {
+  white-space: normal;
+}
+
+.katex-display > .base {
+  margin: 0.25em 0;
+}
+
+.equation-card .katex {
+  font-family: var(--font-display);
+}
+
+.equation-card .katex .mord,
+.equation-card .katex .mrel,
+.equation-card .katex .mbin {
+  color: inherit;
+}
+
+.equation-card .katex-html {
+  overflow-wrap: anywhere;
+}
+.equation-card {
+  margin-top: 0.9rem;
+  padding: 0.9rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, var(--text-hi) 2%, transparent);
+}
+
+.equation-list {
+  list-style: none;
+  display: grid;
+  gap: 0.65rem;
+  margin: 0;
+  padding: 0;
+}
+
+.equation-list li {
+  display: grid;
+  gap: 0.25rem;
+  padding: 0.65rem 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: color-mix(in srgb, var(--text-hi) 2%, transparent);
+}
+
+.equation-list__label {
+  color: var(--text-lo);
+  font-size: 0.8rem;
+}
+
+.equation-list__math {
+  color: var(--text-hi);
+  font-family: var(--font-display);
+  font-size: 1rem;
+  line-height: 1.45;
+}
+
+
+.dashboard-shell {
+  width: 100%;
+  min-height: 100dvh;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  overflow: clip;
+}
+
+.dashboard__header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  border-bottom: 1px solid var(--border);
+  background: color-mix(in srgb, var(--bg-raised) 72%, transparent);
+  backdrop-filter: blur(14px);
+}
+
+.dashboard__header-inner {
+  min-height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding-block: clamp(0.5rem, 1vw, 0.75rem);
+}
+
+.dashboard__title {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.dashboard__brand {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(0.95rem, 1.6vw, 1rem);
+  line-height: 1.2;
+  color: var(--text-hi);
+}
+
+.dashboard__main {
+  min-height: 0;
+  overflow: hidden;
+  padding: clamp(0.65rem, 1vw, 0.75rem) 0 clamp(0.85rem, 1.4vw, 1rem);
+}
+
+.dashboard__main-inner {
+  height: 100%;
+  min-height: 0;
+}
+
+.dashboard__main-inner > * {
+  height: 100%;
+  min-height: 0;
+}
+
+@media (max-width: 900px) {
+  .dashboard__header-inner {
+    flex-direction: column;
+    align-items: flex-start;
+    min-height: auto;
+    gap: 0.55rem;
+  }
+
+  .dashboard__main {
+    padding: 0.6rem 0 0.85rem;
+  }
+}
+
+.lab-dashboard {
+  width: 100%;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: minmax(240px, 280px) minmax(0, 1fr) minmax(240px, 300px);
+  gap: 0.75rem;
+  align-items: stretch;
+  overflow: hidden;
+}
+
+.lab-panel {
+  min-width: 0;
+  min-height: 0;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface-gradient);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.lab-panel__header {
+  padding: 0.8rem 0.9rem 0.55rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.lab-panel__header h2 {
+  margin: 0;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--accent);
+}
+
+.lab-panel__header p {
+  margin: 0.2rem 0 0;
+  color: var(--text-lo);
+  font-size: 0.82rem;
+}
+
+.lab-panel__body {
+  min-height: 0;
+}
+
+.lab-panel__body--scroll {
+  overflow: auto;
+  padding: 0.85rem;
+}
+
+.lab-panel__body--chart {
+  overflow: hidden;
+  padding: 0.85rem;
+}
+
+.lab-grid {
+  width: 100%;
+  min-width: 0;
+  display: grid;
+  grid-template-columns: minmax(240px, 280px) minmax(0, 1fr) minmax(240px, 300px);
+  gap: var(--section-gap);
+  align-items: start;
+  align-content: start;
+}
+
+.lab-grid .controls {
+  max-height: 760px;
+  overflow: auto;
+}
+
+.controls {
+  display: grid;
+  gap: 0.8rem;
+}
+
+.controls label {
+  display: grid;
+  gap: 0.35rem;
+  font-weight: 600;
+}
+
+.controls select,
+.controls textarea,
+.lab-grid select {
+  width: 100%;
+  min-height: 44px;
+  padding: 0.75rem 0.85rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  background: color-mix(in srgb, var(--text-hi) 2%, transparent);
+  color: var(--text-hi);
+}
+
+.controls textarea {
+  min-height: 240px;
+  resize: vertical;
+}
+
+.button-row {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.button-row button {
+  flex: 1;
+  padding: 0.55rem 0.75rem;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+}
+
+.callout {
+  margin: 0.15rem 0;
+  padding: 0.75rem 0.9rem;
+  border: 1px solid color-mix(in srgb, var(--accent) 25%, transparent);
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--accent) 8%, transparent);
+  color: var(--text-lo);
+  font-size: 0.88rem;
+}
+
+.callout-lock {
+  background: color-mix(in srgb, var(--accent-2) 10%, transparent);
+  border-color: color-mix(in srgb, var(--accent-2) 30%, transparent);
+}
+
+.chart-panel {
+  height: 100%;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.chart-panel > div {
+  flex: 1;
+  min-height: 0;
+}
+
+.chart-placeholder {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  border-radius: 14px;
+  border: 1px dashed var(--border);
+  display: grid;
+  place-items: center;
+  color: var(--text-lo);
+  background: color-mix(in srgb, var(--text-hi) 2%, transparent);
+}
+
+.chart-panel__topbar,
+.chart-panel__footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  color: var(--text-lo);
+  font-size: 0.82rem;
+}
+
+.chart-panel__topbar strong {
+  display: block;
+  margin-bottom: 0.15rem;
+  color: var(--text-hi);
+}
+
+.chart-stage {
+  min-height: 0;
+  overflow: hidden;
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  background:
+    radial-gradient(circle at top left, color-mix(in srgb, var(--accent) 8%, transparent), transparent 35%),
+    color-mix(in srgb, var(--text-hi) 2%, transparent);
+}
+
+.chart-stage svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.value-list {
+  display: grid;
+  gap: 0.35rem;
+  margin: 0 0 0.75rem;
+}
+
+.value-list div {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.25rem 0;
+  border-bottom: 1px dashed var(--border);
+}
+
+.value-list dt {
+  color: var(--text-lo);
+}
+
+.value-list dd {
+  margin: 0;
+  color: var(--text-hi);
+}
+
+.formula-list {
+  list-style: none;
+  display: grid;
+  gap: 0.35rem;
+  margin: 0.75rem 0 0;
+  padding: 0;
+  font-size: 0.88rem;
+}
+
+.formula-list li {
+  color: var(--text-lo);
+}
+
+.formula-list strong {
+  color: var(--text-hi);
+}
+
+.hint {
+  margin-top: 0.7rem;
+  color: var(--text-lo);
+  font-size: 0.88rem;
+  line-height: 1.45;
+}
+
+.notes-toggle {
+  margin-top: 0.75rem;
+  padding: 0.65rem 0.8rem;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--text-hi) 2%, transparent);
+}
+
+.notes-toggle summary {
+  cursor: pointer;
+  color: var(--text-hi);
+  font-weight: 600;
+}
+
+.checkbox-row {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center;
+  gap: 0.55rem;
+  min-width: 0;
+}
+
+.checkbox-row input[type="checkbox"] {
+  width: 1.05rem;
+  height: 1.05rem;
+  flex: 0 0 auto;
+}
+
+.vector-legend,
+.chart-legend {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem 0.8rem;
+  margin: 0.65rem 0 0;
+  padding: 0;
+  min-width: 0;
+  color: var(--text-lo);
+  font-size: 0.8rem;
+}
+
+.vector-legend li,
+.chart-legend li {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  min-width: 0;
+}
+
+.swatch {
+  display: inline-block;
+  width: 0.7rem;
+  height: 0.7rem;
+  border-radius: 3px;
+  flex: 0 0 auto;
+}
+
+.page-notes {
+  margin-top: 0.25rem;
+}
+
+.page-notes > * {
+  max-width: 78ch;
+}
+
+.lab-panel--info {
+  min-height: 0;
+}
+
+@media (max-width: 1100px) {
+  .lab-dashboard,
+  .lab-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 900px) {
+  .chart-panel {
+    min-height: 420px;
+  }
+
+  .chart-panel > div {
+    min-height: 380px;
+  }
+
+  .lab-grid .controls {
+    max-height: none;
+    overflow: visible;
+  }
+}
+
+@media (max-width: 760px) {
+  .lab-panel {
+    border-radius: 16px;
+  }
+
+  .lab-panel__body--scroll,
+  .lab-panel__body--chart {
+    padding: 0.8rem;
+  }
+
+  .chart-panel {
+    min-height: 380px;
+  }
+
+  .chart-panel > div {
+    min-height: 340px;
+  }
+
+  .button-row {
+    flex-direction: column;
+  }
+
+  .vector-legend,
+  .chart-legend {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.45rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .controls textarea {
+    min-height: 170px;
+  }
+}
+
+.equation-card__header {
+  margin-bottom: 0.6rem;
+}
+
+.equation-card__header h3 {
+  margin: 0;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--accent);
+}
+
+.equation-card__header p {
+  margin: 0.2rem 0 0;
+  color: var(--text-lo);
+  font-size: 0.82rem;
+}
+
+.suvat-list {
+  list-style: none;
+  display: grid;
+  gap: 0.6rem;
+  margin: 0;
+  padding: 0;
+}
+
+.suvat-list li {
+  display: grid;
+  gap: 0.25rem;
+  padding: 0.6rem 0.7rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: color-mix(in srgb, var(--text-hi) 2%, transparent);
+}
+
+.suvat-sub {
+  color: var(--text-lo);
+  font-size: 0.82rem;
+}
+
+.suvat-sub strong {
+  color: var(--text-hi);
+}
+
+.conservation-block {
+  margin-bottom: 0.9rem;
+}
+
+.conservation-block:last-child {
+  margin-bottom: 0;
+}
+
+.panel-subheading {
+  margin: 1.1rem 0 0.5rem;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--accent);
+}
+
+.katex-wrap {
+  display: inline-block;
+}
+
+.experiment-nav {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.experiment-nav__home,
+.experiment-nav__tab {
+  padding: 0.35rem 0.7rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  color: var(--text-lo);
+  font-size: 0.82rem;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.experiment-nav__tabs {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.experiment-nav__home.is-active,
+.experiment-nav__tab.is-active {
+  color: var(--on-accent);
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+@media (max-width: 760px) {
+  .experiment-nav {
+    width: 100%;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    padding-bottom: 0.25rem;
+  }
+}

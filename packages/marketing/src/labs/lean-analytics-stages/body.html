@@ -1,0 +1,270 @@
+<!--SITE_HEADER-->
+
+  <main id="main">
+    <section class="hero wrap">
+      <p class="eyebrow">Interactive startup-metrics prototype</p>
+
+      <h1>Measure the question that matters right now.</h1>
+
+      <p class="hero-copy">
+        Lean Analytics helps teams progress from a problem hypothesis to a scalable business by
+        focusing on one core uncertainty at a time: customer need, retention, organic growth,
+        sustainable revenue and efficient scale. Use each stage to define an experiment, select
+        practical evidence and decide what must be true before moving forward.
+      </p>
+
+      <div class="notice">
+        <span class="notice-icon" aria-hidden="true">!</span>
+        <div>
+          <strong>Do not treat the stages as a universal, rigid sequence.</strong>
+          A product may need to revisit earlier assumptions, and not every business relies on
+          virality. The useful principle is to resolve the most consequential uncertainty before
+          spending heavily on the next growth lever.
+        </div>
+      </div>
+    </section>
+
+    <section class="wrap app-shell" aria-label="Lean Analytics Stages tool">
+      <form class="panel planner" id="analytics-form">
+        <div class="panel-heading">
+          <h2>Set the learning focus</h2>
+          <p>
+            Record a specific experiment for the active stage: what you believe, the signal you
+            will measure, the threshold that would change your decision and the next action.
+          </p>
+        </div>
+
+        <div class="field-set">
+          <div class="field">
+            <label for="venture-name">Venture, product or experiment</label>
+            <input
+              id="venture-name"
+              name="venture-name"
+              type="text"
+              value="Collaborative research-impact planning software"
+              placeholder="For example: A new SaaS product, marketplace or service"
+            />
+          </div>
+
+          <div class="field">
+            <label for="stage-selector">Lean Analytics stage</label>
+            <select id="stage-selector" name="stage-selector">
+              <option value="empathy">1. Empathy — problem and customer understanding</option>
+              <option value="stickiness">2. Stickiness — engagement and retention</option>
+              <option value="virality">3. Virality — repeatable growth loops</option>
+              <option value="revenue">4. Revenue — monetisation and unit economics</option>
+              <option value="scale">5. Scale — efficient repeatable growth</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="hypothesis">Current hypothesis or question</label>
+            <textarea
+              id="hypothesis"
+              name="hypothesis"
+              placeholder="What do you believe, and what uncertainty are you trying to reduce?"
+            >Research-development and impact professionals struggle to turn broad impact ambitions into practical, shared plans, and will engage with a collaborative visual workspace that structures this work.</textarea>
+          </div>
+
+          <div class="two-columns">
+            <div class="field">
+              <label for="metric">One metric that matters</label>
+              <input
+                id="metric"
+                name="metric"
+                type="text"
+                value="Number of interviewees who describe the planning problem as frequent, painful and currently poorly served"
+                placeholder="For example: Week-4 retention or trial-to-paid conversion"
+              />
+            </div>
+
+            <div class="field">
+              <label for="threshold">Decision threshold</label>
+              <input
+                id="threshold"
+                name="threshold"
+                type="text"
+                value="At least 12 of 15 relevant interviewees describe a recurring problem and agree to test a prototype"
+                placeholder="What result would justify progress, iteration or stopping?"
+              />
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="experiment">Experiment or evidence-gathering activity</label>
+            <textarea
+              id="experiment"
+              name="experiment"
+              placeholder="Describe the smallest credible test you will run."
+            >Conduct semi-structured problem interviews with research-development staff and principal investigators; use a simple interactive prototype to test whether the proposed workflow is understandable and useful.</textarea>
+          </div>
+
+          <div class="field">
+            <label for="next-action">Next action if the threshold is met</label>
+            <textarea
+              id="next-action"
+              name="next-action"
+              placeholder="State the next decision or experiment—not a vague ambition."
+            >Build a narrow MVP focused on stakeholder mapping, pathway design and collaborative export, then test whether early users return to complete a second planning task.</textarea>
+          </div>
+
+          <div class="field">
+            <label for="demo-picker">Load a demo plan</label>
+            <select id="demo-picker" name="demo-picker">
+              <option value="">Choose a demo…</option>
+              <option value="research-saas">Research-impact planning software</option>
+              <option value="climate-service">Climate communications service</option>
+              <option value="marketplace">Local skills marketplace</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="action-row">
+          <button class="button button-primary" type="submit">Save stage experiment</button>
+          <button class="button button-secondary" id="clear-stage" type="button">Clear stage</button>
+          <button class="button button-secondary button-wide" id="copy-plan" type="button">
+            Copy learning plan
+          </button>
+        </div>
+      </form>
+
+      <section class="panel dashboard" aria-labelledby="dashboard-title">
+        <div class="dashboard-header">
+          <div>
+            <h2 id="dashboard-title">Lean Analytics journey</h2>
+            <p id="dashboard-subtitle">
+              Select a stage to inspect its central question, evidence, current experiment and gate to progress.
+            </p>
+          </div>
+
+          <div class="stage-badge">
+            <div>
+              <strong id="current-stage-badge">Empathy</strong>
+              <span id="current-stage-label">Current learning focus</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="dashboard-body">
+          <div class="stage-track" id="stage-track">
+            <button class="stage-button" type="button" data-stage="empathy" aria-pressed="false">
+              <span class="stage-number">Stage 01</span>
+              <strong>Empathy</strong>
+              <small>Understand a real, urgent problem for a reachable audience.</small>
+              <span class="stage-status" id="empathy-status">Not planned</span>
+            </button>
+
+            <button class="stage-button" type="button" data-stage="stickiness" aria-pressed="false">
+              <span class="stage-number">Stage 02</span>
+              <strong>Stickiness</strong>
+              <small>Prove people return because the product creates recurring value.</small>
+              <span class="stage-status" id="stickiness-status">Not planned</span>
+            </button>
+
+            <button class="stage-button" type="button" data-stage="virality" aria-pressed="false">
+              <span class="stage-number">Stage 03</span>
+              <strong>Virality</strong>
+              <small>Find repeatable, cost-effective ways users bring in new users.</small>
+              <span class="stage-status" id="virality-status">Not planned</span>
+            </button>
+
+            <button class="stage-button" type="button" data-stage="revenue" aria-pressed="false">
+              <span class="stage-number">Stage 04</span>
+              <strong>Revenue</strong>
+              <small>Demonstrate a viable, sustainable economic engine.</small>
+              <span class="stage-status" id="revenue-status">Not planned</span>
+            </button>
+
+            <button class="stage-button" type="button" data-stage="scale" aria-pressed="false">
+              <span class="stage-number">Stage 05</span>
+              <strong>Scale</strong>
+              <small>Grow efficiently while preserving the core value and economics.</small>
+              <span class="stage-status" id="scale-status">Not planned</span>
+            </button>
+          </div>
+
+          <section class="focus-card" aria-live="polite">
+            <div>
+              <h3 id="focus-title">Empathy</h3>
+              <p id="focus-description">
+                Begin by understanding a specific customer problem before relying on product output or growth metrics.
+              </p>
+            </div>
+
+            <div class="focus-metrics">
+              <div class="metric-box">
+                <small>Core question</small>
+                <strong id="focus-question">—</strong>
+              </div>
+
+              <div class="metric-box">
+                <small>Useful evidence</small>
+                <strong id="focus-evidence">—</strong>
+              </div>
+
+              <div class="metric-box">
+                <small>Gate to progress</small>
+                <strong id="focus-gate">—</strong>
+              </div>
+
+              <div class="metric-box">
+                <small>Current metric</small>
+                <strong id="focus-metric">—</strong>
+              </div>
+            </div>
+          </section>
+
+          <section class="progress-wrap">
+            <div class="progress-label">
+              <span>Learning-plan coverage</span>
+              <strong id="progress-text">0 of 5 stages planned</strong>
+            </div>
+
+            <div
+              class="progress-bar"
+              role="progressbar"
+              aria-label="Lean Analytics plan coverage"
+              aria-valuemin="0"
+              aria-valuemax="5"
+              aria-valuenow="0"
+            >
+              <div class="progress-fill" id="progress-fill"></div>
+            </div>
+          </section>
+
+          <div class="insights-grid">
+            <article class="insight-card">
+              <small>Current experiment</small>
+              <p id="experiment-insight">Add a stage experiment to define the smallest useful learning activity.</p>
+            </article>
+
+            <article class="insight-card">
+              <small>Decision threshold</small>
+              <p id="threshold-insight">Specify the result that will lead you to advance, iterate or stop.</p>
+            </article>
+
+            <article class="insight-card">
+              <small>Next move</small>
+              <p id="next-action-insight">Keep the next action tied to what you learn, rather than a predetermined roadmap.</p>
+            </article>
+          </div>
+
+          <section class="experiment-panel">
+            <h3>Experiment discipline</h3>
+            <ul class="experiment-list" id="experiment-list"></ul>
+          </section>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <p>
+        This prototype supports structured learning and product planning. It does not guarantee
+        product-market fit, investment outcomes or commercial success. Choose measures that respect
+        privacy, avoid manipulative design, account for qualitative evidence and are suitable for
+        your business model and customers.
+      </p>
+    </div>
+  </footer>

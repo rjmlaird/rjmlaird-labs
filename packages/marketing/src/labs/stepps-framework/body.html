@@ -1,0 +1,261 @@
+<!--SITE_HEADER-->
+
+  <main id="main">
+    <section class="hero wrap">
+      <p class="eyebrow">Interactive shareability-planning prototype</p>
+
+      <h1>Give people a good reason to pass your idea on.</h1>
+
+      <p class="hero-copy">
+        STEPPS helps you design content, products and campaigns that people may find useful,
+        meaningful, visible and worth talking about. Map each principle around a clear audience
+        need, then test the result with real people rather than assuming attention equals value.
+      </p>
+
+      <div class="notice">
+        <span class="notice-icon" aria-hidden="true">!</span>
+        <div>
+          <strong>Sharing should be voluntary and informed.</strong>
+          Do not use misinformation, manufactured outrage, hidden incentives, deceptive scarcity
+          or personal-data exploitation to create reach. A strong campaign earns attention by
+          being relevant, truthful, accessible and genuinely useful.
+        </div>
+      </div>
+    </section>
+
+    <section class="wrap app-shell" aria-label="STEPPS framework canvas">
+      <form class="panel planner" id="stepps-form">
+        <div class="panel-heading">
+          <h2>Plan one STEPPS element</h2>
+          <p>
+            Choose an element, define the creative or product choice, then state the audience
+            benefit and the evidence or ethical boundary that will guide testing.
+          </p>
+        </div>
+
+        <div class="field-set">
+          <div class="field">
+            <label for="campaign-name">Campaign, content or idea</label>
+            <input
+              id="campaign-name"
+              name="campaign-name"
+              type="text"
+              value="A public campaign showing how satellite data supports local climate action"
+              placeholder="For example: Product launch, social campaign, video series or public-information resource"
+            />
+          </div>
+
+          <div class="field">
+            <label for="step-selector">STEPPS element</label>
+            <select id="step-selector" name="step-selector">
+              <option value="currency">Social Currency</option>
+              <option value="triggers">Triggers</option>
+              <option value="emotion">Emotion</option>
+              <option value="public">Public</option>
+              <option value="value">Practical Value</option>
+              <option value="stories">Stories</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="step-idea">Creative or content choice</label>
+            <textarea
+              id="step-idea"
+              name="step-idea"
+              placeholder="Describe the specific content, design or message choice."
+            >Give local climate practitioners a concise, shareable “evidence translator” card that turns one satellite-data insight into a clear question they can use in a meeting or community conversation.</textarea>
+          </div>
+
+          <div class="field">
+            <label for="step-benefit">Audience benefit</label>
+            <textarea
+              id="step-benefit"
+              name="step-benefit"
+              placeholder="Why would the audience find this useful, meaningful or worth sharing?"
+            >It helps practitioners explain a complex topic confidently, look prepared and bring a grounded evidence point into conversations where decisions are being made.</textarea>
+          </div>
+
+          <div class="field">
+            <label for="step-evidence">Evidence, test or ethical boundary</label>
+            <textarea
+              id="step-evidence"
+              name="step-evidence"
+              placeholder="How will you test the idea, and what guardrail prevents misleading or manipulative communication?"
+            >Test comprehension and real-world use in workshops; clearly state data limits, source information and uncertainty rather than overstating what a map or metric can prove.</textarea>
+          </div>
+
+          <div class="field">
+            <label for="demo-picker">Load an example campaign</label>
+            <select id="demo-picker" name="demo-picker">
+              <option value="">Choose a demo…</option>
+              <option value="climate">Climate-action communications campaign</option>
+              <option value="product-launch">Sustainable product launch</option>
+              <option value="learning">Professional learning resource</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="action-row">
+          <button class="button button-primary" type="submit">Save STEPPS element</button>
+          <button class="button button-secondary" id="clear-step" type="button">Clear entry</button>
+          <button class="button button-secondary button-wide" id="copy-canvas" type="button">
+            Copy STEPPS canvas
+          </button>
+        </div>
+      </form>
+
+      <section class="panel canvas" aria-labelledby="canvas-title">
+        <div class="canvas-header">
+          <div>
+            <h2 id="canvas-title">Your STEPPS canvas</h2>
+            <p id="canvas-subtitle">
+              Select an element to inspect its content choice, audience benefit, evidence and ethical constraint.
+            </p>
+          </div>
+
+          <div class="coverage-badge">
+            <div>
+              <strong id="coverage-score">6/6</strong>
+              <span id="coverage-label">Elements mapped</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="canvas-body">
+          <div class="legend" aria-label="STEPPS legend">
+            <span class="legend-item"><span class="legend-swatch" style="color: var(--blue)"></span>Identity and status</span>
+            <span class="legend-item"><span class="legend-swatch" style="color: var(--teal)"></span>Everyday recall</span>
+            <span class="legend-item"><span class="legend-swatch" style="color: var(--red)"></span>Meaningful feeling</span>
+            <span class="legend-item"><span class="legend-swatch" style="color: var(--purple)"></span>Visible behaviour</span>
+            <span class="legend-item"><span class="legend-swatch" style="color: var(--green)"></span>Useful help</span>
+            <span class="legend-item"><span class="legend-swatch" style="color: var(--amber)"></span>Memorable narrative</span>
+          </div>
+
+          <div class="stepps-grid">
+            <button class="step-card" type="button" data-step="currency" aria-pressed="false">
+              <span>
+                <span class="step-letter">S</span>
+                <span class="step-kicker">STEP 01</span>
+                <strong>Social Currency</strong>
+                <small id="currency-summary">No idea added.</small>
+              </span>
+              <span class="step-status" id="currency-status">Not planned</span>
+            </button>
+
+            <button class="step-card" type="button" data-step="triggers" aria-pressed="false">
+              <span>
+                <span class="step-letter">T</span>
+                <span class="step-kicker">STEP 02</span>
+                <strong>Triggers</strong>
+                <small id="triggers-summary">No idea added.</small>
+              </span>
+              <span class="step-status" id="triggers-status">Not planned</span>
+            </button>
+
+            <button class="step-card" type="button" data-step="emotion" aria-pressed="false">
+              <span>
+                <span class="step-letter">E</span>
+                <span class="step-kicker">STEP 03</span>
+                <strong>Emotion</strong>
+                <small id="emotion-summary">No idea added.</small>
+              </span>
+              <span class="step-status" id="emotion-status">Not planned</span>
+            </button>
+
+            <button class="step-card" type="button" data-step="public" aria-pressed="false">
+              <span>
+                <span class="step-letter">P</span>
+                <span class="step-kicker">STEP 04</span>
+                <strong>Public</strong>
+                <small id="public-summary">No idea added.</small>
+              </span>
+              <span class="step-status" id="public-status">Not planned</span>
+            </button>
+
+            <button class="step-card" type="button" data-step="value" aria-pressed="false">
+              <span>
+                <span class="step-letter">P</span>
+                <span class="step-kicker">STEP 05</span>
+                <strong>Practical Value</strong>
+                <small id="value-summary">No idea added.</small>
+              </span>
+              <span class="step-status" id="value-status">Not planned</span>
+            </button>
+
+            <button class="step-card" type="button" data-step="stories" aria-pressed="false">
+              <span>
+                <span class="step-letter">S</span>
+                <span class="step-kicker">STEP 06</span>
+                <strong>Stories</strong>
+                <small id="stories-summary">No idea added.</small>
+              </span>
+              <span class="step-status" id="stories-status">Not planned</span>
+            </button>
+          </div>
+
+          <section class="detail-card" aria-live="polite">
+            <div>
+              <h3 id="detail-title">Select a STEPPS element</h3>
+              <p id="detail-idea">
+                Click a card to inspect the creative choice and check whether it creates genuine value for the audience.
+              </p>
+            </div>
+
+            <div class="detail-meta">
+              <div class="meta-box">
+                <small>Audience benefit</small>
+                <strong id="detail-benefit">—</strong>
+              </div>
+
+              <div class="meta-box">
+                <small>Evidence / boundary</small>
+                <strong id="detail-evidence">—</strong>
+              </div>
+
+              <div class="meta-box">
+                <small>Planning prompt</small>
+                <strong id="detail-prompt">—</strong>
+              </div>
+
+              <div class="meta-box">
+                <small>Ethical risk</small>
+                <strong id="detail-risk">—</strong>
+              </div>
+            </div>
+          </section>
+
+          <div class="insights-grid">
+            <article class="insight-card">
+              <small>Campaign coverage</small>
+              <p id="coverage-insight">Map the six elements, but do not force every one into every piece of content.</p>
+            </article>
+
+            <article class="insight-card">
+              <small>Audience value</small>
+              <p id="value-insight">Prioritise information, stories and experiences that help or matter to people beyond the brand’s immediate goals.</p>
+            </article>
+
+            <article class="insight-card">
+              <small>Testing discipline</small>
+              <p id="testing-insight">Test comprehension, trust, accessibility and intended action—not just likes, views or reposts.</p>
+            </article>
+          </div>
+
+          <section class="ethics-panel">
+            <h3>Shareability with integrity</h3>
+            <ul class="ethics-list" id="ethics-list"></ul>
+          </section>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <p>
+        This prototype supports communications planning. It does not guarantee reach, engagement
+        or commercial results. Avoid misinformation, harmful stereotyping, manufactured outrage,
+        deceptive incentives and inaccessible formats. Build campaigns around consent, evidence,
+        accessibility and value for the communities you aim to reach.
+      </p>
+    </footer>

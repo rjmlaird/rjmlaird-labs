@@ -1,0 +1,19 @@
+---
+import LabLayout from '@labs/ui/LabLayout.astro';
+import Ramp from '../components/Ramp';
+---
+
+<LabLayout lab="mechanics" current="ramp">
+  <main class="page">
+    <header class="hero">
+      <p class="eyebrow">Labs</p>
+      <h1>Ramp</h1>
+      <p class="lede">
+        Explore motion, energy, friction, mass, momentum, and acceleration on a simple ramp — with the SUVAT
+        equations and conservation checks shown alongside the simulation.
+      </p>
+    </header>
+
+    <Ramp client:only="react" />
+  </main>
+</LabLayout>

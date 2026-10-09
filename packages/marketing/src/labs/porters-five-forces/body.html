@@ -1,0 +1,229 @@
+<!--SITE_HEADER-->
+
+  <main id="main">
+    <section class="hero wrap">
+      <p class="eyebrow">Interactive strategy-analysis prototype</p>
+
+      <h1>Understand the forces shaping your market.</h1>
+
+      <p class="hero-copy">
+        Assess competitive rivalry, buyer power, supplier power, the threat of new entrants and
+        the threat of substitutes. Use the map to identify where pressure sits, what makes it
+        stronger, and how your organisation could be less exposed.
+      </p>
+
+      <div class="notice">
+        <span class="notice-icon" aria-hidden="true">!</span>
+        <div>
+          <strong>Use this for industry structure, not a generic competitor list.</strong>
+          The model asks how value is distributed among industry actors and what makes a market
+          more or less attractive—not simply which brands look similar today.
+        </div>
+      </div>
+    </section>
+
+    <section class="wrap app-shell" aria-label="Porter's Five Forces tool">
+      <form class="panel planner" id="forces-form">
+        <div class="panel-heading">
+          <h2>Set up the analysis</h2>
+          <p>
+            Define a specific market, then score each competitive force from 1 (weak pressure) to
+            5 (very strong pressure). Add a concise rationale for the force you are reviewing.
+          </p>
+        </div>
+
+        <div class="field-set">
+          <div class="field">
+            <label for="market-name">Market or industry definition</label>
+            <input
+              id="market-name"
+              name="market-name"
+              type="text"
+              value="Earth-observation and satellite-data communication services for UK public-sector and climate organisations"
+              placeholder="Define a clear market, customer scope and geography."
+            />
+            <p class="field-help">
+              Keep the definition focused: product/service, customer group and geography where relevant.
+            </p>
+          </div>
+
+          <div class="field">
+            <label for="force-selector">Force to assess</label>
+            <select id="force-selector" name="force-selector">
+              <option value="rivalry">Rivalry among existing competitors</option>
+              <option value="entrants">Threat of new entrants</option>
+              <option value="buyers">Bargaining power of buyers</option>
+              <option value="suppliers">Bargaining power of suppliers</option>
+              <option value="substitutes">Threat of substitutes</option>
+            </select>
+          </div>
+
+          <div class="range-grid">
+            <div class="range-field">
+              <label for="force-score">Competitive pressure: 1 weak → 5 very strong</label>
+              <input id="force-score" type="range" min="1" max="5" value="4" />
+              <output class="range-value" id="force-score-value">4</output>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="force-rationale">What makes this force strong or weak?</label>
+            <textarea
+              id="force-rationale"
+              name="force-rationale"
+              placeholder="List the structural drivers: switching costs, concentration, differentiation, capital needs, data access, procurement, regulation, alternatives and so on."
+            >Specialist agencies, consultancies, universities and internal teams compete for finite public-sector budgets. Differentiation depends on credible domain knowledge, trusted relationships, accessible storytelling and demonstrable outcomes.</textarea>
+          </div>
+
+          <div class="field">
+            <label for="force-response">Possible strategic response</label>
+            <textarea
+              id="force-response"
+              name="force-response"
+              placeholder="How might the organisation reduce exposure, create differentiation or change the terms of competition?"
+            >Differentiate through combined Earth-observation literacy, responsible communication, interactive tools and locally grounded stakeholder engagement.</textarea>
+          </div>
+
+          <div class="field">
+            <label for="demo-picker">Load a demo</label>
+            <select id="demo-picker" name="demo-picker">
+              <option value="">Choose a demo…</option>
+              <option value="eo-services">EO and climate communication services</option>
+              <option value="research-impact">Research-impact consultancy</option>
+              <option value="sustainable-marketing">Sustainability communications agency</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="action-row">
+          <button class="button button-primary" type="submit">Save force assessment</button>
+          <button class="button button-secondary" id="clear-force" type="button">Clear force</button>
+          <button class="button button-secondary button-wide" id="copy-analysis" type="button">
+            Copy analysis summary
+          </button>
+        </div>
+      </form>
+
+      <section class="panel analysis" aria-labelledby="analysis-title">
+        <div class="analysis-header">
+          <div>
+            <h2 id="analysis-title">Five Forces map</h2>
+            <p id="analysis-subtitle">
+              Select a force to inspect its rationale, pressure level and strategic response.
+            </p>
+          </div>
+
+          <div class="attractiveness-badge">
+            <div>
+              <strong id="attractiveness-label">Moderate</strong>
+              <span id="attractiveness-score">Industry pressure: 3.0 / 5</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="analysis-body">
+          <div class="force-map" id="force-map">
+            <button class="force-card" type="button" data-force="entrants" aria-pressed="false">
+              <span class="force-label">Threat of</span>
+              <strong>New entrants</strong>
+              <small id="entrants-summary">No assessment added.</small>
+              <span class="force-score" id="entrants-score">Not scored</span>
+            </button>
+
+            <button class="force-card" type="button" data-force="suppliers" aria-pressed="false">
+              <span class="force-label">Bargaining power of</span>
+              <strong>Suppliers</strong>
+              <small id="suppliers-summary">No assessment added.</small>
+              <span class="force-score" id="suppliers-score">Not scored</span>
+            </button>
+
+            <div class="industry-core" id="industry-core">
+              <div>
+                <span>Competitive structure</span>
+                <strong id="industry-name-display">Your market</strong>
+                <small>Rivalry among existing competitors</small>
+                <span class="force-score" id="rivalry-score">Not scored</span>
+              </div>
+            </div>
+
+            <button class="force-card" type="button" data-force="buyers" aria-pressed="false">
+              <span class="force-label">Bargaining power of</span>
+              <strong>Buyers</strong>
+              <small id="buyers-summary">No assessment added.</small>
+              <span class="force-score" id="buyers-score">Not scored</span>
+            </button>
+
+            <button class="force-card" type="button" data-force="substitutes" aria-pressed="false">
+              <span class="force-label">Threat of</span>
+              <strong>Substitutes</strong>
+              <small id="substitutes-summary">No assessment added.</small>
+              <span class="force-score" id="substitutes-score">Not scored</span>
+            </button>
+          </div>
+
+          <section class="force-detail" aria-live="polite">
+            <div>
+              <h3 id="detail-title">Select a force</h3>
+              <p id="detail-rationale">
+                Click a force on the map to view your rationale and possible strategic response.
+              </p>
+            </div>
+
+            <div class="detail-grid">
+              <div class="detail-box">
+                <small>Pressure level</small>
+                <strong id="detail-score">—</strong>
+              </div>
+
+              <div class="detail-box">
+                <small>Strategic response</small>
+                <strong id="detail-response">—</strong>
+              </div>
+
+              <div class="detail-box">
+                <small>Key question</small>
+                <strong id="detail-question">—</strong>
+              </div>
+
+              <div class="detail-box">
+                <small>Interpretation</small>
+                <strong id="detail-interpretation">—</strong>
+              </div>
+            </div>
+          </section>
+
+          <div class="insights-grid">
+            <article class="insight-card">
+              <small>Strongest pressure</small>
+              <p id="strongest-force">Score all five forces to identify the strongest pressure.</p>
+            </article>
+
+            <article class="insight-card">
+              <small>Strategic focus</small>
+              <p id="strategic-focus">Add possible responses to turn the diagnosis into choices.</p>
+            </article>
+
+            <article class="insight-card">
+              <small>Watch for change</small>
+              <p id="watch-for">Revisit the model when technology, regulation, costs or buyer behaviour shifts.</p>
+            </article>
+          </div>
+
+          <section class="strategy-panel">
+            <h3>Strategy prompts</h3>
+            <ul class="strategy-list" id="strategy-list"></ul>
+          </section>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <p>
+        This prototype is a strategy-planning aid. It does not replace market research, commercial
+        due diligence, pricing analysis, legal advice or financial modelling. Use specific,
+        evidence-based assumptions and revisit assessments when competitive conditions change.
+      </p>
+    </div>
+  </footer>

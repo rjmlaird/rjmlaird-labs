@@ -1,0 +1,28 @@
+/* Shared Marketing Labs chrome: skip link, header, lab bar, actions, toast, related labs. */
+.wrap { width: min(calc(100% - 2rem), var(--max-width)); margin-inline: auto; }
+.ml-skip { position: absolute; left: 1rem; top: -4rem; z-index: 100; padding: 0.6rem 1rem; border-radius: 8px; background: var(--amber); color: #08111d; font-weight: 600; text-decoration: none; }
+.ml-skip:focus { top: 1rem; }
+.ml-header { position: sticky; top: 0; z-index: 50; border-bottom: 1px solid var(--border); background: rgba(8, 17, 29, 0.86); backdrop-filter: blur(10px); }
+.ml-header-inner { display: flex; align-items: center; justify-content: space-between; gap: 1rem; min-height: 3.6rem; }
+.ml-brand { display: inline-flex; align-items: center; gap: 0.7rem; color: var(--text-hi); font-family: var(--font-display); font-size: 0.98rem; font-weight: 600; text-decoration: none; }
+.ml-mark { display: grid; flex: 0 0 auto; place-items: center; min-width: 2rem; height: 2rem; padding: 0 0.3rem; border: 1px solid rgba(0, 194, 168, 0.65); border-radius: 999px; color: var(--teal); font-size: 0.72rem; font-weight: 700; }
+.ml-nav { display: flex; flex-wrap: wrap; gap: 0.25rem; }
+.ml-nav a { padding: 0.45rem 0.7rem; border-radius: 8px; color: var(--text-lo); font-size: 0.86rem; text-decoration: none; }
+.ml-nav a:hover, .ml-nav a[aria-current="page"] { background: rgba(237, 244, 248, 0.07); color: var(--text-hi); }
+.ml-labbar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.8rem 1.2rem; padding: 1rem 0 0.2rem; }
+.ml-labid { display: flex; align-items: center; gap: 0.75rem; min-width: 0; }
+.ml-labid p { margin: 0; color: var(--text-dim); font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; }
+.ml-labid strong { font-family: var(--font-display); font-size: 1.05rem; }
+.ml-actions { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.ml-btn { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.5rem 0.8rem; border: 1px solid var(--border-strong); border-radius: 8px; background: rgba(16, 29, 48, 0.7); color: var(--text-hi); font-size: 0.82rem; font-weight: 500; text-decoration: none; cursor: pointer; }
+.ml-btn:hover { border-color: var(--teal); }
+.ml-btn.primary { border-color: var(--teal); background: var(--teal); color: #05211d; font-weight: 600; }
+.ml-toast { position: fixed; left: 50%; bottom: 1.2rem; z-index: 80; padding: 0.65rem 1rem; border: 1px solid var(--border-strong); border-radius: 10px; background: var(--navy-raised); box-shadow: var(--shadow); color: var(--text-hi); font-size: 0.86rem; opacity: 0; pointer-events: none; transform: translate(-50%, 2rem); transition: opacity 0.2s, transform 0.2s; }
+.ml-toast.show { opacity: 1; transform: translate(-50%, 0); }
+.ml-more { padding: 2rem 0 2.5rem; border-top: 1px solid var(--border); }
+.ml-more h2 { margin: 0 0 0.8rem; font-family: var(--font-display); font-size: 1rem; }
+.ml-more ul { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0.75rem; margin: 0; padding: 0; list-style: none; }
+.ml-more a { display: block; height: 100%; padding: 0.85rem; border: 1px solid var(--border); border-radius: 10px; background: rgba(16, 29, 48, 0.5); color: var(--text-hi); text-decoration: none; }
+.ml-more a:hover { border-color: var(--teal); }
+.ml-more small { display: block; margin-top: 0.25rem; color: var(--text-lo); line-height: 1.4; }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; } }

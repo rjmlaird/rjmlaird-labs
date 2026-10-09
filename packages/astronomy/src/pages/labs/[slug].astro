@@ -1,0 +1,51 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import { categoryById } from '../../data/categories';
+export async function getStaticPaths() {
+  const labs = (await getCollection('labs')).filter((l) => l.data.status !== 'planned');
+  return labs.map((lab) => ({ params: { slug: lab.id }, props: { lab } }));
+}
+const { lab } = Astro.props;
+const cat = categoryById(lab.data.category);
+const { Content } = await render(lab);
+const src = `/demos/${lab.id}/`;
+---
+<Base title={lab.data.title} description={lab.data.summary}>
+  <p class="crumbs"><a href="/">Astronomy Labs</a> / <a href={`/c/${cat.id}/`}>{cat.title}</a> / {lab.data.title}</p>
+  <h1>{lab.data.title}</h1>
+  <p class="lede">{lab.data.summary}</p>
+  <iframe id="lab" class="lab-frame" src={`${src}index.html`} title={lab.data.title} loading="eager"></iframe>
+  <div class="about"><Content /></div>
+  <p><a href={`${src}index.html`}>Open full screen ↗</a></p>
+  <script is:inline>
+    (function () {
+      var f = document.getElementById('lab');
+      function theme() { return document.documentElement.dataset.theme; }
+      function sync() {
+        try {
+          var d = f.contentDocument; if (!d) return;
+          var t = theme();
+          if (t) d.documentElement.setAttribute('data-theme', t); else d.documentElement.removeAttribute('data-theme');
+        } catch (e) {}
+      }
+      function fit() {
+        try {
+          var d = f.contentDocument; if (!d) return;
+          var h = Math.max(d.documentElement.scrollHeight, d.body ? d.body.scrollHeight : 0);
+          if (h) f.style.height = h + 'px';
+        } catch (e) {}
+      }
+      f.addEventListener('load', function () {
+        sync(); fit();
+        try {
+          new ResizeObserver(fit).observe(f.contentDocument.documentElement);
+          new ResizeObserver(fit).observe(f.contentDocument.body);
+        } catch (e) {}
+        setInterval(fit, 1500);
+      });
+      window.addEventListener('al-theme', sync);
+      window.addEventListener('resize', fit);
+    })();
+  </script>
+</Base>

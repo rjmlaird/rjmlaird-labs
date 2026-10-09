@@ -1,0 +1,237 @@
+<!--SITE_HEADER-->
+
+  <main id="main">
+    <section class="hero wrap">
+      <p class="eyebrow">Interactive marketing-model prototype</p>
+
+      <h1>Plan acquisition around the value of the whole customer relationship.</h1>
+
+      <p class="hero-copy">
+        Customer Lifetime Value estimates the present value of future contribution from a customer
+        relationship. Use it to examine whether acquisition, onboarding and retention investments
+        can be justified over time—not simply by the first transaction.
+      </p>
+
+      <div class="notice">
+        <span class="notice-icon" aria-hidden="true">!</span>
+        <div>
+          <strong>CLV is an estimate, not a promise or a licence to overspend.</strong>
+          Base assumptions on cohorts and representative data, separate revenue from contribution
+          margin, include service and retention costs where material, and update forecasts when
+          retention, pricing, market conditions or customer behaviour changes.
+        </div>
+      </div>
+    </section>
+
+    <section class="wrap app-shell" aria-label="Customer Lifetime Value calculator">
+      <form class="panel calculator" id="clv-form">
+        <div class="panel-heading">
+          <h2>CLV assumptions</h2>
+          <p>
+            This calculator projects expected contribution over a fixed horizon, applies annual
+            retention and discounts future value to present value. Enter averages for a defined
+            customer segment or cohort rather than blending incomparable customer types.
+          </p>
+        </div>
+
+        <div class="field-set">
+          <div class="field">
+            <label for="segment-name">Customer segment or cohort</label>
+            <input
+              id="segment-name"
+              name="segment-name"
+              type="text"
+              value="Professional subscription customers"
+              placeholder="For example: New customers acquired through paid search"
+            />
+          </div>
+
+          <div class="two-columns">
+            <div class="field">
+              <label for="avg-order-value">Average order / period revenue</label>
+              <input id="avg-order-value" name="avg-order-value" type="number" min="0" step="0.01" value="240" />
+              <p class="field-help">Enter average revenue per transaction or billing period.</p>
+            </div>
+
+            <div class="field">
+              <label for="purchase-frequency">Purchases / periods per year</label>
+              <input id="purchase-frequency" name="purchase-frequency" type="number" min="0" step="0.1" value="2.5" />
+              <p class="field-help">For subscriptions, use billing periods per year.</p>
+            </div>
+          </div>
+
+          <div class="two-columns">
+            <div class="field">
+              <label for="gross-margin">Gross contribution margin (%)</label>
+              <input id="gross-margin" name="gross-margin" type="number" min="0" max="100" step="1" value="68" />
+              <p class="field-help">Use a contribution-oriented margin where possible.</p>
+            </div>
+
+            <div class="field">
+              <label for="annual-retention">Annual retention rate (%)</label>
+              <input id="annual-retention" name="annual-retention" type="number" min="0" max="100" step="1" value="75" />
+              <p class="field-help">Retention is 100% minus annual churn rate.</p>
+            </div>
+          </div>
+
+          <div class="divider"></div>
+
+          <div class="two-columns">
+            <div class="field">
+              <label for="customer-acquisition-cost">Customer acquisition cost (CAC)</label>
+              <input id="customer-acquisition-cost" name="customer-acquisition-cost" type="number" min="0" step="0.01" value="310" />
+              <p class="field-help">Include attributable media, sales and onboarding costs.</p>
+            </div>
+
+            <div class="field">
+              <label for="annual-service-cost">Annual service / retention cost</label>
+              <input id="annual-service-cost" name="annual-service-cost" type="number" min="0" step="0.01" value="45" />
+              <p class="field-help">Include support, success and retention costs where material.</p>
+            </div>
+          </div>
+
+          <div class="two-columns">
+            <div class="field">
+              <label for="discount-rate">Annual discount rate (%)</label>
+              <input id="discount-rate" name="discount-rate" type="number" min="0" max="100" step="1" value="12" />
+              <p class="field-help">Discounts future contribution to today’s value.</p>
+            </div>
+
+            <div class="field">
+              <label for="projection-years">Projection horizon (years)</label>
+              <input id="projection-years" name="projection-years" type="number" min="1" max="10" step="1" value="5" />
+              <p class="field-help">A longer horizon increases forecast uncertainty.</p>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="demo-picker">Load an example model</label>
+            <select id="demo-picker" name="demo-picker">
+              <option value="">Choose a demo…</option>
+              <option value="subscription">Professional subscription service</option>
+              <option value="ecommerce">Repeat-purchase ecommerce brand</option>
+              <option value="saas">B2B SaaS account model</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="action-row">
+          <button class="button button-primary" type="submit">Calculate CLV</button>
+          <button class="button button-secondary" id="reset-model" type="button">Reset values</button>
+          <button class="button button-secondary button-wide" id="copy-results" type="button">
+            Copy CLV summary
+          </button>
+        </div>
+      </form>
+
+      <section class="panel results" aria-labelledby="results-title">
+        <div class="results-header">
+          <div>
+            <h2 id="results-title">Lifetime-value projection</h2>
+            <p id="results-subtitle">
+              Present-value forecast for <span id="segment-display">Professional subscription customers</span>.
+            </p>
+          </div>
+
+          <div class="result-badge">
+            <div>
+              <strong id="clv-badge">£0</strong>
+              <span>Net CLV after CAC</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="results-body">
+          <section class="metric-grid" aria-label="Customer Lifetime Value key metrics">
+            <article class="metric-card highlight">
+              <small>Present-value CLV</small>
+              <strong id="pv-clv">£0</strong>
+              <p>Projected contribution after service cost and discounting, before acquisition cost.</p>
+            </article>
+
+            <article class="metric-card">
+              <small>Net CLV after CAC</small>
+              <strong id="net-clv">£0</strong>
+              <p>Present-value CLV less the stated acquisition cost.</p>
+            </article>
+
+            <article class="metric-card warning">
+              <small>CLV : CAC ratio</small>
+              <strong id="clv-cac-ratio">0.0 : 1</strong>
+              <p id="ratio-note">Compare against your own payback, margin and cash-flow requirements.</p>
+            </article>
+
+            <article class="metric-card">
+              <small>CAC payback</small>
+              <strong id="payback-period">—</strong>
+              <p>Estimated point at which discounted cumulative contribution covers CAC.</p>
+            </article>
+          </section>
+
+          <section class="cashflow-card">
+            <div class="cashflow-heading">
+              <div>
+                <h3>Expected contribution by year</h3>
+                <p>
+                  Each year reflects remaining customers after retention, expected annual
+                  contribution after service cost and the present-value discount factor.
+                </p>
+              </div>
+            </div>
+
+            <div class="cashflow-table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Year</th>
+                    <th>Expected active customers</th>
+                    <th>Revenue</th>
+                    <th>Contribution after service cost</th>
+                    <th>Discount factor</th>
+                    <th>Present value</th>
+                    <th>Cumulative PV</th>
+                  </tr>
+                </thead>
+                <tbody id="cashflow-table-body"></tbody>
+              </table>
+            </div>
+
+            <div class="bar-chart" id="bar-chart" aria-label="Projected present value by year"></div>
+          </section>
+
+          <section class="insights-grid">
+            <article class="insight-card">
+              <small>Revenue basis</small>
+              <p id="revenue-insight">—</p>
+            </article>
+
+            <article class="insight-card">
+              <small>Retention sensitivity</small>
+              <p id="retention-insight">—</p>
+            </article>
+
+            <article class="insight-card">
+              <small>Acquisition decision</small>
+              <p id="acquisition-insight">—</p>
+            </article>
+          </section>
+
+          <section class="guidance-panel">
+            <h3>Use CLV responsibly</h3>
+            <ul class="guidance-list" id="guidance-list"></ul>
+          </section>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <p>
+        This calculator is for scenario planning, not financial, tax or investment advice.
+        Results depend entirely on the assumptions entered. Review historical cohorts, attribution,
+        refunds, cost-to-serve, working capital, taxes, capacity, concentration risk and data
+        quality with appropriate commercial and financial expertise before making decisions.
+      </p>
+    </div>
+  </footer>

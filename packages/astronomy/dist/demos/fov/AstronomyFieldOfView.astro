@@ -1,0 +1,335 @@
+---
+import { PRESETS, OBJECTS } from '../lib/fov/data';
+
+interface Props {
+  id?: string;
+  heading?: string;
+  defaultPresetId?: string;
+  defaultObjectId?: string;
+}
+
+const {
+  id = `afov-${Math.random().toString(36).slice(2, 8)}`,
+  heading = 'Field of view comparison',
+  defaultPresetId = 'bino-10x50',
+  defaultObjectId = 'moon',
+} = Astro.props;
+
+const grouped = new Map<string, typeof PRESETS>();
+for (const p of PRESETS) grouped.set(p.category, [...(grouped.get(p.category) ?? []), p]);
+const categories = [...grouped];
+
+const TYPES = [
+  ['naked-eye', 'Naked eye'], ['binoculars', 'Binoculars'], ['refractor', 'Refractor telescope'],
+  ['reflector', 'Reflector telescope'], ['catadioptric', 'Catadioptric telescope'],
+  ['finder', 'Finder scope'], ['camera', 'Camera or imaging setup'],
+];
+
+// `for` lists the instrument groups that show the field: scope | camera | bino | eye
+const FIELDS = [
+  { k: 'apertureMm', label: 'Aperture or mirror diameter (mm)', for: 'scope camera' },
+  { k: 'focalLengthMm', label: 'Telescope focal length (mm)', for: 'scope camera' },
+  { k: 'eyepieceFocalLengthMm', label: 'Eyepiece focal length (mm)', for: 'scope' },
+  { k: 'eyepieceAfovDeg', label: 'Eyepiece apparent field (°)', for: 'scope' },
+  { k: 'fieldStopMm', label: 'Field stop or sensor diagonal (mm), optional', for: 'scope camera' },
+  { k: 'focalFactor', label: 'Barlow (above 1) or reducer (below 1) factor', for: 'scope camera', ph: '1' },
+  { k: 'trainFactor', label: 'Other optical-train factor, optional', for: 'scope camera', ph: '1' },
+  { k: 'binocularMagnification', label: 'Binocular magnification', for: 'bino' },
+  { k: 'binocularObjectiveMm', label: 'Objective diameter (mm)', for: 'bino' },
+  { k: 'trueFieldDeg', label: 'True field of view (°)', for: 'bino eye' },
+  { k: 'fovMetresAt1000m', label: 'Field width at 1000 m (m)', for: 'bino' },
+  { k: 'binocularAfovDeg', label: 'Apparent field of view (°)', for: 'bino' },
+];
+---
+
+<section class="afov" data-afov data-presets={JSON.stringify(PRESETS)} data-objects={JSON.stringify(OBJECTS)} aria-labelledby={`${id}-h`}>
+  <h2 id={`${id}-h`} class="afov-title">{heading}</h2>
+
+  <div class="afov-grid">
+    <form class="afov-controls" onsubmit="return false">
+      <fieldset class="afov-seg">
+        <legend>Instrument source</legend>
+        <label><input type="radio" name={`${id}-mode`} value="preset" checked /> Preset</label>
+        <label><input type="radio" name={`${id}-mode`} value="custom" /> Custom</label>
+      </fieldset>
+
+      <label class="afov-field" data-r="presetWrap">
+        <span>Preset (representative example)</span>
+        <select data-r="preset">
+          {categories.map(([cat, items]) => (
+            <optgroup label={cat}>
+              {items.map((p) => <option value={p.id} selected={p.id === defaultPresetId}>{p.name}</option>)}
+            </optgroup>
+          ))}
+        </select>
+        <small data-r="presetDesc"></small>
+      </label>
+
+      <div data-r="customWrap" hidden>
+        <label class="afov-field">
+          <span>Instrument type</span>
+          <select data-r="type">{TYPES.map(([v, l]) => <option value={v}>{l}</option>)}</select>
+        </label>
+        {FIELDS.map((f) => (
+          <label class="afov-field" data-for={f.for}>
+            <span>{f.label}</span>
+            <input type="number" min="0" step="any" inputmode="decimal" data-f={f.k} placeholder={f.ph ?? ''} />
+          </label>
+        ))}
+      </div>
+
+      <label class="afov-field">
+        <span>Object</span>
+        <select data-r="object">
+          {OBJECTS.map((o) => <option value={o.id} selected={o.id === defaultObjectId}>{o.name}</option>)}
+        </select>
+      </label>
+
+      <label class="afov-field">
+        <span>Compare with (dashed outline)</span>
+        <select data-r="compare">
+          <option value="">None</option>
+          {PRESETS.map((p) => <option value={p.id}>{p.name}</option>)}
+        </select>
+      </label>
+
+      <label class="afov-field">
+        <span>Display units</span>
+        <select data-r="unit">
+          <option value="deg">Degrees</option>
+          <option value="arcmin">Arcminutes</option>
+          <option value="arcsec">Arcseconds</option>
+        </select>
+      </label>
+    </form>
+
+    <div class="afov-view">
+      <svg viewBox="0 0 320 320" role="img" data-r="svg" aria-label="Field of view">
+        <defs>
+          <clipPath id={`${id}-clip`}><circle cx="160" cy="160" r="150" /></clipPath>
+        </defs>
+        <circle class="afov-sky" cx="160" cy="160" r="150" />
+        <g clip-path={`url(#${id}-clip)`}>
+          <g data-r="stars"></g>
+          <ellipse data-r="obj" cx="160" cy="160" rx="0" ry="0" fill-opacity="0.85" />
+        </g>
+        <circle class="afov-ring" data-r="ringA" cx="160" cy="160" r="150" />
+        <circle class="afov-ring afov-ring-b" data-r="ringB" cx="160" cy="160" r="0" />
+        <path class="afov-cross" d="M160 148v-10M160 172v10M148 160h-10M172 160h10" />
+      </svg>
+      <p class="afov-legend" data-r="legend" aria-live="polite"></p>
+    </div>
+  </div>
+
+  <div class="afov-results" aria-live="polite">
+    <p class="afov-verdict" data-r="verdict"></p>
+    <ul class="afov-warn" data-r="warnings"></ul>
+    <dl class="afov-stats" data-r="stats"></dl>
+    <ul class="afov-notes" data-r="notes"></ul>
+  </div>
+</section>
+
+<script>
+  import { computeOptics, evaluateFit, formatAngle, METHOD_LABEL } from '../lib/fov/calc';
+  import type { InstrumentConfig, AngleUnit } from '../lib/fov/calc';
+  import type { InstrumentPreset, SkyObject } from '../lib/fov/data';
+
+  const KEYS = [
+    'apertureMm', 'focalLengthMm', 'eyepieceFocalLengthMm', 'eyepieceAfovDeg', 'fieldStopMm',
+    'focalFactor', 'trainFactor', 'binocularMagnification', 'binocularObjectiveMm',
+    'trueFieldDeg', 'fovMetresAt1000m', 'binocularAfovDeg',
+  ] as const;
+  const GROUP: Record<string, string> = {
+    'naked-eye': 'eye', binoculars: 'bino', camera: 'camera',
+    refractor: 'scope', reflector: 'scope', catadioptric: 'scope', finder: 'scope',
+  };
+  const NS = 'http://www.w3.org/2000/svg';
+  const VIEW_R = 150;
+
+  function init(root: HTMLElement) {
+    const presets: InstrumentPreset[] = JSON.parse(root.dataset.presets!);
+    const objects: SkyObject[] = JSON.parse(root.dataset.objects!);
+    const r = <T extends HTMLElement | SVGElement = HTMLElement>(n: string) => root.querySelector<T>(`[data-r="${n}"]`)!;
+    const inputs = Array.from(root.querySelectorAll<HTMLInputElement>('input[data-f]'));
+    const modeRadios = Array.from(root.querySelectorAll<HTMLInputElement>('input[type="radio"]'));
+    const presetSel = r<HTMLSelectElement>('preset');
+    const typeSel = r<HTMLSelectElement>('type');
+    const mode = () => modeRadios.find((x) => x.checked)!.value;
+
+    // Deterministic star field, so the view is stable between renders.
+    const stars = r<SVGGElement>('stars');
+    let seed = 7;
+    const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
+    for (let i = 0; i < 60; i++) {
+      const c = document.createElementNS(NS, 'circle');
+      c.setAttribute('cx', String(20 + rnd() * 280));
+      c.setAttribute('cy', String(20 + rnd() * 280));
+      c.setAttribute('r', String(0.4 + rnd() * 0.9));
+      c.setAttribute('class', 'afov-star');
+      stars.appendChild(c);
+    }
+
+    const fill = (p: InstrumentPreset) => {
+      typeSel.value = p.type;
+      inputs.forEach((i) => { const v = (p as any)[i.dataset.f!]; i.value = v === undefined ? '' : String(v); });
+    };
+
+    const config = (): InstrumentConfig => {
+      if (mode() === 'preset') return presets.find((p) => p.id === presetSel.value)!;
+      const cfg: any = { type: typeSel.value };
+      inputs.forEach((i) => {
+        if (i.closest<HTMLElement>('[data-for]')!.hidden) return;
+        cfg[i.dataset.f!] = i.value === '' ? undefined : Number(i.value);
+      });
+      return cfg;
+    };
+
+    const li = (parent: HTMLElement, text: string) => { const e = document.createElement('li'); e.textContent = text; parent.appendChild(e); };
+
+    function render() {
+      const custom = mode() === 'custom';
+      r('presetWrap').hidden = custom;
+      r('customWrap').hidden = !custom;
+      const group = GROUP[typeSel.value];
+      root.querySelectorAll<HTMLElement>('[data-for]').forEach((el) => { el.hidden = !el.dataset.for!.split(' ').includes(group); });
+
+      const preset = presets.find((p) => p.id === presetSel.value);
+      r('presetDesc').textContent = preset ? `${preset.description}${preset.notes ? ' ' + preset.notes : ''} Illustrative values, not a spec for every instrument of this kind.` : '';
+
+      const unit = r<HTMLSelectElement>('unit').value as AngleUnit;
+      const obj = objects.find((o) => o.id === r<HTMLSelectElement>('object').value)!;
+      const res = computeOptics(config());
+      const cmpPreset = presets.find((p) => p.id === r<HTMLSelectElement>('compare').value);
+      const cmp = cmpPreset ? computeOptics(cmpPreset) : undefined;
+
+      // ---- results text ----
+      const verdict = r('verdict'); const warn = r('warnings'); const stats = r('stats'); const notes = r('notes');
+      [warn, stats, notes].forEach((e) => (e.textContent = ''));
+      res.warnings.forEach((w) => li(warn, w));
+      res.notes.forEach((n) => li(notes, n));
+
+      const row = (k: string, v: string) => {
+        const dt = document.createElement('dt'); dt.textContent = k;
+        const dd = document.createElement('dd'); dd.textContent = v;
+        stats.append(dt, dd);
+      };
+      const num = (v: number | undefined, d: number, suffix = '') => (v === undefined ? '—' : `${Number(v.toFixed(d)).toLocaleString('en-GB')}${suffix}`);
+      const approx = res.approximate ? '≈ ' : '';
+      row('Magnification', num(res.magnification, 1, '×'));
+      row('Effective focal length', num(res.effectiveFocalLengthMm, 0, ' mm'));
+      row('Focal ratio', res.focalRatio === undefined ? '—' : `f/${res.focalRatio.toFixed(1)}`);
+      row('Exit pupil', num(res.exitPupilMm, 1, ' mm'));
+      if (res.trueFieldDeg !== undefined) {
+        row('True field of view', `${approx}${formatAngle(res.trueFieldDeg, unit)}`);
+        row('Field diameter', `${approx}${formatAngle(res.trueFieldDeg, 'deg')} = ${formatAngle(res.trueFieldDeg, 'arcmin')} = ${formatAngle(res.trueFieldDeg, 'arcsec')}`);
+        row('Method', METHOD_LABEL[res.method]);
+      } else {
+        row('True field of view', '—');
+      }
+
+      // ---- drawing ----
+      const svg = r<SVGSVGElement>('svg');
+      const ringA = r<SVGCircleElement>('ringA');
+      const ringB = r<SVGCircleElement>('ringB');
+      const el = r<SVGEllipseElement>('obj');
+      const fA = res.trueFieldDeg;
+      const fB = cmp?.trueFieldDeg;
+
+      if (fA === undefined) {
+        verdict.textContent = 'Complete the instrument details to see the field of view.';
+        el.setAttribute('rx', '0'); el.setAttribute('ry', '0'); ringB.setAttribute('r', '0');
+        r('legend').textContent = '';
+        svg.setAttribute('aria-label', 'Field of view unavailable');
+        return;
+      }
+
+      const viewDeg = Math.max(fA, fB ?? 0);
+      const objDeg = obj.majorArcmin / 60;
+      const objMinDeg = obj.minorArcmin / 60;
+      ringA.setAttribute('r', String((VIEW_R * fA) / viewDeg));
+      ringB.setAttribute('r', fB ? String((VIEW_R * fB) / viewDeg) : '0');
+      const rx = Math.max((VIEW_R * objDeg) / 2 / viewDeg, 1.2);
+      const ry = Math.max((VIEW_R * objMinDeg) / 2 / viewDeg, 1.2);
+      el.setAttribute('rx', String(rx)); el.setAttribute('ry', String(ry));
+      el.setAttribute('fill', obj.colour);
+
+      const fit = evaluateFit(obj.majorArcmin, fA);
+      const pct = fit.percent < 0.1 ? '<0.1' : fit.percent < 10 ? fit.percent.toFixed(1) : Math.round(fit.percent).toLocaleString('en-GB');
+      verdict.textContent = `${obj.name} ${fit.fits ? 'fits' : 'does not fit'}: it spans about ${pct}% of the field diameter. ${fit.note}${obj.note ? ' ' + obj.note : ''}`;
+      r('legend').textContent = cmpPreset
+        ? `Solid outline: current instrument. Dashed: ${cmpPreset.name} (${fB !== undefined ? '≈ ' + formatAngle(fB, unit) : 'field unavailable'}).`
+        : `Circle = the field of view (${approx}${formatAngle(fA, unit)} across). ${obj.name} is drawn to the same scale.`;
+      svg.setAttribute('aria-label', `${obj.name} shown at ${pct}% of the field diameter`);
+    }
+
+    root.addEventListener('input', render);
+    root.addEventListener('change', (e) => {
+      const t = e.target as HTMLInputElement;
+      if (t.type === 'radio' && t.value === 'custom') {
+        const p = presets.find((x) => x.id === presetSel.value);
+        if (p) fill(p);
+      }
+      render();
+    });
+    fill(presets.find((p) => p.id === presetSel.value)!);
+    render();
+  }
+
+  document.querySelectorAll<HTMLElement>('[data-afov]').forEach(init);
+</script>
+
+<style>
+  .afov {
+    --afov-ink: var(--afov-text, #1c2230);
+    --afov-muted: #5b6577;
+    --afov-surface: var(--afov-bg, #f6f7f9);
+    --afov-line: #ccd2dc;
+    --afov-sky: #0b1020;
+    --afov-accent: #e0a63a;
+    color: var(--afov-ink);
+    background: var(--afov-surface);
+    border: 1px solid var(--afov-line);
+    border-radius: 6px;
+    padding: clamp(1rem, 3vw, 2rem);
+    font: inherit;
+  }
+  @media (prefers-color-scheme: dark) {
+    .afov { --afov-ink: var(--afov-text, #e6e9f0); --afov-muted: #9aa4b8; --afov-surface: var(--afov-bg, #141926); --afov-line: #2c3547; }
+  }
+  .afov-title { margin: 0 0 1rem; font-size: 1.4rem; line-height: 1.2; }
+  .afov-grid { display: grid; gap: 1.5rem; grid-template-columns: minmax(0, 1fr); }
+  @media (min-width: 760px) { .afov-grid { grid-template-columns: minmax(0, 20rem) minmax(0, 1fr); align-items: start; } }
+
+  .afov-controls { display: grid; gap: 0.85rem; }
+  .afov-seg { border: 0; padding: 0; margin: 0; display: flex; gap: 1rem; }
+  .afov-seg legend { padding: 0; margin-bottom: 0.3rem; font-size: 0.85rem; color: var(--afov-muted); }
+  .afov-field { display: grid; gap: 0.25rem; margin-bottom: 0.6rem; }
+  .afov-controls > .afov-field { margin-bottom: 0; }
+  .afov-field[hidden], [hidden] { display: none; }
+  .afov-field > span { font-size: 0.85rem; color: var(--afov-muted); }
+  .afov-field small { font-size: 0.8rem; color: var(--afov-muted); line-height: 1.35; }
+  .afov select, .afov input[type='number'] {
+    font: inherit; color: inherit; background: transparent; padding: 0.45rem 0.55rem;
+    border: 1px solid var(--afov-line); border-radius: 4px; width: 100%; box-sizing: border-box;
+  }
+  .afov select option, .afov select optgroup { color: #1c2230; background: #fff; }
+  .afov :is(select, input):focus-visible { outline: 2px solid var(--afov-accent); outline-offset: 1px; }
+
+  .afov-view { display: grid; gap: 0.5rem; justify-items: center; }
+  .afov-view svg { width: min(100%, 26rem); height: auto; }
+  .afov-sky { fill: var(--afov-sky); }
+  .afov-star { fill: #fff; opacity: 0.7; }
+  .afov-ring { fill: none; stroke: var(--afov-accent); stroke-width: 2; }
+  .afov-ring-b { stroke-dasharray: 6 5; stroke: #8fb4ff; stroke-width: 1.5; }
+  .afov-cross { stroke: #fff; stroke-opacity: 0.25; stroke-width: 1; }
+  .afov-legend { margin: 0; font-size: 0.85rem; color: var(--afov-muted); text-align: center; max-width: 30rem; }
+
+  .afov-results { margin-top: 1.5rem; border-top: 1px solid var(--afov-line); padding-top: 1rem; }
+  .afov-verdict { margin: 0 0 0.75rem; font-size: 1.05rem; line-height: 1.45; max-width: 60ch; }
+  .afov-warn { margin: 0 0 0.75rem; padding: 0 0 0 1.1rem; color: #b45309; }
+  @media (prefers-color-scheme: dark) { .afov-warn { color: #f2b45c; } }
+  .afov-notes { margin: 0.75rem 0 0; padding-left: 1.1rem; font-size: 0.85rem; color: var(--afov-muted); }
+  .afov-stats { display: grid; grid-template-columns: max-content 1fr; gap: 0.3rem 1.25rem; margin: 0; }
+  .afov-stats :global(dt) { color: var(--afov-muted); }
+  .afov-stats :global(dd) { margin: 0; font-variant-numeric: tabular-nums; }
+</style>

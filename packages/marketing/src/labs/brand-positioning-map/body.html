@@ -1,0 +1,239 @@
+<!--SITE_HEADER-->
+
+  <main id="main">
+    <section class="hero wrap">
+      <p class="eyebrow">Interactive perceptual-mapping prototype</p>
+
+      <h1>See the market through your audience’s eyes.</h1>
+
+      <p class="hero-copy">
+        Map how customers perceive your brand and the alternatives they genuinely consider. Use
+        two attributes that matter to purchase decisions—such as affordability and specialist
+        expertise, or simplicity and capability—to reveal crowded positions, meaningful
+        differentiation and potential opportunities to investigate.
+      </p>
+
+      <div class="notice">
+        <span class="notice-icon" aria-hidden="true">!</span>
+        <div>
+          <strong>An empty space is a research question, not automatically an opportunity.</strong>
+          A blank area can signal unmet demand, but it can also reflect a trade-off customers do
+          not value, a proposition that is difficult to deliver or missing competitors. Ground map
+          positions in customer evidence and test any positioning hypothesis before investing.
+        </div>
+      </div>
+    </section>
+
+    <section class="wrap app-shell" aria-label="Brand positioning map tool">
+      <form class="panel planner" id="positioning-form">
+        <div class="panel-heading">
+          <h2>Plot a brand or alternative</h2>
+          <p>
+            Use scores from research where possible. A positioning map represents perception, not
+            a factual scorecard; label assumptions and distinguish customer evidence from internal
+            judgement.
+          </p>
+        </div>
+
+        <div class="field-set">
+          <div class="field">
+            <label for="brand-name">Brand, competitor or substitute</label>
+            <input
+              id="brand-name"
+              name="brand-name"
+              type="text"
+              value="Your Brand"
+              placeholder="For example: Your brand, direct competitor or alternative solution"
+            />
+          </div>
+
+          <div class="field">
+            <label for="brand-note">Evidence or perception note</label>
+            <textarea
+              id="brand-note"
+              name="brand-note"
+              placeholder="Summarise the research evidence, assumptions or customer language behind this position."
+            >Illustrative own-brand position. Validate with customer interviews, ratings research, usability testing, review analysis and competitor comparison.</textarea>
+          </div>
+
+          <div class="field">
+            <label for="brand-type">Brand type</label>
+            <select id="brand-type" name="brand-type">
+              <option value="own">Your brand</option>
+              <option value="competitor">Competitor</option>
+              <option value="substitute">Substitute or adjacent alternative</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="x-low">Horizontal axis: lower end</label>
+            <input id="x-low" name="x-low" type="text" value="Less specialised" />
+          </div>
+
+          <div class="field">
+            <label for="x-high">Horizontal axis: higher end</label>
+            <input id="x-high" name="x-high" type="text" value="More specialised" />
+          </div>
+
+          <div class="field">
+            <label for="y-low">Vertical axis: lower end</label>
+            <input id="y-low" name="y-low" type="text" value="Lower perceived value" />
+          </div>
+
+          <div class="field">
+            <label for="y-high">Vertical axis: higher end</label>
+            <input id="y-high" name="y-high" type="text" value="Higher perceived value" />
+          </div>
+
+          <div class="range-row">
+            <div class="range-label">
+              <label for="x-score">Horizontal perception score</label>
+              <output class="range-value" id="x-score-value">72 / 100</output>
+            </div>
+            <input id="x-score" name="x-score" type="range" min="0" max="100" step="1" value="72" />
+          </div>
+
+          <div class="range-row">
+            <div class="range-label">
+              <label for="y-score">Vertical perception score</label>
+              <output class="range-value" id="y-score-value">74 / 100</output>
+            </div>
+            <input id="y-score" name="y-score" type="range" min="0" max="100" step="1" value="74" />
+          </div>
+
+          <div class="field">
+            <label for="demo-picker">Load an example market</label>
+            <select id="demo-picker" name="demo-picker">
+              <option value="">Choose a demo…</option>
+              <option value="software">Research-planning software market</option>
+              <option value="websites">Website user-testing comparison</option>
+              <option value="consumer">Sustainable household products market</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="action-row">
+          <button class="button button-primary" type="submit">Add or update position</button>
+          <button class="button button-secondary" id="remove-brand" type="button">Remove selected</button>
+          <button class="button button-secondary button-wide" id="copy-map" type="button">
+            Copy positioning map
+          </button>
+        </div>
+      </form>
+
+      <section class="panel map-panel" aria-labelledby="map-title">
+        <div class="map-header">
+          <div>
+            <h2 id="map-title">Brand perception map</h2>
+            <p id="map-subtitle">
+              Select a point to inspect its evidence note and compare its perceived position with the wider competitive set.
+            </p>
+          </div>
+
+          <div class="brand-count">
+            <div>
+              <strong id="brand-count">5</strong>
+              <span>Alternatives plotted</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="map-body">
+          <div class="legend" aria-label="Map legend">
+            <span class="legend-item"><span class="legend-dot" style="color: var(--teal)"></span>Your brand</span>
+            <span class="legend-item"><span class="legend-dot" style="color: var(--purple)"></span>Competitor</span>
+            <span class="legend-item"><span class="legend-dot" style="color: var(--amber)"></span>Substitute / adjacent option</span>
+            <span class="legend-item"><span class="legend-dot" style="color: var(--text-lo); border-style: dashed"></span>Dashed border = own brand</span>
+          </div>
+
+          <div class="map-scroll">
+            <div class="map-layout">
+              <div class="y-axis-label" id="y-axis-title">Perceived value</div>
+
+              <div class="perceptual-grid" id="perceptual-grid">
+                <div class="quadrant-shade"></div>
+                <div class="quadrant-shade"></div>
+                <div class="quadrant-shade"></div>
+                <div class="quadrant-shade"></div>
+
+                <span class="axis-point axis-top" id="y-axis-high">Higher perceived value</span>
+                <span class="axis-point axis-bottom" id="y-axis-low">Lower perceived value</span>
+                <span class="axis-point axis-left" id="x-axis-low">Less specialised</span>
+                <span class="axis-point axis-right" id="x-axis-high">More specialised</span>
+              </div>
+
+              <div class="x-axis-label">
+                <span id="x-axis-label-low">Less specialised</span>
+                <span>Customer perception</span>
+                <span id="x-axis-label-high">More specialised</span>
+              </div>
+            </div>
+          </div>
+
+          <section class="detail-card" aria-live="polite">
+            <div>
+              <h3 id="detail-title">Select a brand</h3>
+              <p id="detail-note">
+                Click any point on the map to inspect the evidence or assumption behind its placement.
+              </p>
+            </div>
+
+            <div class="detail-meta">
+              <div class="meta-box">
+                <small>Position type</small>
+                <strong id="detail-type">—</strong>
+              </div>
+
+              <div class="meta-box">
+                <small>Horizontal perception</small>
+                <strong id="detail-x">—</strong>
+              </div>
+
+              <div class="meta-box">
+                <small>Vertical perception</small>
+                <strong id="detail-y">—</strong>
+              </div>
+
+              <div class="meta-box">
+                <small>Research prompt</small>
+                <strong id="detail-prompt">—</strong>
+              </div>
+            </div>
+          </section>
+
+          <div class="insights-grid">
+            <article class="insight-card">
+              <small>Competitive density</small>
+              <p id="density-insight">Clusters may signal close substitutes, but validate this with customer comparisons and choice research.</p>
+            </article>
+
+            <article class="insight-card">
+              <small>Positioning opportunity</small>
+              <p id="opportunity-insight">Whitespace is an invitation to explore—not evidence of demand or a viable differentiation strategy.</p>
+            </article>
+
+            <article class="insight-card">
+              <small>Evidence quality</small>
+              <p id="evidence-insight">Treat internal scores as hypotheses; strengthen them with representative customer research.</p>
+            </article>
+          </div>
+
+          <section class="guidance-panel">
+            <h3>How to use a positioning map</h3>
+            <ul class="guidance-list" id="guidance-list"></ul>
+          </section>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <p>
+        This prototype is for strategic discussion and research planning. It does not establish
+        objective product quality, market demand or competitor performance. Avoid unsupported
+        comparative claims, misleading ratings, fabricated customer evidence and the collection of
+        user-testing or survey data without appropriate consent and privacy safeguards.
+      </p>
+    </div>
+  </footer>

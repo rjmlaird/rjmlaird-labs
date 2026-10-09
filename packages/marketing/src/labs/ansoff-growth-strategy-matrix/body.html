@@ -1,0 +1,261 @@
+<!--SITE_HEADER-->
+
+  <main id="main">
+    <section class="hero wrap">
+      <p class="eyebrow">Interactive Ansoff-matrix prototype</p>
+
+      <h1>Explore growth beyond doing more of the same.</h1>
+
+      <p class="hero-copy">
+        The Ansoff matrix structures growth choices around two questions: are you working with
+        existing or new products, and existing or new markets? Use it to generate and evaluate
+        strategic options across penetration, market development, product development and
+        diversification.
+      </p>
+
+      <div class="notice">
+        <span class="notice-icon" aria-hidden="true">!</span>
+        <div>
+          <strong>Risk generally increases as unfamiliarity increases—but the matrix is not a risk score.</strong>
+          Assess customer demand, strategic fit, capability, economics, delivery capacity,
+          competition, regulation and ethical implications before committing resources. “New”
+          must be defined for your specific organisation and target market.
+        </div>
+      </div>
+    </section>
+
+    <section class="wrap app-shell" aria-label="Ansoff Growth Strategy Matrix planner">
+      <form class="panel planner" id="ansoff-form">
+        <div class="panel-heading">
+          <h2>Plan a growth option</h2>
+          <p>
+            Choose a matrix quadrant, describe the initiative and record the target market,
+            evidence, experiment and key risk. A strong option has a testable hypothesis—not only
+            an attractive idea.
+          </p>
+        </div>
+
+        <div class="field-set">
+          <div class="field">
+            <label for="business-name">Business, product portfolio or proposition</label>
+            <input
+              id="business-name"
+              name="business-name"
+              type="text"
+              value="Collaborative research-impact planning platform"
+              placeholder="For example: Product line, service business or strategic initiative"
+            />
+          </div>
+
+          <div class="field">
+            <label for="strategy-selector">Growth strategy</label>
+            <select id="strategy-selector" name="strategy-selector">
+              <option value="penetration">Market Penetration</option>
+              <option value="development">Market Development</option>
+              <option value="product">Product Development</option>
+              <option value="diversification">Diversification</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="initiative">Initiative or growth hypothesis</label>
+            <textarea
+              id="initiative"
+              name="initiative"
+              placeholder="Describe a specific action rather than a broad ambition."
+            >Improve activation and repeat use among existing research-development teams through guided onboarding, templates and role-based collaboration prompts.</textarea>
+          </div>
+
+          <div class="field">
+            <label for="audience">Target market or customer group</label>
+            <textarea
+              id="audience"
+              name="audience"
+              placeholder="Who is the customer, segment, use case, geography, channel or need?"
+            >Existing institutional customers and active project teams that already use the platform but have uneven adoption across roles.</textarea>
+          </div>
+
+          <div class="field">
+            <label for="evidence">Evidence and test</label>
+            <textarea
+              id="evidence"
+              name="evidence"
+              placeholder="What evidence supports the option, and what low-risk experiment could validate it?"
+            >Analyse product-usage cohorts and interview active and inactive users; test a guided onboarding sequence with a small group and compare activation, repeat use and reported usefulness.</textarea>
+          </div>
+
+          <div class="field">
+            <label for="risk">Key risk, dependency or boundary</label>
+            <textarea
+              id="risk"
+              name="risk"
+              placeholder="Name the most consequential uncertainty, trade-off or ethical boundary."
+            >Do not optimise usage through intrusive notifications or dark patterns; ensure the onboarding support saves time and respects user roles, consent and data governance.</textarea>
+          </div>
+
+          <div class="field">
+            <label for="demo-picker">Load an example growth plan</label>
+            <select id="demo-picker" name="demo-picker">
+              <option value="">Choose a demo…</option>
+              <option value="platform">Research-planning platform</option>
+              <option value="consumer">Sustainable consumer-products brand</option>
+              <option value="services">Professional-services business</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="action-row">
+          <button class="button button-primary" type="submit">Save growth option</button>
+          <button class="button button-secondary" id="clear-option" type="button">Clear entry</button>
+          <button class="button button-secondary button-wide" id="copy-matrix" type="button">
+            Copy growth matrix
+          </button>
+        </div>
+      </form>
+
+      <section class="panel matrix-panel" aria-labelledby="matrix-title">
+        <div class="matrix-header">
+          <div>
+            <h2 id="matrix-title">Growth strategy map</h2>
+            <p id="matrix-subtitle">
+              Select a quadrant to inspect its initiative, target market, evidence and risk boundary.
+            </p>
+          </div>
+
+          <div class="coverage-badge">
+            <div>
+              <strong id="coverage-score">4/4</strong>
+              <span>Options mapped</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="matrix-body">
+          <div class="legend" aria-label="Strategy risk legend">
+            <span class="legend-item"><span class="legend-dot" style="color: var(--blue)"></span>Known product + known market</span>
+            <span class="legend-item"><span class="legend-dot" style="color: var(--teal)"></span>Known product + new market</span>
+            <span class="legend-item"><span class="legend-dot" style="color: var(--purple)"></span>New product + known market</span>
+            <span class="legend-item"><span class="legend-dot" style="color: var(--amber)"></span>New product + new market</span>
+          </div>
+
+          <div class="matrix-scroll">
+            <div class="ansoff-layout">
+              <div class="y-axis-label">Markets</div>
+
+              <div class="matrix-grid">
+                <button class="strategy-card" type="button" data-strategy="development" aria-pressed="false">
+                  <span>
+                    <span class="strategy-number">02</span>
+                    <span class="strategy-kicker">Existing product · New market</span>
+                    <h3>Market Development</h3>
+                    <p id="development-summary">No growth option added.</p>
+                  </span>
+                  <span class="strategy-status" id="development-status">Not planned</span>
+                </button>
+
+                <button class="strategy-card" type="button" data-strategy="diversification" aria-pressed="false">
+                  <span>
+                    <span class="strategy-number">04</span>
+                    <span class="strategy-kicker">New product · New market</span>
+                    <h3>Diversification</h3>
+                    <p id="diversification-summary">No growth option added.</p>
+                  </span>
+                  <span class="strategy-status" id="diversification-status">Not planned</span>
+                </button>
+
+                <button class="strategy-card" type="button" data-strategy="penetration" aria-pressed="false">
+                  <span>
+                    <span class="strategy-number">01</span>
+                    <span class="strategy-kicker">Existing product · Existing market</span>
+                    <h3>Market Penetration</h3>
+                    <p id="penetration-summary">No growth option added.</p>
+                  </span>
+                  <span class="strategy-status" id="penetration-status">Not planned</span>
+                </button>
+
+                <button class="strategy-card" type="button" data-strategy="product" aria-pressed="false">
+                  <span>
+                    <span class="strategy-number">03</span>
+                    <span class="strategy-kicker">New product · Existing market</span>
+                    <h3>Product Development</h3>
+                    <p id="product-summary">No growth option added.</p>
+                  </span>
+                  <span class="strategy-status" id="product-status">Not planned</span>
+                </button>
+              </div>
+
+              <div class="x-axis-label">
+                <span>Existing products</span>
+                <span>Products</span>
+                <span>New products</span>
+              </div>
+            </div>
+          </div>
+
+          <section class="detail-card" aria-live="polite">
+            <div>
+              <h3 id="detail-title">Select a growth strategy</h3>
+              <p id="detail-initiative">
+                Click a quadrant to inspect the planned initiative and the evidence needed to support it.
+              </p>
+            </div>
+
+            <div class="detail-meta">
+              <div class="meta-box">
+                <small>Target market</small>
+                <strong id="detail-audience">—</strong>
+              </div>
+
+              <div class="meta-box">
+                <small>Evidence and test</small>
+                <strong id="detail-evidence">—</strong>
+              </div>
+
+              <div class="meta-box">
+                <small>Key risk / boundary</small>
+                <strong id="detail-risk">—</strong>
+              </div>
+
+              <div class="meta-box">
+                <small>Strategy prompt</small>
+                <strong id="detail-prompt">—</strong>
+              </div>
+            </div>
+          </section>
+
+          <div class="insights-grid">
+            <article class="insight-card">
+              <small>Portfolio coverage</small>
+              <p id="coverage-insight">Map choices across all four options, then prioritise the few initiatives that have compelling evidence and strategic fit.</p>
+            </article>
+
+            <article class="insight-card">
+              <small>Learning design</small>
+              <p id="learning-insight">Convert assumptions into small, ethical tests before scaling investment, advertising or delivery capacity.</p>
+            </article>
+
+            <article class="insight-card">
+              <small>Risk management</small>
+              <p id="risk-insight">Newness can be valuable, but unfamiliar markets and products increase uncertainty and require stronger validation.</p>
+            </article>
+          </div>
+
+          <section class="guidance-panel">
+            <h3>Using the Ansoff matrix well</h3>
+            <ul class="guidance-list" id="guidance-list"></ul>
+          </section>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <p>
+        This prototype is a strategic-planning tool, not investment advice. Growth initiatives can
+        affect customers, communities, staff, suppliers and markets in different ways. Validate
+        demand, accessibility, security, privacy, sustainability, regulatory duties, operational
+        capability and financial resilience before making material commitments.
+      </p>
+    </div>
+  </footer>

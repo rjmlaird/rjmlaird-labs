@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Magnetic fields, A-level physics</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Familjen+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{--bg:#eceef2;--panel:#f9fafb;--field:#eef1f5;--ink:#16202c;--muted:#566274;--line:#d0d7e0;--accent:#8f5f10;--on-accent:#fff;--sky:#070b17;--display:'Familjen Grotesk',system-ui,-apple-system,'Segoe UI',sans-serif;--mono:'IBM Plex Mono',ui-monospace,Menlo,Consolas,monospace;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0a0e17;--panel:#111826;--field:#0c121e;--ink:#e6ebf3;--muted:#93a0b4;--line:#243046;--accent:#e0a844;--on-accent:#1a1100;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0a0e17;--panel:#111826;--field:#0c121e;--ink:#e6ebf3;--muted:#93a0b4;--line:#243046;--accent:#e0a844;--on-accent:#1a1100;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 var(--display);padding:20px 16px 36px}
+.wrap{max-width:1120px;margin-inline:auto;display:flex;flex-direction:column;gap:16px}
+h1{margin:0;font-size:1.7rem;letter-spacing:-.015em}.top p{margin:2px 0 0;color:var(--muted);max-width:68ch}
+h2{margin:0 0 4px;font-size:1.15rem;font-weight:600}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px;min-width:0}
+.tabs{display:flex;flex-wrap:wrap;gap:6px}
+.tabs button{display:flex;flex-direction:column;align-items:flex-start;gap:0;padding:6px 12px;text-align:left}
+.tabs small{font:.68rem var(--mono);color:var(--muted)}
+.layout{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:16px;align-items:start}
+@media(max-width:860px){.layout{grid-template-columns:minmax(0,1fr)}}
+.cw{border:1px solid var(--line);border-radius:6px;overflow:hidden;background:var(--sky)}.cw canvas{display:block;width:100%}
+button,input,select{font:inherit;font-size:.86rem;color:var(--ink);background:var(--field);border:1px solid var(--line);border-radius:6px;padding:6px 10px}
+button{cursor:pointer}button:hover{border-color:var(--muted)}button[aria-selected=true],button[aria-pressed=true]{border-color:var(--accent);background:var(--panel);font-weight:600}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+input[type=range]{width:100%;padding:0;accent-color:var(--accent);margin:6px 0 0}
+.ctl{display:flex;flex-direction:column;gap:12px}
+.sl label,.opt>span{display:flex;justify-content:space-between;gap:8px;font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.07em}
+.sl output{font:.82rem var(--mono);color:var(--ink);text-transform:none;letter-spacing:0}
+.opt .bs{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}.opt select{width:100%;margin-top:6px}
+dl.facts{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px 12px;margin:14px 0 0;padding-top:10px;border-top:1px solid var(--line)}
+dl.facts dt{color:var(--muted);font-size:.9rem}dl.facts dd{margin:0;font:.84rem var(--mono);text-align:right}
+.key{margin:12px 0 0;font-size:.9rem}.key b{font-weight:600}.note{margin:8px 0 0;color:var(--muted);font-size:.82rem}
+</style></head><body>
+<main class="wrap">
+<header class="top"><h1>Magnetic fields</h1>
+<p>Interactive demos for AQA A-level Physics 3.7.5 (7408), one tab for each subsection. Change a quantity, watch the picture, and check the equation.</p></header>
+<div class="tabs" role="tablist" id="tabs"></div>
+<section class="card" aria-live="polite"><h2 id="ttl"></h2><p class="note" style="margin:0 0 10px" id="sub"></p>
+<div class="layout"><div><div class="cw"><canvas id="cv" role="img" aria-label="Interactive diagram"></canvas></div></div>
+<div><div class="ctl" id="ctl"></div><dl class="facts" id="out"></dl></div></div>
+<p class="key" id="key"></p></section>
+</main>
+<script>
+const $ = (id) => document.getElementById(id), TAU = Math.PI * 2, RAD = Math.PI / 180, cl = (v, a, b) => Math.max(a, Math.min(b, v));
+function fmt(x, u) { const a = Math.abs(x); let s = x === 0 ? '0' : (a >= 1e5 || a < 1e-2) ? x.toExponential(2).replace('e+', ' × 10^').replace('e-', ' × 10^−') : (+x.toPrecision(3)) + ''; return s + (u ? ' ' + u : ''); }
+const len = (m) => m < 1e-3 ? fmt(m * 1e6, 'µm') : m < 0.01 ? fmt(m * 1e3, 'mm') : m < 1 ? fmt(m * 100, 'cm') : fmt(m, 'm');
+function fit(cv, h) { const w = cv.parentElement.clientWidth; if (!w) return null; const d = Math.min(window.devicePixelRatio || 1, 2); if (cv.width !== Math.round(w * d) || cv.height !== Math.round(h * d)) { cv.width = Math.round(w * d); cv.height = Math.round(h * d); cv.style.height = h + 'px'; } const c = cv.getContext('2d'); c.setTransform(d, 0, 0, d, 0, 0); return { c, w, h }; }
+function halo(c, s, x, y, al, col, font) { c.font = font || '11px "IBM Plex Mono",monospace'; c.textAlign = al || 'left'; c.textBaseline = 'middle'; c.lineWidth = 3; c.lineJoin = 'round'; c.strokeStyle = 'rgba(7,11,23,.88)'; c.strokeText(s, x, y); c.fillStyle = col || '#e6ebf3'; c.fillText(s, x, y); }
+function arrow(c, x0, y0, dx, dy, col, w) { const L = Math.hypot(dx, dy); if (L < 2) return; c.strokeStyle = col; c.fillStyle = col; c.lineWidth = w || 2.5; c.beginPath(); c.moveTo(x0, y0); c.lineTo(x0 + dx, y0 + dy); c.stroke(); const a = Math.atan2(dy, dx), h = Math.min(10, L * 0.45); c.beginPath(); c.moveTo(x0 + dx, y0 + dy); c.lineTo(x0 + dx - h * Math.cos(a - 0.4), y0 + dy - h * Math.sin(a - 0.4)); c.lineTo(x0 + dx - h * Math.cos(a + 0.4), y0 + dy - h * Math.sin(a + 0.4)); c.fill(); }
+function cross(c, x, y, into, col) { c.strokeStyle = col; c.fillStyle = col; c.lineWidth = 1.2; if (into) { c.beginPath(); c.moveTo(x - 3.5, y - 3.5); c.lineTo(x + 3.5, y + 3.5); c.moveTo(x + 3.5, y - 3.5); c.lineTo(x - 3.5, y + 3.5); c.stroke(); } else { c.beginPath(); c.arc(x, y, 2.2, 0, TAU); c.fill(); c.beginPath(); c.arc(x, y, 5, 0, TAU); c.stroke(); } }
+function plot(c, x, y, w, h, o) {
+  const X = (v) => x + (v - o.x0) / (o.x1 - o.x0) * w, Y = (v) => y + h - (v - o.y0) / (o.y1 - o.y0) * h;
+  c.strokeStyle = 'rgba(190,205,235,.28)'; c.lineWidth = 1; c.strokeRect(x, y, w, h); if (o.y0 < 0 && o.y1 > 0) { c.beginPath(); c.moveTo(x, Y(0)); c.lineTo(x + w, Y(0)); c.stroke(); }
+  for (const s of o.series) { c.strokeStyle = s.col; c.lineWidth = 2; c.beginPath(); for (let i = 0; i <= 180; i++) { const v = o.x0 + (o.x1 - o.x0) * i / 180; if (i) c.lineTo(X(v), Y(s.fn(v))); else c.moveTo(X(v), Y(s.fn(v))); } c.stroke(); }
+  halo(c, o.t, x + 6, y + 10, 'left', '#e6ebf3'); halo(c, fmt(o.y1), x - 4, y + 7, 'right', 'rgba(190,205,235,.8)', '10px "IBM Plex Mono",monospace'); halo(c, fmt(o.y0), x - 4, y + h - 7, 'right', 'rgba(190,205,235,.8)', '10px "IBM Plex Mono",monospace'); return { X, Y };
+}
+function field(c, x0, y0, w, h, B, col) { for (let y = y0 + 14; y < y0 + h - 6; y += 22) { c.strokeStyle = col; c.lineWidth = 1; c.beginPath(); c.moveTo(18, y); c.lineTo(w - 18, y); c.stroke(); for (const x of [w * 0.2, w * 0.5, w * 0.8]) { c.beginPath(); c.moveTo(x - 5, y - 3); c.lineTo(x + 1, y); c.lineTo(x - 5, y + 3); c.stroke(); } } }
+function coilScene(c, w, hs, p, th) {
+  const cx = w / 2, cy = hs / 2, L = 34 + 80 * Math.sqrt(p.A / 500), tx = -Math.sin(th), ty = -Math.cos(th), nx = Math.cos(th), ny = -Math.sin(th), pr = L * Math.abs(Math.cos(th));
+  for (let y = 16; y < hs - 6; y += 18) { const hit = Math.abs(y - cy) < pr / 2 && Math.abs(Math.cos(th)) > 0.02; c.strokeStyle = hit ? 'rgba(255,194,71,.8)' : 'rgba(127,176,255,.4)'; c.lineWidth = hit ? 1.8 : 1; c.beginPath(); c.moveTo(14, y); c.lineTo(w - 14, y); c.stroke(); c.beginPath(); c.moveTo(w - 20, y - 3); c.lineTo(w - 14, y); c.lineTo(w - 20, y + 3); c.stroke(); }
+  const turns = Math.min(7, Math.max(1, Math.round(p.N / 80))); c.strokeStyle = '#e39a4a'; c.lineWidth = 2.5;
+  for (let k = 0; k < turns; k++) { const o = (k - (turns - 1) / 2) * 4; c.beginPath(); c.moveTo(cx + nx * o - tx * L / 2, cy + ny * o - ty * L / 2); c.lineTo(cx + nx * o + tx * L / 2, cy + ny * o + ty * L / 2); c.stroke(); }
+  arrow(c, cx, cy, nx * 46, ny * 46, '#fff', 2); halo(c, 'normal', cx + nx * 52, cy + ny * 52, nx >= 0 ? 'left' : 'right', '#fff');
+  c.strokeStyle = '#fff'; c.lineWidth = 1; c.beginPath(); c.arc(cx, cy, 24, 0, -th, th > 0); c.stroke(); halo(c, 'θ', cx + 32, cy - 6 * Math.sign(Math.sin(th) || 1), 'left', '#fff');
+  c.setLineDash([3, 3]); c.strokeStyle = 'rgba(255,194,71,.9)'; c.beginPath(); c.moveTo(cx + L / 2 + 24, cy - pr / 2); c.lineTo(cx + L / 2 + 24, cy + pr / 2); c.stroke(); c.setLineDash([]); halo(c, 'A cosθ', cx + L / 2 + 30, cy, 'left', '#ffc247');
+  halo(c, 'B →', 10, 12, 'left', '#7fb0ff'); halo(c, 'coil seen edge-on', w - 10, hs - 10, 'right', '#e39a4a');
+}
+const PART = { e: { n: 'Electron', m: 9.109e-31, q: -1.602e-19 }, p: { n: 'Proton', m: 1.673e-27, q: 1.602e-19 }, a: { n: 'Alpha particle', m: 6.645e-27, q: 3.204e-19 } };
+const R = (k, label, unit, min, max, step, log) => ({ t: 'r', k, label, unit, min, max, step, log }), O = (k, label, opts) => ({ t: 'o', k, label, opts }), S = (k, label, opts) => ({ t: 's', k, label, opts }), Bt = (label, fn) => ({ t: 'b', label, fn });
+const VD = [0.5, 1, 2, 5, 10, 20, 50, 100], TD = [0.1, 0.2, 0.5, 1, 2, 5, 10, 20, 50];
+const TABS = [
+{ code: '3.7.5.1', name: 'Force on a wire', title: 'Force on a current-carrying wire', sub: 'Field perpendicular to the current. Links to Required practical 10 (top-pan balance).', h: 300,
+  p: { B: 200, I: 5, l: 10, cur: 1, fld: -1 },
+  ctl: [R('B', 'Flux density B', 'mT', 10, 500, 10), R('I', 'Current I', 'A', 0, 10, 0.5), R('l', 'Length of wire in field l', 'cm', 1, 20, 1), O('cur', 'Current direction', [[1, 'to the right →'], [-1, 'to the left ←']]), O('fld', 'Field direction', [[-1, 'into page ×'], [1, 'out of page •']])],
+  out(p) { const F = p.B / 1e3 * p.I * p.l / 100, up = -p.cur * p.fld > 0; return [['Force F = BIl', fmt(F, 'N')], ['Direction of force', up ? 'up the page' : 'down the page'], ['Balance reading changes by F/g', fmt(F / 9.81 * 1000, 'g')], ['B = F / Il', fmt(p.B, 'mT')]]; },
+  key: '<b>F = BIl</b> when the field is perpendicular to the current. The <b>tesla</b> is the flux density that gives a force of 1 N on 1 m of wire carrying 1 A. <b>Fleming’s left-hand rule:</b> First finger = Field, seCond finger = Current, thuMb = Motion (force). In Required practical 10 the magnets sit on a top-pan balance, so the reading changes by F/g.',
+  draw(c, w, h, p) {
+    const F = p.B / 1e3 * p.I * p.l / 100, up = -p.cur * p.fld > 0, cy = h / 2, x0 = w * 0.18, x1 = w * 0.82, half = p.l / 20 * (w * 0.64) / 2 * 1; c.fillStyle = 'rgba(127,176,255,.07)'; c.fillRect(24, 24, w - 48, h - 48);
+    for (let x = 48; x < w - 30; x += 38) for (let y = 48; y < h - 30; y += 38) cross(c, x, y, p.fld < 0, 'rgba(127,176,255,.55)');
+    const xa = w / 2 - half, xb = w / 2 + half; c.strokeStyle = '#e39a4a'; c.lineWidth = 7; c.lineCap = 'round'; c.beginPath(); c.moveTo(x0 - 20, cy); c.lineTo(x1 + 20, cy); c.stroke(); c.lineCap = 'butt';
+    c.strokeStyle = '#ffc247'; c.lineWidth = 7; c.beginPath(); c.moveTo(xa, cy); c.lineTo(xb, cy); c.stroke();
+    if (p.I > 0) arrow(c, w / 2 - p.cur * 40, cy - 16, p.cur * 80, 0, '#ffc247', 2.5); halo(c, 'I', w / 2, cy - 28, 'center', '#ffc247');
+    c.strokeStyle = 'rgba(255,255,255,.6)'; c.lineWidth = 1; c.beginPath(); c.moveTo(xa, cy + 22); c.lineTo(xb, cy + 22); c.moveTo(xa, cy + 17); c.lineTo(xa, cy + 27); c.moveTo(xb, cy + 17); c.lineTo(xb, cy + 27); c.stroke(); halo(c, 'l = ' + p.l + ' cm', w / 2, cy + 36, 'center', '#fff');
+    const L = cl(F * 500, 0, 120) * (up ? -1 : 1); arrow(c, w / 2, cy, 0, L, '#ff6a5a', 4); halo(c, 'F = ' + fmt(F, 'N') + (Math.abs(F * 500) > 120 ? ' (off scale)' : ''), w / 2 + 12, cy + L * 0.6 + (up ? -4 : 4), 'left', '#ff9a8a');
+    halo(c, 'Field ' + (p.fld < 0 ? 'into' : 'out of') + ' the page', 32, 38, 'left', '#7fb0ff'); halo(c, 'Fleming: First = Field, seCond = Current, thuMb = Motion', 32, h - 12, 'left', 'rgba(190,205,235,.8)', '10.5px "IBM Plex Mono",monospace');
+  } },
+{ code: '3.7.5.2', name: 'Moving charges', title: 'Charged particles in a magnetic field', sub: 'F = BQv acts at right angles to the velocity, so the path is a circle. The idea behind the cyclotron.', h: 380,
+  p: { part: 'e', v: 5, B: 5, fld: -1 }, st: { phase: 0 },
+  ctl: [O('part', 'Particle', [['e', 'Electron'], ['p', 'Proton'], ['a', 'Alpha']]), R('v', 'Speed v', '×10⁶ m/s', 1, 10, 0.5), R('B', 'Flux density B', 'mT', 1, 20, 1), O('fld', 'Field direction', [[-1, 'into page ×'], [1, 'out of page •']])],
+  out(p) { const q = PART[p.part], r = q.m * p.v * 1e6 / (p.B / 1e3 * Math.abs(q.q)), T = TAU * q.m / (p.B / 1e3 * Math.abs(q.q)); return [['Force F = BQv', fmt(p.B / 1e3 * Math.abs(q.q) * p.v * 1e6, 'N')], ['Radius r = mv / BQ', len(r)], ['Period T = 2πm / BQ', fmt(T, 's')], ['Frequency f = BQ / 2πm', fmt(1 / T, 'Hz')], ['Charge sign', q.q > 0 ? 'positive' : 'negative']]; },
+  key: 'The force is always perpendicular to the velocity, so the speed stays constant and the path is a circle: BQv = mv²/r, giving <b>r = mv/(BQ)</b>. The <b>period T = 2πm/(BQ) does not depend on speed</b>, which is why a cyclotron can use a fixed-frequency electric field to speed particles up on every half-turn while they spiral outwards. Positive and negative charges curve opposite ways (use Fleming’s left hand with conventional current).',
+  draw(c, w, h, p, t, dt, S) {
+    const q = PART[p.part], rr = (v, B) => q.m * v * 1e6 / (B / 1e3 * Math.abs(q.q)), ref = rr(5, 5), px = 0.2 * h / ref, r = rr(p.v, p.B), rp = r * px, dir = Math.sign(q.q) * -p.fld, wref = Math.abs(q.q) * 5e-3 / q.m, wv = Math.abs(q.q) * p.B / 1e3 / q.m / wref * TAU / 4;
+    S.phase += dt * dir * wv; const cx = w / 2, cy = h / 2, ps = S.phase, x = cx + rp * Math.cos(ps), y = cy - rp * Math.sin(ps), vx = -Math.sin(ps) * dir, vy = -Math.cos(ps) * dir;
+    for (let a = 30; a < w; a += 38) for (let b = 30; b < h; b += 38) cross(c, a, b, p.fld < 0, 'rgba(127,176,255,.4)');
+    c.save(); c.beginPath(); c.rect(0, 0, w, h); c.clip(); c.setLineDash([4, 5]); c.strokeStyle = 'rgba(255,255,255,.3)'; c.lineWidth = 1; c.beginPath(); c.arc(cx, cy, rp, 0, TAU); c.stroke(); c.setLineDash([]);
+    c.strokeStyle = 'rgba(255,194,71,.8)'; c.lineWidth = 2.5; c.beginPath(); c.arc(cx, cy, rp, -ps, -ps + dir * 1.6, dir < 0); c.stroke();
+    const fx = cx - x, fy = cy - y, fl = Math.hypot(fx, fy) || 1; arrow(c, x, y, vx * 46, vy * 46, '#fff', 2.5); arrow(c, x, y, fx / fl * 46, fy / fl * 46, '#ff6a5a', 2.5);
+    c.fillStyle = q.q > 0 ? '#ff8a6a' : '#7fb0ff'; c.beginPath(); c.arc(x, y, 8, 0, TAU); c.fill(); c.fillStyle = '#070b17'; c.font = '700 13px sans-serif'; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillText(q.q > 0 ? '+' : '−', x, y + 0.5); c.restore();
+    halo(c, 'v', x + vx * 52, y + vy * 52, 'center', '#fff'); halo(c, 'F = BQv', x + fx / fl * 58, y + fy / fl * 58, 'center', '#ff9a8a'); halo(c, q.n + ' · r = ' + len(r), 12, 16, 'left', '#e6ebf3'); halo(c, 'Slowed down to watch; the speed of rotation depends only on B', 12, h - 12, 'left', 'rgba(190,205,235,.7)', '10px "IBM Plex Mono",monospace');
+  } },
+{ code: '3.7.5.3', name: 'Flux linkage', title: 'Magnetic flux and flux linkage', sub: 'Φ = BA cosθ, where θ is the angle between B and the normal to the coil. Links to Required practical 11 (search coil).', h: 420,
+  p: { B: 200, A: 100, N: 100, th: 30 },
+  ctl: [R('B', 'Flux density B', 'mT', 10, 500, 10), R('A', 'Coil area A', 'cm²', 10, 500, 10), R('N', 'Turns N', '', 1, 500, 1), R('th', 'Angle θ', '°', 0, 360, 1)],
+  out(p) { const F = p.B / 1e3 * p.A / 1e4, c = Math.cos(p.th * RAD); return [['Φ = BA cosθ', fmt(F * c, 'Wb')], ['Flux linkage NΦ', fmt(p.N * F * c, 'Wb turns')], ['Maximum NΦ (θ = 0°)', fmt(p.N * F, 'Wb turns')], ['cosθ', c.toFixed(2)]]; },
+  key: '<b>Magnetic flux Φ = BA</b> when B is normal to the area, and <b>Φ = BA cosθ</b> otherwise. <b>Flux linkage = NΦ = BAN cosθ</b> for a coil of N turns. It is zero when the coil’s plane is parallel to the field (θ = 90°). In Required practical 11 a search coil on an oscilloscope shows the induced signal shrinking to nothing at that angle. The amber field lines are the ones passing through the coil: the more there are, the larger the flux.',
+  draw(c, w, h, p) { const hs = h * 0.52, th = p.th * RAD, m = p.N * p.B / 1e3 * p.A / 1e4; coilScene(c, w, hs, p, th); const g = plot(c, 52, hs + 22, w - 70, h - hs - 50, { x0: 0, x1: 360, y0: -m, y1: m, t: 'NΦ against θ', series: [{ col: '#7fb0ff', fn: (x) => m * Math.cos(x * RAD) }] }); c.fillStyle = '#ffc247'; c.beginPath(); c.arc(g.X(p.th), g.Y(m * Math.cos(th)), 5, 0, TAU); c.fill(); for (const a of [0, 90, 180, 270, 360]) halo(c, a + '°', g.X(a), h - 10, 'center', 'rgba(190,205,235,.8)', '10px "IBM Plex Mono",monospace'); } },
+{ code: '3.7.5.4', name: 'Induction', title: 'Electromagnetic induction', sub: 'Faraday’s and Lenz’s laws, and the emf of a coil rotating in a field.', h: 560,
+  p: { B: 100, A: 100, N: 100, f: 1 }, st: { ph: 0 },
+  ctl: [R('B', 'Flux density B', 'mT', 10, 500, 10), R('A', 'Coil area A', 'cm²', 10, 500, 10), R('N', 'Turns N', '', 10, 500, 10), R('f', 'Rotation frequency', 'Hz', 0.25, 4, 0.25)],
+  out(p) { const w = TAU * p.f, e = p.B / 1e3 * p.A / 1e4 * p.N * w, T = 1 / p.f; return [['Peak emf BANω', fmt(e, 'V')], ['Angular speed ω = 2πf', fmt(w, 'rad/s')], ['Period', fmt(T, 's')], ['Peak flux linkage BAN', fmt(e / w, 'Wb turns')]]; },
+  key: '<b>Faraday’s law:</b> the induced emf equals the rate of change of flux linkage, <b>ε = −N ΔΦ/Δt</b>. <b>Lenz’s law</b> (the minus sign): the induced current opposes the change that causes it. For a coil rotating uniformly, NΦ = BAN cosωt, so <b>ε = BANω sin ωt</b>. The emf is biggest when the flux linkage is changing fastest (the orange tangent is steepest) and zero when NΦ is at a maximum or minimum. For a straight conductor of length l moving at speed v across the field, ε = Blv.',
+  draw(c, w, h, p, t, dt, S) {
+    S.ph += dt * p.f; const x = S.ph % 2, th = TAU * x, m = p.N * p.B / 1e3 * p.A / 1e4, e = m * TAU * p.f, hs = 190; coilScene(c, w, hs, p, th);
+    const gh = (h - hs - 60) / 2, xs = 52, gw = w - 70, g1 = plot(c, xs, hs + 16, gw, gh, { x0: 0, x1: 2, y0: -m, y1: m, t: 'Flux linkage NΦ (Wb turns)', series: [{ col: '#7fb0ff', fn: (u) => m * Math.cos(TAU * u) }] });
+    const g2 = plot(c, xs, hs + 36 + gh, gw, gh, { x0: 0, x1: 2, y0: -e, y1: e, t: 'Induced emf ε (V)', series: [{ col: '#ffc247', fn: (u) => e * Math.sin(TAU * u) }] });
+    for (const g of [g1, g2]) { c.strokeStyle = '#fff'; c.lineWidth = 1; c.beginPath(); c.moveTo(g.X(x), g === g1 ? hs + 16 : hs + 36 + gh); c.lineTo(g.X(x), (g === g1 ? hs + 16 : hs + 36 + gh) + gh); c.stroke(); }
+    const sl = -m * TAU * Math.sin(th), d = 0.12; c.strokeStyle = '#ff9a4a'; c.lineWidth = 2.5; c.beginPath(); c.moveTo(g1.X(x - d), g1.Y(m * Math.cos(th) - sl * d)); c.lineTo(g1.X(x + d), g1.Y(m * Math.cos(th) + sl * d)); c.stroke();
+    c.fillStyle = '#ffc247'; c.beginPath(); c.arc(g2.X(x), g2.Y(e * Math.sin(th)), 5, 0, TAU); c.fill(); halo(c, 'ε = −(slope of NΦ)', w - 10, hs + 36 + gh + gh - 10, 'right', '#ff9a4a'); halo(c, '2 rotations', w - 10, h - 8, 'right', 'rgba(190,205,235,.7)', '10px "IBM Plex Mono",monospace');
+  } },
+{ code: '3.7.5.5', name: 'Alternating current', title: 'Alternating currents and the oscilloscope', sub: 'Peak, peak-to-peak and r.m.s. values, read from a simulated oscilloscope screen.', h: 380,
+  p: { V0: 3, f: 2.7, vd: 1, td: 0.5, R: 100, meas: 1 }, 
+  ctl: [R('V0', 'Peak voltage V₀', 'V', 0.5, 400, 0.5), R('f', 'Frequency (log scale)', 'Hz', 0, 3.6, 0.02, true), S('vd', 'Y-gain', VD.map((v) => [v, v + ' V/div'])), S('td', 'Timebase', TD.map((v) => [v, v + ' ms/div'])), R('R', 'Load resistor R', 'Ω', 10, 1000, 10), O('meas', 'Measurement guides', [[1, 'On'], [0, 'Off']]), Bt('UK mains: 230 V r.m.s., 50 Hz', function () { Object.assign(TABS[4].p, { V0: 325, f: Math.log10(50), vd: 100, td: 5 }); })],
+  out(p) { const f = Math.pow(10, p.f), V = p.V0, T = 1 / f, I0 = V / p.R; return [['Peak voltage V₀', fmt(V, 'V')], ['Peak-to-peak', fmt(2 * V, 'V')], ['V r.m.s. = V₀/√2', fmt(V / Math.SQRT2, 'V')], ['Period T = 1/f', fmt(T * 1e3, 'ms')], ['Frequency', fmt(f, 'Hz')], ['I r.m.s. = I₀/√2', fmt(I0 / Math.SQRT2, 'A')], ['Mean power', fmt(V * I0 / 2, 'W')]]; },
+  key: 'For sinusoidal signals <b>V<sub>rms</sub> = V₀/√2</b> and <b>I<sub>rms</sub> = I₀/√2</b>, and the peak-to-peak value is 2V₀. UK mains is 230 V r.m.s., so the peak is about 325 V and the peak-to-peak 650 V. On the scope, voltage = divisions × V/div and period T = divisions × time/div, then f = 1/T. Adjust the gain and timebase until the trace fills the screen.',
+  draw(c, w, h, p) {
+    const f = Math.pow(10, p.f), gx = 10, gy = 10, ww = w - 2 * gx, hh = h - 2 * gy, dx = ww / 10, dy = hh / 8, cy = gy + hh / 2; c.fillStyle = '#04120a'; c.fillRect(0, 0, w, h); c.strokeStyle = 'rgba(109,255,138,.18)'; c.lineWidth = 1;
+    for (let i = 0; i <= 10; i++) { c.beginPath(); c.moveTo(gx + i * dx, gy); c.lineTo(gx + i * dx, gy + hh); c.stroke(); } for (let j = 0; j <= 8; j++) { c.beginPath(); c.moveTo(gx, gy + j * dy); c.lineTo(gx + ww, gy + j * dy); c.stroke(); }
+    c.strokeStyle = 'rgba(109,255,138,.45)'; c.beginPath(); c.moveTo(gx, cy); c.lineTo(gx + ww, cy); c.moveTo(gx + ww / 2, gy); c.lineTo(gx + ww / 2, gy + hh); c.stroke();
+    c.save(); c.beginPath(); c.rect(gx, gy, ww, hh); c.clip(); const Y = (v) => cy - v / p.vd * dy, X = (ms) => gx + ms / p.td * dx, T = 1e3 / f;
+    if (p.meas) { c.setLineDash([4, 4]); c.strokeStyle = 'rgba(255,194,71,.8)'; c.lineWidth = 1; for (const s of [1, -1]) { c.beginPath(); c.moveTo(gx, Y(s * p.V0)); c.lineTo(gx + ww, Y(s * p.V0)); c.stroke(); } c.beginPath(); c.moveTo(X(0), gy); c.lineTo(X(0), gy + hh); c.moveTo(X(T), gy); c.lineTo(X(T), gy + hh); c.stroke(); c.setLineDash([]); }
+    c.strokeStyle = '#6dff8a'; c.lineWidth = 2; c.shadowColor = '#6dff8a'; c.shadowBlur = 6; c.beginPath(); for (let i = 0; i <= 600; i++) { const ms = p.td * 10 * i / 600, v = p.V0 * Math.sin(TAU * f * ms / 1e3); if (i) c.lineTo(X(ms), Y(v)); else c.moveTo(X(ms), Y(v)); } c.stroke(); c.shadowBlur = 0; c.restore();
+    halo(c, p.vd + ' V/div', gx + 6, gy + hh - 8, 'left', '#6dff8a'); halo(c, p.td + ' ms/div', gx + ww - 6, gy + hh - 8, 'right', '#6dff8a');
+    if (p.meas) { halo(c, 'peak-to-peak = ' + (2 * p.V0 / p.vd).toFixed(1) + ' div × ' + p.vd + ' = ' + fmt(2 * p.V0, 'V'), gx + 8, gy + 12, 'left', '#ffc247'); halo(c, 'T = ' + (T / p.td).toFixed(1) + ' div × ' + p.td + ' ms = ' + fmt(T, 'ms'), gx + 8, gy + 28, 'left', '#ffc247'); }
+    if (Math.abs(p.V0) / p.vd > 4) halo(c, 'trace off screen: raise V/div', w / 2, gy + hh - 24, 'center', '#ff9a8a');
+  } },
+{ code: '3.7.5.6', name: 'Transformer', title: 'The operation of a transformer', sub: 'Turns ratio, efficiency, and why electricity is transmitted at high voltage.', h: 470,
+  p: { Np: 100, Ns: 400, Vp: 12, eff: 95, RL: 100, P: 10, Rl: 2, Vt: 33 },
+  ctl: [R('Np', 'Primary turns Nₚ', '', 10, 1000, 10), R('Ns', 'Secondary turns Nₛ', '', 10, 1000, 10), R('Vp', 'Primary voltage Vₚ (r.m.s.)', 'V', 1, 250, 1), R('eff', 'Efficiency', '%', 50, 100, 1), R('RL', 'Load resistance', 'Ω', 10, 1000, 10), R('P', 'Power to transmit', 'MW', 1, 100, 1), R('Rl', 'Cable resistance', 'Ω', 0.5, 10, 0.5), R('Vt', 'Transmission voltage', 'kV', 11, 400, 1)],
+  out(p) { const Vs = p.Vp * p.Ns / p.Np, Is = Vs / p.RL, Ps = Vs * Is, Pp = Ps / (p.eff / 100), Ip = Pp / p.Vp, I = p.P * 1e6 / (p.Vt * 1e3), loss = I * I * p.Rl; return [['Vₛ = Vₚ × Nₛ/Nₚ', fmt(Vs, 'V') + (p.Ns > p.Np ? ' (step-up)' : p.Ns < p.Np ? ' (step-down)' : '')], ['Secondary current Iₛ', fmt(Is, 'A')], ['Primary current Iₚ', fmt(Ip, 'A')], ['Power lost in transformer', fmt(Pp - Ps, 'W')], ['Efficiency IₛVₛ/IₚVₚ', fmt(Ps / Pp * 100, '%')], ['Line current I = P/V', fmt(I, 'A')], ['Power lost in cables I²R', fmt(loss / 1e6, 'MW') + ' (' + fmt(loss / (p.P * 1e6) * 100, '%') + ')']]; },
+  key: '<b>V<sub>s</sub>/V<sub>p</sub> = N<sub>s</sub>/N<sub>p</sub></b> and <b>efficiency = I<sub>s</sub>V<sub>s</sub>/(I<sub>p</sub>V<sub>p</sub>)</b>. Losses come from the resistance of the windings, <b>eddy currents</b> in the core (cut down by laminating it), hysteresis, and flux that does not link both coils. A step-up transformer raises the voltage and lowers the current by the same factor. Transmitting at high voltage means a smaller current for the same power, so the cable loss <b>I²R</b> is far smaller.',
+  draw(c, w, h, p) {
+    const Vs = p.Vp * p.Ns / p.Np, Is = Vs / p.RL, Ip = Vs * Is / (p.eff / 100) / p.Vp, x0 = w * 0.3, x1 = w * 0.7, y0 = 40, y1 = 200; c.strokeStyle = '#7e8aa3'; c.lineWidth = 16; c.strokeRect(x0, y0, x1 - x0, y1 - y0); c.lineWidth = 1; c.strokeStyle = 'rgba(7,11,23,.7)'; for (let k = -6; k <= 6; k += 2) { c.beginPath(); c.moveTo(x0 - 8, y0 + 80 + k * 7); c.lineTo(x0 + 8, y0 + 80 + k * 7); c.moveTo(x1 - 8, y0 + 80 + k * 7); c.lineTo(x1 + 8, y0 + 80 + k * 7); c.stroke(); }
+    const coil = (x, n, col) => { const k = Math.round(4 + 12 * n / 1000); c.strokeStyle = col; c.lineWidth = 3; for (let i = 0; i < k; i++) { const y = y0 + 30 + i * 100 / k; c.beginPath(); c.ellipse(x, y + 4, 14, 3.5, 0, 0, TAU); c.stroke(); } };
+    coil(x0, p.Np, '#e39a4a'); coil(x1, p.Ns, '#7fb0ff'); c.lineWidth = 2; c.strokeStyle = '#e39a4a'; c.beginPath(); c.moveTo(x0 - 14, y0 + 34); c.lineTo(60, y0 + 34); c.lineTo(60, y0 + 70); c.moveTo(x0 - 14, y0 + 130); c.lineTo(60, y0 + 130); c.lineTo(60, y0 + 94); c.stroke(); c.beginPath(); c.arc(60, y0 + 82, 14, 0, TAU); c.stroke(); halo(c, '~', 60, y0 + 82, 'center', '#e39a4a', '700 16px sans-serif');
+    c.strokeStyle = '#7fb0ff'; c.beginPath(); c.moveTo(x1 + 14, y0 + 34); c.lineTo(w - 70, y0 + 34); c.lineTo(w - 70, y0 + 66); c.moveTo(x1 + 14, y0 + 130); c.lineTo(w - 70, y0 + 130); c.lineTo(w - 70, y0 + 98); c.stroke(); c.strokeRect(w - 80, y0 + 66, 20, 32); halo(c, 'R', w - 70, y0 + 82, 'center', '#7fb0ff');
+    halo(c, 'Nₚ = ' + p.Np, x0 - 22, y0 + 82, 'right', '#e39a4a'); halo(c, 'Nₛ = ' + p.Ns, x1 + 22, y0 + 82, 'left', '#7fb0ff'); halo(c, 'Vₚ = ' + p.Vp + ' V', 60, y0 + 150, 'center', '#e39a4a'); halo(c, 'Vₛ = ' + fmt(Vs, 'V'), w - 70, y0 + 150, 'center', '#7fb0ff'); halo(c, 'Iₚ = ' + fmt(Ip, 'A'), 60, y0 - 12, 'center', '#e39a4a'); halo(c, 'Iₛ = ' + fmt(Is, 'A'), w - 70, y0 - 12, 'center', '#7fb0ff'); halo(c, 'laminated iron core', w / 2, y0 + 82, 'center', '#c8d2e6');
+    const I = p.P * 1e6 / (p.Vt * 1e3), loss = Math.min(I * I * p.Rl, p.P * 1e6), by = 262, bx = 24, bw = w - 48, lf = loss / (p.P * 1e6); halo(c, 'Sending ' + p.P + ' MW down cables at ' + p.Vt + ' kV', bx, by - 20, 'left', '#e6ebf3', '12px "IBM Plex Mono",monospace');
+    c.fillStyle = '#2f9e5b'; c.fillRect(bx, by, bw * (1 - lf), 34); c.fillStyle = '#d2563f'; c.fillRect(bx + bw * (1 - lf), by, bw * lf, 34); halo(c, 'delivered ' + fmt((1 - lf) * p.P, 'MW'), bx + 8, by + 17, 'left', '#fff'); halo(c, 'lost ' + fmt(lf * 100, '%') + (I * I * p.Rl > p.P * 1e6 ? ' (all of it!)' : ''), bx + bw - 8, by + 52, 'right', '#ff9a8a');
+    halo(c, 'Same power at a lower voltage needs a bigger current, and the cable loss grows as I².', bx, by + 82, 'left', 'rgba(190,205,235,.8)', '10.5px "IBM Plex Mono",monospace');
+  } }
+];
+let cur = 0, last = 0, tt = 0, outHtml = '';
+function setTab(i) {
+  cur = i; const T = TABS[i]; T.st = T.st || {}; $('ttl').textContent = T.code + ' ' + T.title; $('sub').textContent = T.sub; $('key').innerHTML = T.key; document.querySelectorAll('#tabs button').forEach((b, k) => b.setAttribute('aria-selected', String(k === i)));
+  const box = $('ctl'); box.innerHTML = ''; outHtml = '';
+  for (const d of T.ctl) {
+    const el = document.createElement('div');
+    if (d.t === 'r') { el.className = 'sl'; const sh = () => d.log ? fmt(Math.pow(10, T.p[d.k]), d.unit) : T.p[d.k] + (d.unit ? ' ' + d.unit : ''); el.innerHTML = '<label>' + d.label + ' <output></output></label><input type="range" min="' + d.min + '" max="' + d.max + '" step="' + d.step + '" value="' + T.p[d.k] + '">'; const inp = el.querySelector('input'), o = el.querySelector('output'); o.textContent = sh(); inp.oninput = () => { T.p[d.k] = parseFloat(inp.value); o.textContent = sh(); }; d.sync = () => { inp.value = T.p[d.k]; o.textContent = sh(); }; }
+    else if (d.t === 'o') { el.className = 'opt'; el.innerHTML = '<span>' + d.label + '</span><div class="bs"></div>'; const bs = el.querySelector('.bs'), bt = []; for (const [v, l] of d.opts) { const b = document.createElement('button'); b.type = 'button'; b.textContent = l; b.onclick = () => { T.p[d.k] = v; bt.forEach((x) => x.b.setAttribute('aria-pressed', String(x.v === v))); }; b.setAttribute('aria-pressed', String(T.p[d.k] === v)); bt.push({ b, v }); bs.appendChild(b); } }
+    else if (d.t === 's') { el.className = 'opt'; el.innerHTML = '<span>' + d.label + '</span><select>' + d.opts.map(([v, l]) => '<option value="' + v + '"' + (T.p[d.k] === v ? ' selected' : '') + '>' + l + '</option>').join('') + '</select>'; const s = el.querySelector('select'); s.onchange = () => { T.p[d.k] = parseFloat(s.value); }; d.sync = () => { s.value = T.p[d.k]; }; }
+    else { const b = document.createElement('button'); b.type = 'button'; b.textContent = d.label; b.onclick = () => { d.fn(); T.ctl.forEach((x) => x.sync && x.sync()); }; el.appendChild(b); }
+    box.appendChild(el);
+  }
+}
+function frame(ts) {
+  const dt = Math.min(0.1, (ts - last) / 1000 || 0); last = ts; tt += dt; const T = TABS[cur], f = fit($('cv'), T.h);
+  if (f) { f.c.fillStyle = '#070b17'; f.c.fillRect(0, 0, f.w, f.h); T.draw(f.c, f.w, f.h, T.p, tt, dt, T.st); }
+  const html = T.out(T.p).map(([a, b]) => '<dt>' + a + '</dt><dd>' + b + '</dd>').join(''); if (html !== outHtml) { outHtml = html; $('out').innerHTML = html; }
+  requestAnimationFrame(frame);
+}
+TABS.forEach((T, i) => { const b = document.createElement('button'); b.type = 'button'; b.setAttribute('role', 'tab'); b.innerHTML = T.name + '<small>' + T.code + '</small>'; b.onclick = () => setTab(i); $('tabs').appendChild(b); });
+setTab(0); requestAnimationFrame(frame);
+</script></body></html>

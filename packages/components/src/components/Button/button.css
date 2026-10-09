@@ -1,0 +1,27 @@
+.btn {
+  font: 600 0.95rem var(--font-ui);
+  padding: 0.55rem 1rem;
+  border-radius: var(--r);
+  border: 1px solid var(--accent);
+  background: var(--accent);
+  color: var(--accent-text);
+  cursor: pointer;
+  min-height: 2.75rem;
+  transition: transform var(--dur);
+}
+.btn:active {
+  transform: translateY(1px);
+}
+.btn--secondary {
+  background: transparent;
+  color: var(--accent);
+}
+.btn--danger {
+  background: var(--danger);
+  border-color: var(--danger);
+  color: var(--surface);
+}
+.btn[disabled] {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

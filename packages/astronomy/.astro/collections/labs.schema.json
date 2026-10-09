@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string"
+    },
+    "summary": {
+      "type": "string"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "orbits",
+        "sky-and-time",
+        "optics",
+        "stars",
+        "cosmology",
+        "phenomena",
+        "exoplanets"
+      ]
+    },
+    "tags": {
+      "default": [],
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "order": {
+      "default": 100,
+      "type": "number"
+    },
+    "status": {
+      "default": "live",
+      "type": "string",
+      "enum": [
+        "live",
+        "beta",
+        "planned"
+      ]
+    },
+    "added": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "kind": {
+      "default": "iframe",
+      "type": "string",
+      "enum": [
+        "iframe"
+      ]
+    },
+    "$schema": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "title",
+    "summary",
+    "category",
+    "added"
+  ]
+}

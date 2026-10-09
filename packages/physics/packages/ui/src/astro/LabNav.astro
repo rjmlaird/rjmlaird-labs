@@ -1,0 +1,20 @@
+---
+import { experimentsOf } from "@labs/registry";
+
+interface Props { lab: string; current?: string }
+const { lab, current = "index" } = Astro.props;
+const items = experimentsOf(lab);
+---
+
+{
+  items.length > 0 && (
+    <nav class="experiment-nav" aria-label={`${lab} experiments`}>
+      <a href="/" class:list={["experiment-nav__home", current === "index" && "is-active"]}>All experiments</a>
+      <div class="experiment-nav__tabs">
+        {items.map((item) => (
+          <a href={item.href} class:list={["experiment-nav__tab", current === item.id && "is-active"]}>{item.label}</a>
+        ))}
+      </div>
+    </nav>
+  )
+}

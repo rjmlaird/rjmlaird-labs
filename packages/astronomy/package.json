@@ -1,0 +1,15 @@
+{
+  "name": "astronomy-labs",
+  "type": "module",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "new-lab": "node scripts/new-lab.mjs"
+  },
+  "dependencies": {
+    "astro": "^7.3.8"
+  }
+}

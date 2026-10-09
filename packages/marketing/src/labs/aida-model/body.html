@@ -1,0 +1,277 @@
+<!--SITE_HEADER-->
+
+  <main id="main">
+    <section class="hero wrap">
+      <p class="eyebrow">Interactive marcomms planning prototype</p>
+
+      <h1>Plan the message people need at each decision moment.</h1>
+
+      <p class="hero-copy">
+        AIDA helps you structure campaign communications around four practical goals: become known,
+        earn attention, make the proposition meaningful and help people take the next suitable
+        step. Add Retention when ongoing customer value, trust, loyalty or advocacy matters after
+        the initial conversion.
+      </p>
+
+      <div class="notice">
+        <span class="notice-icon" aria-hidden="true">!</span>
+        <div>
+          <strong>AIDA is a communication lens, not a literal customer journey.</strong>
+          People compare alternatives, consult peers, revisit information and enter at different
+          stages. Pair this canvas with customer research, channel data and accessible, truthful
+          communications rather than assuming a single linear funnel.
+        </div>
+      </div>
+    </section>
+
+    <section class="wrap app-shell" aria-label="AIDA marketing communications canvas">
+      <form class="panel planner" id="aida-form">
+        <div class="panel-heading">
+          <h2>Plan a stage</h2>
+          <p>
+            For each communication stage, specify the audience task, core message, channel or
+            touchpoint, call to action and a way to assess whether the communication helped.
+          </p>
+        </div>
+
+        <div class="field-set">
+          <div class="field">
+            <label for="campaign-name">Campaign, proposition or product</label>
+            <input
+              id="campaign-name"
+              name="campaign-name"
+              type="text"
+              value="Collaborative research-impact planning software"
+              placeholder="For example: Product launch, new service or public information campaign"
+            />
+          </div>
+
+          <div class="field">
+            <label for="stage-selector">AIDA stage</label>
+            <select id="stage-selector" name="stage-selector">
+              <option value="awareness">Awareness / Attention</option>
+              <option value="interest">Interest</option>
+              <option value="desire">Desire</option>
+              <option value="action">Action</option>
+              <option value="retention">Retention (optional AIDAR extension)</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="audience-task">Audience need or task</label>
+            <textarea
+              id="audience-task"
+              name="audience-task"
+              placeholder="What does the audience need to understand, feel confident about or accomplish?"
+            >Research-development staff and project leaders need to recognise that impact planning can be a collaborative, practical process rather than a burdensome administrative exercise.</textarea>
+          </div>
+
+          <div class="field">
+            <label for="core-message">Core message or proof point</label>
+            <textarea
+              id="core-message"
+              name="core-message"
+              placeholder="State the message clearly and support it with credible evidence."
+            >Turn complex impact ambitions into a shared, evidence-informed plan that helps teams clarify stakeholders, pathways and next actions.</textarea>
+          </div>
+
+          <div class="two-columns">
+            <div class="field">
+              <label for="touchpoint">Channel or touchpoint</label>
+              <input
+                id="touchpoint"
+                name="touchpoint"
+                type="text"
+                value="Relevant professional networks, practical webinars, short articles and partner newsletters"
+                placeholder="For example: Search, PR, email, website, webinar or sales conversation"
+              />
+            </div>
+
+            <div class="field">
+              <label for="cta">Appropriate next action</label>
+              <input
+                id="cta"
+                name="cta"
+                type="text"
+                value="Read a practical example or register for a short demonstration"
+                placeholder="For example: Learn more, download, enquire, book, trial or buy"
+              />
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="measure">Measure and ethical boundary</label>
+            <textarea
+              id="measure"
+              name="measure"
+              placeholder="How will you assess usefulness while respecting consent, privacy and accessibility?"
+            >Measure reach among relevant audiences and webinar sign-ups alongside qualitative feedback on clarity; use consent-based analytics and avoid inflated claims about outcomes.</textarea>
+          </div>
+
+          <div class="field">
+            <label for="demo-picker">Load an example campaign</label>
+            <select id="demo-picker" name="demo-picker">
+              <option value="">Choose a demo…</option>
+              <option value="research">Research-impact planning software</option>
+              <option value="salon">Local salon launch</option>
+              <option value="climate">Climate communications service</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="action-row">
+          <button class="button button-primary" type="submit">Save stage plan</button>
+          <button class="button button-secondary" id="clear-stage" type="button">Clear entry</button>
+          <button class="button button-secondary button-wide" id="copy-plan" type="button">
+            Copy AIDA plan
+          </button>
+        </div>
+      </form>
+
+      <section class="panel canvas" aria-labelledby="canvas-title">
+        <div class="canvas-header">
+          <div>
+            <h2 id="canvas-title">AIDA communications map</h2>
+            <p id="canvas-subtitle">
+              Select a stage to see the planned message, touchpoint, next action and measurement approach.
+            </p>
+          </div>
+
+          <div class="coverage-badge">
+            <div>
+              <strong id="coverage-score">5/5</strong>
+              <span>Stages mapped</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="canvas-body">
+          <div class="legend" aria-label="AIDA legend">
+            <span class="legend-item"><span class="legend-swatch" style="color: var(--blue)"></span>Reach and recognition</span>
+            <span class="legend-item"><span class="legend-swatch" style="color: var(--teal)"></span>Understanding and research</span>
+            <span class="legend-item"><span class="legend-swatch" style="color: var(--purple)"></span>Relevance and preference</span>
+            <span class="legend-item"><span class="legend-swatch" style="color: var(--amber)"></span>Friction-free next step</span>
+            <span class="legend-item"><span class="legend-swatch" style="color: var(--green)"></span>Long-term value</span>
+          </div>
+
+          <div class="funnel-wrap">
+            <div class="funnel">
+              <button class="funnel-stage" type="button" data-stage="awareness" aria-pressed="false">
+                <span class="stage-letter">A</span>
+                <span>
+                  <span class="stage-kicker">Stage 01</span>
+                  <strong>Awareness / Attention</strong>
+                  <small id="awareness-summary">No stage plan added.</small>
+                </span>
+                <span class="stage-status" id="awareness-status">Not planned</span>
+              </button>
+
+              <button class="funnel-stage" type="button" data-stage="interest" aria-pressed="false">
+                <span class="stage-letter">I</span>
+                <span>
+                  <span class="stage-kicker">Stage 02</span>
+                  <strong>Interest</strong>
+                  <small id="interest-summary">No stage plan added.</small>
+                </span>
+                <span class="stage-status" id="interest-status">Not planned</span>
+              </button>
+
+              <button class="funnel-stage" type="button" data-stage="desire" aria-pressed="false">
+                <span class="stage-letter">D</span>
+                <span>
+                  <span class="stage-kicker">Stage 03</span>
+                  <strong>Desire</strong>
+                  <small id="desire-summary">No stage plan added.</small>
+                </span>
+                <span class="stage-status" id="desire-status">Not planned</span>
+              </button>
+
+              <button class="funnel-stage" type="button" data-stage="action" aria-pressed="false">
+                <span class="stage-letter">A</span>
+                <span>
+                  <span class="stage-kicker">Stage 04</span>
+                  <strong>Action</strong>
+                  <small id="action-summary">No stage plan added.</small>
+                </span>
+                <span class="stage-status" id="action-status">Not planned</span>
+              </button>
+
+              <button class="funnel-stage" type="button" data-stage="retention" aria-pressed="false">
+                <span class="stage-letter">R</span>
+                <span>
+                  <span class="stage-kicker">Extension</span>
+                  <strong>Retention</strong>
+                  <small id="retention-summary">No stage plan added.</small>
+                </span>
+                <span class="stage-status" id="retention-status">Not planned</span>
+              </button>
+            </div>
+          </div>
+
+          <section class="detail-card" aria-live="polite">
+            <div>
+              <h3 id="detail-title">Select a stage</h3>
+              <p id="detail-task">
+                Click a funnel stage to inspect the audience task and communication approach.
+              </p>
+            </div>
+
+            <div class="detail-meta">
+              <div class="meta-box">
+                <small>Core message</small>
+                <strong id="detail-message">—</strong>
+              </div>
+
+              <div class="meta-box">
+                <small>Touchpoint</small>
+                <strong id="detail-touchpoint">—</strong>
+              </div>
+
+              <div class="meta-box">
+                <small>Next action</small>
+                <strong id="detail-cta">—</strong>
+              </div>
+
+              <div class="meta-box">
+                <small>Measure / boundary</small>
+                <strong id="detail-measure">—</strong>
+              </div>
+            </div>
+          </section>
+
+          <div class="insights-grid">
+            <article class="insight-card">
+              <small>Journey coverage</small>
+              <p id="coverage-insight">Map communications across stages, then check how people actually discover, assess and use your offer.</p>
+            </article>
+
+            <article class="insight-card">
+              <small>Message discipline</small>
+              <p id="message-insight">Align the message with the audience’s current question—do not ask for a high-commitment action before they have useful information.</p>
+            </article>
+
+            <article class="insight-card">
+              <small>Measurement</small>
+              <p id="measurement-insight">Use stage-appropriate measures and pair quantitative indicators with feedback about clarity, relevance and trust.</p>
+            </article>
+          </div>
+
+          <section class="guidance-panel">
+            <h3>Real-world AIDA tips</h3>
+            <ul class="guidance-list" id="guidance-list"></ul>
+          </section>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <p>
+        This prototype supports marketing-communications planning. It does not predict individual
+        purchase decisions or campaign outcomes. Use clear claims, appropriate consent, accessible
+        formats and transparent measures; do not use deceptive scarcity, misleading proof,
+        dark-pattern conversion tactics or privacy-invasive tracking.
+      </p>
+    </div>
+  </footer>

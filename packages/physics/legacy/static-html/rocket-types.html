@@ -1,0 +1,318 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Rocket types and launch physics</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Familjen+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{--bg:#eceef2;--panel:#f9fafb;--field:#eef1f5;--ink:#16202c;--muted:#566274;--line:#d0d7e0;--accent:#8f5f10;--on-accent:#fff;--sky:#070b17;--red:#c0402c;--blue:#2a68b8;--display:'Familjen Grotesk',system-ui,-apple-system,'Segoe UI',sans-serif;--mono:'IBM Plex Mono',ui-monospace,Menlo,Consolas,monospace;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0a0e17;--panel:#111826;--field:#0c121e;--ink:#e6ebf3;--muted:#93a0b4;--line:#243046;--accent:#e0a844;--on-accent:#1a1100;--red:#e0624b;--blue:#5a9be8;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0a0e17;--panel:#111826;--field:#0c121e;--ink:#e6ebf3;--muted:#93a0b4;--line:#243046;--accent:#e0a844;--on-accent:#1a1100;--red:#e0624b;--blue:#5a9be8;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}*{box-sizing:border-box}[hidden]{display:none!important}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 var(--display);padding:20px 16px 36px}
+.wrap{max-width:1120px;margin-inline:auto;display:flex;flex-direction:column;gap:16px}
+h1{margin:0;font-size:1.7rem;letter-spacing:-.015em}.top p{margin:2px 0 0;color:var(--muted);max-width:68ch}
+.top ul{margin:8px 0 0;padding-left:18px;color:var(--muted);font-size:.88rem;max-width:80ch}
+h2{margin:0 0 8px;font-size:1.02rem;font-weight:600}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px;min-width:0}
+.layout{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:16px;align-items:start}
+@media(max-width:860px){.layout{grid-template-columns:minmax(0,1fr)}}
+.col{display:flex;flex-direction:column;gap:16px;min-width:0}
+.cw{border:1px solid var(--line);border-radius:6px;overflow:hidden;background:var(--sky)}.cw canvas{display:block;width:100%}
+button,input,select{font:inherit;font-size:.86rem;color:var(--ink);background:var(--field);border:1px solid var(--line);border-radius:6px;padding:6px 10px}
+button{cursor:pointer}button:hover{border-color:var(--muted)}button[aria-pressed=true]{border-color:var(--accent);background:var(--panel);font-weight:600}
+button.primary{background:var(--accent);color:var(--on-accent);border-color:transparent;font-weight:600;min-width:78px}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+select{max-width:100%}
+.btns{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:10px}
+.btns .lbl{color:var(--muted);font-size:.8rem}
+.live{margin:8px 0 0;font:.82rem var(--mono);color:var(--muted)}
+.note{margin:10px 0 0;color:var(--muted);font-size:.8rem;max-width:72ch}
+table{width:100%;border-collapse:collapse}td,th{padding:6px 0;border-top:1px solid var(--line);font:.84rem var(--mono);text-align:right}
+th{font-size:.68rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);border-top:0;font-weight:400}
+td:first-child,th:first-child{text-align:left;font-family:var(--display);font-size:.92rem;color:var(--muted)}
+td.dn{color:var(--red)}td.bl{color:var(--blue)}td.dn,td.bl{font-weight:500}
+.sc{overflow-x:auto}.sc table{min-width:560px}.sc td,.sc th{padding:6px 8px}
+.sw{display:inline-block;width:12px;height:12px;border-radius:50%;margin-right:7px;vertical-align:-1px;border:1px solid var(--line)}
+.exp{font-size:.92rem}.exp p{margin:0 0 8px}.exp ul{margin:0 0 10px;padding-left:18px;color:var(--muted);font-size:.88rem}.exp li{margin-bottom:4px}
+.eq{font:.95rem var(--mono);margin:6px 0 10px;padding:8px 10px;background:var(--field);border:1px solid var(--line);border-radius:6px;overflow-x:auto}
+abbr{text-decoration:underline dotted;cursor:help}
+</style></head><body>
+<main class="wrap">
+<header class="top"><h1>Rocket types and launch physics</h1>
+<p>Compare Saturn V, Starship, Vega and Ariane 5: how each is split into stages, how thrust, weight, drag and energy change on the way up, and how the launch site and escape velocity set the speed targets.</p>
+<ul><li>Pick a rocket and a launch site, then press Play to watch the ascent and the plots build up.</li><li>Switch the plot tabs to see forces, speed, energy and mass; toggle the vectors on the animation.</li><li>Hover underlined terms for definitions. The ascent is a simplified 2D model, so treat figures as illustrative.</li></ul></header>
+<div class="layout">
+<div class="col">
+<section class="card" aria-label="Rocket and stages">
+<div class="btns" id="rk" style="margin:0 0 10px"></div>
+<div class="cw"><canvas id="diag" role="img" aria-label="Stage diagram"></canvas></div>
+<p class="live" id="rkSub"></p>
+<div class="sc"><table id="stbl"></table></div>
+<p class="note" id="stNote"></p>
+</section>
+<section class="card" aria-label="Ascent">
+<div class="cw"><canvas id="asc" role="img" aria-label="Side view of the ascent"></canvas></div>
+<p class="live" id="live"></p>
+<div class="btns"><button type="button" class="primary" id="play" aria-pressed="true">Pause</button><button type="button" id="rst">Restart</button>
+<select id="spd" aria-label="Simulation speed"><option value="5">5× real time</option><option value="10" selected>10× real time</option><option value="25">25× real time</option></select>
+<select id="site" aria-label="Launch site"></select></div>
+<div class="btns"><span class="lbl">Vectors:</span><button type="button" data-v="v" aria-pressed="true">Velocity</button><button type="button" data-v="t" aria-pressed="true">Thrust</button><button type="button" data-v="w" aria-pressed="true">Weight</button><button type="button" data-v="d" aria-pressed="false">Drag</button></div>
+<p class="note">Altitude uses a log-like scale so the thin lower atmosphere stays visible. Spent stages fall away on ballistic paths. Launches are eastward, with the pitch programme tuned for the Florida case, so other sites show how the rotation boost changes the outcome.</p>
+</section>
+<section class="card" aria-label="Plots"><div class="btns" style="margin:0 0 10px" id="ptabs"><button type="button" data-p="f" aria-pressed="true">Forces</button><button type="button" data-p="v" aria-pressed="false">Speed</button><button type="button" data-p="e" aria-pressed="false">Energy</button><button type="button" data-p="m" aria-pressed="false">Mass</button></div>
+<div class="cw"><canvas id="plot" role="img" aria-label="Plot against time"></canvas></div>
+<p class="note" id="pNote"></p></section>
+<section class="card" aria-label="Fuel and energy"><h2>Propellant, payload and energy</h2>
+<div class="cw"><canvas id="fuel" role="img" aria-label="Bar chart of propellant and payload mass for each rocket"></canvas></div>
+<p class="note">Bars are on a log scale. Chemical energy uses rough values per kilogram of propellant mix (RP-1/LOX 10.3 MJ, LH2/LOX 13.4, methane/LOX 10.0, solid 6.5, hypergolic 6.0). Payload energy is the kinetic plus potential energy of the published LEO payload in a 200 km orbit (about 32 MJ/kg). Most of a rocket’s mass is propellant, and only a small share of the chemical energy ends up in the payload; the rest leaves as exhaust or is lost to gravity and drag. Hydrogen engines give more Δv per kilogram, but hydrogen is bulky and the engines are complex; dense fuels give more thrust per tank.</p></section>
+</div>
+<div class="col">
+<section class="card" aria-label="Results"><h2 id="resH"></h2><table id="tbl"></table><p class="note" id="tblNote"></p></section>
+<section class="card exp" aria-label="Rocket equation"><h2>The rocket equation</h2>
+<div class="eq">Δv = I<sub>sp</sub> · g₀ · ln(m₀ / m<sub>f</sub>)</div>
+<p>The <abbr title="Change in velocity a rocket can deliver, ignoring gravity and drag">Δv</abbr> grows with <abbr title="Specific impulse: thrust per unit weight flow of propellant, in seconds. Higher means more efficient.">I<sub>sp</sub></abbr> and with the logarithm of the mass ratio (wet mass m₀ over final mass m<sub>f</sub>). Dropping empty stages keeps m<sub>f</sub> small, which is why every rocket here is staged.</p>
+<table id="eqt"></table><p class="note" id="eqNote"></p></section>
+<section class="card" aria-label="Launch sites"><h2>Launch site and Earth’s rotation</h2>
+<div class="cw"><canvas id="earth" role="img" aria-label="Earth with launch sites at their latitudes"></canvas></div>
+<div class="sc"><table id="sitet"></table></div>
+<p class="note" id="siteNote"></p></section>
+<section class="card" aria-label="Escape velocity"><h2>Orbital and escape velocity</h2>
+<div class="cw"><canvas id="esc" role="img" aria-label="Paths of objects launched sideways at different speeds"></canvas></div>
+<p class="note">An object launched sideways from low altitude, at different fractions of circular orbital speed (about 7.8 km/s). Below 1.0 it falls back; at 1.0 it circles; between 1.0 and √2 it follows an ellipse; at √2 (about 11.2 km/s from the surface) it escapes. This ignores the atmosphere, and real rockets reach these speeds gradually over several minutes.</p>
+<p class="note" id="escNote"></p></section>
+<section class="card exp" aria-label="Key terms" id="terms"></section>
+</div></div></main>
+<script>
+/*SIM*/
+const TAU = Math.PI * 2, G0 = 9.80665, RE = 6371e3, MU = 3.986004e14, VEQ = 465.1, RAD = Math.PI / 180;
+const FUEL = { kerolox: ['RP-1 / LOX', 10.3], hydrolox: ['LH2 / LOX', 13.4], methalox: ['Methane / LOX', 10.0], solid: ['Solid (AP / Al / HTPB)', 6.5], hypergol: ['UDMH / N2O4', 6.0] };
+/* Stage figures are approximate public values (totals for the group; F = vacuum thrust in MN; i0/iv = Isp at sea level / vacuum in s;
+   used = fraction of propellant burned during the ascent shown; lift = ignites at liftoff; side = strapped alongside). Check before publication. */
+const ROCKETS = [
+{ id: 'satv', name: 'Saturn V', sub: 'NASA · Apollo', pay: 45, leo: 118, ph: 25, tk: 12, p: 3.06, cap: 'LEO, then trans-lunar injection (TLI) with a second S-IVB burn.',
+  esc: 'Saturn V did not launch straight to escape speed. It reached low orbit, then the S-IVB fired again for TLI. That needs more than orbital speed but less than full escape from the surface, because it started from orbit.',
+  stages: [
+  { n: 'S-IC', lab: 'I', fuel: 'kerolox', H: 42, D: 10.1, prop: 2160, dry: 130, F: 38.5, i0: 263, iv: 304 },
+  { n: 'S-II', lab: 'II', fuel: 'hydrolox', H: 24.9, D: 10.1, prop: 450, dry: 36, F: 5.1, i0: 421, iv: 421 },
+  { n: 'S-IVB', lab: 'III', fuel: 'hydrolox', H: 17.8, D: 6.6, prop: 109, dry: 11, used: 0.3, F: 1.0, i0: 421, iv: 421 }] },
+{ id: 'ss', name: 'Starship', sub: 'SpaceX · Super Heavy + Starship', pay: 100, leo: 100, ph: 0, tk: 15, p: 2.13, cap: 'LEO (suborbital insertion, then a circularising burn). Beyond LEO needs in-orbit refuelling.',
+  esc: 'Starship is designed to be fully reusable. For lunar and Mars missions it would be refuelled in orbit, so the ship can leave from orbit with its tanks full instead of lifting all that propellant off the ground.',
+  stages: [
+  { n: 'Super Heavy', lab: 'I', fuel: 'methalox', H: 71, D: 9, prop: 3400, dry: 275, used: 0.95, F: 79, i0: 327, iv: 350 },
+  { n: 'Starship', lab: 'II', fuel: 'methalox', H: 52, D: 9, prop: 1500, dry: 120, used: 0.97, F: 14, i0: 330, iv: 375 }] },
+{ id: 'vega', name: 'Vega', sub: 'ESA · Arianespace', pay: 2.3, leo: 2.3, ph: 3.6, tk: 6, tp: 330, p: 4.18, cap: 'LEO and Sun-synchronous orbit for small satellites.',
+  esc: 'Vega is a small-satellite launcher. It is built for low Earth orbit, so reaching escape speed would be far beyond its capability.',
+  stages: [
+  { n: 'P80', lab: 'I', fuel: 'solid', H: 11.7, D: 3, prop: 88, dry: 7.5, F: 2.25, i0: 245, iv: 280 },
+  { n: 'Zefiro 23', lab: 'II', fuel: 'solid', H: 8.4, D: 1.9, prop: 24, dry: 2.6, F: 0.9, i0: 287, iv: 287 },
+  { n: 'Zefiro 9', lab: 'III', fuel: 'solid', H: 4.1, D: 1.9, prop: 10, dry: 1, F: 0.25, i0: 296, iv: 296 },
+  { n: 'AVUM', lab: 'IV', fuel: 'hypergol', H: 2.04, D: 1.9, prop: 0.55, dry: 0.47, used: 0.8, F: 0.00245, i0: 315, iv: 315 }] },
+{ id: 'a5', name: 'Ariane 5 ECA', sub: 'ESA · Arianespace', pay: 10, leo: 21, ph: 15.3, tk: 10, tp: 640, p: 3.23, cap: 'LEO and geostationary transfer orbit (GTO), the usual route to GEO.',
+  esc: 'Ariane 5 targets geostationary transfer orbit, which needs more energy than LEO but stays bound to Earth. Kourou’s latitude gives an eastward boost that helps with exactly this job.',
+  stages: [
+  { n: 'EAP boosters ×2', lab: 'I', m: 2, side: true, lift: true, fuel: 'solid', H: 31.6, D: 3.05, prop: 476, dry: 66, F: 9.8, i0: 250, iv: 275 },
+  { n: 'EPC core', lab: 'II', lift: true, fuel: 'hydrolox', H: 30.5, D: 5.4, prop: 173, dry: 14.7, F: 1.35, i0: 310, iv: 432 },
+  { n: 'ESC-A', lab: 'III', after: 1, fuel: 'hydrolox', H: 4.7, D: 5.4, prop: 14.7, dry: 4.5, used: 0.55, F: 0.067, i0: 446, iv: 446 }] }];
+const SITES = [
+{ id: 'kou', name: 'Guiana Space Centre, Kourou', short: 'Kourou', lat: 5.2, note: 'Near the equator: the biggest eastward boost, ideal for GEO and heavy payloads. Launches east over the Atlantic.' },
+{ id: 'ksc', name: 'Kennedy Space Center / Cape Canaveral', short: 'Florida', lat: 28.5, note: 'Eastward launches reach 28.5° inclination; the ISS orbit (51.6°) needs a north-easterly azimuth.' },
+{ id: 'bai', name: 'Baikonur Cosmodrome', short: 'Baikonur', lat: 45.6, note: 'Far from the equator, so a smaller boost. Launches towards the ISS head north-east (azimuth about 62°).' },
+{ id: 'van', name: 'Vandenberg, California', short: 'Vandenberg', lat: 34.7, note: 'Used for polar and Sun-synchronous orbits, launching south, so Earth’s rotation helps little.' }];
+function simulate(R, site) {
+  const dt = 0.25, gap = 2, CD = 0.35, vr = VEQ * Math.cos(site.lat * RAD), pay = R.pay * 1e3;
+  const S = R.stages.map((s, i) => { const used = s.used === undefined ? 1 : s.used, rem = s.prop * used * 1e3;
+    return { ...s, lift: !!s.lift || i === 0, i, rem, res: s.prop * 1e3 - rem, dryk: s.dry * 1e3, md: s.F * 1e6 / (s.iv * G0), st: (s.lift || i === 0) ? 1 : 0, gone: false, done: 0, dv: 0, area: (s.m || 1) * Math.PI * Math.pow(s.D / 2, 2) }; });
+  const endAt = (i) => { const s = S[i], a = s.lift ? 0 : endAt(s.after === undefined ? i - 1 : s.after) + gap; return a + s.rem / s.md; };
+  const Tend = Math.max(...S.map((s) => endAt(s.i))), tk = R.tk;
+  const theta = (t) => { if (t < tk) return Math.PI / 2; const u = Math.min(1, (t - tk) / ((R.tp || Tend) - tk)); return Math.PI / 2 * Math.pow(1 - u, R.p); };
+  const o = { t: [], thr: [], wt: [], drag: [], net: [], v: [], ke: [], pe: [], m: [], h: [], x: [], vx: [], vy: [], th: [], ac: [] }, ev = [];
+  let t = 0, x = 0, h = 0, vx = vr, vy = 0, maxQ = { q: 0 }, dvT = 0, gL = 0, dL = 0, m0 = 0, F0 = 0;
+  while (t <= Tend + 1 && h >= 0) {
+    for (const s of S) if (s.st === 0 && S[s.after === undefined ? s.i - 1 : s.after].gone && t >= S[s.after === undefined ? s.i - 1 : s.after].done + gap) s.st = 1;
+    const m = pay + S.reduce((a, s) => a + (s.gone ? 0 : s.dryk + s.res + s.rem), 0), pr = Math.exp(-h / 7000);
+    let F = 0, ac = '';
+    for (const s of S) if (s.st === 1) { const Fi = s.md * G0 * (s.iv + (s.i0 - s.iv) * pr); F += Fi; s.dv += Fi / m * dt; ac = s.lab; }
+    const r = RE + h, v = Math.hypot(vx, vy) || 1e-6, vrl = Math.hypot(vx - vr, vy) || 1e-6, q = 0.5 * 1.225 * Math.exp(-h / 8500) * vrl * vrl;
+    const side = S.filter((s) => !s.gone && s.side).reduce((a, s) => a + s.area, 0), core = Math.max(0, ...S.filter((s) => !s.gone && !s.side).map((s) => s.area));
+    const Dr = q * CD * (core + side), g = MU / (r * r), th = theta(t), W = m * g;
+    if (t === 0) { m0 = m; F0 = F; }
+    if (q > maxQ.q) maxQ = { q, t, h, x, v: vrl };
+    o.t.push(t); o.thr.push(F); o.wt.push(W); o.drag.push(Dr); o.net.push(F - W - Dr); o.v.push(v); o.ke.push(0.5 * m * v * v); o.pe.push(m * MU * (1 / RE - 1 / r));
+    o.m.push(m); o.h.push(h); o.x.push(x); o.vx.push(vx); o.vy.push(vy); o.th.push(th); o.ac.push(ac);
+    dvT += F / m * dt; gL += g * (vy / v) * dt; dL += Dr / m * dt;
+    const ax = F * Math.cos(th) / m - Dr / m * (vx - vr) / vrl, ay = F * Math.sin(th) / m - Dr / m * vy / vrl - g + vx * vx / r;
+    vx += ax * dt; vy += ay * dt; h += vy * dt; x += (vx - vr) * RE / r * dt; t += dt;
+    for (const s of S) if (s.st === 1) { s.rem -= s.md * dt; if (s.rem <= 0) { s.rem = 0; s.st = 2; s.gone = true; s.done = t; ev.push({ t, x, h, vx, vy, lab: s.lab, col: s.i, txt: s.n + ' burnout and separation' }); } }
+  }
+  const r = RE + h, v2 = vx * vx + vy * vy, eps = v2 / 2 - MU / r, L = r * vx; let rp = null, ra = null;
+  if (eps < 0) { const e = Math.sqrt(Math.max(0, 1 + 2 * eps * L * L / (MU * MU))), p = L * L / MU; rp = p / (1 + e) - RE; ra = p / (1 - e) - RE; }
+  const mb = S.reduce((a, s) => a + s.prop * (s.used === undefined ? 1 : s.used), 0) * 1e3, ivAvg = S.reduce((a, s) => a + s.prop * (s.used === undefined ? 1 : s.used) * s.iv, 0) * 1e3 / mb;
+  return { o, ev, maxQ, Tend, dvT, gL, dL, m0, F0, vEnd: Math.hypot(vx, vy), vyEnd: vy, hEnd: h, rp, ra, vr, dvS: S.map((s) => s.dv), single: ivAvg * G0 * Math.log(m0 / (m0 - mb)), eps, crashed: h < 0 };
+}
+/*ENDSIM*/
+
+const $ = (id) => document.getElementById(id), COL = ['#e0624b', '#e0a844', '#5a9be8', '#5fcf9a', '#b48cf0'], MONO = "11px 'IBM Plex Mono',monospace";
+const n = (x, d = 0) => x.toLocaleString('en-GB', { minimumFractionDigits: d, maximumFractionDigits: d });
+const st = { r: ROCKETS[0], s: SITES[1], sim: null, t: 0, speed: 10, plot: 'f', vec: { v: true, t: true, w: true, d: false }, playing: !(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) };
+let dirty = true;
+const burnOf = (s) => s.prop * (s.used === undefined ? 1 : s.used) * s.iv * G0 / (s.F * 1e3);
+function fit(c, ar) { const w = c.parentElement.clientWidth, d = window.devicePixelRatio || 1, h = Math.round(w / ar);
+  if (c.width !== Math.round(w * d) || c.height !== Math.round(h * d)) { c.width = Math.round(w * d); c.height = Math.round(h * d); c.style.height = h + 'px'; }
+  const g = c.getContext('2d'); g.setTransform(d, 0, 0, d, 0, 0); g.font = MONO; g.textBaseline = 'middle'; return [g, w, h]; }
+const txt = (g, t, x, y, col = '#93a0b4', al = 'left') => { g.fillStyle = col; g.textAlign = al; g.fillText(t, x, y); };
+function arrow(g, x, y, dx, dy, col) { const L = Math.hypot(dx, dy); if (L < 2) return; g.strokeStyle = g.fillStyle = col; g.lineWidth = 2; g.beginPath(); g.moveTo(x, y); g.lineTo(x + dx, y + dy); g.stroke();
+  const a = Math.atan2(dy, dx); g.beginPath(); g.moveTo(x + dx, y + dy); g.lineTo(x + dx - 7 * Math.cos(a - .4), y + dy - 7 * Math.sin(a - .4)); g.lineTo(x + dx - 7 * Math.cos(a + .4), y + dy - 7 * Math.sin(a + .4)); g.fill(); }
+const run = () => { st.sim = simulate(st.r, st.s); st.t = 0; };
+
+/* ---- stage diagram, drawn to scale ---- */
+function drawDiag() {
+  const [g, w, h] = fit($('diag'), 1.5), R = st.r, main = R.stages.filter((s) => !s.side), side = R.stages.filter((s) => s.side);
+  const Ht = main.reduce((a, s) => a + s.H, 0) + R.ph, sc = (h - 34) / Ht, cx = w * 0.3; let y = h - 14;
+  g.fillStyle = '#070b17'; g.fillRect(0, 0, w, h); g.strokeStyle = '#243046'; g.beginPath(); g.moveTo(8, h - 14); g.lineTo(w - 8, h - 14); g.stroke();
+  const block = (xc, yb, s) => { const bw = s.D * sc * (s.m ? 1 : 1), bh = s.H * sc; g.fillStyle = COL[R.stages.indexOf(s) % 5]; g.fillRect(xc - bw / 2, yb - bh, bw, bh); g.strokeStyle = '#070b17'; g.strokeRect(xc - bw / 2, yb - bh, bw, bh);
+    if (bw > 14) txt(g, s.lab, xc, yb - bh / 2, '#070b17', 'center'); return yb - bh; };
+  const coreW = Math.max(...main.map((s) => s.D)) * sc / 2;
+  side.forEach((s) => { [-1, 1].forEach((k) => block(cx + k * (main[0].D / 2 + s.D / 2) * sc, h - 14, s)); });
+  const labs = [];
+  main.forEach((s) => { const top = block(cx, y, s); labs.push([s, (y + top) / 2]); y = top; });
+  side.forEach((s) => labs.push([s, h - 14 - s.H * sc / 2]));
+  if (R.ph > 0) { const pw = main[main.length - 1].D * sc / 2, ph = R.ph * sc; g.fillStyle = '#b9c4d6'; g.beginPath(); g.moveTo(cx - pw, y); g.lineTo(cx - pw, y - ph * .55); g.quadraticCurveTo(cx - pw, y - ph, cx, y - ph); g.quadraticCurveTo(cx + pw, y - ph, cx + pw, y - ph * .55); g.lineTo(cx + pw, y); g.fill(); labs.push([{ n: 'Payload', lab: '' }, y - ph / 2]); }
+  const lx = cx + Math.max(coreW, (main[0].D + 2 * (side[0] ? side[0].D : 0)) * sc / 2) + 18;
+  labs.sort((a, b) => b[1] - a[1]).forEach(([s, yy]) => { g.strokeStyle = '#3a4860'; g.beginPath(); g.moveTo(cx + coreW * .5, yy); g.lineTo(lx - 4, yy); g.stroke();
+    txt(g, `${s.lab ? s.lab + ' · ' : ''}${s.n}`, lx, yy - 6, '#e6ebf3'); if (s.H) txt(g, `${s.H} m × ${s.D} m`, lx, yy + 7, '#93a0b4'); });
+  txt(g, `Total height ≈ ${n(Ht, 0)} m (to scale)`, 10, 12);
+}
+function stageTable() {
+  const R = st.r; $('stbl').innerHTML = '<tr><th>Stage</th><th>H × D (m)</th><th>Propellant</th><th>Prop (t)</th><th>Dry (t)</th><th>Thrust</th><th>Burn (s)</th><th><abbr title="Specific impulse at sea level / in vacuum">Isp</abbr> (s)</th></tr>' +
+    R.stages.map((s, i) => `<tr><td><span class="sw" style="background:${COL[i % 5]}"></span>${s.lab} ${s.n}</td><td>${s.H} × ${s.D}</td><td>${FUEL[s.fuel][0]}</td><td>${n(s.prop, s.prop < 10 ? 2 : 0)}</td><td>${n(s.dry, 1)}</td><td>${s.F < 0.01 ? n(s.F * 1000, 1) + ' kN' : n(s.F, s.F < 10 ? 2 : 1) + ' MN'}</td><td>${n(burnOf(s))}</td><td>${s.i0 === s.iv ? s.iv : s.i0 + ' / ' + s.iv}</td></tr>`).join('');
+  $('rkSub').textContent = `${R.sub} · ${R.cap}`;
+  $('stNote').textContent = `Thrust is vacuum thrust for the group of engines; burn time is the ascent burn simulated here (upper stages are not always burned to depletion). Payload mass in the simulation: ${R.pay} t. Figures are approximate and rounded.`;
+}
+
+/* ---- ascent animation ---- */
+function drawAsc() {
+  const [g, w, h] = fit($('asc'), 1.7), S = st.sim, o = S.o, i = Math.min(o.t.length - 1, Math.floor(st.t / 0.25)), L = 34, Rr = 78, T = 12, B = 26, hB = h - B;
+  const hmax = Math.max(250, Math.max(...o.h) / 1e3 * 1.1), Xm = Math.max(100, Math.max(...o.x) / 1e3 * 1.05), lg = Math.log(1 + hmax / 3);
+  const YA = (k) => hB - (hB - T) * Math.log(1 + Math.max(0, k) / 3) / lg, XA = (k) => L + k / Xm * (w - L - Rr), vr = S.vr;
+  g.fillStyle = '#070b17'; g.fillRect(0, 0, w, h);
+  [[0, 12, 'Troposphere', .2], [12, 50, 'Stratosphere', .14], [50, 85, 'Mesosphere', .09], [85, hmax, 'Thermosphere', .04]].forEach(([a, b, nm, al]) => { g.fillStyle = `rgba(90,155,232,${al})`; g.fillRect(0, YA(b), w, YA(a) - YA(b)); txt(g, nm, w - Rr + 6, (YA(a) + YA(Math.min(b, hmax))) / 2, '#6c7a90'); });
+  g.setLineDash([4, 4]); g.strokeStyle = '#5b6b86'; g.beginPath(); g.moveTo(0, YA(100)); g.lineTo(w - Rr, YA(100)); g.stroke(); g.setLineDash([]); txt(g, '100 km', 4, YA(100) - 7);
+  g.fillStyle = '#2b3345'; g.fillRect(0, hB, w, B); g.fillStyle = '#93a0b4'; g.fillRect(XA(0) - 5, hB - 3, 10, 3);
+  g.lineWidth = 1.5; g.strokeStyle = 'rgba(224,168,68,.3)'; g.beginPath(); o.x.forEach((x, k) => k ? g.lineTo(XA(x / 1e3), YA(o.h[k] / 1e3)) : g.moveTo(XA(x / 1e3), YA(o.h[k] / 1e3))); g.stroke();
+  g.strokeStyle = '#e0a844'; g.beginPath(); for (let k = 0; k <= i; k++) k ? g.lineTo(XA(o.x[k] / 1e3), YA(o.h[k] / 1e3)) : g.moveTo(XA(o.x[k] / 1e3), YA(o.h[k] / 1e3)); g.stroke();
+  S.ev.forEach((e) => { if (st.t < e.t) return; const tau = st.t - e.t, dh = e.h + e.vy * tau - 4.5 * tau * tau; g.fillStyle = COL[e.col % 5];
+    if (dh > 0) g.fillRect(XA((e.x + (e.vx - vr) * tau) / 1e3) - 3, YA(dh / 1e3) - 3, 6, 6); g.fillRect(XA(e.x / 1e3) - 1.5, YA(e.h / 1e3) - 5, 3, 10); txt(g, e.lab, XA(e.x / 1e3) + 5, YA(e.h / 1e3) + 10, COL[e.col % 5]); });
+  if (st.t >= S.maxQ.t) { const mx = XA(S.maxQ.x / 1e3), my = YA(S.maxQ.h / 1e3); g.fillStyle = '#fff'; g.beginPath(); g.moveTo(mx, my - 5); g.lineTo(mx + 5, my); g.lineTo(mx, my + 5); g.lineTo(mx - 5, my); g.fill(); txt(g, 'Max Q', mx + 8, my - 8, '#fff'); }
+  const px = XA(o.x[i] / 1e3), py = YA(o.h[i] / 1e3), th = o.th[i], dx = Math.cos(th), dy = -Math.sin(th), ci = Math.max(0, st.r.stages.findIndex((s) => s.lab === o.ac[i]));
+  if (o.thr[i] > 0) { g.strokeStyle = '#ffd36b'; g.lineWidth = 3; g.beginPath(); g.moveTo(px - dx * 4, py - dy * 4); g.lineTo(px - dx * 17, py - dy * 17); g.stroke(); }
+  g.save(); g.translate(px, py); g.rotate(Math.atan2(dy, dx)); g.fillStyle = COL[ci % 5]; g.fillRect(-8, -3, 16, 6); g.restore();
+  const mx = (a) => Math.max(...a), fr = (a, k) => 10 + 42 * Math.abs(a[k]) / mx(a.map(Math.abs)), vrel = Math.hypot(o.vx[i] - vr, o.vy[i]) || 1;
+  if (st.vec.t) arrow(g, px, py, dx * fr(o.thr, i), dy * fr(o.thr, i), '#e0a844');
+  if (st.vec.w) arrow(g, px, py, 0, fr(o.wt, i), '#5a9be8');
+  if (st.vec.v) arrow(g, px, py, (o.vx[i] - vr) / vrel * fr(o.v, i), -o.vy[i] / vrel * fr(o.v, i), '#5fcf9a');
+  if (st.vec.d && o.drag[i] > 1) arrow(g, px, py, -(o.vx[i] - vr) / vrel * fr(o.drag, i), o.vy[i] / vrel * fr(o.drag, i), '#e0624b');
+  txt(g, `downrange (km), up to ${n(Xm)}`, L, h - 11);
+  $('live').textContent = `t = ${n(o.t[i])} s · altitude ${n(o.h[i] / 1e3, 1)} km · speed ${n(o.v[i] / 1e3, 2)} km/s · ${o.ac[i] ? 'stage ' + o.ac[i] + ' burning' : 'coasting'} · mass ${n(o.m[i] / 1e3)} t`;
+}
+
+/* ---- plots ---- */
+function drawPlot() {
+  const [g, w, h] = fit($('plot'), 2.1), S = st.sim, o = S.o, k = st.plot, Lm = 48, Rm = 10, T = 12, B = 24, tm = o.t[o.t.length - 1], i = Math.min(o.t.length - 1, Math.floor(st.t / 0.25));
+  const D = { f: [[['Thrust', o.thr, '#e0a844'], ['Weight', o.wt, '#5a9be8'], ['Drag', o.drag, '#e0624b'], ['Net force', o.net, '#5fcf9a']], 1e6, 'MN'],
+    v: [[['Speed', o.v, '#5fcf9a']], 1e3, 'km/s'], e: [[['Kinetic', o.ke, '#e0a844'], ['Potential', o.pe, '#5a9be8'], ['Total', o.ke.map((a, j) => a + o.pe[j]), '#b48cf0']], 1e12, 'TJ'], m: [[['Mass', o.m, '#e6ebf3']], 1e3, 'tonnes'] }[k];
+  const [ser, un, ul] = D; let lo = 0, hi = Math.max(...ser.flatMap((s) => s[1])) / un; if (k === 'f') lo = Math.min(0, ...o.net) / un; if (k === 'v') hi = Math.max(hi, 12);
+  const stp = Math.pow(10, Math.floor(Math.log10((hi - lo) / 4))), st2 = [1, 2, 5, 10].map((q) => q * stp).find((q) => (hi - lo) / q <= 5); hi = Math.ceil(hi / st2) * st2; lo = Math.floor(lo / st2) * st2;
+  const X = (t) => Lm + t / tm * (w - Lm - Rm), Y = (v) => T + (1 - (v - lo) / (hi - lo)) * (h - T - B);
+  g.fillStyle = '#070b17'; g.fillRect(0, 0, w, h); g.strokeStyle = '#243046'; g.lineWidth = 1;
+  for (let v = lo; v <= hi + 1e-9; v += st2) { g.beginPath(); g.moveTo(Lm, Y(v)); g.lineTo(w - Rm, Y(v)); g.stroke(); txt(g, n(v, st2 < 1 ? 1 : 0), Lm - 5, Y(v), '#93a0b4', 'right'); }
+  for (let t = 0; t <= tm; t += Math.ceil(tm / 6 / 50) * 50) txt(g, n(t), X(t), h - 10, '#93a0b4', 'center'); txt(g, 'time (s)', w - Rm, h - 10, '#93a0b4', 'right'); txt(g, ul, 4, T);
+  if (k === 'v') [[7.8, 'orbital 7.8 km/s'], [11.2, 'escape 11.2 km/s']].forEach(([v, l]) => { g.setLineDash([4, 4]); g.strokeStyle = '#8e9bb8'; g.beginPath(); g.moveTo(Lm, Y(v)); g.lineTo(w - Rm, Y(v)); g.stroke(); g.setLineDash([]); txt(g, l, Lm + 6, Y(v) - 7, '#c9d2e3'); });
+  const ms = [[0, 'Liftoff'], [S.maxQ.t, 'Max Q'], ...S.ev.map((e) => [e.t, e.lab])]; g.setLineDash([2, 4]); g.strokeStyle = '#5b6b86';
+  ms.forEach(([t, l], j) => { g.beginPath(); g.moveTo(X(t), T); g.lineTo(X(t), h - B); g.stroke(); txt(g, l, X(t) + 3, T + 7 + (j % 2) * 11, '#7f8da3'); }); g.setLineDash([]);
+  ser.forEach(([nm, a, c], j) => { for (const pass of [0, 1]) { g.globalAlpha = pass ? 1 : .3; g.strokeStyle = c; g.lineWidth = 2; g.beginPath(); const end = pass ? i : a.length - 1; for (let q = 0; q <= end; q += 2) q ? g.lineTo(X(o.t[q]), Y(a[q] / un)) : g.moveTo(X(o.t[q]), Y(a[q] / un)); g.stroke(); } g.globalAlpha = 1;
+    g.fillStyle = c; g.fillRect(w - Rm - 96, T + 4 + j * 14, 9, 9); txt(g, nm, w - Rm - 82, T + 9 + j * 14, '#c9d2e3'); });
+  g.strokeStyle = '#fff'; g.beginPath(); g.moveTo(X(o.t[i]), T); g.lineTo(X(o.t[i]), h - B); g.stroke();
+  $('pNote').textContent = { f: 'Net force = thrust − weight − drag, a simple scalar balance. Thrust rises as the air thins, drops at each stage separation, and weight falls as propellant burns. Early on the net force is small for Saturn V (thrust-to-weight about 1.15).', v: 'Speed is measured relative to Earth’s centre, so it includes the launch-site rotation. The dashed lines are the targets: about 7.8 km/s for low orbit and 11.2 km/s to escape from the surface.', e: 'Kinetic energy ½mv² grows with speed squared, while the vehicle shrinks as stages drop away. Potential energy is the exact mgh form for a falling gravity field, m·GM(1/R − 1/(R+h)).', m: 'Mass falls steadily as propellant burns and in steps when empty stages are discarded. Most of the liftoff mass is propellant.' }[k];
+}
+
+/* ---- tables ---- */
+function update() {
+  const R = st.r, S = st.sim, o = S.o, orb = S.eps >= 0 ? 'Escape trajectory' : S.rp >= 100e3 ? `Orbit ${n(S.rp / 1e3)} × ${n(S.ra / 1e3)} km` : S.rp < 0 ? 'Suborbital: falls back to Earth' : `Perigee ${n(S.rp / 1e3)} km: needs another burn`;
+  const rows = [['Liftoff mass', `${n(S.m0 / 1e3)} t`, ''], ['Liftoff thrust (sea level)', `${n(S.F0 / 1e6, 1)} MN · T/W ${n(S.F0 / S.m0 / G0, 2)}`, ''], ['Max Q (peak dynamic pressure)', `${n(S.maxQ.q / 1e3)} kPa at ${n(S.maxQ.t)} s, ${n(S.maxQ.h / 1e3, 1)} km`, ''],
+    ['End of simulated burn', `${n(S.Tend)} s`, ''], ['Altitude at burnout', `${n(S.hEnd / 1e3)} km`, ''], ['Speed at burnout (inertial)', `${n(S.vEnd / 1e3, 2)} km/s`, S.vEnd >= 7.6e3 ? '' : 'dn'], ['Resulting path', orb, S.rp >= 100e3 || S.eps >= 0 ? 'bl' : 'dn'], ['Rotation boost at ' + st.s.short, `${n(S.vr)} m/s`, '']];
+  $('resH').textContent = `${R.name} from ${st.s.short}`;
+  $('tbl').innerHTML = '<tr><th>Quantity</th><th>Value</th></tr>' + rows.map((r) => `<tr><td>${r[0]}</td><td class="${r[2]}">${r[1]}</td></tr>`).join('');
+  $('tblNote').textContent = 'A simplified 2D model: a prescribed pitch-over, an exponential atmosphere, a fixed drag coefficient and a spherical Earth. It is tuned so that each rocket reaches roughly orbital speed from Florida; real flight profiles are optimised and differ. Try other sites to see the effect of Earth’s rotation.';
+  const dv = S.dvS.map((d, i) => [`Stage ${R.stages[i].lab}: ${R.stages[i].n}`, `${n(d / 1e3, 2)} km/s`]);
+  $('eqt').innerHTML = '<tr><th>Contribution</th><th>Value</th></tr>' + [...dv, ['Total ideal Δv (thrust ÷ mass, summed)', `${n(S.dvT / 1e3, 2)} km/s`], ['Lost to gravity', `−${n(S.gL / 1e3, 2)} km/s`], ['Lost to drag', `−${n(S.dL / 1e3, 2)} km/s`],
+    ['If it never dropped a stage', `${n(S.single / 1e3, 2)} km/s`], ['Needed for LEO, including losses', '≈ 9.3–10 km/s'], ['Needed to escape, from the surface', '≥ 11.2 km/s + losses']].map((r) => `<tr><td>${r[0]}</td><td>${r[1]}</td></tr>`).join('');
+  $('eqNote').textContent = `${R.name}: ${R.cap} The “never dropped a stage” row uses one average Isp and keeps every tank and engine: that gap is what staging buys.`;
+  $('sitet').innerHTML = '<tr><th>Site</th><th>Latitude</th><th>Boost</th><th>Share of 7.8 km/s</th></tr>' + SITES.map((s) => `<tr><td><button type="button" data-s="${s.id}" aria-pressed="${s === st.s}">${s.short}</button></td><td>${n(s.lat, 1)}° N</td><td>${n(VEQ * Math.cos(s.lat * RAD))} m/s</td><td>${n(VEQ * Math.cos(s.lat * RAD) / 78, 1)} %</td></tr>`).join('');
+  document.querySelectorAll('[data-s]').forEach((b) => b.onclick = () => setSite(SITES.find((s) => s.id === b.dataset.s)));
+  $('siteNote').innerHTML = `<b>${st.s.name}.</b> ${st.s.note} The eastward surface speed is v<sub>eq</sub> cos φ = 465 m/s × cos ${n(st.s.lat, 1)}° = ${n(S.vr)} m/s, which the rocket doesn’t have to supply for an eastward orbit.`;
+  $('escNote').textContent = R.esc; $('site').value = st.s.id;
+  document.querySelectorAll('[data-r]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.r === R.id)));
+  $('diag').setAttribute('aria-label', `Stage diagram of ${R.name}`); stageTable();
+}
+$('terms').innerHTML = `<h2>Key terms</h2><ul><li><b>Stage:</b> a section with its own engines and tanks, discarded when empty.</li><li><b>Isp:</b> specific impulse, a measure of engine efficiency in seconds.</li><li><b>LEO:</b> low Earth orbit, a few hundred kilometres up. <b>GTO</b> is the stretched transfer orbit that leads to geostationary orbit (about 35,786 km). <b>TLI</b> is the burn that sends a spacecraft towards the Moon.</li><li><b>Max Q:</b> the moment of greatest aerodynamic stress, where air density and speed multiply to the highest dynamic pressure.</li><li><b>Escape velocity:</b> √2 times circular orbital speed, about 11.2 km/s at the surface.</li></ul>
+<h2>Key takeaways</h2><ul><li>Staging discards empty tanks and engines, so the remaining mass accelerates more easily.</li><li>Propellants trade thrust, efficiency, density and complexity: hydrogen is efficient but bulky, kerosene and methane are dense, solids are simple but can’t be throttled.</li><li>An eastward launch near the equator gets up to about 465 m/s for free, around 6 % of orbital speed.</li><li>Orbital and escape speeds are the targets, but gravity and drag losses mean real vehicles need well over 9 km/s of Δv to reach orbit.</li></ul>`;
+
+/* ---- Earth rotation, escape, fuel ---- */
+function drawEarth() {
+  const [g, w, h] = fit($('earth'), 1.9), cx = w * 0.27, cy = h / 2, r = h * 0.4; g.fillStyle = '#070b17'; g.fillRect(0, 0, w, h);
+  g.fillStyle = '#12304f'; g.beginPath(); g.arc(cx, cy, r, 0, TAU); g.fill(); g.strokeStyle = '#3a6ea5'; g.lineWidth = 1.5; g.stroke();
+  g.setLineDash([4, 4]); g.strokeStyle = '#5b6b86'; g.beginPath(); g.moveTo(cx - r, cy); g.lineTo(cx + r, cy); g.stroke(); g.setLineDash([]); g.strokeStyle = '#8e9bb8'; g.beginPath(); g.moveTo(cx, cy - r - 12); g.lineTo(cx, cy + r + 12); g.stroke();
+  txt(g, 'rotation axis', cx + 4, cy - r - 8); txt(g, 'equator', cx - r, cy + 10);
+  SITES.forEach((s) => { const a = s.lat * RAD, px = cx + r * Math.cos(a), py = cy - r * Math.sin(a), v = VEQ * Math.cos(a), sel = s === st.s;
+    arrow(g, px, py, 20 + (w - px - 130) * Math.cos(a) * 0.9, 0, sel ? '#e0a844' : '#7f8da3'); g.fillStyle = sel ? '#fff' : '#b9c4d6'; g.beginPath(); g.arc(px, py, sel ? 5 : 3.5, 0, TAU); g.fill();
+    txt(g, `${s.short} · ${n(s.lat, 1)}° · ${n(v)} m/s east`, px + 8, py - 10, sel ? '#fff' : '#93a0b4'); });
+  txt(g, 'Arrow length is proportional to eastward surface speed (the view is side-on)', 10, h - 10);
+}
+$('earth').addEventListener('click', (ev) => { const c = $('earth'), b = c.getBoundingClientRect(), y = ev.clientY - b.top, h = b.height; let best = null, bd = 28;
+  SITES.forEach((s) => { const d = Math.abs(h / 2 - h * 0.4 * Math.sin(s.lat * RAD) - y); if (d < bd) { bd = d; best = s; } }); if (best) setSite(best); });
+function drawEsc() {
+  const [g, w, h] = fit($('esc'), 1.7), cx = w * 0.3, cy = h / 2, u = h * 0.19, RR = 0.94; g.fillStyle = '#070b17'; g.fillRect(0, 0, w, h);
+  g.fillStyle = '#12304f'; g.beginPath(); g.arc(cx, cy, RR * u, 0, TAU); g.fill(); g.strokeStyle = '#3a6ea5'; g.stroke();
+  [[0.8, '0.8 · falls back', '#e0624b'], [1, '1.0 · circular orbit', '#5fcf9a'], [1.2, '1.2 · elliptical orbit', '#5a9be8'], [Math.SQRT2, '√2 · escape (7.8 → 11.2 km/s)', '#e0a844'], [1.6, '1.6 · leaves, still moving', '#b48cf0']].forEach(([k, lab, c], j) => {
+    let x = 0, y = 1, vx = k, vy = 0; g.strokeStyle = c; g.lineWidth = 1.8; g.beginPath(); g.moveTo(cx, cy - u);
+    for (let s = 0; s < 40000; s++) { const r = Math.hypot(x, y), a = -1 / (r * r * r); vx += a * x * 0.0015; vy += a * y * 0.0015; x += vx * 0.0015; y += vy * 0.0015; if (Math.hypot(x, y) < RR && s > 5) break;
+      const X = cx + x * u, Y = cy - y * u; if (X > w + 20 || Y > h + 20 || Y < -20 || X < -20) break; if (s % 8 === 0) g.lineTo(X, Y); } g.stroke(); g.fillStyle = c; g.fillRect(w - 218, 10 + j * 15, 9, 9); txt(g, lab, w - 204, 15 + j * 15, '#c9d2e3'); });
+  txt(g, 'Launch speed as a multiple of circular orbital speed', 10, h - 10);
+}
+function drawFuel() {
+  const [g, w, h] = fit($('fuel'), 1.5), Lm = 4, bw = w - 24, X = (v) => Lm + 10 + Math.log10(Math.max(v, 1)) / 4 * bw * 0.97; g.fillStyle = '#070b17'; g.fillRect(0, 0, w, h);
+  [1, 10, 100, 1000].forEach((v) => { g.strokeStyle = '#243046'; g.beginPath(); g.moveTo(X(v), 4); g.lineTo(X(v), h - 18); g.stroke(); txt(g, n(v) + ' t', X(v), h - 8, '#93a0b4', 'center'); });
+  const rh = (h - 22) / ROCKETS.length;
+  ROCKETS.forEach((R, k) => { const y = 6 + k * rh, prop = R.stages.reduce((a, s) => a + s.prop, 0), E = R.stages.reduce((a, s) => a + s.prop * FUEL[s.fuel][1], 0) / 1000, Ep = R.leo * 32.3 / 1000, sel = R === st.r;
+    txt(g, R.name, 12, y + 7, sel ? '#fff' : '#c9d2e3'); g.fillStyle = '#e0a844'; g.fillRect(X(1), y + 15, X(prop) - X(1), 10); txt(g, `propellant ${n(prop, prop < 10 ? 1 : 0)} t`, X(prop) + 5, y + 20, '#e0a844');
+    g.fillStyle = '#5a9be8'; g.fillRect(X(1), y + 28, Math.max(2, X(R.leo) - X(1)), 10); txt(g, `payload to LEO ${n(R.leo, R.leo < 10 ? 1 : 0)} t`, X(R.leo) + 5, y + 33, '#5a9be8');
+    txt(g, `chemical ${n(E, 1)} TJ · payload orbital energy ${n(Ep, 2)} TJ (${n(Ep / E * 100, 1)} %)`, 12, y + 47, '#7f8da3'); });
+}
+
+/* ---- events ---- */
+const setSite = (s) => { st.s = s; run(); update(); dirty = true; };
+const setRocket = (r) => { st.r = r; run(); update(); dirty = true; };
+$('rk').innerHTML = ROCKETS.map((r) => `<button type="button" data-r="${r.id}" aria-pressed="false">${r.name}</button>`).join('');
+$('site').innerHTML = SITES.map((s) => `<option value="${s.id}">${s.name}</option>`).join('');
+document.querySelectorAll('[data-r]').forEach((b) => b.onclick = () => setRocket(ROCKETS.find((r) => r.id === b.dataset.r)));
+$('site').onchange = (e) => setSite(SITES.find((s) => s.id === e.target.value));
+document.querySelectorAll('[data-v]').forEach((b) => b.onclick = () => { st.vec[b.dataset.v] = !st.vec[b.dataset.v]; b.setAttribute('aria-pressed', String(st.vec[b.dataset.v])); dirty = true; });
+document.querySelectorAll('[data-p]').forEach((b) => b.onclick = () => { st.plot = b.dataset.p; document.querySelectorAll('[data-p]').forEach((x) => x.setAttribute('aria-pressed', String(x === b))); dirty = true; });
+$('play').onclick = () => { st.playing = !st.playing; $('play').textContent = st.playing ? 'Pause' : 'Play'; $('play').setAttribute('aria-pressed', String(st.playing)); };
+$('rst').onclick = () => { st.t = 0; dirty = true; };
+$('spd').onchange = (e) => { st.speed = +e.target.value; };
+if (!st.playing) { $('play').textContent = 'Play'; $('play').setAttribute('aria-pressed', 'false'); }
+window.addEventListener('resize', () => { dirty = true; });
+let last = 0;
+function frame(ts) {
+  const dt = Math.min(0.05, (ts - last) / 1000 || 0); last = ts; const end = st.sim.o.t[st.sim.o.t.length - 1];
+  if (st.playing) { st.t += dt * st.speed; if (st.t > end + 4) st.t = 0; dirty = true; }
+  if (dirty) { dirty = false; drawDiag(); drawAsc(); drawPlot(); drawEarth(); drawEsc(); drawFuel(); }
+  requestAnimationFrame(frame);
+}
+run(); update(); requestAnimationFrame(frame);
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { dirty = true; });
+</script>
+</body></html>

@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Rise and set calculator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Familjen+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{--bg:#eceef2;--panel:#f9fafb;--field:#eef1f5;--ink:#16202c;--muted:#566274;--line:#d0d7e0;--accent:#8f5f10;--on-accent:#fff;--sky:#0a1020;--display:'Familjen Grotesk',system-ui,-apple-system,'Segoe UI',sans-serif;--mono:'IBM Plex Mono',ui-monospace,Menlo,Consolas,monospace;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0a0e17;--panel:#111826;--field:#0c121e;--ink:#e6ebf3;--muted:#93a0b4;--line:#243046;--accent:#e0a844;--on-accent:#1a1100;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0a0e17;--panel:#111826;--field:#0c121e;--ink:#e6ebf3;--muted:#93a0b4;--line:#243046;--accent:#e0a844;--on-accent:#1a1100;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 var(--display);padding:20px 16px 36px}
+.wrap{max-width:1120px;margin-inline:auto;display:flex;flex-direction:column;gap:16px}
+h1{margin:0;font-size:1.7rem;letter-spacing:-.015em}.top p{margin:2px 0 0;color:var(--muted);max-width:66ch}
+h2{margin:0 0 8px;font-size:1.02rem;font-weight:600}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px;min-width:0}
+.layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.25fr);gap:16px;align-items:start}
+@media(max-width:860px){.layout{grid-template-columns:minmax(0,1fr)}}
+.col{display:flex;flex-direction:column;gap:16px;min-width:0}
+button,input,select{font:inherit;font-size:.86rem;color:var(--ink);background:var(--field);border:1px solid var(--line);border-radius:6px;padding:6px 10px}
+button{cursor:pointer}button:hover{border-color:var(--muted)}button[aria-pressed=true]{border-color:var(--accent);background:var(--panel)}
+button.primary{background:var(--accent);color:var(--on-accent);border-color:transparent;font-weight:600}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.pre{display:flex;flex-wrap:wrap;gap:6px}
+.form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 12px;margin-top:12px}
+.form label{display:flex;flex-direction:column;gap:3px;font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;min-width:0}
+.form input,.form select{width:100%;font-family:var(--mono)}.form .wide{grid-column:1/-1}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:10px}
+.note{margin:10px 0 0;color:var(--muted);font-size:.8rem;max-width:72ch}
+.place{font:500 .9rem var(--mono);margin:0 0 8px}
+table{width:100%;border-collapse:collapse}
+td{padding:6px 0;border-top:1px solid var(--line);font:.86rem var(--mono);vertical-align:baseline}
+td:first-child{font-family:var(--display);color:var(--muted);font-size:.92rem;width:44%}td:last-child{text-align:right}
+td small{color:var(--muted)}
+.cw{border:1px solid var(--line);border-radius:6px;overflow:hidden;background:var(--sky)}.cw canvas{display:block;width:100%}
+.chk{display:inline-flex;align-items:center;gap:6px;font-size:.88rem}.chk input{accent-color:var(--accent);width:15px;height:15px;margin:0;padding:0}
+</style></head><body>
+<main class="wrap">
+<header class="top"><h1>Rise and set calculator</h1>
+<p>Sunrise, sunset, moonrise and moonset for any place and date, with the length of the day through the year. Try the presets to see how latitude changes the seasons.</p></header>
+<div class="layout">
+<div class="col">
+<section class="card" aria-label="Location and date"><h2>Place and date</h2>
+<div class="pre" id="pre"></div>
+<div class="form">
+<label>Latitude (° N+)<input type="number" id="lat" step="0.01" min="-90" max="90"></label>
+<label>Longitude (° E+)<input type="number" id="lon" step="0.01" min="-180" max="180"></label>
+<label>Date<input type="date" id="date"></label>
+<label>Show times in<select id="tz"></select></label></div>
+<div class="row"><button type="button" id="prev" aria-label="Previous day">−1 day</button><button type="button" id="today">Today</button><button type="button" id="next" aria-label="Next day">+1 day</button><button type="button" id="geo" class="primary">My location</button><span class="note" id="msg" style="margin:0"></span></div>
+</section>
+<section class="card" aria-label="The day at a glance"><h2>The day at a glance</h2>
+<div class="cw"><canvas id="day" role="img" aria-label="Timeline of the day showing daylight, twilight and night, and when the Moon is up"></canvas></div>
+<p class="note">Yellow is daylight, then civil, nautical and astronomical twilight fading to night. The lower bar shows when the Moon is above the horizon.</p></section>
+</div>
+<section class="card" aria-label="Results"><div class="place" id="place"></div>
+<h2>Sun</h2><table id="sun"></table><p class="note" id="sunNote" style="margin-top:6px"></p>
+<h2 style="margin-top:16px">Moon</h2><table id="moon"></table><p class="note" id="moonNote" style="margin-top:6px"></p>
+<p class="note">Rise and set mean the upper edge touching the horizon, with standard refraction and sea-level horizon. Sun times are good to about a minute and Moon times to a few minutes.</p></section>
+</div>
+<section class="card" aria-label="Day length through the year"><h2>Day length through the year</h2>
+<div class="cw"><canvas id="yr" role="img" aria-label="Chart of day length in hours for each day of the year at the chosen latitude"></canvas></div>
+<div class="row"><label class="chk"><input type="checkbox" id="cmp" checked> Compare the presets</label></div>
+<p class="note">The bright line is your place. Click the chart to jump to that day. Near the equator the day barely changes. Far from it, summer days stretch and winter days shrink, up to midnight sun and polar night inside the polar circles.</p></section>
+</main>
+<script>
+const RAD = Math.PI / 180, J2000 = Date.UTC(2000, 0, 1, 12), $ = (id) => document.getElementById(id);
+const PRE = [['London', 51.51, -0.13, 'Europe/London'], ['New York', 40.71, -74.01, 'America/New_York'], ['Sydney', -33.87, 151.21, 'Australia/Sydney'], ['Quito', -0.18, -78.47, 'America/Guayaquil'], ['Tromsø', 69.65, 18.96, 'Europe/Oslo']];
+const BTZ = Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC';
+const loc = { name: 'Leicester (default)', lat: 52.64, lon: -1.13, tz: 'Europe/London' };
+const now = new Date(), st = { y: now.getFullYear(), m: now.getMonth() + 1, d: now.getDate(), utc: false };
+const C16 = ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW'];
+const pad = (n) => String(n).padStart(2, '0'), dd = (ms) => (ms - J2000) / 864e5;
+const wrap360 = (x) => ((x % 360) + 360) % 360;
+
+/* ---- astronomy ---- */
+function sunPos(d) {
+  const L = 280.460 + 0.9856474 * d, g = (357.528 + 0.9856003 * d) * RAD, lam = (L + 1.915 * Math.sin(g) + 0.020 * Math.sin(2 * g)) * RAD, e = (23.439 - 4e-7 * d) * RAD;
+  return { ra: Math.atan2(Math.cos(e) * Math.sin(lam), Math.cos(lam)), dec: Math.asin(Math.sin(e) * Math.sin(lam)), lam };
+}
+function moonPos(d) {
+  const L = (218.316 + 13.176396 * d) * RAD, M = (134.963 + 13.064993 * d) * RAD, F = (93.272 + 13.229350 * d) * RAD;
+  const l = L + 6.289 * RAD * Math.sin(M), b = 5.128 * RAD * Math.sin(F), dist = 385001 - 20905 * Math.cos(M), e = 23.4397 * RAD;
+  return { ra: Math.atan2(Math.sin(l) * Math.cos(e) - Math.tan(b) * Math.sin(e), Math.cos(l)), dec: Math.asin(Math.sin(b) * Math.cos(e) + Math.cos(b) * Math.sin(e) * Math.sin(l)), lam: l, par: Math.asin(6378.14 / dist) / RAD };
+}
+function horiz(p, ms) {
+  const H = (280.46061837 + 360.98564736629 * dd(ms) + loc.lon) * RAD - p.ra, ph = loc.lat * RAD;
+  const alt = Math.asin(Math.sin(ph) * Math.sin(p.dec) + Math.cos(ph) * Math.cos(p.dec) * Math.cos(H));
+  const az = Math.atan2(Math.sin(H), Math.cos(H) * Math.sin(ph) - Math.tan(p.dec) * Math.cos(ph)) / RAD + 180;
+  return { alt: alt / RAD, az: wrap360(az) };
+}
+const sunAt = (ms) => horiz(sunPos(dd(ms)), ms), moonAt = (ms) => horiz(moonPos(dd(ms)), ms);
+function scan(f, h0, t0, t1) { // every crossing of altitude h0 within [t0, t1]
+  const ev = [], step = 6e5; let tp = t0, vp = f(t0).alt - h0;
+  for (let t = t0 + step; ; t += step) {
+    if (t > t1) t = t1;
+    const v = f(t).alt - h0;
+    if ((vp < 0) !== (v < 0)) {
+      let a = tp, b = t, va = vp;
+      for (let i = 0; i < 20; i++) { const m = (a + b) / 2, vm = f(m).alt - h0; if ((vm < 0) === (va < 0)) { a = m; va = vm; } else b = m; }
+      const tm = (a + b) / 2; ev.push({ t: tm, up: v >= 0, az: f(tm).az });
+    }
+    tp = t; vp = v; if (t >= t1) break;
+  }
+  return ev;
+}
+function upTime(f, h0, t0, t1, ev) {
+  let up = f(t0).alt >= h0, last = t0, tot = 0;
+  for (const e of ev) { if (up) tot += e.t - last; up = e.up; last = e.t; }
+  return up ? tot + t1 - last : tot;
+}
+function transit(t0, t1) {
+  const step = 6e5, n = Math.round((t1 - t0) / step), a = []; let bi = 1;
+  for (let i = 0; i <= n; i++) { a.push(sunAt(t0 + i * step).alt); if (i && i < n && a[i] > a[bi]) bi = i; }
+  const y0 = a[bi - 1], y1 = a[bi], y2 = a[bi + 1] === undefined ? sunAt(t0 + (bi + 1) * step).alt : a[bi + 1], o = 0.5 * (y0 - y2) / (y0 - 2 * y1 + y2);
+  return { t: t0 + (bi + o) * step, alt: y1 - 0.25 * (y0 - y2) * o };
+}
+function dayLen(y, m, d) { // hours, from the declination at midday UTC
+  const dec = sunPos(dd(Date.UTC(y, m - 1, d, 12))).dec, ph = Math.max(-89.9, Math.min(89.9, loc.lat)) * RAD;
+  const c = (Math.sin(-0.833 * RAD) - Math.sin(ph) * Math.sin(dec)) / (Math.cos(ph) * Math.cos(dec));
+  return c >= 1 ? 0 : c <= -1 ? 24 : 2 * Math.acos(c) / RAD / 15;
+}
+function phase(ms) {
+  const m = moonPos(dd(ms)), D = wrap360((m.lam - sunPos(dd(ms)).lam) / RAD), names = ['New moon', 'Waxing crescent', 'First quarter', 'Waxing gibbous', 'Full moon', 'Waning gibbous', 'Last quarter', 'Waning crescent'];
+  return { name: names[Math.floor((D + 22.5) / 45) % 8], lit: (1 - Math.cos(D * RAD)) / 2 };
+}
+
+/* ---- time zones ---- */
+const effTz = () => st.utc ? 'UTC' : loc.tz, fmts = {};
+function tzOff(tz, ms) {
+  const o = {}; for (const x of new Intl.DateTimeFormat('en-US', { timeZone: tz, hourCycle: 'h23', year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' }).formatToParts(new Date(ms))) o[x.type] = +x.value;
+  return Date.UTC(o.year, o.month - 1, o.day, o.hour, o.minute, o.second) - Math.floor(ms / 1000) * 1000;
+}
+const midnight = (tz, y, m, d) => { const g = Date.UTC(y, m, d); return g - tzOff(tz, g - tzOff(tz, g)); };
+function hhmm(ms, tz) { const f = fmts[tz] || (fmts[tz] = new Intl.DateTimeFormat('en-GB', { timeZone: tz, hour: '2-digit', minute: '2-digit', hourCycle: 'h23' })); return f.format(new Date(ms)); }
+const dur = (ms) => { const m = Math.round(ms / 6e4); return Math.floor(m / 60) + ' h ' + pad(m % 60) + ' min'; };
+const dir = (az) => Math.round(az) + '° ' + C16[Math.round(az / 22.5) % 16];
+
+/* ---- results ---- */
+let sky = null;
+function update() {
+  const tz = effTz(), t0 = midnight(tz, st.y, st.m - 1, st.d), t1 = midnight(tz, st.y, st.m - 1, st.d + 1), mid = (t0 + t1) / 2;
+  const sr = scan(sunAt, -0.833, t0, t1), cv = scan(sunAt, -6, t0, t1), mp = moonPos(dd(mid)), mh = 0.7275 * mp.par - 0.5667, mr = scan(moonAt, mh, t0, t1);
+  const tr = transit(t0, t1), len = upTime(sunAt, -0.833, t0, t1, sr), dl = dayLen(st.y, st.m, st.d) - dayLen(st.y, st.m, st.d - 1), ph = phase(mid);
+  const one = (ev, up, label, deg) => { const e = ev.filter((x) => x.up === up); return [label, e.length ? e.map((x) => hhmm(x.t, tz) + (deg ? ' <small>' + dir(x.az) + '</small>' : '')).join(', ') : '<small>none today</small>']; };
+  const tab = (rows) => rows.map(([a, b]) => '<tr><td>' + a + '</td><td>' + b + '</td></tr>').join('');
+  const sgn = Math.abs(dl) * 3600 < 1 ? 'no change' : (dl > 0 ? '+' : '−') + Math.floor(Math.abs(dl) * 60) + ' min ' + pad(Math.round(Math.abs(dl) * 3600) % 60) + ' s';
+  $('sun').innerHTML = tab([one(cv, true, 'Civil dawn'), one(sr, true, 'Sunrise', 1), ['Solar noon', hhmm(tr.t, tz) + ' <small>' + tr.alt.toFixed(1) + '° high</small>'], one(sr, false, 'Sunset', 1), one(cv, false, 'Civil dusk'), ['Day length', dur(len)], ['Change since yesterday', sgn]]);
+  $('moon').innerHTML = tab([one(mr, true, 'Moonrise', 1), one(mr, false, 'Moonset', 1), ['Phase', ph.name + ' <small>' + Math.round(ph.lit * 100) + '% lit</small>']]);
+  $('sunNote').textContent = sr.length ? '' : (sunAt(mid).alt > -0.833 ? 'The Sun stays above the horizon all day (midnight sun).' : 'The Sun stays below the horizon all day (polar night).');
+  $('moonNote').textContent = mr.length ? 'Moon times drift about 50 minutes later each day, so some days have no moonrise or no moonset.' : (moonAt(mid).alt > mh ? 'The Moon is up all day here.' : 'The Moon does not rise on this day here.');
+  $('place').textContent = loc.name + ' · ' + Math.abs(loc.lat).toFixed(2) + '°' + (loc.lat < 0 ? 'S' : 'N') + ' ' + Math.abs(loc.lon).toFixed(2) + '°' + (loc.lon < 0 ? 'W' : 'E') + ' · ' + new Date(Date.UTC(st.y, st.m - 1, st.d)).toLocaleDateString(undefined, { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' });
+  sky = { t0, t1, tz }; drawDay(); drawYear();
+}
+
+/* ---- drawing ---- */
+function fit(cv, h) {
+  const w = cv.parentElement.clientWidth; if (!w) return null; const d = Math.min(window.devicePixelRatio || 1, 2);
+  if (cv.width !== Math.round(w * d) || cv.height !== Math.round(h * d)) { cv.width = Math.round(w * d); cv.height = Math.round(h * d); cv.style.height = h + 'px'; }
+  const c = cv.getContext('2d'); c.setTransform(d, 0, 0, d, 0, 0); return { c, w, h };
+}
+function drawDay() {
+  const f = fit($('day'), 96); if (!f || !sky) return; const { c, w, h } = f, L = 44, pw = w - L - 10, { t0, t1, tz } = sky, N = 288;
+  c.clearRect(0, 0, w, h); c.font = '10.5px "IBM Plex Mono",monospace'; c.textBaseline = 'middle'; c.textAlign = 'right'; c.fillStyle = 'rgba(190,205,235,.8)';
+  c.fillText('Sun', L - 6, 26); c.fillText('Moon', L - 6, 58);
+  const mh = 0.7275 * moonPos(dd((t0 + t1) / 2)).par - 0.5667;
+  for (let i = 0; i < N; i++) {
+    const t = t0 + (i + 0.5) * (t1 - t0) / N, a = sunAt(t).alt, x = L + i * pw / N;
+    c.fillStyle = a > -0.833 ? '#ffc247' : a > -6 ? '#e0875a' : a > -12 ? '#4a5a9a' : a > -18 ? '#26315c' : '#0d1328'; c.fillRect(x, 12, pw / N + 0.6, 28);
+    c.fillStyle = moonAt(t).alt > mh ? '#cfd8ee' : '#161d33'; c.fillRect(x, 44, pw / N + 0.6, 28);
+  }
+  c.textAlign = 'center'; c.fillStyle = 'rgba(190,205,235,.8)';
+  for (let hr = 0; hr <= 24; hr += 6) { const x = L + hr / 24 * pw; c.fillText(hhmm(t0 + hr * (t1 - t0) / 24, tz).replace(/^24/, '00'), Math.min(w - 16, Math.max(L, x)), 86); c.fillStyle = 'rgba(255,255,255,.25)'; c.fillRect(x - 0.5, 10, 1, 64); c.fillStyle = 'rgba(190,205,235,.8)'; }
+  const n = Date.now(); if (n >= t0 && n <= t1) { const x = L + (n - t0) / (t1 - t0) * pw; c.strokeStyle = '#fff'; c.lineWidth = 1.5; c.beginPath(); c.moveTo(x, 8); c.lineTo(x, 76); c.stroke(); }
+}
+let yg = null;
+function drawYear() {
+  const f = fit($('yr'), Math.round(Math.max(240, Math.min(380, $('yr').parentElement.clientWidth * 0.36)))); if (!f) return;
+  const { c, w, h } = f, M = { l: 40, r: 78, t: 16, b: 26 }, pw = w - M.l - M.r, ph = h - M.t - M.b, y = st.y, nd = (Date.UTC(y + 1, 0, 1) - Date.UTC(y, 0, 1)) / 864e5;
+  const X = (i) => M.l + i / (nd - 1) * pw, Y = (v) => M.t + (24 - v) / 24 * ph; yg = { M, pw, nd };
+  c.clearRect(0, 0, w, h); c.font = '10.5px "IBM Plex Mono",monospace'; c.textBaseline = 'middle'; c.lineWidth = 1;
+  for (let v = 0; v <= 24; v += 6) { c.strokeStyle = v === 12 ? 'rgba(190,205,235,.4)' : 'rgba(190,205,235,.15)'; c.beginPath(); c.moveTo(M.l, Y(v)); c.lineTo(w - M.r, Y(v)); c.stroke(); c.textAlign = 'right'; c.fillStyle = 'rgba(190,205,235,.8)'; c.fillText(v + ' h', M.l - 6, Y(v)); }
+  const doy = (m, d) => Math.round((Date.UTC(y, m, d) - Date.UTC(y, 0, 1)) / 864e5);
+  c.textAlign = 'center';
+  for (let m = 0; m < 12; m++) c.fillText('JFMAMJJASOND'[m], X(doy(m, 15)), h - 10);
+  for (const [m, d, s] of [[2, 20, 'Equinox'], [5, 21, 'Solstice'], [8, 22, 'Equinox'], [11, 21, 'Solstice']]) { c.strokeStyle = 'rgba(255,255,255,.14)'; c.beginPath(); c.moveTo(X(doy(m, d)), M.t); c.lineTo(X(doy(m, d)), h - M.b); c.stroke(); c.fillStyle = 'rgba(190,205,235,.55)'; c.fillText(s, Math.min(w - M.r - 22, Math.max(M.l + 24, X(doy(m, d)))), M.t - 6); }
+  const curve = (lat, col, wd) => {
+    const keep = loc.lat; loc.lat = lat; c.strokeStyle = col; c.lineWidth = wd; c.beginPath(); let last = 0;
+    for (let i = 0; i < nd; i++) { const v = dayLen(y, 1, i + 1); last = v; if (i) c.lineTo(X(i), Y(v)); else c.moveTo(X(i), Y(v)); }
+    c.stroke(); loc.lat = keep; return last;
+  };
+  if ($('cmp').checked) {
+    const labs = PRE.map(([n, la]) => { const v = curve(la, 'rgba(150,175,230,.45)', 1.2); return [n, Y(v)]; }).sort((a, b) => a[1] - b[1]);
+    for (let i = 1; i < labs.length; i++) if (labs[i][1] - labs[i - 1][1] < 11) labs[i][1] = labs[i - 1][1] + 11;
+    c.textAlign = 'left'; c.fillStyle = 'rgba(160,185,235,.8)'; for (const [n, yy] of labs) c.fillText(n, w - M.r + 6, yy);
+  }
+  curve(loc.lat, '#ffc247', 2.5);
+  const i = Math.round((Date.UTC(st.y, st.m - 1, st.d) - Date.UTC(y, 0, 1)) / 864e5), v = dayLen(st.y, st.m, st.d);
+  c.setLineDash([3, 3]); c.strokeStyle = '#fff'; c.beginPath(); c.moveTo(X(i), M.t); c.lineTo(X(i), h - M.b); c.stroke(); c.setLineDash([]);
+  c.fillStyle = '#fff'; c.beginPath(); c.arc(X(i), Y(v), 4, 0, 6.2832); c.fill();
+  c.textAlign = i > nd / 2 ? 'right' : 'left'; c.fillText(Math.floor(v) + ' h ' + pad(Math.round(v % 1 * 60) % 60) + ' min', X(i) + (i > nd / 2 ? -8 : 8), Y(v) + (v > 12 ? 14 : -12));
+}
+
+/* ---- controls ---- */
+function setDateInput() { $('date').value = st.y + '-' + pad(st.m) + '-' + pad(st.d); }
+function shiftDay(n) { const d = new Date(Date.UTC(st.y, st.m - 1, st.d + n)); st.y = d.getUTCFullYear(); st.m = d.getUTCMonth() + 1; st.d = d.getUTCDate(); setDateInput(); update(); }
+function setLoc(name, lat, lon, tz) {
+  Object.assign(loc, { name, lat, lon, tz }); $('lat').value = lat.toFixed(2); $('lon').value = lon.toFixed(2);
+  $('tz').innerHTML = '<option value="place">' + (tz === BTZ && !PRE.some((p) => p[0] === name) ? 'Browser time' : 'Local time') + ' (' + tz.replace('_', ' ') + ')</option><option value="utc">UTC</option>'; $('tz').value = st.utc ? 'utc' : 'place';
+  document.querySelectorAll('#pre button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.n === name))); $('msg').textContent = ''; update();
+}
+for (const [n, la, lo, tz] of PRE) { const b = document.createElement('button'); b.type = 'button'; b.textContent = n; b.dataset.n = n; b.onclick = () => setLoc(n, la, lo, tz); $('pre').appendChild(b); }
+function locate() {
+  if (!navigator.geolocation) { $('msg').textContent = 'Location is not available here.'; return; }
+  navigator.geolocation.getCurrentPosition((r) => setLoc('Your location', r.coords.latitude, r.coords.longitude, BTZ), () => { $('msg').textContent = 'Location blocked, so it is unchanged.'; }, { timeout: 8000, maximumAge: 6e5 });
+}
+$('geo').onclick = locate; $('prev').onclick = () => shiftDay(-1); $('next').onclick = () => shiftDay(1);
+$('today').onclick = () => { const n = new Date(); st.y = n.getFullYear(); st.m = n.getMonth() + 1; st.d = n.getDate(); setDateInput(); update(); };
+$('tz').onchange = () => { st.utc = $('tz').value === 'utc'; update(); };
+$('date').onchange = () => { const p = $('date').value.split('-').map(Number); if (p.length === 3 && p[0]) { [st.y, st.m, st.d] = p; update(); } };
+for (const id of ['lat', 'lon']) $(id).onchange = () => { const la = parseFloat($('lat').value), lo = parseFloat($('lon').value); if (isFinite(la) && isFinite(lo)) setLoc('Custom place', Math.max(-90, Math.min(90, la)), Math.max(-180, Math.min(180, lo)), BTZ); };
+$('cmp').onchange = drawYear;
+$('yr').addEventListener('click', (e) => {
+  if (!yg) return; const x = e.clientX - $('yr').getBoundingClientRect().left, i = Math.max(0, Math.min(yg.nd - 1, Math.round((x - yg.M.l) / yg.pw * (yg.nd - 1))));
+  const d = new Date(Date.UTC(st.y, 0, 1 + i)); st.m = d.getUTCMonth() + 1; st.d = d.getUTCDate(); setDateInput(); update();
+});
+if ('ResizeObserver' in window) { const ro = new ResizeObserver(() => { drawDay(); drawYear(); }); ro.observe($('day').parentElement); ro.observe($('yr').parentElement); }
+try { matchMedia('(prefers-color-scheme: dark)').addEventListener('change', update); } catch (_) {}
+setDateInput(); setLoc(loc.name, loc.lat, loc.lon, loc.tz); locate();
+</script></body></html>

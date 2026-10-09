@@ -1,0 +1,10 @@
+/* Print / Save as PDF: light, ink-friendly output of whatever the lab currently shows. */
+@media print {
+  :root { --navy: #fff; --navy-raised: #fff; --navy-soft: #f3f5f8; --text-hi: #111; --text-lo: #333; --text-dim: #555; --border: #cfd5df; --border-strong: #98a2b3; --shadow: none; --teal: #007a6a; --amber: #9a6200; --blue: #2b55b8; --purple: #5b3fc0; --green: #1d7a45; --red: #b03030; --orange: #a65a1a; --pink: #a33e88; }
+  html, body { background: #fff !important; color: #111 !important; }
+  .ml-header, .ml-actions, .ml-more, .ml-skip, .ml-toast, .action-row, button:not(.bubble) { display: none !important; }
+  .panel, .detail-card, .meta-box, .insight-card, .summary-card, .notice, .guidance-panel { background: #fff !important; box-shadow: none !important; break-inside: avoid; }
+  .wrap { width: 100% !important; }
+  a { color: inherit; text-decoration: none; }
+  * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}

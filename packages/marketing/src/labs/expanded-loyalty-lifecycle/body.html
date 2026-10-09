@@ -1,0 +1,447 @@
+<!--SITE_HEADER-->
+
+  <main id="main">
+    <section class="hero wrap">
+      <p class="eyebrow">Expanded lifecycle marketing planner</p>
+
+      <h1>Turn first contact into a relationship—not just a conversion.</h1>
+
+      <p class="hero-copy">
+        Customer lifecycle marketing coordinates relevant communications, service and customer
+        experiences from discovery through repeat value and voluntary advocacy. This planner
+        combines the loyalty ladder with the RACE lifecycle—Reach, Act, Convert and Engage—to
+        reveal gaps across the journey rather than treating marketing as a series of isolated
+        campaigns.
+      </p>
+
+      <div class="notice">
+        <span class="notice-icon" aria-hidden="true">!</span>
+        <div>
+          <strong>Personalisation should be useful, proportionate and controllable.</strong>
+          Use customer information to reduce friction and increase relevance—not to exploit
+          vulnerability, create false urgency, conceal choices or make disengagement difficult.
+          Customers may pause, lapse and return; meaningful re-engagement starts by restoring
+          value and trust.
+        </div>
+      </div>
+    </section>
+
+    <section class="wrap app-shell" aria-label="Customer lifecycle marketing planner">
+      <form class="panel planner" id="lifecycle-form">
+        <div class="panel-heading">
+          <h2>Plan a lifecycle moment</h2>
+          <p>
+            Select a loyalty stage and RACE phase. Capture the customer outcome, activity,
+            channel, measure and experience boundary. Prioritise the underlying experience over
+            message volume or short-term conversion pressure.
+          </p>
+        </div>
+
+        <div class="field-set">
+          <div class="field">
+            <label for="brand-name">Brand, product or service</label>
+            <input
+              id="brand-name"
+              name="brand-name"
+              type="text"
+              value="Collaborative research-impact planning platform"
+              placeholder="For example: Product, service or organisation"
+            />
+          </div>
+
+          <div class="two-columns">
+            <div class="field">
+              <label for="business-mode">Lifecycle context</label>
+              <select id="business-mode" name="business-mode">
+                <option value="b2b">B2B / complex consideration</option>
+                <option value="b2c">B2C / ecommerce and repeat purchase</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="loyalty-stage">Loyalty stage</label>
+              <select id="loyalty-stage" name="loyalty-stage">
+                <option value="prospect">Prospect</option>
+                <option value="customer">Customer</option>
+                <option value="client">Client</option>
+                <option value="supporter">Supporter</option>
+                <option value="advocate">Advocate</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="two-columns">
+            <div class="field">
+              <label for="race-stage">RACE stage</label>
+              <select id="race-stage" name="race-stage">
+                <option value="reach">Reach</option>
+                <option value="act">Act</option>
+                <option value="convert">Convert</option>
+                <option value="engage">Engage</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="channel-type">Primary channel type</label>
+              <select id="channel-type" name="channel-type">
+                <option value="owned">Owned media / direct experience</option>
+                <option value="paid">Paid media / retargeting</option>
+                <option value="earned">Earned media / community / referrals</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="customer-outcome">Customer outcome</label>
+            <textarea
+              id="customer-outcome"
+              name="customer-outcome"
+            >Understand whether the platform is relevant to their planning challenge and make an informed decision without pressure or unnecessary data sharing.</textarea>
+          </div>
+
+          <div class="field">
+            <label for="activity">Always-on activity or experience</label>
+            <textarea
+              id="activity"
+              name="activity"
+            >Provide accessible guidance, practical examples and an optional discovery conversation focused on the customer’s context and goals.</textarea>
+          </div>
+
+          <div class="two-columns">
+            <div class="field">
+              <label for="measure">Customer-centred measure</label>
+              <input
+                id="measure"
+                name="measure"
+                type="text"
+                value="Qualified enquiry quality, content usefulness and voluntary follow-up"
+              />
+            </div>
+
+            <div class="field">
+              <label for="priority">Priority</label>
+              <select id="priority" name="priority">
+                <option value="high">High priority</option>
+                <option value="medium">Medium priority</option>
+                <option value="low">Low priority</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="boundary">Customer-experience and ethical boundary</label>
+            <textarea
+              id="boundary"
+              name="boundary"
+            >Avoid gating essential information, pre-ticked consent, misleading urgency or intrusive tracking. Keep data use clear and choices easy to change.</textarea>
+          </div>
+
+          <div class="field">
+            <label for="demo-picker">Load an example lifecycle plan</label>
+            <select id="demo-picker" name="demo-picker">
+              <option value="">Choose a demo…</option>
+              <option value="b2b">B2B research-planning platform</option>
+              <option value="b2c">B2C repeat-purchase ecommerce brand</option>
+              <option value="services">Professional-services lifecycle</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="action-row">
+          <button class="button button-primary" type="submit">Save lifecycle activity</button>
+          <button class="button button-secondary" id="clear-entry" type="button">Clear entry</button>
+          <button class="button button-secondary button-wide" id="copy-plan" type="button">
+            Copy lifecycle plan
+          </button>
+        </div>
+      </form>
+
+      <section class="panel workspace" aria-labelledby="workspace-title">
+        <div class="workspace-header">
+          <div>
+            <h2 id="workspace-title">Lifecycle relationship map</h2>
+            <p>
+              Explore lifecycle coverage from initial awareness through ongoing engagement,
+              retention and voluntary advocacy.
+            </p>
+          </div>
+
+          <div class="score-badge">
+            <div>
+              <strong id="coverage-score">8/8</strong>
+              <span>Core moments planned</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="workspace-body">
+          <div class="mode-switch" aria-label="Lifecycle mode">
+            <button class="mode-button active" type="button" data-mode="b2b">B2B lifecycle</button>
+            <button class="mode-button" type="button" data-mode="b2c">B2C lifecycle</button>
+          </div>
+
+          <section>
+            <div class="section-title-row">
+              <div>
+                <h3>RACE lifecycle flow</h3>
+              </div>
+              <p>Click a stage to inspect its strategy and activities.</p>
+            </div>
+
+            <div class="race-flow-wrap">
+              <div class="race-flow">
+                <button class="race-stage" type="button" data-race="reach">
+                  <span class="race-index">01</span>
+                  <span class="race-kicker">Build awareness</span>
+                  <h4>Reach</h4>
+                  <p id="reach-summary">No activity mapped.</p>
+                  <span class="race-status" id="reach-status">Not planned</span>
+                </button>
+
+                <button class="race-stage" type="button" data-race="act">
+                  <span class="race-index">02</span>
+                  <span class="race-kicker">Prompt interaction</span>
+                  <h4>Act</h4>
+                  <p id="act-summary">No activity mapped.</p>
+                  <span class="race-status" id="act-status">Not planned</span>
+                </button>
+
+                <button class="race-stage" type="button" data-race="convert">
+                  <span class="race-index">03</span>
+                  <span class="race-kicker">Enable commitment</span>
+                  <h4>Convert</h4>
+                  <p id="convert-summary">No activity mapped.</p>
+                  <span class="race-status" id="convert-status">Not planned</span>
+                </button>
+
+                <button class="race-stage" type="button" data-race="engage">
+                  <span class="race-index">04</span>
+                  <span class="race-kicker">Sustain value</span>
+                  <h4>Engage</h4>
+                  <p id="engage-summary">No activity mapped.</p>
+                  <span class="race-status" id="engage-status">Not planned</span>
+                </button>
+              </div>
+            </div>
+          </section>
+
+          <section>
+            <div class="section-title-row">
+              <div>
+                <h3>Loyalty ladder</h3>
+              </div>
+              <p>Relationship depth grows through value, trust and choice.</p>
+            </div>
+
+            <div class="loyalty-ladder-wrap">
+              <div class="loyalty-ladder">
+                <button class="loyalty-rung" type="button" data-stage="prospect">
+                  <span>
+                    <span class="rung-number">01</span>
+                    <span class="rung-kicker">Considering</span>
+                    <h4>Prospect</h4>
+                    <p id="prospect-summary">No activity mapped.</p>
+                  </span>
+                  <span class="rung-status" id="prospect-status">Not planned</span>
+                </button>
+
+                <button class="loyalty-rung" type="button" data-stage="customer">
+                  <span>
+                    <span class="rung-number">02</span>
+                    <span class="rung-kicker">First value exchange</span>
+                    <h4>Customer</h4>
+                    <p id="customer-summary">No activity mapped.</p>
+                  </span>
+                  <span class="rung-status" id="customer-status">Not planned</span>
+                </button>
+
+                <button class="loyalty-rung" type="button" data-stage="client">
+                  <span>
+                    <span class="rung-number">03</span>
+                    <span class="rung-kicker">Repeat relationship</span>
+                    <h4>Client</h4>
+                    <p id="client-summary">No activity mapped.</p>
+                  </span>
+                  <span class="rung-status" id="client-status">Not planned</span>
+                </button>
+
+                <button class="loyalty-rung" type="button" data-stage="supporter">
+                  <span>
+                    <span class="rung-number">04</span>
+                    <span class="rung-kicker">Voluntary contribution</span>
+                    <h4>Supporter</h4>
+                    <p id="supporter-summary">No activity mapped.</p>
+                  </span>
+                  <span class="rung-status" id="supporter-status">Not planned</span>
+                </button>
+
+                <button class="loyalty-rung" type="button" data-stage="advocate">
+                  <span>
+                    <span class="rung-number">05</span>
+                    <span class="rung-kicker">Voluntary recommendation</span>
+                    <h4>Advocate</h4>
+                    <p id="advocate-summary">No activity mapped.</p>
+                  </span>
+                  <span class="rung-status" id="advocate-status">Not planned</span>
+                </button>
+              </div>
+            </div>
+          </section>
+
+          <section class="loop-diagram">
+            <article class="loop-card">
+              <strong>Pause, friction or lapse</strong>
+              <p>
+                Customers may become inactive because needs change, value is unclear, service fails,
+                affordability changes or the journey becomes difficult.
+              </p>
+            </article>
+
+            <span class="loop-arrow" aria-hidden="true">↺</span>
+
+            <article class="loop-card">
+              <strong>Restore value and trust</strong>
+              <p>
+                Use service recovery, relevant support, accessible preference controls and an
+                optional win-back message when there is a real reason to reconnect.
+              </p>
+            </article>
+          </section>
+
+          <section class="detail-card" aria-live="polite">
+            <div>
+              <h3 id="detail-title">Select a lifecycle moment</h3>
+              <p id="detail-outcome">
+                Choose a RACE stage or loyalty rung to review its customer outcome and planned experience.
+              </p>
+            </div>
+
+            <div class="detail-meta">
+              <div class="meta-box">
+                <small>Always-on activity</small>
+                <strong id="detail-activity">—</strong>
+              </div>
+
+              <div class="meta-box">
+                <small>Channel and priority</small>
+                <strong id="detail-channel">—</strong>
+              </div>
+
+              <div class="meta-box">
+                <small>Meaningful measure</small>
+                <strong id="detail-measure">—</strong>
+              </div>
+
+              <div class="meta-box">
+                <small>Experience boundary</small>
+                <strong id="detail-boundary">—</strong>
+              </div>
+            </div>
+          </section>
+
+          <section class="touchpoint-panel">
+            <h3>Paid, owned and earned touchpoints</h3>
+            <p>
+              Review how channel types support the lifecycle. Coverage matters, but each activity
+              should have a clear role, customer benefit and measurement approach.
+            </p>
+
+            <div class="touchpoint-scroll">
+              <div class="touchpoint-grid" id="touchpoint-grid">
+                <div class="grid-head">Channel type</div>
+                <div class="grid-head">Reach</div>
+                <div class="grid-head">Act</div>
+                <div class="grid-head">Convert</div>
+                <div class="grid-head">Engage</div>
+              </div>
+            </div>
+          </section>
+
+          <section class="gap-analysis">
+            <h3>Always-on lifecycle gap analysis</h3>
+            <p>
+              Use this visual as a workshop prompt: compare the activities that could support each
+              stage with the activities currently in place, then prioritise the gaps that matter
+              most to customers and commercial goals.
+            </p>
+
+            <div class="gap-grid">
+              <article class="gap-card">
+                <strong>Reach</strong>
+                <span id="reach-gap-note">Awareness and discoverability coverage</span>
+                <div class="gap-score-row">
+                  <span class="gap-score" id="reach-gap">0%</span>
+                  <span class="gap-score-row" aria-hidden="true">●</span>
+                </div>
+                <div class="gap-bar"><span id="reach-gap-bar" style="width: 0%"></span></div>
+              </article>
+
+              <article class="gap-card">
+                <strong>Act</strong>
+                <span id="act-gap-note">Interaction and lead-quality coverage</span>
+                <div class="gap-score-row">
+                  <span class="gap-score" id="act-gap">0%</span>
+                  <span class="gap-score-row" aria-hidden="true">●</span>
+                </div>
+                <div class="gap-bar"><span id="act-gap-bar" style="width: 0%"></span></div>
+              </article>
+
+              <article class="gap-card">
+                <strong>Convert</strong>
+                <span id="convert-gap-note">Decision and purchase-experience coverage</span>
+                <div class="gap-score-row">
+                  <span class="gap-score" id="convert-gap">0%</span>
+                  <span class="gap-score-row" aria-hidden="true">●</span>
+                </div>
+                <div class="gap-bar"><span id="convert-gap-bar" style="width: 0%"></span></div>
+              </article>
+
+              <article class="gap-card">
+                <strong>Engage</strong>
+                <span id="engage-gap-note">Retention and customer-value coverage</span>
+                <div class="gap-score-row">
+                  <span class="gap-score" id="engage-gap">0%</span>
+                  <span class="gap-score-row" aria-hidden="true">●</span>
+                </div>
+                <div class="gap-bar"><span id="engage-gap-bar" style="width: 0%"></span></div>
+              </article>
+            </div>
+          </section>
+
+          <div class="insights-grid">
+            <article class="insight-card">
+              <small>Lifecycle focus</small>
+              <p id="coverage-insight">—</p>
+            </article>
+
+            <article class="insight-card">
+              <small>Customer relationship</small>
+              <p id="relationship-insight">—</p>
+            </article>
+
+            <article class="insight-card">
+              <small>Next planning move</small>
+              <p id="priority-insight">—</p>
+            </article>
+          </div>
+
+          <section class="guidance-panel">
+            <h3>Lifecycle marketing principles</h3>
+            <ul class="guidance-list" id="guidance-list"></ul>
+          </section>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <p>
+        This lifecycle planner supports marketing and customer-experience discussions; it is not
+        legal, financial or privacy advice. Use behavioural, CRM, analytics and advertising data
+        lawfully and transparently. Minimise data collection, protect preference controls,
+        accommodate accessibility needs and avoid practices that manipulate, exclude or obstruct
+        customers.
+      </p>
+    </div>
+  </footer>

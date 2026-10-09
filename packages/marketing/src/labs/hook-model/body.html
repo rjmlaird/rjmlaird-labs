@@ -1,0 +1,247 @@
+<!--SITE_HEADER-->
+
+  <main id="main">
+    <section class="hero wrap">
+      <p class="eyebrow">Interactive product-behaviour prototype</p>
+
+      <h1>Design return behaviour around meaningful value.</h1>
+
+      <p class="hero-copy">
+        Map the four parts of a repeat-use loop: what prompts a user, the easiest useful action,
+        the value they receive and the contribution that makes the product more valuable next time.
+        Use the model to reduce friction and support beneficial habits—not to exploit attention,
+        anxiety or vulnerability.
+      </p>
+
+      <div class="notice">
+        <span class="notice-icon" aria-hidden="true">!</span>
+        <div>
+          <strong>Habit-forming is not automatically user-centred.</strong>
+          Keep the user’s long-term interest as the design constraint. Avoid dark patterns,
+          deceptive urgency, excessive notifications, unwanted data extraction and reward systems
+          that encourage harmful or compulsive use.
+        </div>
+      </div>
+    </section>
+
+    <section class="wrap app-shell" aria-label="Hook Model canvas">
+      <form class="panel planner" id="hook-form">
+        <div class="panel-heading">
+          <h2>Design one loop element</h2>
+          <p>
+            Choose a stage, describe the proposed experience, the user benefit and the evidence
+            that would show it is helpful, understandable and ethically designed.
+          </p>
+        </div>
+
+        <div class="field-set">
+          <div class="field">
+            <label for="product-name">Product, service or experience</label>
+            <input
+              id="product-name"
+              name="product-name"
+              type="text"
+              value="A fitness and wellbeing habit-tracking app"
+              placeholder="For example: A learning app, SaaS product or subscription service"
+            />
+          </div>
+
+          <div class="field">
+            <label for="step-selector">Hook stage</label>
+            <select id="step-selector" name="step-selector">
+              <option value="trigger">Trigger</option>
+              <option value="action">Action</option>
+              <option value="reward">Variable Reward</option>
+              <option value="investment">Investment</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="step-design">Design decision</label>
+            <textarea
+              id="step-design"
+              name="step-design"
+              placeholder="Describe the user experience, not merely the feature."
+            >A user-controlled daily reminder appears at the time they have chosen, inviting them to log a workout or select an intentional rest day.</textarea>
+          </div>
+
+          <div class="field">
+            <label for="step-value">User benefit</label>
+            <textarea
+              id="step-value"
+              name="step-value"
+              placeholder="What legitimate problem does this solve or outcome does it support?"
+            >It helps users build a consistent, self-directed movement routine without making them feel punished for missed days.</textarea>
+          </div>
+
+          <div class="field">
+            <label for="step-evidence">Evidence and ethical guardrail</label>
+            <textarea
+              id="step-evidence"
+              name="step-evidence"
+              placeholder="How will you know it works, and what limit protects the user?"
+            >Track opt-in reminder retention and voluntary workout logging; allow easy frequency controls, quiet hours and a one-tap pause or unsubscribe option.</textarea>
+          </div>
+
+          <div class="field">
+            <label for="demo-picker">Load an example</label>
+            <select id="demo-picker" name="demo-picker">
+              <option value="">Choose a demo…</option>
+              <option value="fitness">Fitness and wellbeing app</option>
+              <option value="learning">Professional learning app</option>
+              <option value="research-tool">Collaborative research-planning tool</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="action-row">
+          <button class="button button-primary" type="submit">Save loop element</button>
+          <button class="button button-secondary" id="clear-step" type="button">Clear entry</button>
+          <button class="button button-secondary button-wide" id="copy-hook" type="button">
+            Copy Hook canvas
+          </button>
+        </div>
+      </form>
+
+      <section class="panel canvas" aria-labelledby="canvas-title">
+        <div class="canvas-header">
+          <div>
+            <h2 id="canvas-title">Your ethical Hook Model</h2>
+            <p id="canvas-subtitle">
+              Select a stage to inspect its design choice, user benefit, evidence and safety guardrail.
+            </p>
+          </div>
+
+          <div class="ethics-badge">
+            <div>
+              <strong id="ethics-status">Review needed</strong>
+              <span id="ethics-label">User wellbeing check</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="canvas-body">
+          <div class="legend" aria-label="Hook Model legend">
+            <span class="legend-item"><span class="legend-swatch" style="color: var(--blue)"></span>Prompt</span>
+            <span class="legend-item"><span class="legend-swatch" style="color: var(--teal)"></span>Low-friction behaviour</span>
+            <span class="legend-item"><span class="legend-swatch" style="color: var(--purple)"></span>Meaningful payoff</span>
+            <span class="legend-item"><span class="legend-swatch" style="color: var(--amber)"></span>Future value</span>
+          </div>
+
+          <div class="hook-map">
+            <div class="hook-diagram">
+              <div class="loop-ring" id="loop-ring"></div>
+              <span class="loop-arrow one" aria-hidden="true">→</span>
+              <span class="loop-arrow two" aria-hidden="true">↓</span>
+              <span class="loop-arrow three" aria-hidden="true">←</span>
+              <span class="loop-arrow four" aria-hidden="true">↑</span>
+
+              <button class="hook-node" type="button" data-step="trigger" aria-pressed="false">
+                <span>
+                  <span class="node-kicker">Step 01</span>
+                  <strong>Trigger</strong>
+                  <small id="trigger-summary">No design added.</small>
+                </span>
+              </button>
+
+              <button class="hook-node" type="button" data-step="action" aria-pressed="false">
+                <span>
+                  <span class="node-kicker">Step 02</span>
+                  <strong>Action</strong>
+                  <small id="action-summary">No design added.</small>
+                </span>
+              </button>
+
+              <button class="hook-node" type="button" data-step="reward" aria-pressed="false">
+                <span>
+                  <span class="node-kicker">Step 03</span>
+                  <strong>Variable Reward</strong>
+                  <small id="reward-summary">No design added.</small>
+                </span>
+              </button>
+
+              <button class="hook-node" type="button" data-step="investment" aria-pressed="false">
+                <span>
+                  <span class="node-kicker">Step 04</span>
+                  <strong>Investment</strong>
+                  <small id="investment-summary">No design added.</small>
+                </span>
+              </button>
+
+              <div class="hook-centre" id="hook-centre">
+                <div>
+                  <span>Repeat value loop</span>
+                  <strong id="product-name-display">Your product</strong>
+                  <small>Each stage should help a user achieve a worthwhile outcome with informed, controllable participation.</small>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <section class="detail-card" aria-live="polite">
+            <div>
+              <h3 id="detail-title">Select a loop stage</h3>
+              <p id="detail-design">
+                Click a stage to inspect the design decision and assess whether it serves the user’s interests.
+              </p>
+            </div>
+
+            <div class="detail-meta">
+              <div class="meta-box">
+                <small>User benefit</small>
+                <strong id="detail-value">—</strong>
+              </div>
+
+              <div class="meta-box">
+                <small>Evidence / guardrail</small>
+                <strong id="detail-evidence">—</strong>
+              </div>
+
+              <div class="meta-box">
+                <small>Planning prompt</small>
+                <strong id="detail-prompt">—</strong>
+              </div>
+
+              <div class="meta-box">
+                <small>Ethical risk</small>
+                <strong id="detail-risk">—</strong>
+              </div>
+            </div>
+          </section>
+
+          <div class="insights-grid">
+            <article class="insight-card">
+              <small>Loop completeness</small>
+              <p id="completeness-insight">Map all four stages to see whether the intended return behaviour depends on real value.</p>
+            </article>
+
+            <article class="insight-card">
+              <small>Value test</small>
+              <p id="value-insight">Describe what becomes better for the user, not just what becomes better for engagement metrics.</p>
+            </article>
+
+            <article class="insight-card">
+              <small>Control test</small>
+              <p id="control-insight">Build in choice, transparency, accessible settings and easy ways to pause or leave.</p>
+            </article>
+          </div>
+
+          <section class="ethics-panel">
+            <h3>Ethical design checks</h3>
+            <ul class="ethics-list" id="ethics-list"></ul>
+          </section>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <p>
+        This prototype is a product-design and reflection tool, not a justification for addictive
+        or manipulative engagement. Test with real users, collect only necessary data, make
+        notifications and personalisation optional, and design for long-term wellbeing—not merely
+        time spent or repeat opens.
+      </p>
+    </div>
+  </footer>

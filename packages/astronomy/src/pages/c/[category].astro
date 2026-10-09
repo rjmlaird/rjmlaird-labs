@@ -1,0 +1,20 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import LabCard from '../../components/LabCard.astro';
+import { categories } from '../../data/categories';
+export async function getStaticPaths() {
+  const labs = (await getCollection('labs')).filter((l) => l.data.status !== 'planned');
+  return categories.map((c) => ({
+    params: { category: c.id },
+    props: { cat: c, labs: labs.filter((l) => l.data.category === c.id).sort((a, b) => a.data.order - b.data.order) },
+  }));
+}
+const { cat, labs } = Astro.props;
+---
+<Base title={cat.title} description={cat.blurb}>
+  <p class="crumbs"><a href="/">Astronomy Labs</a> / {cat.title}</p>
+  <h1>{cat.icon} {cat.title}</h1>
+  <p class="lede">{cat.blurb}</p>
+  {labs.length ? <ul class="cards">{labs.map((lab) => <LabCard lab={lab} />)}</ul> : <p>Nothing here yet.</p>}
+</Base>

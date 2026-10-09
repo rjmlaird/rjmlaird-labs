@@ -2,49 +2,52 @@
   {
     "slug": "n-body",
     "title": "N-Body Orbital Sandbox",
-    "description": "A minimal browser-based gravity simulator for exploring orbital motion and prototyping new interactive experiments.",
+    "group": "space",
+    "description": "A browser-based gravity simulator for exploring how multiple bodies interact under Newtonian gravitation. Use it to test initial conditions, inspect orbital paths and prototype mechanics for later space-science visualisations.",
     "status": "active",
     "tech": [
       "React",
       "Vite",
-      "Canvas API"
+      "Canvas 2D"
     ],
     "demoUrl": "https://n-body.labs.rjmlaird.co.uk",
     "repoUrl": "https://github.com/rjmlaird/rjmlaird-labs/tree/main/packages/lab-orbital-mechanics",
     "updated": "2026-07-11"
   },
   {
-    "slug": "carbon-reduction-plan",
+    "slug": "crp",
     "title": "Carbon Reduction Plan",
-    "description": "A focused web project for presenting carbon reduction information in a simple, maintainable interface.",
+    "group": "climate",
+    "description": "A clear, accessible presentation of a carbon reduction plan: organisational commitments, emissions-reduction measures, delivery milestones and progress information in a format intended to be straightforward to maintain and publish.",
     "status": "active",
     "tech": [
       "React",
-      "Vite",
-      "Canvas API"
+      "Vite"
     ],
     "demoUrl": "https://crp.labs.rjmlaird.co.uk",
     "repoUrl": "https://github.com/rjmlaird/rjmlaird-labs/tree/main/packages/carbon-reduction-plan",
     "updated": "2026-07-11"
   },
   {
-    "slug": "wildfire-story-lab",
+    "slug": "wildfires",
     "title": "Wildfire Story Lab",
-    "description": "An experimental storytelling tool for exploring how climate and wildfire narratives can be communicated interactively.",
+    "group": "climate",
+    "description": "An interactive storytelling prototype for explaining wildfire risk, landscape conditions and climate context. It explores how maps, visual sequences and evidence-led annotations can make complex environmental narratives easier to follow.",
     "status": "planned",
     "tech": [
       "React",
       "Vite",
-      "Canvas API"
+      "Canvas 2D"
     ],
     "demoUrl": "https://wildfires.labs.rjmlaird.co.uk",
     "repoUrl": "https://github.com/rjmlaird/rjmlaird-labs/tree/main/packages/wildfire-story-lab",
     "updated": "2026-07-11"
   },
   {
-    "slug": "contrast-lab",
+    "slug": "contrast",
     "title": "Contrast Lab",
-    "description": "A WCAG 2.x colour contrast checker for testing foreground and background pairs against AA and AAA accessibility thresholds.",
+    "group": "web-dev",
+    "description": "A WCAG colour-contrast checker for testing foreground and background combinations against AA and AAA contrast requirements. It is intended as a quick accessibility check during interface design and component development.",
     "status": "active",
     "tech": [
       "React",
@@ -57,10 +60,13 @@
   {
     "slug": "components",
     "title": "Component Sandbox",
-    "description": "A live gallery of the Astro UI blocks used across rjmlaird.co.uk, each rendered with its source snippet underneath.",
+    "group": "web-dev",
+    "description": "A working catalogue for reviewing reusable Astro interface components before they are adopted elsewhere. It provides rendered examples, implementation snippets and a place to test states, responsiveness and accessibility behaviour.",
     "status": "active",
     "tech": [
-      "Astro"
+      "Astro",
+      "TypeScript",
+      "CSS"
     ],
     "demoUrl": "https://components.labs.rjmlaird.co.uk",
     "repoUrl": "https://github.com/rjmlaird/rjmlaird-labs/tree/main/packages/component-sandbox",
@@ -69,8 +75,9 @@
   {
     "slug": "climate-visualiser",
     "title": "Climate Visualiser",
-    "description": "A science-communication project that turns temperature anomaly data into a readable chart with plain-English annotations.",
-    "status": "planned",
+    "group": "climate",
+    "description": "A science-communication visualisation that presents temperature anomalies as an interpretable time series, combining charts with concise annotations that explain long-term warming, variability and the limits of the underlying data.",
+    "status": "in-progress",
     "tech": [
       "React",
       "Vite",
@@ -83,11 +90,13 @@
   {
     "slug": "mechanics",
     "title": "Mechanics",
-    "description": "An interactive classical mechanics lab featuring four real-time simulations built on a shared physics engine: ramp forces and friction, Newton's cradle momentum transfers, projectile motion with independent SUVAT equations, and vehicle stopping distances.",
-    "status": "planned",
+    "group": "maths-physics",
+    "description": "An interactive classical-mechanics lab covering forces on an inclined plane, friction, momentum transfer in Newton's cradle, projectile motion and vehicle stopping distance. Each simulation is designed to connect numerical relationships with visible motion.",
+    "status": "in-progress",
     "tech": [
       "React",
-      "Vite"
+      "Vite",
+      "TypeScript"
     ],
     "demoUrl": "https://mechanics.labs.rjmlaird.co.uk",
     "repoUrl": "https://github.com/rjmlaird/rjmlaird-labs/tree/main/packages/mechanics",
@@ -96,8 +105,9 @@
   {
     "slug": "graphs",
     "title": "Graphs",
-    "description": "A modular pre-launch template designed for data visualization, custom charting, and analytical metric rendering.",
-    "status": "planned",
+    "group": "maths-physics",
+    "description": "A flexible graphing and data-visualisation workspace for experimenting with datasets, analytical metrics and custom chart configurations. It acts as a starting point for interactive explanatory charts rather than a general-purpose spreadsheet.",
+    "status": "in-progress",
     "tech": [
       "React",
       "Vite"
@@ -109,12 +119,14 @@
   {
     "slug": "satellites",
     "title": "Satellites",
-    "description": "A live orbital tracker utilizing SGP4 propagation of Celestrak's GP catalog, cross-referenced with SATCAT and rendered interactively via Leaflet maps.",
+    "group": "space",
+    "description": "An interactive satellite tracker that propagates General Perturbations orbital data with SGP4, adds satellite-catalogue context and displays positions and ground tracks on an interactive map. It is designed for exploration and situational awareness, not precision operational tracking.",
     "status": "active",
     "tech": [
       "Astro",
-      "Vite",
-      "Leaflet"
+      "TypeScript",
+      "Leaflet",
+      "SGP4"
     ],
     "demoUrl": "https://satellites.labs.rjmlaird.co.uk",
     "repoUrl": "https://github.com/rjmlaird/rjmlaird-labs/tree/main/packages/satellites",
@@ -123,90 +135,88 @@
   {
     "slug": "drought",
     "title": "Drought",
-    "description": "A comprehensive UK drought risk monitor combining live Copernicus European Drought Observatory (EDO/GDO) indicators with real-time Environment Agency and SEPA hydrology data.",
+    "group": "climate",
+    "description": "A UK-focused drought-risk monitor that brings together drought-observatory indicators with hydrology data from the Environment Agency and SEPA. It is intended to show how rainfall, soil moisture, river flows, groundwater and vegetation stress can point to different forms of drought.",
     "status": "planned",
     "tech": [
       "React",
-      "Vite"
+      "Vite",
+      "Geospatial Data"
     ],
     "demoUrl": "https://drought.labs.rjmlaird.co.uk",
-    "repoUrl": "https://github.com/rjmlaird/rjmlaird-labs/tree/main/packages/drought",
+    "repoUrl": "https://github.com/rjmlaird/labs/tree/main/packages/drought",
     "updated": "2026-07-26"
   },
   {
     "slug": "tintwistle",
     "title": "Tintwistle",
-    "description": "A pre-launch environmental or geographical monitoring experiment focused on the Tintwistle area, currently in development.",
+    "group": "places",
+    "description": "A place-based environmental monitoring prototype for Tintwistle and its surrounding landscape. The project provides a home for exploring local geography, weather, environmental conditions and public datasets through a focused local lens.",
     "status": "planned",
     "tech": [
       "React",
-      "Vite"
+      "Vite",
+      "Geospatial Data"
     ],
     "demoUrl": "https://tintwistle.labs.rjmlaird.co.uk",
-    "repoUrl": "https://github.com/rjmlaird/rjmlaird-labs/tree/main/packages/tintwistle",
+    "repoUrl": "https://github.com/rjmlaird/labs/tree/main/packages/tintwistle",
     "updated": "2026-07-26"
   },
   {
     "slug": "biodiversity",
     "title": "Biodiversity",
-    "description": "A habitat health monitor combining satellite-derived vegetation greenness (NDVI), live designated nature reserve boundaries (NNR, LNR, SSSI), and river water quality archives.",
+    "group": "climate",
+    "description": "A habitat-health monitor combining vegetation greenness from satellite observation, designated-site boundaries and water-quality records. It explores how multiple environmental signals can be viewed together without treating any single indicator as a complete measure of ecological condition.",
     "status": "planned",
     "tech": [
       "React",
-      "Vite"
+      "Vite",
+      "Geospatial Data"
     ],
     "demoUrl": "https://biodiversity.labs.rjmlaird.co.uk",
-    "repoUrl": "https://github.com/rjmlaird/rjmlaird-labs/tree/main/packages/biodiversity",
+    "repoUrl": "https://github.com/rjmlaird/labs/tree/main/packages/biodiversity",
     "updated": "2026-07-26"
   },
   {
     "slug": "sewage",
     "title": "Sewage",
-    "description": "A real-time monitoring tool tracking raw-sewage storm overflow activations (EDMs) across Severn Trent Water and Anglian Water, contextualised with Copernicus soil moisture and rainfall anomalies.",
-    "status": "planned",
+    "group": "places",
+    "description": "A monitoring prototype for storm-overflow activations, placing water-company event data alongside rainfall and soil-moisture context. It is designed to help users explore timing and patterns, not to determine causes or regulatory compliance from a single data source.",
+    "status": "in-progress",
     "tech": [
       "React",
-      "Vite"
+      "Vite",
+      "Geospatial Data"
     ],
     "demoUrl": "https://sewage.labs.rjmlaird.co.uk",
-    "repoUrl": "https://github.com/rjmlaird/rjmlaird-labs/tree/main/packages/sewage",
-    "updated": "2026-07-26"
-  },
-  {
-    "slug": "astro",
-    "title": "Astro",
-    "description": "A pre-launch exploratory tool dedicated to astronomical data processing, space missions, or celestial mechanics.",
-    "status": "planned",
-    "tech": [
-      "Streamliy",
-      "Vite"
-    ],
-    "demoUrl": "https://astro.labs.rjmlaird.co.uk",
-    "repoUrl": "https://github.com/rjmlaird/rjmlaird-labs/tree/main/packages/astro",
+    "repoUrl": "https://github.com/rjmlaird/labs/tree/main/packages/sewage",
     "updated": "2026-07-26"
   },
   {
     "slug": "atmosphere",
     "title": "Atmosphere",
-    "description": "A multi-tiered vertical air quality profile tracking nitrogen dioxide, ozone, and particulates over Leicestershire by blending Copernicus CAMS regional models with real-world AURN ground stations.",
+    "group": "places",
+    "description": "An air-quality profile for Leicestershire that brings together modelled atmospheric conditions and AURN monitoring observations. It aims to show nitrogen dioxide, ozone and particulate context across altitude and time, while clearly distinguishing model output from ground measurements.",
     "status": "planned",
     "tech": [
       "React",
-      "Vite"
+      "Vite",
+      "Geospatial Data"
     ],
     "demoUrl": "https://atmosphere.labs.rjmlaird.co.uk",
-    "repoUrl": "https://github.com/rjmlaird/rjmlaird-labs/tree/main/packages/atmosphere",
+    "repoUrl": "https://github.com/rjmlaird/labs/tree/main/packages/atmosphere",
     "updated": "2026-07-27"
   },
   {
     "slug": "cfd",
-    "title": "Flow around objects",
-    "description": "A 2D fluid solver running in the browser. It uses the lattice Boltzmann method to compute flow around an aerofoil, square or cylinder in air or water, with live drag and lift coefficients, vortex shedding and pressure and vorticity fields. An educational model, not experimentally validated.",
-    "status": "active",
+    "title": "Flow Around Objects",
+    "group": "maths-physics",
+    "description": "A browser-based two-dimensional fluid-flow simulation using a D2Q9 lattice Boltzmann model. Compare air or water flowing around an aerofoil, square or cylinder, inspect pressure and vorticity fields, and observe drag, lift and vortex shedding. It is an educational model, not an experimentally validated CFD tool.",
+    "status": "in-progress",
     "tech": [
       "JavaScript",
       "Canvas 2D",
-      "Lattice Boltzmann (D2Q9)",
+      "Lattice Boltzmann",
       "Cloudflare Workers"
     ],
     "demoUrl": "https://cfd.labs.rjmlaird.co.uk",
@@ -216,8 +226,9 @@
   {
     "slug": "electricity",
     "title": "Electricity",
-    "description": "An interactive exploration of electricity: how voltage, current and resistance relate, and how simple circuits behave as you change the components.",
-    "status": "active",
+    "group": "maths-physics",
+    "description": "An interactive introduction to basic circuit behaviour, showing how voltage, current and resistance relate as component values change. It is designed to make Ohm's law and simple circuit relationships more visual and testable.",
+    "status": "in-progress",
     "tech": [
       "React",
       "Vite",
@@ -230,7 +241,8 @@
   {
     "slug": "elements",
     "title": "Elements",
-    "description": "An interactive periodic table for exploring the chemical elements, their properties and how they group and trend across the table.",
+    "group": "maths-physics",
+    "description": "An interactive periodic table for exploring the chemical elements, their classifications and the patterns that emerge across groups and periods. It is designed as a compact visual reference and learning tool.",
     "status": "active",
     "tech": [
       "React",
@@ -242,29 +254,121 @@
     "updated": "2026-10-05"
   },
   {
-    "slug": "leicester-floods",
-    "title": "leicester-floods",
-    "description": "New experiment — update this description.",
-    "status": "planned",
+    "slug": "rubiks",
+    "title": "Rubik's Cube",
+    "group": "maths-physics",
+    "description": "An interactive Rubik's Cube experiment for exploring three-dimensional transformations, move notation and algorithmic problem-solving. It provides a practical bridge between a familiar puzzle and ideas from geometry, permutations and state-space search.",
+    "status": "active",
     "tech": [
       "React",
-      "Vite"
+      "Vite",
+      "TypeScript"
     ],
-    "demoUrl": "https://leicester-floods.labs.rjmlaird.co.uk",
-    "repoUrl": "https://github.com/greenorbitspace/labs/tree/main/packages/leicester-floods",
+    "demoUrl": "https://rubiks.labs.rjmlaird.co.uk",
+    "repoUrl": "https://github.com/rjmlaird/labs/tree/main/packages/rubiks",
     "updated": "2026-10-06"
   },
   {
-    "slug": "rubiks",
-    "title": "rubiks",
+    "slug": "astronomy",
+    "title": "Astronomy",
+    "group": "space",
+    "description": "A broader astronomy lab for interactive visualisers covering observing, the Solar System, stellar and galactic phenomena, and the physical scales used to understand the Universe. Individual tools can develop independently while sharing a clear astronomy home.",
+    "status": "planned",
+    "tech": [
+      "HTML",
+      "CSS",
+      "JavaScript"
+    ],
+    "demoUrl": "https://astronomy.labs.rjmlaird.co.uk",
+    "repoUrl": "https://github.com/rjmlaird/labs/tree/main/packages/astronomy",
+    "updated": "2026-10-08"
+  },
+  {
+    "slug": "space",
+    "title": "Space",
+    "group": "space",
+    "description": "A broader space lab for interactive visualisers covering rockets, satellites.....",
+    "status": "planned",
+    "tech": [
+      "HTML",
+      "CSS",
+      "JavaScript"
+    ],
+    "demoUrl": "https://astronomy.labs.rjmlaird.co.uk",
+    "repoUrl": "https://github.com/rjmlaird/labs/tree/main/packages/space",
+    "updated": "2026-10-08"
+  },
+  {
+    "slug": "physics",
+    "title": "Physics",
+    "group": "maths-physics",
+    "description": "A physics lab for interactive simulations and explainers across mechanics, waves, electricity, fluids, relativity and modern physics. It provides a common home for experiments that prioritise intuition, visual feedback and transparent assumptions.",
+    "status": "planned",
+    "tech": [
+      "React",
+      "Vite",
+      "TypeScript"
+    ],
+    "demoUrl": "https://physics.labs.rjmlaird.co.uk",
+    "repoUrl": "https://github.com/rjmlaird/labs/tree/main/packages/physics",
+    "updated": "2026-10-08"
+  },
+  {
+    "slug": "maths",
+    "title": "Maths",
+    "group": "maths-physics",
+    "description": "A maths lab for interactive exploration of functions, graphs, equations, geometry, probability and numerical methods. Its purpose is to make abstract relationships easier to inspect by changing inputs and immediately seeing the result.",
+    "status": "planned",
+    "tech": [
+      "React",
+      "Vite",
+      "TypeScript"
+    ],
+    "demoUrl": "https://maths.labs.rjmlaird.co.uk",
+    "repoUrl": "https://github.com/rjmlaird/labs/tree/main/packages/maths",
+    "updated": "2026-10-08"
+  },
+  {
+    "slug": "climate",
+    "title": "Climate",
+    "group": "climate",
+    "description": "A climate lab for interactive tools that connect observations, long-term trends, risk indicators and adaptation choices. It is a shared home for clear, evidence-led climate communication rather than a single model or dataset.",
+    "status": "planned",
+    "tech": [
+      "React",
+      "Vite",
+      "TypeScript"
+    ],
+    "demoUrl": "https://climate.labs.rjmlaird.co.uk",
+    "repoUrl": "https://github.com/rjmlaird/labs/tree/main/packages/climate",
+    "updated": "2026-10-08"
+  },
+  {
+    "slug": "weather",
+    "title": "Weather",
+    "group": "places",
+    "description": "A weather lab for presenting local conditions, forecasts, historical observations and weather-related hazards in a readable, interactive form. It is intended to distinguish short-term weather from long-term climate context while showing how they connect.",
+    "status": "planned",
+    "tech": [
+      "React",
+      "Vite",
+      "TypeScript"
+    ],
+    "demoUrl": "https://weather.labs.rjmlaird.co.uk",
+    "repoUrl": "https://github.com/rjmlaird/labs/tree/main/packages/weather",
+    "updated": "2026-10-08"
+  },
+  {
+    "slug": "marketing",
+    "title": "marketing",
     "description": "New experiment — update this description.",
     "status": "planned",
     "tech": [
       "React",
       "Vite"
     ],
-    "demoUrl": "https://rubiks.labs.rjmlaird.co.uk",
-    "repoUrl": "https://github.com/greenorbitspace/labs/tree/main/packages/rubiks",
-    "updated": "2026-10-06"
+    "demoUrl": "https://marketing.labs.rjmlaird.co.uk",
+    "repoUrl": "https://github.com/rjmlaird/labs/tree/main/packages/marketing",
+    "updated": "2026-10-08"
   }
 ]

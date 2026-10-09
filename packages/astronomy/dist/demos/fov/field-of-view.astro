@@ -1,0 +1,18 @@
+---
+import AstronomyFieldOfView from '../components/AstronomyFieldOfView.astro';
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Field of view visualiser</title>
+  </head>
+  <body style="max-width: 62rem; margin: 2rem auto; padding: 0 1rem; font-family: system-ui, sans-serif;">
+    <h1>What will I see?</h1>
+    <AstronomyFieldOfView defaultPresetId="dob-200" defaultObjectId="m31" />
+
+    <!-- Several instances on one page are fine; each needs a unique id if you set one. -->
+    <!-- <AstronomyFieldOfView id="fov-b" heading="Binoculars" defaultPresetId="bino-15x70" /> -->
+  </body>
+</html>

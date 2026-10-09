@@ -1,0 +1,19 @@
+.metric {
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 1rem;
+  background: var(--surface-raised);
+  color: var(--text);
+}
+.metric__value {
+  font: 600 2.3rem/1 var(--font-read);
+}
+.metric__unit,
+.metric__label {
+  font: 400 0.9rem/1.55 var(--font-ui);
+  color: var(--text-muted);
+}
+.metric__stale {
+  color: var(--warn);
+  font-size: 0.82rem;
+}

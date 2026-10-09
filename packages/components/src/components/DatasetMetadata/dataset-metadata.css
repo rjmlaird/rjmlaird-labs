@@ -1,0 +1,15 @@
+.meta-list {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 0.25rem 1rem;
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--text);
+}
+.meta-list dt {
+  color: var(--text-muted);
+}
+.meta-list dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}

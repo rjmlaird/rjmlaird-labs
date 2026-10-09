@@ -1,0 +1,15 @@
+---
+import LabLayout from "@labs/ui/LabLayout.astro";
+import Experiment from "../components/Experiment";
+---
+
+<LabLayout lab="__SLUG__">
+  <main class="page">
+    <header class="hero">
+      <p class="eyebrow">Labs</p>
+      <h1>__TITLE__</h1>
+      <p class="lede">Describe what the learner should notice.</p>
+    </header>
+    <Experiment client:only="react" />
+  </main>
+</LabLayout>

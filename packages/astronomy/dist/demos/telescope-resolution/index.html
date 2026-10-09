@@ -1,0 +1,327 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Telescope resolution demo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Familjen+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{--bg:#eceef2;--panel:#f9fafb;--field:#eef1f5;--ink:#16202c;--muted:#566274;--line:#d0d7e0;--accent:#8f5f10;--on-accent:#fff;--sky:#070b17;--up:#2f9e5b;--dn:#d2563f;--display:'Familjen Grotesk',system-ui,-apple-system,'Segoe UI',sans-serif;--mono:'IBM Plex Mono',ui-monospace,Menlo,Consolas,monospace;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0a0e17;--panel:#111826;--field:#0c121e;--ink:#e6ebf3;--muted:#93a0b4;--line:#243046;--accent:#e0a844;--on-accent:#1a1100;--up:#4cc27f;--dn:#ee7b63;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0a0e17;--panel:#111826;--field:#0c121e;--ink:#e6ebf3;--muted:#93a0b4;--line:#243046;--accent:#e0a844;--on-accent:#1a1100;--up:#4cc27f;--dn:#ee7b63;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 var(--display);padding:20px 16px 36px}
+.wrap{max-width:1120px;margin-inline:auto;display:flex;flex-direction:column;gap:16px}
+h1{margin:0;font-size:1.7rem;letter-spacing:-.015em}.top p{margin:2px 0 0;color:var(--muted);max-width:72ch}
+h2{margin:0 0 8px;font-size:1.02rem;font-weight:600}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px;min-width:0}
+.layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;align-items:start}
+@media(max-width:860px){.layout{grid-template-columns:minmax(0,1fr)}}
+.col{display:flex;flex-direction:column;gap:16px;min-width:0}
+.panels{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:10px}
+@media(max-width:620px){.panels{grid-template-columns:minmax(0,1fr)}}
+.cw{border:1px solid var(--line);border-radius:6px;overflow:hidden;background:var(--sky)}.cw canvas{display:block;width:100%}
+button,input,select{font:inherit;font-size:.86rem;color:var(--ink);background:var(--field);border:1px solid var(--line);border-radius:6px;padding:6px 10px}
+button{cursor:pointer}button:hover{border-color:var(--muted)}button[aria-pressed=true]{border-color:var(--accent);background:var(--panel);font-weight:600}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+input[type=range]{width:100%;padding:0;accent-color:var(--accent);margin:6px 0 0}
+select{width:100%}
+.btns{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:10px}
+.btns .lbl{color:var(--muted);font-size:.8rem}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 16px;margin-top:12px}
+@media(max-width:560px){.grid{grid-template-columns:minmax(0,1fr)}}
+.sl label{display:flex;justify-content:space-between;gap:8px;font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.07em}
+.sl output{font:.82rem var(--mono);color:var(--ink);text-transform:none;letter-spacing:0;text-align:right}
+.live{margin:8px 0 0;font:.82rem var(--mono);color:var(--muted)}
+.note{margin:10px 0 0;color:var(--muted);font-size:.8rem;max-width:72ch}
+.tdesc{margin:8px 0 0;font-size:.88rem;color:var(--muted);min-height:2.6em}
+table{width:100%;border-collapse:collapse}td,th{padding:6px 0;border-top:1px solid var(--line);font:.84rem var(--mono);text-align:right}
+th{font-size:.68rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);border-top:0;font-weight:400}
+td:first-child,th:first-child{text-align:left;font-family:var(--display);font-size:.92rem;color:var(--muted)}
+td.up{color:var(--up);font-weight:500}td.dn{color:var(--dn);font-weight:500}
+.exp{font-size:.92rem}.exp p{margin:0 0 8px}.exp ul{margin:0;padding-left:18px;color:var(--muted);font-size:.88rem}.exp li{margin-bottom:5px}
+</style></head><body>
+<main class="wrap">
+<header class="top"><h1>Telescope resolution demo</h1>
+<p><b>How to use it:</b> pick a telescope, or set the aperture and wavelength yourself, then change the separation of the two stars. The left panel is the true sky; the right panel is what the telescope makes of it. Use <i>Set separation</i> to place the stars at the Rayleigh limit, then watch them merge as you shrink the aperture. Switch to the test pattern to see fine detail wash out in the same way.</p></header>
+
+<section class="card" aria-label="Images">
+<div class="btns" style="margin:0"><button type="button" id="mStar" aria-pressed="true">Double star</button><button type="button" id="mPat" aria-pressed="false">Test pattern</button></div>
+<div class="panels">
+<figure style="margin:0"><div class="cw"><canvas id="trueC" role="img" aria-label="The true scene, with no blurring"></canvas></div><p class="note" style="margin-top:6px"><b>True sky.</b> The ideal scene with infinite resolution.</p></figure>
+<figure style="margin:0"><div class="cw"><canvas id="teleC" role="img" aria-label="The scene as seen through the telescope"></canvas></div><p class="note" style="margin-top:6px"><b>Telescope view.</b> The same scene blurred by the Airy pattern of a circular aperture.</p></figure>
+</div>
+<p class="live" id="live"></p>
+<p class="note" id="warn"></p>
+</section>
+
+<div class="layout">
+<div class="col">
+<section class="card" aria-label="Controls"><h2>Telescope and target</h2>
+<div class="sl"><label for="tel">Telescope preset</label>
+<select id="tel"></select></div>
+<p class="tdesc" id="tdesc"></p>
+<div class="grid">
+<div class="sl"><label for="D">Aperture diameter D <output id="Dout"></output></label><input type="range" id="D" min="0" max="1000" step="1"></div>
+<div class="sl"><label for="lam">Wavelength λ <output id="lamOut"></output></label><input type="range" id="lam" min="0" max="1000" step="1"></div>
+<div class="sl"><label for="sep"><span id="sepLbl">Star separation</span> <output id="sepOut"></output></label><input type="range" id="sep" min="0" max="1000" step="1"></div>
+<div class="sl"><label for="see">Atmospheric seeing (FWHM) <output id="seeOut"></output></label><input type="range" id="see" min="0" max="3" step="0.1" value="0"></div>
+</div>
+<div class="btns"><span class="lbl">Band:</span><button type="button" data-lam="550">Visible 550 nm</button><button type="button" data-lam="1000">Near-IR 1 µm</button><button type="button" data-lam="5000">Mid-IR 5 µm</button><button type="button" data-lam="1300000">Sub-mm 1.3 mm</button></div>
+<div class="btns"><span class="lbl">Set separation:</span><button type="button" data-k="0.5">0.5 × limit</button><button type="button" data-k="1">1 × limit (Rayleigh)</button><button type="button" data-k="2">2 × limit</button></div>
+<div class="grid">
+<div class="sl"><label for="disp">Display</label><select id="disp"><option value="lin">Linear brightness</option><option value="str">Stretched (shows faint rings)</option></select></div>
+<div class="sl"><label for="fov">Field of view</label><select id="fov"><option value="sep">Follow the separation (compare telescopes)</option><option value="blur">Zoom out to fit the blur</option></select></div>
+</div>
+<div class="btns"><button type="button" id="rst">Reset to defaults</button></div>
+<p class="note">Seeing is the blurring from turbulence in Earth's atmosphere, typically 0.5–1 arcsec at good sites. Leave it at zero for a space telescope or an ideal adaptive-optics system. Wavelength presets for the telescopes can be changed afterwards.</p>
+</section>
+</div>
+<div class="col">
+<section class="card" aria-label="Results"><h2>Resolution readout</h2>
+<table id="tbl"></table>
+<p class="note">According to the Rayleigh criterion, two point sources are just resolved when their separation is about θ ≈ 1.22 λ / D. At that separation the dip between the two peaks is about 74% of the peak brightness.</p></section>
+<section class="card" aria-label="Brightness profile"><h2>Brightness along the line through the sources</h2>
+<div class="cw"><canvas id="prof" role="img" aria-label="Plot of the telescope image brightness along the line through the sources"></canvas></div>
+<p class="note" id="profNote"></p></section>
+<section class="card exp" aria-label="Explanation">
+<p><b>Why bigger telescopes see finer detail.</b> Light passing through a circular aperture spreads into an Airy pattern: a bright core ringed by faint rings. The core's angular radius, 1.22 λ / D, is the diffraction limit. Every point in the sky is smeared into this pattern, so detail finer than that blends together.</p>
+<ul>
+<li><b>Bigger D, finer detail.</b> Doubling the aperture halves the limit.</li>
+<li><b>Shorter λ, finer detail.</b> At 2 µm, JWST's 6.5 m mirror has a limit of about 0.077″, coarser than Hubble's 0.058″ at 550 nm, despite the bigger mirror.</li>
+<li><b>The atmosphere.</b> From the ground, turbulence usually limits visible-light images to 0.5–1″ whatever the size. Try the seeing slider with the VLT. Space telescopes and adaptive optics get closer to the diffraction limit.</li>
+<li><b>Interferometry.</b> A single 12 m ALMA dish resolves only about 27″ at 1.3 mm. ALMA combines many dishes, and its resolution then depends on the distance between them (up to about 16 km), not the size of one dish.</li>
+<li><b>Simplified model.</b> Equal-brightness stars, a clear circular aperture (no central obstruction), no noise, and an exact calculation of the image from the aperture's transfer function. When a telescope is sharper than the picture's pixels, the image is limited by the display.</li>
+</ul></section>
+</div></div></main>
+<script>
+const N = 256, ARC = 206264.806, TAU = Math.PI * 2, $ = (id) => document.getElementById(id);
+const sig = (x, n) => String(parseFloat(x.toPrecision(n)));
+const RANGE = { D: [0.005, 40], lam: [300, 2e6], sep: [0.002, 60] };
+const toPos = (k, v) => Math.log(v / RANGE[k][0]) / Math.log(RANGE[k][1] / RANGE[k][0]) * 1000;
+const fromPos = (k, p) => RANGE[k][0] * Math.pow(RANGE[k][1] / RANGE[k][0], p / 1000);
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+const BG = [7, 11, 23];
+
+/* ---- telescope presets ---- */
+const TEL = {
+  custom: { n: 'Custom', d: 'Your own aperture and wavelength.' },
+  eye: { n: 'Human eye (7 mm pupil)', D: 0.007, lam: 550, g: 'Everyday and amateur', d: 'A dark-adapted pupil of about 7 mm. Diffraction alone limits it to about 20 arcsec.' },
+  refractor: { n: 'Amateur refractor – 0.1 m', D: 0.1, lam: 550, g: 'Everyday and amateur', d: '0.1 m (4-inch) refractor, visible light: a classic backyard telescope that splits wide double stars.' },
+  reflector: { n: 'Amateur reflector – 0.25 m', D: 0.25, lam: 550, g: 'Everyday and amateur', d: '0.25 m (10-inch) reflector, visible light: a popular amateur telescope for planets and close doubles.' },
+  ntt: { n: 'NTT – 3.58 m', D: 3.58, lam: 550, g: 'Ground-based optical / infrared', d: '3.58 m New Technology Telescope (ESO, La Silla), visible/near-IR: it pioneered active optics to keep its mirror in shape.' },
+  hale: { n: 'Hale Telescope (Palomar) – 5.1 m', D: 5.1, lam: 550, g: 'Ground-based optical / infrared', d: '5.1 m (200-inch) Hale Telescope, visible light: the world’s largest telescope from 1948 until the 1970s.' },
+  vlt: { n: 'VLT Unit Telescope – 8.2 m', D: 8.2, lam: 550, g: 'Ground-based optical / infrared', d: '8.2 m VLT Unit Telescope (ESO, Chile), visible/near-IR. Needs adaptive optics to approach this limit: try the seeing slider.' },
+  elt: { n: 'ELT – 39 m (under construction)', D: 39, lam: 1000, g: 'Ground-based optical / infrared', d: '39 m Extremely Large Telescope (ESO, under construction in Chile), shown here in the near-infrared.' },
+  hst: { n: 'Hubble Space Telescope – 2.4 m', D: 2.4, lam: 550, g: 'Space', d: '2.4 m Hubble Space Telescope, visible light: above the atmosphere, so it can reach its diffraction limit.' },
+  jwst: { n: 'JWST – 6.5 m (near-IR)', D: 6.5, lam: 2000, g: 'Space', d: '6.5 m James Webb Space Telescope, near-infrared (2 µm here): a bigger mirror, but a longer wavelength.' },
+  alma: { n: 'ALMA – single 12 m antenna', D: 12, lam: 1.3e6, g: 'Millimetre', d: 'One 12 m ALMA dish at 1.3 mm. A single dish resolves only tens of arcsec; ALMA combines many dishes as an interferometer.' }
+};
+const DEF = { mode: 'star', tel: 'reflector', D: 0.25, lam: 550, sep: 1, seeing: 0, stretch: false, fov: 'sep' };
+const st = Object.assign({}, DEF);
+
+/* ---- formatting ---- */
+const fmtLen = (m) => m < 0.05 ? sig(m * 1000, 2) + ' mm' : m < 1 ? sig(m * 100, 2) + ' cm' : sig(m, 3) + ' m';
+const fmtWl = (nm) => nm < 1000 ? sig(nm, 3) + ' nm' : nm < 1e6 ? sig(nm / 1000, 3) + ' µm' : sig(nm / 1e6, 3) + ' mm';
+const band = (nm) => nm < 380 ? 'ultraviolet' : nm < 750 ? 'visible' : nm < 2500 ? 'near-infrared' : nm < 25000 ? 'mid-infrared' : nm < 1e6 ? 'far-IR / sub-mm' : 'millimetre';
+const angBoth = (a) => a >= 1 ? sig(a, 3) + ' arcsec' : sig(a, 3) + ' arcsec · ' + sig(a * 1000, 3) + ' mas';
+const angShort = (a) => a >= 1 ? sig(a, 2) + '″' : a >= 0.001 ? sig(a * 1000, 2) + ' mas' : sig(a * 1e6, 2) + ' µas';
+const niceAng = (a) => { const e = Math.pow(10, Math.floor(Math.log10(a))), m = a / e; return (m >= 5 ? 5 : m >= 2 ? 2 : 1) * e; };
+
+/* ---- FFT (radix-2, 2-D) ---- */
+const rev = new Uint16Array(N), cosT = new Float64Array(N / 2), sinT = new Float64Array(N / 2), xr = new Float64Array(N), xi = new Float64Array(N);
+for (let i = 0; i < N; i++) { let r = 0; for (let b = 0; b < 8; b++) if (i & (1 << b)) r |= 1 << (7 - b); rev[i] = r; }
+for (let k = 0; k < N / 2; k++) { cosT[k] = Math.cos(TAU * k / N); sinT[k] = Math.sin(TAU * k / N); }
+function fft1(re, im, off, stride, inv) {
+  for (let i = 0; i < N; i++) { const j = off + rev[i] * stride; xr[i] = re[j]; xi[i] = im[j]; }
+  for (let len = 2; len <= N; len <<= 1) {
+    const half = len >> 1, step = N / len;
+    for (let i = 0; i < N; i += len) for (let k = 0; k < half; k++) {
+      const wr = cosT[k * step], wi = inv ? sinT[k * step] : -sinT[k * step], a = i + k, b = a + half;
+      const tr = xr[b] * wr - xi[b] * wi, ti = xr[b] * wi + xi[b] * wr;
+      xr[b] = xr[a] - tr; xi[b] = xi[a] - ti; xr[a] += tr; xi[a] += ti;
+    }
+  }
+  for (let i = 0; i < N; i++) { const j = off + i * stride; re[j] = xr[i]; im[j] = xi[i]; }
+}
+function fft2(re, im, inv) {
+  for (let r = 0; r < N; r++) fft1(re, im, r * N, 1, inv);
+  for (let c = 0; c < N; c++) fft1(re, im, c, N, inv);
+  if (inv) { const s = 1 / (N * N); for (let i = 0; i < N * N; i++) { re[i] *= s; im[i] *= s; } }
+}
+
+/* ---- simulation buffers ---- */
+const re = new Float64Array(N * N), im = new Float64Array(N * N), H = new Float64Array(N * N), scene = new Float64Array(N * N);
+const offT = document.createElement('canvas'), offS = document.createElement('canvas'); offT.width = offT.height = offS.width = offS.height = N;
+let R = null, dirty = true;
+
+// test pattern: three vertical and three horizontal bars (rectangles in units of the bar spacing p, field = 7p)
+const RECTS = []; for (let i = 0; i < 3; i++) { RECTS.push([0.75 + i, 1.25 + i, 2.25, 4.75]); RECTS.push([4.0, 6.5, 2.25 + i, 2.75 + i]); }
+const ov = (a, b, c, d) => Math.max(0, Math.min(b, d) - Math.max(a, c));
+function buildPattern(p, F) {
+  scene.fill(0); const pix = F / N, w = pix / p, pos = (i) => (i * pix - F / 2) / p + 3.5, idx = (u) => (((u - 3.5) * p + F / 2) / pix);
+  for (const [x0, x1, y0, y1] of RECTS) {
+    const ia = Math.max(0, Math.floor(idx(x0) - 1)), ib = Math.min(N - 1, Math.ceil(idx(x1) + 1)), ja = Math.max(0, Math.floor(idx(y0) - 1)), jb = Math.min(N - 1, Math.ceil(idx(y1) + 1));
+    for (let j = ja; j <= jb; j++) {
+      const cy = ov(pos(j) - w / 2, pos(j) + w / 2, y0, y1) / w; if (cy <= 0) continue;
+      for (let i = ia; i <= ib; i++) scene[j * N + i] += ov(pos(i) - w / 2, pos(i) + w / 2, x0, x1) / w * cy;
+    }
+  }
+}
+const lerpRow = (arr, row, x) => { const i0 = clamp(Math.floor(x), 0, N - 2), f = clamp(x - i0, 0, 1); return arr[row * N + i0] * (1 - f) + arr[row * N + i0 + 1] * f; };
+
+function simulate() {
+  const star = st.mode === 'star', lamM = st.lam * 1e-9, thR = 1.22 * lamM / st.D * ARC, eff = Math.hypot(thR, st.seeing);
+  let F = (star ? 6 : 7) * st.sep; if (st.fov === 'blur') F = Math.max(F, 6 * eff);
+  const pix = F / N, fc = st.D / (lamM * ARC), sigma = st.seeing / 2.3548;
+  // transfer function of a circular aperture x atmosphere x anti-alias taper
+  for (let m2 = 0; m2 < N; m2++) {
+    const k2 = m2 < N / 2 ? m2 : m2 - N;
+    for (let m1 = 0; m1 < N; m1++) {
+      const k1 = m1 < N / 2 ? m1 : m1 - N, kr = Math.hypot(k1, k2), f = kr / F, rho = f / fc; let h = 0;
+      if (rho < 1) {
+        h = (2 / Math.PI) * (Math.acos(rho) - rho * Math.sqrt(1 - rho * rho));
+        if (sigma > 0) h *= Math.exp(-2 * Math.PI * Math.PI * sigma * sigma * f * f);
+        const q = kr / (N / 2); h *= q < 0.6 ? 1 : q < 1 ? Math.pow(Math.cos(Math.PI / 2 * (q - 0.6) / 0.4), 2) : 0;
+      }
+      H[m2 * N + m1] = h;
+    }
+  }
+  if (star) {
+    const d = st.sep / (2 * F), u1 = 0.5 - d, u2 = 0.5 + d, ar = new Float64Array(N), ai = new Float64Array(N);
+    for (let m = 0; m < N; m++) { const k = m < N / 2 ? m : m - N, p1 = -TAU * k * u1, p2 = -TAU * k * u2; ar[m] = Math.cos(p1) + Math.cos(p2); ai[m] = Math.sin(p1) + Math.sin(p2); }
+    for (let m2 = 0; m2 < N; m2++) { const sg = (m2 & 1) ? -1 : 1; for (let m1 = 0; m1 < N; m1++) { const i = m2 * N + m1; re[i] = sg * H[i] * ar[m1]; im[i] = sg * H[i] * ai[m1]; } }
+  } else {
+    buildPattern(st.sep, F); re.set(scene); im.fill(0); fft2(re, im, false);
+    for (let i = 0; i < N * N; i++) { re[i] *= H[i]; im[i] *= H[i]; }
+  }
+  fft2(re, im, true);
+  let peak = 0; for (let i = 0; i < N * N; i++) if (re[i] > peak) peak = re[i]; if (peak <= 0) peak = 1;
+  for (let i = 0; i < N * N; i++) re[i] /= peak;
+  // metrics
+  let metric, row, limited = fc > 0.3 * N / F;
+  if (star) {
+    row = N / 2; const x1 = (0.5 - st.sep / (2 * F)) * N, x2 = (0.5 + st.sep / (2 * F)) * N, pk = (lerpRow(re, row, x1) + lerpRow(re, row, x2)) / 2, mid = lerpRow(re, row, N / 2);
+    metric = Math.min(1.5, mid / pk);
+  } else {
+    const idx = (u) => ((u - 3.5) * st.sep + F / 2) / pix; row = Math.round(idx(3.0));
+    const hi = [1.0, 2.0, 3.0].map((u) => lerpRow(re, row, idx(u))).reduce((a, b) => a + b) / 3, lo = [1.5, 2.5].map((u) => lerpRow(re, row, idx(u))).reduce((a, b) => a + b) / 2;
+    metric = (hi - lo) / (hi + lo);
+  }
+  R = { star, thR, eff, F, pix, row, metric, limited, sep: st.sep, resolved: st.sep >= eff * 0.999 };
+  // pre-render image canvases
+  const tint = star ? [255, 244, 225] : [255, 214, 160], g = st.stretch ? 0.4 : 1;
+  const cs = offS.getContext('2d'), id = cs.createImageData(N, N);
+  for (let i = 0; i < N * N; i++) { const v = Math.pow(clamp(re[i], 0, 1), g); for (let c = 0; c < 3; c++) id.data[i * 4 + c] = BG[c] + (tint[c] - BG[c]) * v; id.data[i * 4 + 3] = 255; }
+  cs.putImageData(id, 0, 0);
+  if (!star) {
+    const ct = offT.getContext('2d'), it = ct.createImageData(N, N);
+    for (let i = 0; i < N * N; i++) { const v = clamp(scene[i], 0, 1); for (let c = 0; c < 3; c++) it.data[i * 4 + c] = BG[c] + (tint[c] - BG[c]) * v; it.data[i * 4 + 3] = 255; }
+    ct.putImageData(it, 0, 0);
+  }
+}
+
+/* ---- drawing helpers ---- */
+function fit(cv, h) {
+  const w = cv.parentElement.clientWidth; if (!w) return null; const d = Math.min(window.devicePixelRatio || 1, 2); if (h === 'sq') h = w;
+  if (cv.width !== Math.round(w * d) || cv.height !== Math.round(h * d)) { cv.width = Math.round(w * d); cv.height = Math.round(h * d); cv.style.height = h + 'px'; }
+  const c = cv.getContext('2d'); c.setTransform(d, 0, 0, d, 0, 0); return { c, w, h };
+}
+function halo(c, s, x, y, al, col) { c.font = '11px "IBM Plex Mono",monospace'; c.textAlign = al; c.textBaseline = 'middle'; c.lineWidth = 3; c.lineJoin = 'round'; c.strokeStyle = 'rgba(7,11,23,.88)'; c.strokeText(s, x, y); c.fillStyle = col; c.fillText(s, x, y); }
+function bar(c, x0, x1, y, col) { c.strokeStyle = col; c.lineWidth = 2; c.beginPath(); c.moveTo(x0, y); c.lineTo(x1, y); c.moveTo(x0, y - 4); c.lineTo(x0, y + 4); c.moveTo(x1, y - 4); c.lineTo(x1, y + 4); c.stroke(); }
+function overlay(c, w, h, title, amberAng, amberLabel) {
+  halo(c, title, 10, 14, 'left', '#9db0cc');
+  const sb = niceAng(R.F * 0.22), len = sb / R.F * w; bar(c, 10, 10 + len, h - 26, '#e6ebf3'); halo(c, angShort(sb), 10, h - 40, 'left', '#e6ebf3');
+  let al = amberAng / R.F * w, tag = ''; if (al > w * 0.85) { al = w * 0.85; tag = ' (off scale)'; }
+  if (al < 3) al = 3;
+  bar(c, w - 10 - al, w - 10, h - 12, '#e0a844'); halo(c, amberLabel + ' ' + angShort(amberAng) + tag, w - 10, h - 26, 'right', '#e0a844');
+}
+function drawTrue() {
+  const cv = $('trueC'), f = fit(cv, 'sq'); if (!f) return; const { c, w, h } = f;
+  c.fillStyle = '#070b17'; c.fillRect(0, 0, w, h);
+  if (R.star) {
+    for (const s of [-1, 1]) {
+      const x = w * (0.5 + s * R.sep / (2 * R.F)), y = h / 2, gr = c.createRadialGradient(x, y, 0, x, y, 16);
+      gr.addColorStop(0, 'rgba(255,244,225,.85)'); gr.addColorStop(1, 'rgba(255,244,225,0)'); c.fillStyle = gr; c.fillRect(x - 16, y - 16, 32, 32);
+      c.fillStyle = '#fff6e6'; c.beginPath(); c.arc(x, y, 2.4, 0, TAU); c.fill();
+    }
+  } else { c.imageSmoothingEnabled = true; c.drawImage(offT, 0, 0, w, h); }
+  overlay(c, w, h, 'TRUE SKY', R.sep, R.star ? 'separation' : 'bar spacing');
+}
+function drawTele() {
+  const cv = $('teleC'), f = fit(cv, 'sq'); if (!f) return; const { c, w, h } = f;
+  c.imageSmoothingEnabled = true; c.imageSmoothingQuality = 'high'; c.drawImage(offS, 0, 0, w, h);
+  overlay(c, w, h, 'TELESCOPE VIEW', R.eff, 'limit');
+  halo(c, R.resolved ? 'RESOLVED' : 'UNRESOLVED', w - 10, 14, 'right', R.resolved ? '#5fd08a' : '#ff8f7a');
+}
+function drawProfile() {
+  const cv = $('prof'), f = fit(cv, 190); if (!f) return; const { c, w, h } = f;
+  const L = 34, Rr = 12, T = 14, B = 30, pw = w - L - Rr, ph = h - T - B, X = (x) => L + x / R.F * pw, Y = (v) => T + ph * (1 - v / 1.1);
+  c.fillStyle = '#070b17'; c.fillRect(0, 0, w, h);
+  c.lineWidth = 1; c.strokeStyle = 'rgba(190,205,235,.18)';
+  for (const v of [0, 0.5, 1]) { c.beginPath(); c.moveTo(L, Y(v)); c.lineTo(L + pw, Y(v)); c.stroke(); halo(c, String(v), L - 6, Y(v), 'right', '#9db0cc'); }
+  const stp = niceAng(R.F / 5);
+  for (let a = -Math.floor(R.F / 2 / stp) * stp; a <= R.F / 2 + 1e-9; a += stp) { const x = X(a + R.F / 2); c.beginPath(); c.moveTo(x, T + ph); c.lineTo(x, T + ph + 4); c.stroke(); halo(c, (a > 0 ? '+' : '') + (Math.abs(a) < 1e-12 ? '0' : angShort(Math.abs(a)).replace(/^/, a < 0 ? '−' : '')), x, T + ph + 15, 'center', '#9db0cc'); }
+  if (R.star) {
+    c.setLineDash([3, 4]); c.strokeStyle = 'rgba(255,244,225,.55)';
+    for (const s of [-1, 1]) { const x = X(R.F / 2 + s * R.sep / 2); c.beginPath(); c.moveTo(x, T); c.lineTo(x, T + ph); c.stroke(); }
+    c.strokeStyle = 'rgba(224,168,68,.6)'; c.beginPath(); c.moveTo(L, Y(0.735)); c.lineTo(L + pw, Y(0.735)); c.stroke(); c.setLineDash([]);
+    halo(c, 'Rayleigh dip 0.735', L + pw - 4, Y(0.735) - 8, 'right', '#e0a844'); halo(c, 'true star positions (dashed)', L + 6, T + 6, 'left', 'rgba(255,244,225,.8)');
+  } else {
+    c.strokeStyle = 'rgba(190,205,235,.55)'; c.lineWidth = 1.2; c.beginPath();
+    for (let i = 0; i < N; i++) { const x = X(i * R.pix), y = Y(scene[R.row * N + i]); i ? c.lineTo(x, y) : c.moveTo(x, y); } c.stroke();
+    halo(c, 'true pattern (grey)', L + 6, T + 6, 'left', 'rgba(190,205,235,.8)');
+  }
+  c.strokeStyle = '#e0a844'; c.lineWidth = 2; c.beginPath();
+  for (let i = 0; i < N; i++) { const x = X(i * R.pix), y = Y(clamp(re[R.row * N + i], -0.05, 1.1)); i ? c.lineTo(x, y) : c.moveTo(x, y); } c.stroke();
+  halo(c, 'telescope image', L + pw - 4, T + 6, 'right', '#e0a844');
+}
+
+/* ---- text ---- */
+function updateText() {
+  const star = st.mode === 'star', lab = star ? 'Star separation' : 'Bar spacing', rs = R.resolved, ratio = st.sep / R.eff;
+  $('sepLbl').textContent = star ? 'Star separation' : 'Bar spacing (centre to centre)';
+  $('Dout').textContent = fmtLen(st.D); $('lamOut').textContent = `${fmtWl(st.lam)} · ${band(st.lam)}`; $('sepOut').textContent = angShort(st.sep); $('seeOut').textContent = st.seeing > 0 ? st.seeing.toFixed(1) + '″' : 'none';
+  const rows = [['Aperture D', fmtLen(st.D), ''], ['Wavelength λ', fmtWl(st.lam), ''], ['Diffraction limit 1.22 λ/D', angBoth(R.thR), '']];
+  if (st.seeing > 0) rows.push(['Effective limit with seeing', angBoth(R.eff), '']);
+  rows.push([lab, angBoth(st.sep), ''], [`${star ? 'Separation' : 'Spacing'} ÷ limit`, sig(ratio, 3) + ' ×', '']);
+  rows.push(star ? ['Brightness at midpoint ÷ peak', R.metric >= 0.995 ? 'no dip (100%)' : (R.metric * 100).toFixed(0) + '%', ''] : ['Bar contrast in image', (Math.max(0, R.metric) * 100).toFixed(0) + '%', '']);
+  rows.push(['Status', rs ? 'Resolved' : 'Unresolved', rs ? 'up' : 'dn']);
+  $('tbl').innerHTML = '<tr><th>Quantity</th><th>Value</th></tr>' + rows.map((r) => `<tr><td>${r[0]}</td><td class="${r[2]}">${r[1]}</td></tr>`).join('');
+  $('live').textContent = `Diffraction limit: ${angBoth(R.thR)} · ${lab}: ${angBoth(st.sep)} · Status: ${rs ? 'Resolved' : 'Unresolved'}`;
+  $('warn').textContent = (R.limited ? 'Display-limited: this telescope is sharper than the picture’s pixels at this field of view, so the image shown is blurrier than the real thing. Reduce the separation or aperture to see the full detail. ' : '') + `Field of view: ${angShort(R.F)} across.`;
+  $('profNote').textContent = star ? 'The orange curve is the image brightness along the line joining the stars. Two peaks mean resolved; the dashed line marks the dip at the Rayleigh limit.' : 'The orange curve is the image brightness along a line through the vertical bars. Bars that merge into a flat curve are unresolved.';
+  $('tdesc').textContent = TEL[st.tel].d;
+  document.querySelectorAll('[data-lam]').forEach((b) => b.setAttribute('aria-pressed', String(Math.abs(+b.dataset.lam - st.lam) / st.lam < 0.001)));
+  $('mStar').setAttribute('aria-pressed', String(star)); $('mPat').setAttribute('aria-pressed', String(!star));
+  $('D').setAttribute('aria-valuetext', fmtLen(st.D)); $('lam').setAttribute('aria-valuetext', fmtWl(st.lam)); $('sep').setAttribute('aria-valuetext', angShort(st.sep));
+  $('trueC').setAttribute('aria-label', star ? `True sky: two stars ${angShort(st.sep)} apart` : 'True sky: a test pattern of bright bars');
+  $('teleC').setAttribute('aria-label', `Telescope view: ${rs ? 'resolved' : 'unresolved'}, diffraction limit ${angBoth(R.thR)}`);
+}
+function sync(skip) {
+  if (skip !== 'D') $('D').value = toPos('D', st.D); if (skip !== 'lam') $('lam').value = toPos('lam', st.lam); if (skip !== 'sep') $('sep').value = toPos('sep', st.sep);
+  $('see').value = st.seeing; $('tel').value = st.tel; $('disp').value = st.stretch ? 'str' : 'lin'; $('fov').value = st.fov;
+}
+function refresh() { simulate(); updateText(); dirty = true; }
+
+/* ---- events ---- */
+const sel = $('tel'); let html = '<option value="custom">Custom</option>', grp = '';
+for (const k in TEL) { const t = TEL[k]; if (!t.g) continue; if (t.g !== grp) { if (grp) html += '</optgroup>'; html += `<optgroup label="${t.g}">`; grp = t.g; } html += `<option value="${k}">${t.n}</option>`; }
+sel.innerHTML = html + '</optgroup>';
+sel.onchange = () => { st.tel = sel.value; const t = TEL[st.tel]; if (t.D) { st.D = t.D; st.lam = t.lam; } sync(); refresh(); };
+$('D').addEventListener('input', (e) => { st.D = fromPos('D', +e.target.value); st.tel = 'custom'; sync('D'); refresh(); });
+$('lam').addEventListener('input', (e) => { st.lam = fromPos('lam', +e.target.value); st.tel = 'custom'; sync('lam'); refresh(); });
+$('sep').addEventListener('input', (e) => { st.sep = fromPos('sep', +e.target.value); sync('sep'); refresh(); });
+$('see').addEventListener('input', (e) => { st.seeing = +e.target.value; refresh(); });
+$('disp').onchange = (e) => { st.stretch = e.target.value === 'str'; refresh(); };
+$('fov').onchange = (e) => { st.fov = e.target.value; refresh(); };
+document.querySelectorAll('[data-lam]').forEach((b) => b.onclick = () => { st.lam = +b.dataset.lam; st.tel = 'custom'; sync(); refresh(); });
+document.querySelectorAll('[data-k]').forEach((b) => b.onclick = () => { st.sep = clamp(+b.dataset.k * R.thR, RANGE.sep[0], RANGE.sep[1]); sync(); refresh(); });
+$('mStar').onclick = () => { st.mode = 'star'; refresh(); }; $('mPat').onclick = () => { st.mode = 'pat'; refresh(); };
+$('rst').onclick = () => { Object.assign(st, DEF); sync(); refresh(); };
+window.addEventListener('resize', () => { dirty = true; });
+function frame() { if (dirty) { dirty = false; drawTrue(); drawTele(); drawProfile(); } requestAnimationFrame(frame); }
+sync(); refresh(); requestAnimationFrame(frame);
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { dirty = true; });
+</script>
+</body></html>

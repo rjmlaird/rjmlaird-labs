@@ -1,0 +1,50 @@
+---
+import "@labs/tokens/tokens.css";
+import "@labs/tokens/base.css";
+import "@labs/ui/styles.css";
+import { fontsHref } from "@labs/tokens/fonts";
+import { visibleLabs, labUrl } from "@labs/registry";
+import LabCard from "@labs/ui/LabCard.astro";
+
+const labs = visibleLabs();
+const topics = [...new Set(labs.map((l) => l.topic))];
+const label = (t: string) => t[0].toUpperCase() + t.slice(1);
+---
+
+<!doctype html>
+<html lang="en" data-theme="navy">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Interactive physics labs by Ryan Laird." />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="stylesheet" href={fontsHref("navy")} />
+    <title>Labs</title>
+  </head>
+  <body>
+    <main class="wrap page" style="padding-block: 2.5rem">
+      <header class="hero">
+        <p class="eyebrow">rjmlaird.co.uk</p>
+        <h1>Labs</h1>
+        <p class="lede">Interactive physics and science demonstrations.</p>
+      </header>
+      {
+        topics.map((topic) => (
+          <section>
+            <h2 style="margin-bottom: 0.75rem">{label(topic)}</h2>
+            <div class="card-grid">
+              {labs.filter((l) => l.topic === topic).map((lab) => (
+                <LabCard
+                  eyebrow={`${lab.level.toUpperCase()}${lab.status === "wip" ? " · in progress" : ""}`}
+                  title={lab.title}
+                  description={lab.summary}
+                  href={labUrl(lab)}
+                />
+              ))}
+            </div>
+          </section>
+        ))
+      }
+    </main>
+  </body>
+</html>

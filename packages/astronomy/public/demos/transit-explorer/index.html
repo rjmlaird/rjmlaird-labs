@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Exoplanet transit and light-curve explorer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Familjen+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{--bg:#eceef2;--panel:#f9fafb;--field:#eef1f5;--ink:#16202c;--muted:#566274;--line:#d0d7e0;--accent:#8f5f10;--on-accent:#fff;--sky:#070b17;--up:#2f9e5b;--dn:#d2563f;--display:'Familjen Grotesk',system-ui,-apple-system,'Segoe UI',sans-serif;--mono:'IBM Plex Mono',ui-monospace,Menlo,Consolas,monospace;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0a0e17;--panel:#111826;--field:#0c121e;--ink:#e6ebf3;--muted:#93a0b4;--line:#243046;--accent:#e0a844;--on-accent:#1a1100;--up:#4cc27f;--dn:#ee7b63;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0a0e17;--panel:#111826;--field:#0c121e;--ink:#e6ebf3;--muted:#93a0b4;--line:#243046;--accent:#e0a844;--on-accent:#1a1100;--up:#4cc27f;--dn:#ee7b63;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 var(--display);padding:20px 16px 36px}
+.wrap{max-width:1120px;margin-inline:auto;display:flex;flex-direction:column;gap:16px}
+h1{margin:0;font-size:1.7rem;letter-spacing:-.015em}.top p{margin:2px 0 0;color:var(--muted);max-width:72ch}
+h2{margin:0 0 8px;font-size:1.02rem;font-weight:600}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px;min-width:0}
+.layout{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:16px;align-items:start}
+@media(max-width:860px){.layout{grid-template-columns:minmax(0,1fr)}}
+.col{display:flex;flex-direction:column;gap:16px;min-width:0}
+.cw{border:1px solid var(--line);border-radius:6px;overflow:hidden;background:var(--sky)}.cw canvas{display:block;width:100%}
+.cw+.cw{margin-top:10px}
+button,input,select{font:inherit;font-size:.86rem;color:var(--ink);background:var(--field);border:1px solid var(--line);border-radius:6px;padding:6px 10px}
+button{cursor:pointer}button:hover{border-color:var(--muted)}button[aria-pressed=true]{border-color:var(--accent);background:var(--panel);font-weight:600}
+button.primary{background:var(--accent);color:var(--on-accent);border-color:transparent;font-weight:600;min-width:78px}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+input[type=range]{width:100%;padding:0;accent-color:var(--accent);margin:6px 0 0}
+select{width:100%}
+.btns{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:10px}
+.btns .lbl{color:var(--muted);font-size:.8rem}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 16px;margin-top:12px}
+@media(max-width:560px){.grid{grid-template-columns:minmax(0,1fr)}}
+.sl label{display:flex;justify-content:space-between;gap:8px;font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.07em}
+.sl output{font:.82rem var(--mono);color:var(--ink);text-transform:none;letter-spacing:0;text-align:right}
+.live{margin:8px 0 0;font:.82rem var(--mono);color:var(--muted)}
+.note{margin:10px 0 0;color:var(--muted);font-size:.8rem;max-width:72ch}
+table{width:100%;border-collapse:collapse}td,th{padding:6px 0;border-top:1px solid var(--line);font:.84rem var(--mono);text-align:right}
+th{font-size:.68rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);border-top:0;font-weight:400}
+td:first-child,th:first-child{text-align:left;font-family:var(--display);font-size:.92rem;color:var(--muted)}
+td.up{color:var(--up);font-weight:500}td.dn{color:var(--dn);font-weight:500}
+.exp{font-size:.92rem}.exp p{margin:0 0 8px}.exp ul{margin:0;padding-left:18px;color:var(--muted);font-size:.88rem}.exp li{margin-bottom:5px}
+</style></head><body>
+<main class="wrap">
+<header class="top"><h1>Exoplanet transit and light-curve explorer</h1>
+<p>A planet passes in front of its star, and the star's brightness dips. Change the planet's size, its distance from the star and how centrally it crosses, and watch the light curve respond. Add noise to see why small planets are hard to find.</p></header>
+<div class="layout">
+<section class="card" aria-label="Transit animation and light curve">
+<div class="cw"><canvas id="scene" role="img" aria-label="Animation of a planet crossing in front of a star"></canvas></div>
+<div class="cw"><canvas id="curve" role="img" aria-label="Light curve showing relative brightness against time"></canvas></div>
+<p class="live" id="live"></p>
+<div class="sl" style="margin-top:8px"><label for="scrub">Time in the window <output id="scrubOut"></output></label><input type="range" id="scrub" min="0" max="1000" value="0"></div>
+<div class="btns"><button type="button" class="primary" id="play" aria-pressed="true">Pause</button><button type="button" id="rst">Restart</button>
+<span class="lbl">Presets:</span><button type="button" data-p="hj">Hot Jupiter</button><button type="button" data-p="jup">Jupiter</button><button type="button" data-p="mn">Mini-Neptune</button><button type="button" data-p="earth">Earth</button><button type="button" data-p="earthM">Earth-size, M dwarf</button></div>
+<div class="grid">
+<div class="sl"><label for="star">Star type</label><select id="star"><option value="m">M dwarf (0.3 R☉)</option><option value="k">K dwarf (0.7 R☉)</option><option value="g" selected>Sun-like (1 R☉)</option></select></div>
+<div class="sl"><label for="Rp">Planet radius <output id="RpOut"></output></label><input type="range" id="Rp" min="0" max="1000" step="1"></div>
+<div class="sl"><label for="a">Orbital distance <output id="aOut"></output></label><input type="range" id="a" min="0" max="1000" step="1"></div>
+<div class="sl"><label for="b">Impact parameter <output id="bOut"></output></label><input type="range" id="b" min="0" max="1.5" step="0.01" value="0.3"></div>
+<div class="sl"><label for="spd">Time speed <output id="spdOut"></output></label><input type="range" id="spd" min="0" max="1000" step="1"></div>
+<div class="sl"><label for="noise">Photometric noise <output id="noiseOut"></output></label><input type="range" id="noise" min="0" max="3000" step="10" value="0"></div>
+</div>
+<div class="btns"><button type="button" id="ld" aria-pressed="true">Limb darkening: on</button></div>
+<p class="note">The animation is the view from Earth: the planet crosses the star's face. The planet is drawn at true scale relative to the star, but never smaller than a couple of pixels, so tiny planets look larger than they are. Impact parameter b is how far from the star's centre the planet's path passes, in stellar radii: 0 is straight across the middle, and above 1 + Rp/R★ the planet misses the star. The planet's size is in Earth radii (R⊕).</p>
+</section>
+<div class="col">
+<section class="card" aria-label="Derived quantities"><h2>Derived quantities</h2><table id="tbl"></table><p class="note" id="tblNote"></p></section>
+<section class="card exp" aria-label="Explanation">
+<p><b>The transit method.</b> When a planet crosses its star, it blocks a little of the starlight. The fraction blocked is roughly the ratio of the two disc areas, (Rp / R★)². Astronomers measure the star's brightness again and again (photometry) and look for these small, regular dips.</p>
+<ul>
+<li><b>Planet size</b> sets the depth. An Earth crossing the Sun blocks about 84 parts per million; a Jupiter blocks about 1%.</li>
+<li><b>Orbital distance</b> sets the period (P² ∝ a³ / M★). Closer planets transit more often, and more of them happen to line up with us: the chance is about R★ / a.</li>
+<li><b>Impact parameter</b> sets how long the transit lasts and how its shape looks. A central transit has a long, flat bottom; a near-grazing one is short and V-shaped.</li>
+<li><b>Limb darkening.</b> A star is dimmer at its edge than in the middle. This rounds the bottom of the dip, so the curve's shape carries information about the star and the path.</li>
+<li><b>Noise.</b> Real measurements scatter. The transit signal-to-noise ratio grows with depth and with the number of measurements inside the transit, which is why detections usually need several transits and a very steady telescope: space telescopes measure brightness to tens of ppm.</li>
+<li><b>Simplified model.</b> A circular orbit, a dark planet, no starspots, and only the transit (no eclipse of the planet behind the star). Limb-darkening values and stellar sizes are illustrative.</li>
+</ul></section>
+</div></div></main>
+<script>
+const TAU = Math.PI * 2, $ = (id) => document.getElementById(id);
+const sig = (x, n) => String(parseFloat(x.toPrecision(n)));
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+const AU_RSUN = 215.032, RSUN_RE = 109.1, RJ_RE = 11.21, NT = 500, NS = 500;
+const RANGE = { Rp: [0.5, 25], a: [0.015, 6], spd: [0.1, 5] };
+const toPos = (k, v) => Math.log(v / RANGE[k][0]) / Math.log(RANGE[k][1] / RANGE[k][0]) * 1000;
+const fromPos = (k, p) => RANGE[k][0] * Math.pow(RANGE[k][1] / RANGE[k][0], p / 1000);
+const STARS = {
+  m: { n: 'M dwarf', R: 0.3, M: 0.3, u: [0.30, 0.30], col: [255, 140, 80] },
+  k: { n: 'K dwarf', R: 0.7, M: 0.7, u: [0.45, 0.25], col: [255, 185, 105] },
+  g: { n: 'Sun-like star', R: 1.0, M: 1.0, u: [0.40, 0.25], col: [255, 232, 165] }
+};
+const PRE = {
+  hj: { star: 'g', Rp: 13, a: 0.05, b: 0.3 }, jup: { star: 'g', Rp: 11.2, a: 5.2, b: 0.2 }, mn: { star: 'k', Rp: 2.5, a: 0.1, b: 0.4 },
+  earth: { star: 'g', Rp: 1, a: 1, b: 0 }, earthM: { star: 'm', Rp: 1, a: 0.05, b: 0.2 }
+};
+const st = { star: 'g', Rp: 13, a: 0.05, b: 0.3, spd: 1, noise: 0, ld: true, u: 0, playing: !(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) };
+if (!st.playing) st.u = 0.5;
+let M = null, dirty = true;
+
+/* ---- planet disc samples (equal-area spiral) ---- */
+const UX = new Float64Array(NS), UY = new Float64Array(NS);
+for (let j = 0; j < NS; j++) { const r = Math.sqrt((j + 0.5) / NS), t = j * 2.399963; UX[j] = r * Math.cos(t); UY[j] = r * Math.sin(t); }
+function blocked(x, y, k, ld, u1, u2) {
+  if (Math.hypot(x, y) >= 1 + k) return 0;
+  let sum = 0;
+  for (let j = 0; j < NS; j++) {
+    const px = x + k * UX[j], py = y + k * UY[j], r2 = px * px + py * py;
+    if (r2 < 1) { if (ld) { const m = 1 - Math.sqrt(1 - r2); sum += 1 - u1 * m - u2 * m * m; } else sum += 1; }
+  }
+  return k * k * sum / NS / (ld ? 1 - u1 / 3 - u2 / 6 : 1);
+}
+// seeded Gaussian noise so the scatter stays the same when sliders move
+const NOISE = (() => { let s = 12345; const r = () => { s |= 0; s = s + 0x6D2B79F5 | 0; let t = Math.imul(s ^ s >>> 15, 1 | s); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; };
+  return Float64Array.from({ length: NT }, () => Math.sqrt(-2 * Math.log(r() + 1e-12)) * Math.cos(TAU * r())); })();
+
+/* ---- the model ---- */
+function build() {
+  const S = STARS[st.star], k = st.Rp / (S.R * RSUN_RE), aRs = st.a * AU_RSUN / S.R, P = 365.25 * Math.sqrt(st.a * st.a * st.a / S.M), b = st.b;
+  const cosi = Math.min(1, b / aRs), sini = Math.sqrt(1 - cosi * cosi), transit = b < 1 + k;
+  const dur = (kk) => { const q = kk * kk - b * b; return q > 0 ? P / Math.PI * Math.asin(Math.min(1, Math.sqrt(q) / (aRs * sini))) : 0; };
+  const T14 = transit ? dur(1 + k) : 0, T23 = transit && b < 1 - k ? dur(1 - k) : 0;
+  const xv = 1 + k + 0.6, tH = P / TAU * Math.asin(Math.min(0.98, xv / aRs)), [u1, u2] = S.u;
+  const t = new Float64Array(NT), fl = new Float64Array(NT);
+  let dmax = 0;
+  for (let i = 0; i < NT; i++) {
+    t[i] = -tH + 2 * tH * i / (NT - 1); const ph = TAU * t[i] / P;
+    fl[i] = 1 - blocked(aRs * Math.sin(ph), b * Math.cos(ph), k, st.ld, u1, u2); dmax = Math.max(dmax, 1 - fl[i]);
+  }
+  const sg = st.noise * 1e-6, obs = new Float64Array(NT); let ss = 0;
+  for (let i = 0; i < NT; i++) { obs[i] = fl[i] + NOISE[i] * sg; ss += (1 - fl[i]) * (1 - fl[i]); }
+  let lo = 1, hi = 1; for (let i = 0; i < NT; i++) { lo = Math.min(lo, obs[i], fl[i]); hi = Math.max(hi, obs[i]); }
+  if (!transit) { lo = Math.min(lo, 1 - 1e-4); }
+  let pad = Math.max(0.12 * (hi - lo), 2e-5); lo -= pad; hi += pad;
+  M = { S, k, aRs, P, b, inc: Math.acos(cosi) * 180 / Math.PI, transit, T14, T23, xv, tH, t, fl, obs, dmax, lo, hi, geo: k * k, snr: sg > 0 ? Math.sqrt(ss) / sg : 0, prob: 1 / aRs };
+}
+const fluxAt = (u) => { const x = u * (NT - 1), i = clamp(Math.floor(x), 0, NT - 2), f = x - i; return M.fl[i] * (1 - f) + M.fl[i + 1] * f; };
+
+/* ---- formatting ---- */
+const fmtDur = (d) => { const h = d * 24; return h < 1 ? sig(h * 60, 3) + ' min' : h < 48 ? sig(h, 3) + ' h' : sig(d, 3) + ' d'; };
+const fmtDip = (v) => v >= 0.001 ? (v * 100).toFixed(v >= 0.1 ? 1 : 2) + '%' : Math.round(v * 1e6).toLocaleString('en-GB') + ' ppm';
+function niceStep(x) { const e = Math.pow(10, Math.floor(Math.log10(x))), m = x / e; return (m <= 1 ? 1 : m <= 2 ? 2 : m <= 5 ? 5 : 10) * e; }
+
+/* ---- drawing helpers ---- */
+function fit(cv, h) {
+  const w = cv.parentElement.clientWidth; if (!w) return null; const d = Math.min(window.devicePixelRatio || 1, 2);
+  if (cv.width !== Math.round(w * d) || cv.height !== Math.round(h * d)) { cv.width = Math.round(w * d); cv.height = Math.round(h * d); cv.style.height = h + 'px'; }
+  const c = cv.getContext('2d'); c.setTransform(d, 0, 0, d, 0, 0); return { c, w, h };
+}
+function halo(c, s, x, y, al, col) { c.font = '11px "IBM Plex Mono",monospace'; c.textAlign = al; c.textBaseline = 'middle'; c.lineWidth = 3; c.lineJoin = 'round'; c.strokeStyle = 'rgba(7,11,23,.88)'; c.strokeText(s, x, y); c.fillStyle = col; c.fillText(s, x, y); }
+const STARSKY = (() => { let s = 5; const r = () => (s = (s * 16807) % 2147483647) / 2147483647; return Array.from({ length: 60 }, () => [r(), r(), 0.12 + r() * 0.4, 0.6 + r()]); })();
+function posAt(u) { const t = -M.tH + 2 * M.tH * u, ph = TAU * t / M.P; return { t, x: M.aRs * Math.sin(ph), y: M.b * Math.cos(ph) }; }
+
+/* ---- top panel: the star and planet ---- */
+function drawScene() {
+  const cv = $('scene'), f = fit(cv, Math.round(clamp(cv.parentElement.clientWidth * 0.5, 240, 340))); if (!f) return;
+  const { c, w, h } = f, yv = Math.max(1.2, M.b + M.k + 0.2), sc = Math.min((w / 2 - 8) / M.xv, (h / 2 - 20) / yv), cx = w / 2, cy = h / 2, S = M.S;
+  c.fillStyle = '#070b17'; c.fillRect(0, 0, w, h);
+  for (const q of STARSKY) { c.fillStyle = `rgba(220,230,255,${q[2]})`; c.fillRect(q[0] * w, q[1] * h, q[3], q[3]); }
+  // star with limb darkening
+  const [u1, u2] = S.u, g = c.createRadialGradient(cx, cy, 0, cx, cy, sc);
+  for (let i = 0; i <= 10; i++) { const r = i / 10 * 0.999, m = Math.sqrt(1 - r * r), I = st.ld ? 1 - u1 * (1 - m) - u2 * (1 - m) * (1 - m) : 1; g.addColorStop(i / 10, `rgb(${S.col.map((v) => Math.round(v * I)).join(',')})`); }
+  const halo2 = c.createRadialGradient(cx, cy, sc * 0.95, cx, cy, sc * 1.35); halo2.addColorStop(0, `rgba(${S.col.join(',')},.25)`); halo2.addColorStop(1, `rgba(${S.col.join(',')},0)`);
+  c.fillStyle = halo2; c.beginPath(); c.arc(cx, cy, sc * 1.35, 0, TAU); c.fill();
+  c.fillStyle = g; c.beginPath(); c.arc(cx, cy, sc, 0, TAU); c.fill();
+  // planet path, impact parameter
+  c.setLineDash([3, 5]); c.strokeStyle = 'rgba(190,205,235,.4)'; c.lineWidth = 1; c.beginPath();
+  for (let i = 0; i < NT; i += 4) { const ph = TAU * M.t[i] / M.P, x = cx + M.aRs * Math.sin(ph) * sc, y = cy - M.b * Math.cos(ph) * sc; i ? c.lineTo(x, y) : c.moveTo(x, y); } c.stroke();
+  if (M.b > 0.02) { c.strokeStyle = 'rgba(224,168,68,.8)'; c.beginPath(); c.moveTo(cx, cy); c.lineTo(cx, cy - M.b * sc); c.stroke(); halo(c, `b = ${M.b.toFixed(2)}`, cx + 6, cy - M.b * sc / 2, 'left', '#e0a844'); }
+  c.setLineDash([]);
+  // planet
+  const p = posAt(st.u), px = cx + p.x * sc, py = cy - p.y * sc, pr = Math.max(M.k * sc, 1.8);
+  c.fillStyle = '#05070d'; c.strokeStyle = 'rgba(230,235,245,.55)'; c.lineWidth = 1; c.beginPath(); c.arc(px, py, pr, 0, TAU); c.fill(); c.stroke();
+  halo(c, 'planet', px, py + pr + 11, 'center', '#cfd8e8');
+  halo(c, 'VIEW FROM EARTH', 10, 14, 'left', '#9db0cc'); halo(c, `star radius R★ = 1 · planet Rp/R★ = ${sig(M.k, 3)}`, 10, h - 12, 'left', '#9db0cc');
+  if (!M.transit) halo(c, 'no transit: the path misses the star', w - 10, 14, 'right', '#ff8f7a');
+}
+
+/* ---- bottom panel: the light curve ---- */
+function drawCurve() {
+  const cv = $('curve'), f = fit(cv, 240); if (!f) return; const { c, w, h } = f;
+  const L = 58, Rr = 12, T = 16, B = 34, pw = w - L - Rr, ph = h - T - B, W = 2 * M.tH, hrs = W < 3, uk = hrs ? 24 : 1, X = (t) => L + (t + M.tH) / W * pw, Y = (v) => T + ph * (1 - (v - M.lo) / (M.hi - M.lo));
+  c.fillStyle = '#070b17'; c.fillRect(0, 0, w, h);
+  // y grid
+  const ys = niceStep((M.hi - M.lo) / 4), dec = clamp(Math.ceil(-Math.log10(ys) - 1e-9), 0, 7); c.lineWidth = 1; c.strokeStyle = 'rgba(190,205,235,.16)';
+  for (let v = Math.ceil(M.lo / ys) * ys; v <= M.hi; v += ys) { c.beginPath(); c.moveTo(L, Y(v)); c.lineTo(L + pw, Y(v)); c.stroke(); halo(c, v.toFixed(dec), L - 6, Y(v), 'right', '#9db0cc'); }
+  // x ticks (time from mid-transit)
+  const xs = niceStep(W * uk / 6), lim = M.tH * uk;
+  for (let v = -Math.floor(lim / xs) * xs; v <= lim + 1e-9; v += xs) { const x = X(v / uk); c.strokeStyle = 'rgba(190,205,235,.16)'; c.beginPath(); c.moveTo(x, T); c.lineTo(x, T + ph); c.stroke(); halo(c, Math.abs(v) < 1e-9 ? '0' : (v > 0 ? '+' : '−') + sig(Math.abs(v), 3), x, T + ph + 12, 'center', '#9db0cc'); }
+  halo(c, `time from mid-transit (${hrs ? 'hours' : 'days'})`, L + pw, h - 7, 'right', 'rgba(190,205,235,.7)');
+  c.save(); c.translate(12, T + ph / 2); c.rotate(-Math.PI / 2); halo(c, 'relative flux', 0, 0, 'center', 'rgba(190,205,235,.7)'); c.restore();
+  // reference lines and contacts
+  c.setLineDash([4, 4]); c.lineWidth = 1; c.strokeStyle = 'rgba(190,205,235,.45)'; c.beginPath(); c.moveTo(L, Y(1)); c.lineTo(L + pw, Y(1)); c.stroke();
+  if (M.transit) {
+    c.strokeStyle = 'rgba(224,168,68,.55)'; c.beginPath(); c.moveTo(L, Y(1 - M.geo)); c.lineTo(L + pw, Y(1 - M.geo)); c.stroke();
+    if (1 - M.geo > M.lo) halo(c, `(Rp/R★)² = ${fmtDip(M.geo)}`, L + pw - 4, Y(1 - M.geo) + (M.geo > 0 ? -8 : 8), 'right', '#e0a844');
+    c.strokeStyle = 'rgba(143,184,255,.5)';
+    for (const [tt, lab] of [[-M.T14 / 2, 'T1'], [M.T14 / 2, 'T4'], [-M.T23 / 2, 'T2'], [M.T23 / 2, 'T3']]) { if (lab[1] > '1' && lab[1] < '4' && !M.T23) continue; const x = X(tt); c.beginPath(); c.moveTo(x, T); c.lineTo(x, T + ph); c.stroke(); halo(c, lab, x, T + 6, lab === 'T1' || lab === 'T2' ? 'right' : 'left', '#8fb8ff'); }
+    const ya = T + ph - 8; c.setLineDash([]); c.strokeStyle = '#8fb8ff'; c.lineWidth = 1.5; c.beginPath(); c.moveTo(X(-M.T14 / 2), ya); c.lineTo(X(M.T14 / 2), ya); c.stroke();
+    halo(c, `duration T14 = ${fmtDur(M.T14)}`, X(0), ya - 9, 'center', '#8fb8ff');
+  } else halo(c, 'no transit: flat light curve', L + pw / 2, T + ph / 2 - 20, 'center', '#ff8f7a');
+  c.setLineDash([]);
+  // model curve (faint) and the data so far
+  c.strokeStyle = 'rgba(230,235,245,.35)'; c.lineWidth = 1.2; c.beginPath(); for (let i = 0; i < NT; i++) { const x = X(M.t[i]), y = Y(M.fl[i]); i ? c.lineTo(x, y) : c.moveTo(x, y); } c.stroke();
+  const n = Math.floor(st.u * (NT - 1));
+  c.fillStyle = '#e0a844'; for (let i = 0; i <= n; i++) { c.beginPath(); c.arc(X(M.t[i]), Y(M.obs[i]), 1.7, 0, TAU); c.fill(); }
+  const xc = X(posAt(st.u).t); c.strokeStyle = 'rgba(224,168,68,.6)'; c.lineWidth = 1; c.beginPath(); c.moveTo(xc, T); c.lineTo(xc, T + ph); c.stroke();
+  c.fillStyle = '#fff'; c.beginPath(); c.arc(xc, Y(M.obs[n]), 3.5, 0, TAU); c.fill();
+}
+
+/* ---- text ---- */
+function updateText() {
+  const S = M.S, tr = M.transit, rows = [
+    ['Star', `${S.n} (${S.R} R☉)`, ''], ['Planet radius', `${sig(st.Rp, 3)} R⊕ · ${sig(st.Rp / RJ_RE, 2)} RJ`, ''], ['Radius ratio Rp / R★', sig(M.k, 3), ''],
+    ['Orbital distance', `${sig(st.a, 3)} AU · ${sig(M.aRs, 3)} R★`, ''], ['Orbital period P', fmtDur(M.P), ''], ['Impact parameter / inclination', `${M.b.toFixed(2)} / ${M.inc.toFixed(1)}°`, ''],
+    ['Depth (Rp/R★)²', fmtDip(M.geo) + ` (${Math.round(M.geo * 1e6).toLocaleString('en-GB')} ppm)`, ''], ['Deepest dip in the curve', tr ? fmtDip(M.dmax) : '—', ''],
+    ['Duration T14 (first to last contact)', tr ? fmtDur(M.T14) : '—', ''], ['Flat-bottom time T23', M.T23 ? fmtDur(M.T23) : '—', ''], ['Chance of a transit ≈ R★ / a', (M.prob * 100).toFixed(M.prob < 0.1 ? 1 : 0) + '%', '']];
+  if (st.noise > 0) rows.push(['Signal-to-noise (this transit)', tr ? sig(M.snr, 3) : '—', tr && M.snr >= 7 ? 'up' : 'dn']);
+  rows.push(['Result', tr ? 'Transit' : 'No transit', tr ? 'up' : 'dn']);
+  $('tbl').innerHTML = '<tr><th>Quantity</th><th>Value</th></tr>' + rows.map((r) => `<tr><td>${r[0]}</td><td class="${r[2]}">${r[1]}</td></tr>`).join('');
+  $('tblNote').textContent = 'The period comes from Kepler’s third law, and the duration from the orbit’s geometry. A signal-to-noise ratio of about 7 or more is a common detection threshold, and combining several transits raises it.';
+  $('RpOut').textContent = `${sig(st.Rp, 3)} R⊕`; $('aOut').textContent = `${sig(st.a, 3)} AU · P ${fmtDur(M.P)}`; $('bOut').textContent = `b = ${st.b.toFixed(2)}`; $('spdOut').textContent = `×${sig(st.spd, 2)}`; $('noiseOut').textContent = st.noise ? `${st.noise} ppm` : 'none';
+  $('ld').textContent = `Limb darkening: ${st.ld ? 'on' : 'off'}`; $('ld').setAttribute('aria-pressed', String(st.ld));
+  for (const b of document.querySelectorAll('[data-p]')) { const p = PRE[b.dataset.p]; b.setAttribute('aria-pressed', String(p.star === st.star && Math.abs(p.Rp - st.Rp) / p.Rp < 0.01 && Math.abs(p.a - st.a) / p.a < 0.01 && Math.abs(p.b - st.b) < 0.005)); }
+  $('scene').setAttribute('aria-label', `Planet of radius ${sig(st.Rp, 3)} Earth radii crossing a ${S.n.toLowerCase()} at impact parameter ${st.b.toFixed(2)}`);
+  $('curve').setAttribute('aria-label', tr ? `Light curve with a dip of ${fmtDip(M.dmax)} lasting ${fmtDur(M.T14)}` : 'Flat light curve: the planet misses the star');
+}
+function updateLive() {
+  const p = posAt(st.u), hrs = 2 * M.tH < 3, v = p.t * (hrs ? 24 : 1), n = Math.floor(st.u * (NT - 1));
+  $('live').textContent = `t = ${v >= 0 ? '+' : '−'}${sig(Math.abs(v), 3)} ${hrs ? 'h' : 'd'} from mid-transit · relative flux = ${M.obs[n].toFixed(M.hi - M.lo < 1e-3 ? 6 : 5)}`;
+  $('scrubOut').textContent = `${v >= 0 ? '+' : '−'}${sig(Math.abs(v), 3)} ${hrs ? 'h' : 'd'}`;
+}
+function sync(skip) {
+  if (skip !== 'Rp') $('Rp').value = toPos('Rp', st.Rp); if (skip !== 'a') $('a').value = toPos('a', st.a); if (skip !== 'spd') $('spd').value = toPos('spd', st.spd);
+  $('b').value = st.b; $('noise').value = st.noise; $('star').value = st.star; $('scrub').value = Math.round(st.u * 1000);
+}
+function refresh() { build(); updateText(); updateLive(); dirty = true; }
+
+/* ---- events ---- */
+$('Rp').addEventListener('input', (e) => { st.Rp = fromPos('Rp', +e.target.value); refresh(); });
+$('a').addEventListener('input', (e) => { st.a = fromPos('a', +e.target.value); refresh(); });
+$('b').addEventListener('input', (e) => { st.b = +e.target.value; refresh(); });
+$('spd').addEventListener('input', (e) => { st.spd = fromPos('spd', +e.target.value); $('spdOut').textContent = `×${sig(st.spd, 2)}`; });
+$('noise').addEventListener('input', (e) => { st.noise = +e.target.value; refresh(); });
+$('star').onchange = (e) => { st.star = e.target.value; refresh(); };
+$('ld').onclick = () => { st.ld = !st.ld; refresh(); };
+$('scrub').addEventListener('input', (e) => { st.u = +e.target.value / 1000; setPlay(false); updateLive(); dirty = true; });
+document.querySelectorAll('[data-p]').forEach((b) => b.onclick = () => { Object.assign(st, PRE[b.dataset.p]); sync(); refresh(); });
+function setPlay(v) { st.playing = v; $('play').textContent = v ? 'Pause' : 'Play'; $('play').setAttribute('aria-pressed', String(v)); }
+$('play').onclick = () => setPlay(!st.playing);
+$('rst').onclick = () => { st.u = 0; sync(); updateLive(); dirty = true; };
+window.addEventListener('resize', () => { dirty = true; });
+setPlay(st.playing);
+
+let last = 0;
+function frame(ts) {
+  const dt = Math.min(0.05, (ts - last) / 1000 || 0); last = ts;
+  if (st.playing) { st.u += dt * st.spd / 10; if (st.u >= 1) st.u -= 1; $('scrub').value = Math.round(st.u * 1000); updateLive(); dirty = true; }
+  if (dirty) { dirty = false; drawScene(); drawCurve(); }
+  requestAnimationFrame(frame);
+}
+sync(); refresh(); requestAnimationFrame(frame);
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { dirty = true; });
+</script>
+</body></html>

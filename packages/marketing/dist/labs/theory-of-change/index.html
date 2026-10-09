@@ -1,0 +1,284 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Theory of Change Mapper: build a connected pathway from inputs and activities to outputs, outcomes, impact, assumptions and evidence." />
+  <meta name="color-scheme" content="dark" />
+  <title>Theory of Change Mapper · Marketing Labs</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="../../assets/css/tokens.css" />
+  <link rel="stylesheet" href="../../assets/css/components.css" />
+  <link rel="stylesheet" href="../../assets/css/labs/theory-of-change.css" />
+  <link rel="stylesheet" href="../../assets/css/print.css" media="print" />
+</head>
+<body data-lab="theory-of-change">
+  <a class="ml-skip" href="#main">Skip to content</a>
+  <header class="ml-header">
+    <div class="wrap ml-header-inner">
+      <a class="ml-brand" href="../../index.html"><span class="ml-mark" aria-hidden="true">ML</span>Marketing Labs</a>
+      <nav class="ml-nav" aria-label="Lab navigation">
+        <a href="../../index.html">All labs</a>
+        <a rel="prev" href="../seo-brief-to-page/index.html" title="SEO Brief-to-Page Lab">← Previous</a>
+        <a rel="next" href="../impact-pathway-canvas/index.html" title="Impact Pathway Canvas">Next →</a>
+      </nav>
+    </div>
+  </header>
+  <div class="wrap ml-labbar">
+    <div class="ml-labid"><span class="ml-mark" aria-hidden="true">↗</span><div><p>Impact &amp; research</p><strong>Theory of Change Mapper</strong></div></div>
+    <div class="ml-actions" role="toolbar" aria-label="Lab tools">
+      <a class="ml-btn primary" href="../../assets/pdf/theory-of-change.pdf" download>Download PDF guide</a>
+      <button class="ml-btn" type="button" data-action="save">Save inputs</button>
+      <button class="ml-btn" type="button" data-action="load">Load inputs</button>
+      <button class="ml-btn" type="button" data-action="share">Copy share link</button>
+      <button class="ml-btn" type="button" data-action="print">Print</button>
+      <button class="ml-btn" type="button" data-action="reset">Reset</button>
+      <input id="ml-file" type="file" accept="application/json" hidden />
+    </div>
+  </div>
+
+  <main id="main">
+    <section class="hero wrap">
+      <p class="eyebrow">Visual programme-design prototype</p>
+
+      <h1>Make the route from resources to change visible.</h1>
+
+      <p class="hero-copy">
+        Build a connected pathway from inputs and activities to outputs, near-term outcomes,
+        longer-term outcomes and intended impact. Use assumptions, risks and evidence signals to
+        turn an ambitious funding narrative into a more testable, evaluable programme design.
+      </p>
+
+      <div class="notice">
+        <span class="notice-icon" aria-hidden="true">!</span>
+        <div>
+          <strong>A theory of change is a hypothesis, not a guarantee.</strong>
+          It should state what needs to be true, who needs to be involved, what could disrupt the
+          pathway and how progress will be observed and adapted over time.
+        </div>
+      </div>
+    </section>
+
+    <section class="wrap app-shell" aria-label="Theory of Change Mapper">
+      <form class="panel planner" id="toc-form">
+        <div class="panel-heading">
+          <h2>Build a pathway node</h2>
+          <p>
+            Add components one at a time. Select a type, describe the item, then connect it to a
+            preceding node to show the logic of the programme.
+          </p>
+        </div>
+
+        <div class="field-set">
+          <div class="field">
+            <label for="programme-title">Programme or bid title</label>
+            <input
+              id="programme-title"
+              name="programme-title"
+              type="text"
+              value="Cooler neighbourhoods: evidence, engagement and green infrastructure"
+              placeholder="For example: Healthier places through local climate evidence"
+            />
+          </div>
+
+          <div class="two-columns">
+            <div class="field">
+              <label for="node-type">Pathway stage</label>
+              <select id="node-type" name="node-type">
+                <option value="input">Input</option>
+                <option value="activity">Activity</option>
+                <option value="output">Output</option>
+                <option value="outcome">Outcome</option>
+                <option value="impact">Impact</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="timeframe">Indicative timeframe</label>
+              <select id="timeframe" name="timeframe">
+                <option value="0–6 months">0–6 months</option>
+                <option value="6–12 months">6–12 months</option>
+                <option value="1–2 years">1–2 years</option>
+                <option value="2–5 years">2–5 years</option>
+                <option value="5+ years">5+ years</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="node-title">Node title</label>
+            <input
+              id="node-title"
+              name="node-title"
+              type="text"
+              value="Neighbourhood climate evidence workshops"
+              placeholder="For example: Co-designed evidence workshops"
+            />
+          </div>
+
+          <div class="field">
+            <label for="node-description">What happens or changes?</label>
+            <textarea
+              id="node-description"
+              name="node-description"
+              placeholder="Be specific about the resource, action, deliverable, change or longer-term benefit."
+            >Bring satellite-derived heat data together with local knowledge, lived experience and practitioner expertise to test findings and identify feasible priorities.</textarea>
+          </div>
+
+          <div class="field">
+            <label for="node-evidence">Evidence or indicator</label>
+            <textarea
+              id="node-evidence"
+              name="node-evidence"
+              placeholder="How would you know this happened or changed?"
+            >Workshop records, participant feedback, shared priority list, documented changes to the next project phase.</textarea>
+          </div>
+
+          <div class="field">
+            <label for="node-assumption">Critical assumption or dependency</label>
+            <textarea
+              id="node-assumption"
+              name="node-assumption"
+              placeholder="What must be true for this step to lead to the next?"
+            >Community partners have time, accessible routes to participate and a meaningful ability to influence how evidence is interpreted and used.</textarea>
+          </div>
+
+          <div class="field">
+            <label for="connect-to">Connect from</label>
+            <select id="connect-to" name="connect-to">
+              <option value="">Start a new pathway</option>
+            </select>
+            <p class="field-help">
+              Link this node to a preceding node. The connector represents a hypothesis, not proof
+              of causation.
+            </p>
+          </div>
+
+          <div class="field">
+            <label for="example-picker">Load a demo map</label>
+            <select id="example-picker" name="example-picker">
+              <option value="">Choose a demo…</option>
+              <option value="urban-heat">Urban heat and neighbourhood design</option>
+              <option value="coastal-monitoring">Coastal monitoring and resilience</option>
+              <option value="research-engagement">Research engagement and policy use</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="action-row">
+          <button class="button button-primary" type="submit">Add pathway node</button>
+          <button class="button button-secondary" id="clear-node" type="button">Clear node</button>
+          <button class="button button-secondary button-wide" id="copy-summary" type="button">
+            Copy theory of change
+          </button>
+        </div>
+      </form>
+
+      <section class="panel canvas" aria-labelledby="canvas-title">
+        <div class="canvas-header">
+          <div>
+            <h2 id="canvas-title">Connected pathway</h2>
+            <p id="canvas-subtitle">
+              A visual hypothesis of how programme activity could contribute to intended outcomes
+              and impact.
+            </p>
+          </div>
+
+          <div class="canvas-header-actions" aria-label="Diagram controls">
+            <button id="show-pathway" type="button" aria-pressed="true">Pathway</button>
+            <button id="show-assumptions" type="button" aria-pressed="false">Assumptions</button>
+          </div>
+        </div>
+
+        <div class="canvas-body">
+          <div class="legend" aria-label="Diagram legend">
+            <span class="legend-item"><span class="legend-swatch" style="color: var(--blue)"></span>Inputs</span>
+            <span class="legend-item"><span class="legend-swatch" style="color: var(--teal)"></span>Activities</span>
+            <span class="legend-item"><span class="legend-swatch" style="color: var(--purple)"></span>Outputs</span>
+            <span class="legend-item"><span class="legend-swatch" style="color: var(--amber)"></span>Outcomes</span>
+            <span class="legend-item"><span class="legend-swatch" style="color: var(--green)"></span>Impact</span>
+            <span class="legend-item"><span class="legend-line" style="color: var(--text-lo)"></span>Contribution pathway</span>
+            <span class="legend-item"><span class="legend-line dashed" style="color: var(--red)"></span>Assumption or dependency</span>
+          </div>
+
+          <div class="diagram-wrap">
+            <svg
+              id="toc-diagram"
+              viewBox="0 0 1160 570"
+              role="img"
+              aria-label="Interactive theory of change diagram showing connected programme nodes"
+            ></svg>
+          </div>
+
+          <section class="detail-card" aria-live="polite">
+            <div>
+              <h3 id="detail-title">Select a node</h3>
+              <p id="detail-description">
+                Click a pathway node to inspect its role, evidence indicator and assumptions.
+              </p>
+            </div>
+
+            <div class="detail-meta">
+              <div class="meta-box">
+                <small>Stage</small>
+                <strong id="detail-type">—</strong>
+              </div>
+              <div class="meta-box">
+                <small>Timeframe</small>
+                <strong id="detail-timeframe">—</strong>
+              </div>
+              <div class="meta-box">
+                <small>Evidence / indicator</small>
+                <strong id="detail-evidence">—</strong>
+              </div>
+              <div class="meta-box">
+                <small>Critical assumption</small>
+                <strong id="detail-assumption">—</strong>
+              </div>
+            </div>
+          </section>
+
+          <div class="insights-grid">
+            <article class="insight-card">
+              <small>Pathway completeness</small>
+              <p id="completeness-insight">Add nodes to assess coverage from inputs through to impact.</p>
+            </article>
+
+            <article class="insight-card">
+              <small>Evidence planning</small>
+              <p id="evidence-insight">Add indicators to reveal which parts of the theory can be monitored.</p>
+            </article>
+
+            <article class="insight-card">
+              <small>Assumption check</small>
+              <p id="assumption-insight">Add dependencies to identify what should be tested rather than assumed.</p>
+            </article>
+          </div>
+
+          <section class="review-panel">
+            <h3>Funding-bid reviewer prompts</h3>
+            <ul class="review-list" id="review-list"></ul>
+          </section>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <p>
+        This prototype supports strategic planning, workshop facilitation and bid development. It
+        does not establish causality, prove future impact, replace evaluation design or determine
+        funding eligibility. Review pathways with intended users, delivery partners and people
+        affected by the programme; update the map as new evidence emerges.
+      </p>
+    </div>
+  </footer>
+
+  <nav class="ml-more" aria-label="More labs"><div class="wrap"><h2>More Marketing Labs</h2><ul><li><a href="../impact-pathway-canvas/index.html"><strong>Impact Pathway Canvas</strong><small>Impact &amp; research</small></a></li><li><a href="../evidence-strength-ladder/index.html"><strong>Evidence Strength Ladder</strong><small>Impact &amp; research</small></a></li><li><a href="../stakeholder-constellation/index.html"><strong>Stakeholder Constellation</strong><small>Impact &amp; research</small></a></li></ul></div></nav>
+  <div class="ml-toast" id="ml-toast" role="status" aria-live="polite"></div>
+  <script src="../../assets/js/labs/theory-of-change.js" defer></script>
+  <script src="../../assets/js/shared.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,235 @@
+{
+  "categories": [
+    {
+      "id": "strategy",
+      "label": "Strategy & growth"
+    },
+    {
+      "id": "positioning",
+      "label": "Positioning & marketing mix"
+    },
+    {
+      "id": "customers",
+      "label": "Customers & loyalty"
+    },
+    {
+      "id": "content",
+      "label": "Content & communications"
+    },
+    {
+      "id": "impact",
+      "label": "Impact & research"
+    }
+  ],
+  "labs": [
+    {
+      "slug": "ansoff-growth-strategy-matrix",
+      "title": "Ansoff Growth Strategy Matrix",
+      "category": "strategy",
+      "order": 0,
+      "summary": "Interactive Ansoff Growth Strategy Matrix for planning market penetration, market development, product development and diversification.",
+      "eyebrow": "Interactive Ansoff-matrix prototype",
+      "headline": "Explore growth beyond doing more of the same.",
+      "brandMark": "AGM",
+      "headerNote": "Product-market opportunity planning canvas."
+    },
+    {
+      "slug": "bcg-growth-share-matrix",
+      "title": "BCG Growth-Share Matrix",
+      "category": "strategy",
+      "order": 1,
+      "summary": "Interactive BCG Growth-Share Matrix for product and business portfolio planning.",
+      "eyebrow": "Interactive portfolio-strategy prototype",
+      "headline": "See where each offer sits before deciding where to invest.",
+      "brandMark": "BCG",
+      "headerNote": "Portfolio prioritisation and resource-allocation canvas."
+    },
+    {
+      "slug": "porters-five-forces",
+      "title": "Porter’s Five Forces",
+      "category": "strategy",
+      "order": 2,
+      "summary": "Interactive Porter's Five Forces analysis tool for market and competitive strategy.",
+      "eyebrow": "Interactive strategy-analysis prototype",
+      "headline": "Understand the forces shaping your market.",
+      "brandMark": "5F",
+      "headerNote": "Market-structure and competitive-strategy planning tool."
+    },
+    {
+      "slug": "lean-analytics-stages",
+      "title": "Lean Analytics Stages",
+      "category": "strategy",
+      "order": 3,
+      "summary": "Interactive Lean Analytics Stages canvas for Empathy, Stickiness, Virality, Revenue and Scale.",
+      "eyebrow": "Interactive startup-metrics prototype",
+      "headline": "Measure the question that matters right now.",
+      "brandMark": "LA",
+      "headerNote": "Evidence-led startup and product-growth planning tool."
+    },
+    {
+      "slug": "stp-marketing-model",
+      "title": "STP Marketing Model",
+      "category": "positioning",
+      "order": 4,
+      "summary": "Interactive STP Marketing Model canvas for Segmentation, Targeting and Positioning.",
+      "eyebrow": "Interactive audience-strategy prototype",
+      "headline": "Move from a broad market to a message that matters.",
+      "brandMark": "STP",
+      "headerNote": "Audience strategy, prioritisation and positioning tool."
+    },
+    {
+      "slug": "brand-positioning-map",
+      "title": "Brand Positioning Map",
+      "category": "positioning",
+      "order": 5,
+      "summary": "Interactive brand positioning and perceptual map for customer-perception research.",
+      "eyebrow": "Interactive perceptual-mapping prototype",
+      "headline": "See the market through your audience’s eyes.",
+      "brandMark": "MAP",
+      "headerNote": "Customer-perception research and positioning canvas."
+    },
+    {
+      "slug": "7ps-marketing-mix",
+      "title": "7Ps Marketing Mix Canvas",
+      "category": "positioning",
+      "order": 6,
+      "summary": "Interactive 7Ps Marketing Mix canvas for planning Product, Price, Place, Promotion, People, Process and Physical Evidence.",
+      "eyebrow": "Interactive marketing-planning prototype",
+      "headline": "Design the complete customer-facing offer.",
+      "brandMark": "7P",
+      "headerNote": "Offer, experience and go-to-market planning tool."
+    },
+    {
+      "slug": "customer-lifetime-value",
+      "title": "Customer Lifetime Value Calculator",
+      "category": "customers",
+      "order": 7,
+      "summary": "Interactive Customer Lifetime Value calculator for marketing and acquisition planning.",
+      "eyebrow": "Interactive marketing-model prototype",
+      "headline": "Plan acquisition around the value of the whole customer relationship.",
+      "brandMark": "CLV",
+      "headerNote": "Marketing economics and acquisition-planning calculator."
+    },
+    {
+      "slug": "loyalty-ladder",
+      "title": "Customer Loyalty Ladder",
+      "category": "customers",
+      "order": 8,
+      "summary": "Interactive customer loyalty ladder and lifecycle planning template.",
+      "eyebrow": "Interactive loyalty-model prototype",
+      "headline": "Design for customer value before, during and after the first purchase.",
+      "brandMark": "CLL",
+      "headerNote": "Customer lifecycle, retention and advocacy planning canvas."
+    },
+    {
+      "slug": "expanded-loyalty-lifecycle",
+      "title": "Customer Lifecycle & Loyalty Ladder",
+      "category": "customers",
+      "order": 9,
+      "summary": "Interactive customer lifecycle and loyalty ladder planner using the RACE framework.",
+      "eyebrow": "Expanded lifecycle marketing planner",
+      "headline": "Turn first contact into a relationship—not just a conversion.",
+      "brandMark": "RACE",
+      "headerNote": "Always-on lifecycle planning, retention and advocacy canvas."
+    },
+    {
+      "slug": "hook-model",
+      "title": "The Hook Model",
+      "category": "customers",
+      "order": 10,
+      "summary": "Interactive Hook Model canvas for ethical habit-forming product design.",
+      "eyebrow": "Interactive product-behaviour prototype",
+      "headline": "Design return behaviour around meaningful value.",
+      "brandMark": "HM",
+      "headerNote": "Ethical retention and repeat-value product-design tool."
+    },
+    {
+      "slug": "aida-model",
+      "title": "AIDA Marketing Communications Model",
+      "category": "content",
+      "order": 11,
+      "summary": "Interactive AIDA marketing communications planning canvas for Awareness, Interest, Desire, Action and optional Retention.",
+      "eyebrow": "Interactive marcomms planning prototype",
+      "headline": "Plan the message people need at each decision moment.",
+      "brandMark": "AIDA",
+      "headerNote": "Strategic marketing-communications planning canvas."
+    },
+    {
+      "slug": "stepps-framework",
+      "title": "STEPPS Content Framework",
+      "category": "content",
+      "order": 12,
+      "summary": "Interactive STEPPS framework canvas for designing ethical, shareable marketing content.",
+      "eyebrow": "Interactive shareability-planning prototype",
+      "headline": "Give people a good reason to pass your idea on.",
+      "brandMark": "ST",
+      "headerNote": "Ethical word-of-mouth and shareability planning tool."
+    },
+    {
+      "slug": "science-to-story",
+      "title": "Science-to-Story Translator",
+      "category": "content",
+      "order": 13,
+      "summary": "Science-to-Story Translator: a communication planning aid for turning technical source material into audience-aware draft messages.",
+      "eyebrow": "Science communication prototype",
+      "headline": "Keep the evidence. Change the route into it.",
+      "brandMark": "✦",
+      "headerNote": "Communication planning, not automated fact-checking."
+    },
+    {
+      "slug": "seo-brief-to-page",
+      "title": "SEO Brief-to-Page Lab",
+      "category": "content",
+      "order": 14,
+      "summary": "An interactive SEO brief planner for useful, people-first articles, services, tools and campaign pages.",
+      "eyebrow": "Marketing & communications prototype",
+      "headline": "Plan a page that helps someone do something.",
+      "brandMark": "↗",
+      "headerNote": "Useful pages, planned around real user tasks."
+    },
+    {
+      "slug": "theory-of-change",
+      "title": "Theory of Change Mapper",
+      "category": "impact",
+      "order": 15,
+      "summary": "Theory of Change Mapper: build a connected pathway from inputs and activities to outputs, outcomes, impact, assumptions and evidence.",
+      "eyebrow": "Visual programme-design prototype",
+      "headline": "Make the route from resources to change visible.",
+      "brandMark": "↗",
+      "headerNote": "Funding-bid and programme-design planning aid."
+    },
+    {
+      "slug": "impact-pathway-canvas",
+      "title": "Impact Pathway Canvas",
+      "category": "impact",
+      "order": 16,
+      "summary": "Impact Pathway Canvas: map research findings to stakeholders, engagement, outcomes and evidence.",
+      "eyebrow": "Interactive impact-planning prototype",
+      "headline": "Make the route from research to real-world change visible.",
+      "brandMark": "→",
+      "headerNote": "Research-impact strategy and systems-thinking aid."
+    },
+    {
+      "slug": "evidence-strength-ladder",
+      "title": "Evidence Strength Ladder",
+      "category": "impact",
+      "order": 17,
+      "summary": "Evidence Strength Ladder: assess what research evidence supports, what cannot yet be claimed and what is needed to progress toward corroborated impact.",
+      "eyebrow": "Research communication and impact prototype",
+      "headline": "Say what the evidence supports—no more, no less.",
+      "brandMark": "↑",
+      "headerNote": "Responsible claims and impact-planning aid."
+    },
+    {
+      "slug": "stakeholder-constellation",
+      "title": "Stakeholder Constellation",
+      "category": "impact",
+      "order": 18,
+      "summary": "Stakeholder Constellation: map research stakeholders by influence, benefit, involvement, relationship strength, engagement need and exclusion risk.",
+      "eyebrow": "Visual stakeholder-mapping prototype",
+      "headline": "See who matters, how relationships work, and where engagement is needed.",
+      "brandMark": "✦",
+      "headerNote": "Research engagement and impact planning aid."
+    }
+  ]
+}

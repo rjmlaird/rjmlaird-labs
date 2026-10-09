@@ -1,0 +1,497 @@
+/* Shared rules extracted from the original labs. Each rule is annotated with the labs that use it; scripts/build.mjs composes the right subset per lab (rules used by every lab go to core.css). */
+/* @labs: ansoff-growth-strategy-matrix,bcg-growth-share-matrix,porters-five-forces,lean-analytics-stages,stp-marketing-model,brand-positioning-map,7ps-marketing-mix,customer-lifetime-value,loyalty-ladder,expanded-loyalty-lifecycle,hook-model,aida-model,stepps-framework,theory-of-change,impact-pathway-canvas,evidence-strength-ladder,stakeholder-constellation */
+* {
+      box-sizing: border-box;
+    }
+
+/* @labs: ansoff-growth-strategy-matrix,bcg-growth-share-matrix,porters-five-forces,lean-analytics-stages,stp-marketing-model,brand-positioning-map,7ps-marketing-mix,loyalty-ladder,hook-model,aida-model,stepps-framework,science-to-story,seo-brief-to-page,theory-of-change,impact-pathway-canvas,evidence-strength-ladder,stakeholder-constellation */
+html {
+      background: var(--navy);
+      color: var(--text-hi);
+      font-family: var(--font-body);
+      scroll-behavior: smooth;
+    }
+
+/* @labs: ansoff-growth-strategy-matrix,bcg-growth-share-matrix,brand-positioning-map,customer-lifetime-value,loyalty-ladder,stepps-framework */
+body {
+      min-width: 320px;
+      min-height: 100vh;
+      margin: 0;
+      background:
+        radial-gradient(circle at 7% 8%, rgba(0, 194, 168, 0.13), transparent 32rem),
+        radial-gradient(circle at 94% 82%, rgba(179, 156, 255, 0.11), transparent 34rem),
+        var(--navy);
+    }
+
+/* @labs: ansoff-growth-strategy-matrix,bcg-growth-share-matrix,porters-five-forces,lean-analytics-stages,stp-marketing-model,brand-positioning-map,7ps-marketing-mix,loyalty-ladder,expanded-loyalty-lifecycle,hook-model,aida-model,stepps-framework,science-to-story,seo-brief-to-page,theory-of-change,impact-pathway-canvas,evidence-strength-ladder,stakeholder-constellation */
+button,
+    input,
+    select,
+    textarea {
+      font: inherit;
+    }
+
+/* @labs: * */
+button {
+      cursor: pointer;
+    }
+
+/* @labs: * */
+:focus-visible {
+      outline: 3px solid var(--amber);
+      outline-offset: 3px;
+    }
+
+/* @labs: * */
+.wrap {
+      width: min(calc(100% - 2rem), var(--max-width));
+      margin-inline: auto;
+    }
+
+/* @labs: ansoff-growth-strategy-matrix,bcg-growth-share-matrix,porters-five-forces,lean-analytics-stages,stp-marketing-model,brand-positioning-map,7ps-marketing-mix,customer-lifetime-value,loyalty-ladder,hook-model,aida-model,stepps-framework,theory-of-change,impact-pathway-canvas */
+.hero {
+      padding: clamp(3.25rem, 7vw, 5.75rem) 0 2.75rem;
+    }
+
+/* @labs: ansoff-growth-strategy-matrix,bcg-growth-share-matrix,porters-five-forces,lean-analytics-stages,stp-marketing-model,brand-positioning-map,7ps-marketing-mix,customer-lifetime-value,loyalty-ladder,hook-model,aida-model,stepps-framework,science-to-story,seo-brief-to-page,theory-of-change,impact-pathway-canvas,evidence-strength-ladder,stakeholder-constellation */
+.eyebrow {
+      margin: 0 0 0.85rem;
+      color: var(--teal);
+      font-family: var(--font-display);
+      font-size: 0.74rem;
+      font-weight: 600;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+    }
+
+/* @labs: ansoff-growth-strategy-matrix,bcg-growth-share-matrix,brand-positioning-map,customer-lifetime-value,loyalty-ladder */
+.notice {
+      display: flex;
+      gap: 0.75rem;
+      max-width: 1080px;
+      margin-top: 1.6rem;
+      padding: 1rem 1.1rem;
+      border: 1px solid rgba(244, 175, 49, 0.35);
+      border-radius: 12px;
+      background: rgba(244, 175, 49, 0.06);
+      color: var(--text-lo);
+      font-size: 0.88rem;
+      line-height: 1.6;
+    }
+
+/* @labs: ansoff-growth-strategy-matrix,bcg-growth-share-matrix,porters-five-forces,lean-analytics-stages,stp-marketing-model,brand-positioning-map,7ps-marketing-mix,customer-lifetime-value,loyalty-ladder,expanded-loyalty-lifecycle,hook-model,aida-model,stepps-framework,theory-of-change,impact-pathway-canvas,evidence-strength-ladder,stakeholder-constellation */
+.notice-icon {
+      flex: 0 0 auto;
+      color: var(--amber);
+      font-family: var(--font-display);
+      font-weight: 700;
+    }
+
+/* @labs: ansoff-growth-strategy-matrix,bcg-growth-share-matrix,porters-five-forces,lean-analytics-stages,stp-marketing-model,brand-positioning-map,7ps-marketing-mix,customer-lifetime-value,loyalty-ladder,hook-model,aida-model,stepps-framework,theory-of-change,impact-pathway-canvas,evidence-strength-ladder,stakeholder-constellation */
+.notice strong {
+      color: var(--text-hi);
+    }
+
+/* @labs: ansoff-growth-strategy-matrix,bcg-growth-share-matrix,lean-analytics-stages,stp-marketing-model,brand-positioning-map,7ps-marketing-mix,loyalty-ladder,hook-model,aida-model,stepps-framework,impact-pathway-canvas */
+.app-shell {
+      display: grid;
+      grid-template-columns: minmax(320px, 0.63fr) minmax(0, 1.37fr);
+      gap: 1.5rem;
+      align-items: start;
+      padding-bottom: 4rem;
+    }
+
+/* @labs: ansoff-growth-strategy-matrix,bcg-growth-share-matrix,porters-five-forces,lean-analytics-stages,stp-marketing-model,brand-positioning-map,7ps-marketing-mix,customer-lifetime-value,loyalty-ladder,expanded-loyalty-lifecycle,hook-model,aida-model,stepps-framework,theory-of-change,impact-pathway-canvas,evidence-strength-ladder,stakeholder-constellation */
+.panel {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: rgba(16, 29, 48, 0.9);
+      box-shadow: var(--shadow);
+    }
+
+/* @labs: ansoff-growth-strategy-matrix,bcg-growth-share-matrix,porters-five-forces,lean-analytics-stages,stp-marketing-model,brand-positioning-map,7ps-marketing-mix,loyalty-ladder,expanded-loyalty-lifecycle,hook-model,aida-model,stepps-framework,theory-of-change,impact-pathway-canvas,evidence-strength-ladder,stakeholder-constellation */
+.planner {
+      position: sticky;
+      top: 1rem;
+      padding: 1.2rem;
+    }
+
+/* @labs: * */
+.panel-heading {
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+/* @labs: ansoff-growth-strategy-matrix,bcg-growth-share-matrix,porters-five-forces,lean-analytics-stages,stp-marketing-model,brand-positioning-map,7ps-marketing-mix,customer-lifetime-value,loyalty-ladder,expanded-loyalty-lifecycle,hook-model,aida-model,stepps-framework,theory-of-change,impact-pathway-canvas,evidence-strength-ladder,stakeholder-constellation */
+.field-set {
+      display: grid;
+      gap: 1rem;
+      padding: 1.2rem 0;
+    }
+
+/* @labs: ansoff-growth-strategy-matrix,bcg-growth-share-matrix,porters-five-forces,lean-analytics-stages,stp-marketing-model,brand-positioning-map,7ps-marketing-mix,customer-lifetime-value,loyalty-ladder,expanded-loyalty-lifecycle,hook-model,aida-model,stepps-framework,theory-of-change,impact-pathway-canvas,evidence-strength-ladder,stakeholder-constellation */
+.field {
+      display: grid;
+      gap: 0.42rem;
+    }
+
+/* @labs: ansoff-growth-strategy-matrix,bcg-growth-share-matrix,porters-five-forces,lean-analytics-stages,stp-marketing-model,brand-positioning-map,7ps-marketing-mix,customer-lifetime-value,loyalty-ladder,hook-model,aida-model,stepps-framework,theory-of-change,impact-pathway-canvas,evidence-strength-ladder,stakeholder-constellation */
+.field label {
+      color: var(--text-hi);
+      font-size: 0.83rem;
+      font-weight: 600;
+    }
+
+/* @labs: ansoff-growth-strategy-matrix,bcg-growth-share-matrix,porters-five-forces,lean-analytics-stages,stp-marketing-model,brand-positioning-map,7ps-marketing-mix,customer-lifetime-value,loyalty-ladder,expanded-loyalty-lifecycle,hook-model,aida-model,stepps-framework,theory-of-change,impact-pathway-canvas,evidence-strength-ladder,stakeholder-constellation */
+.field-help {
+      margin: 0;
+      color: var(--text-dim);
+      font-size: 0.73rem;
+      line-height: 1.45;
+    }
+
+/* @labs: ansoff-growth-strategy-matrix,bcg-growth-share-matrix,porters-five-forces,lean-analytics-stages,stp-marketing-model,brand-positioning-map,7ps-marketing-mix,loyalty-ladder,hook-model,aida-model,stepps-framework,theory-of-change,impact-pathway-canvas,evidence-strength-ladder,stakeholder-constellation */
+input,
+    select,
+    textarea {
+      width: 100%;
+      border: 1px solid var(--border-strong);
+      border-radius: 8px;
+      background: rgba(5, 12, 22, 0.68);
+      color: var(--text-hi);
+    }
+
+/* @labs: ansoff-growth-strategy-matrix,bcg-growth-share-matrix,porters-five-forces,lean-analytics-stages,stp-marketing-model,brand-positioning-map,7ps-marketing-mix,loyalty-ladder,expanded-loyalty-lifecycle,hook-model,aida-model,stepps-framework,theory-of-change,impact-pathway-canvas,evidence-strength-ladder,stakeholder-constellation */
+input,
+    select {
+      min-height: 2.7rem;
+      padding: 0.62rem 0.7rem;
+    }
+
+/* @labs: ansoff-growth-strategy-matrix,bcg-growth-share-matrix,porters-five-forces,lean-analytics-stages,stp-marketing-model,brand-positioning-map,7ps-marketing-mix,loyalty-ladder,expanded-loyalty-lifecycle,hook-model,aida-model,stepps-framework,science-to-story,seo-brief-to-page,theory-of-change,impact-pathway-canvas,evidence-strength-ladder,stakeholder-constellation */
+input:hover,
+    select:hover,
+    textarea:hover {
+      border-color: rgba(0, 194, 168, 0.58);
+    }
+
+/* @labs: ansoff-growth-strategy-matrix,bcg-growth-share-matrix,porters-five-forces,lean-analytics-stages,stp-marketing-model,brand-positioning-map,7ps-marketing-mix,loyalty-ladder,expanded-loyalty-lifecycle,hook-model,aida-model,stepps-framework,science-to-story,seo-brief-to-page,theory-of-change,impact-pathway-canvas,evidence-strength-ladder,stakeholder-constellation */
+input::placeholder,
+    textarea::placeholder {
+      color: var(--text-dim);
+    }
+
+/* @labs: ansoff-growth-strategy-matrix,bcg-growth-share-matrix,porters-five-forces,lean-analytics-stages,stp-marketing-model,brand-positioning-map,7ps-marketing-mix,customer-lifetime-value,loyalty-ladder,expanded-loyalty-lifecycle,hook-model,aida-model,stepps-framework,theory-of-change,impact-pathway-canvas,evidence-strength-ladder,stakeholder-constellation */
+.action-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.7rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+    }
+
+/* @labs: ansoff-growth-strategy-matrix,bcg-growth-share-matrix,porters-five-forces,lean-analytics-stages,stp-marketing-model,brand-positioning-map,7ps-marketing-mix,customer-lifetime-value,loyalty-ladder,expanded-loyalty-lifecycle,hook-model,aida-model,stepps-framework,theory-of-change,impact-pathway-canvas,evidence-strength-ladder,stakeholder-constellation */
+.button {
+      min-height: 2.7rem;
+      padding: 0.65rem 0.8rem;
+      border: 1px solid transparent;
+      border-radius: 8px;
+      font-family: var(--font-display);
+      font-size: 0.82rem;
+      font-weight: 600;
+    }
+
+/* @labs: * */
+.button-primary {
+      background: var(--teal);
+      color: var(--navy);
+    }
+
+/* @labs: ansoff-growth-strategy-matrix,bcg-growth-share-matrix,porters-five-forces,lean-analytics-stages,stp-marketing-model,brand-positioning-map,7ps-marketing-mix,customer-lifetime-value,loyalty-ladder,expanded-loyalty-lifecycle,hook-model,aida-model,stepps-framework,theory-of-change,impact-pathway-canvas,evidence-strength-ladder,stakeholder-constellation */
+.button-primary:hover {
+      background: #3cdbc6;
+    }
+
+/* @labs: ansoff-growth-strategy-matrix,bcg-growth-share-matrix,porters-five-forces,lean-analytics-stages,stp-marketing-model,brand-positioning-map,7ps-marketing-mix,customer-lifetime-value,loyalty-ladder,hook-model,aida-model,stepps-framework,science-to-story,seo-brief-to-page,theory-of-change,impact-pathway-canvas,evidence-strength-ladder,stakeholder-constellation */
+.button-secondary {
+      border-color: var(--border-strong);
+      background: transparent;
+      color: var(--text-lo);
+    }
+
+/* @labs: ansoff-growth-strategy-matrix,bcg-growth-share-matrix,porters-five-forces,lean-analytics-stages,stp-marketing-model,brand-positioning-map,7ps-marketing-mix,customer-lifetime-value,loyalty-ladder,hook-model,aida-model,stepps-framework,science-to-story,seo-brief-to-page,theory-of-change,impact-pathway-canvas,evidence-strength-ladder,stakeholder-constellation */
+.button-secondary:hover {
+      border-color: var(--text-lo);
+      color: var(--text-hi);
+    }
+
+/* @labs: * */
+.button-wide {
+      grid-column: 1 / -1;
+    }
+
+/* @labs: ansoff-growth-strategy-matrix,stp-marketing-model,brand-positioning-map,7ps-marketing-mix,loyalty-ladder,hook-model,aida-model,stepps-framework,theory-of-change,impact-pathway-canvas */
+.legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.55rem 0.95rem;
+      color: var(--text-dim);
+      font-size: 0.72rem;
+    }
+
+/* @labs: ansoff-growth-strategy-matrix,bcg-growth-share-matrix,stp-marketing-model,brand-positioning-map,7ps-marketing-mix,loyalty-ladder,hook-model,aida-model,stepps-framework,theory-of-change,impact-pathway-canvas */
+.legend-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.38rem;
+    }
+
+/* @labs: ansoff-growth-strategy-matrix,bcg-growth-share-matrix,stp-marketing-model,brand-positioning-map,7ps-marketing-mix,loyalty-ladder,hook-model,aida-model,stepps-framework,theory-of-change */
+.detail-card {
+      display: grid;
+      grid-template-columns: 0.9fr 1.1fr;
+      gap: 1rem;
+      padding: 1rem;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: rgba(5, 12, 22, 0.34);
+    }
+
+/* @labs: ansoff-growth-strategy-matrix,bcg-growth-share-matrix,stp-marketing-model,brand-positioning-map,7ps-marketing-mix,loyalty-ladder,expanded-loyalty-lifecycle,hook-model,aida-model,stepps-framework,theory-of-change,impact-pathway-canvas */
+.detail-card h3 {
+      margin-bottom: 0.38rem;
+      font-size: 1rem;
+    }
+
+/* @labs: ansoff-growth-strategy-matrix,bcg-growth-share-matrix,stp-marketing-model,brand-positioning-map,7ps-marketing-mix,loyalty-ladder,hook-model,aida-model,stepps-framework,theory-of-change,impact-pathway-canvas */
+.detail-card p {
+      margin: 0;
+      color: var(--text-lo);
+      font-size: 0.84rem;
+      line-height: 1.55;
+    }
+
+/* @labs: ansoff-growth-strategy-matrix,bcg-growth-share-matrix,stp-marketing-model,brand-positioning-map,7ps-marketing-mix,loyalty-ladder,expanded-loyalty-lifecycle,hook-model,aida-model,stepps-framework,theory-of-change,impact-pathway-canvas */
+.detail-meta {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.65rem;
+    }
+
+/* @labs: ansoff-growth-strategy-matrix,bcg-growth-share-matrix,stp-marketing-model,brand-positioning-map,7ps-marketing-mix,loyalty-ladder,expanded-loyalty-lifecycle,hook-model,aida-model,stepps-framework,theory-of-change,impact-pathway-canvas */
+.meta-box {
+      padding: 0.68rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: rgba(16, 29, 48, 0.72);
+    }
+
+/* @labs: ansoff-growth-strategy-matrix,bcg-growth-share-matrix,stp-marketing-model,brand-positioning-map,7ps-marketing-mix,loyalty-ladder,hook-model,aida-model,stepps-framework,theory-of-change,impact-pathway-canvas */
+.meta-box small {
+      display: block;
+      margin-bottom: 0.28rem;
+      color: var(--text-dim);
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+    }
+
+/* @labs: ansoff-growth-strategy-matrix,bcg-growth-share-matrix,stp-marketing-model,brand-positioning-map,7ps-marketing-mix,loyalty-ladder,hook-model,aida-model,stepps-framework */
+.meta-box strong {
+      display: block;
+      color: var(--text-hi);
+      font-family: var(--font-display);
+      font-size: 0.78rem;
+      font-weight: 600;
+      line-height: 1.35;
+    }
+
+/* @labs: ansoff-growth-strategy-matrix,porters-five-forces,lean-analytics-stages,stp-marketing-model,brand-positioning-map,7ps-marketing-mix,customer-lifetime-value,loyalty-ladder,expanded-loyalty-lifecycle,hook-model,aida-model,stepps-framework,theory-of-change,impact-pathway-canvas,stakeholder-constellation */
+.insights-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 0.75rem;
+    }
+
+/* @labs: ansoff-growth-strategy-matrix,porters-five-forces,lean-analytics-stages,stp-marketing-model,brand-positioning-map,7ps-marketing-mix,customer-lifetime-value,loyalty-ladder,expanded-loyalty-lifecycle,hook-model,aida-model,stepps-framework,theory-of-change,impact-pathway-canvas */
+.insight-card {
+      padding: 0.85rem;
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      background: rgba(5, 12, 22, 0.3);
+    }
+
+/* @labs: ansoff-growth-strategy-matrix,porters-five-forces,lean-analytics-stages,stp-marketing-model,brand-positioning-map,7ps-marketing-mix,customer-lifetime-value,loyalty-ladder,expanded-loyalty-lifecycle,hook-model,aida-model,stepps-framework,theory-of-change,impact-pathway-canvas */
+.insight-card small {
+      display: block;
+      margin-bottom: 0.35rem;
+      color: var(--text-dim);
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+    }
+
+/* @labs: ansoff-growth-strategy-matrix,porters-five-forces,lean-analytics-stages,stp-marketing-model,brand-positioning-map,7ps-marketing-mix,customer-lifetime-value,loyalty-ladder,hook-model,aida-model,stepps-framework,theory-of-change,impact-pathway-canvas */
+.insight-card p {
+      margin: 0;
+      color: var(--text-lo);
+      font-size: 0.8rem;
+      line-height: 1.52;
+    }
+
+/* @labs: ansoff-growth-strategy-matrix,porters-five-forces,lean-analytics-stages,stp-marketing-model,brand-positioning-map,7ps-marketing-mix,customer-lifetime-value,loyalty-ladder,hook-model,aida-model,stepps-framework,theory-of-change,impact-pathway-canvas,stakeholder-constellation */
+.insight-card strong {
+      color: var(--text-hi);
+    }
+
+/* @labs: ansoff-growth-strategy-matrix,bcg-growth-share-matrix,brand-positioning-map,customer-lifetime-value,loyalty-ladder,expanded-loyalty-lifecycle,aida-model */
+.guidance-panel {
+      padding: 1rem;
+      border: 1px solid rgba(88, 208, 139, 0.4);
+      border-radius: 10px;
+      background: rgba(88, 208, 139, 0.055);
+    }
+
+/* @labs: ansoff-growth-strategy-matrix,bcg-growth-share-matrix,brand-positioning-map,customer-lifetime-value,loyalty-ladder,expanded-loyalty-lifecycle,aida-model */
+.guidance-panel h3 {
+      margin-bottom: 0.7rem;
+      color: var(--green);
+      font-size: 1rem;
+    }
+
+/* @labs: ansoff-growth-strategy-matrix,bcg-growth-share-matrix,brand-positioning-map,customer-lifetime-value,loyalty-ladder,expanded-loyalty-lifecycle,aida-model */
+.guidance-list {
+      display: grid;
+      gap: 0.6rem;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+/* @labs: ansoff-growth-strategy-matrix,bcg-growth-share-matrix,brand-positioning-map,customer-lifetime-value,loyalty-ladder,aida-model */
+.guidance-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.58rem;
+      color: var(--text-lo);
+      font-size: 0.83rem;
+      line-height: 1.5;
+    }
+
+/* @labs: ansoff-growth-strategy-matrix,bcg-growth-share-matrix,brand-positioning-map,customer-lifetime-value,loyalty-ladder,expanded-loyalty-lifecycle,aida-model */
+.guidance-icon {
+      display: grid;
+      flex: 0 0 auto;
+      width: 1.25rem;
+      height: 1.25rem;
+      place-items: center;
+      margin-top: 0.02rem;
+      border: 1px solid rgba(88, 208, 139, 0.7);
+      border-radius: 50%;
+      color: var(--green);
+      font-size: 0.68rem;
+      font-weight: 700;
+    }
+
+/* @labs: * */
+.site-footer {
+      padding: 2rem 0 3rem;
+      border-top: 1px solid var(--border);
+    }
+
+/* @labs: ansoff-growth-strategy-matrix,bcg-growth-share-matrix,porters-five-forces,lean-analytics-stages,stp-marketing-model,brand-positioning-map,7ps-marketing-mix,customer-lifetime-value,loyalty-ladder,expanded-loyalty-lifecycle,hook-model,aida-model,stepps-framework,theory-of-change,impact-pathway-canvas,evidence-strength-ladder,stakeholder-constellation */
+.site-footer p {
+      max-width: 95ch;
+      margin: 0;
+      color: var(--text-dim);
+      font-size: 0.77rem;
+      line-height: 1.6;
+    }
+
+/* @labs: bcg-growth-share-matrix,porters-five-forces,lean-analytics-stages,stp-marketing-model,brand-positioning-map,7ps-marketing-mix,expanded-loyalty-lifecycle,hook-model,aida-model,stepps-framework,science-to-story,seo-brief-to-page,theory-of-change,impact-pathway-canvas,evidence-strength-ladder,stakeholder-constellation */
+h1,
+    h2,
+    h3,
+    h4 {
+      margin-top: 0;
+      font-family: var(--font-display);
+      letter-spacing: -0.025em;
+    }
+
+/* @labs: bcg-growth-share-matrix,porters-five-forces,lean-analytics-stages,brand-positioning-map,impact-pathway-canvas,stakeholder-constellation */
+h1 {
+      max-width: 19ch;
+      margin-bottom: 1.1rem;
+      font-size: clamp(2.2rem, 5vw, 4.15rem);
+      line-height: 1.03;
+    }
+
+/* @labs: bcg-growth-share-matrix,brand-positioning-map,hook-model,aida-model,stepps-framework */
+textarea {
+      min-height: 5.65rem;
+      padding: 0.72rem;
+      resize: vertical;
+    }
+
+/* @labs: bcg-growth-share-matrix,lean-analytics-stages,stp-marketing-model,brand-positioning-map,customer-lifetime-value,loyalty-ladder,expanded-loyalty-lifecycle,hook-model,aida-model,theory-of-change,impact-pathway-canvas */
+.two-columns {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.8rem;
+    }
+
+/* @labs: stp-marketing-model,7ps-marketing-mix,customer-lifetime-value,hook-model,aida-model,evidence-strength-ladder */
+h1 {
+      max-width: 18ch;
+      margin-bottom: 1.1rem;
+      font-size: clamp(2.2rem, 5vw, 4.15rem);
+      line-height: 1.03;
+    }
+
+/* @labs: stp-marketing-model,7ps-marketing-mix,hook-model,aida-model,stepps-framework,theory-of-change,impact-pathway-canvas */
+.panel-heading h2,
+    .canvas-header h2 {
+      margin-bottom: 0.35rem;
+      font-size: 1.25rem;
+    }
+
+/* @labs: stp-marketing-model,7ps-marketing-mix,hook-model,aida-model,stepps-framework,theory-of-change,impact-pathway-canvas */
+.panel-heading p,
+    .canvas-header p {
+      margin: 0;
+      color: var(--text-lo);
+      font-size: 0.85rem;
+      line-height: 1.55;
+    }
+
+/* @labs: stp-marketing-model,7ps-marketing-mix,hook-model,aida-model,stepps-framework,theory-of-change,impact-pathway-canvas */
+.canvas {
+      overflow: hidden;
+    }
+
+/* @labs: stp-marketing-model,7ps-marketing-mix,hook-model,aida-model,stepps-framework,theory-of-change,impact-pathway-canvas */
+.canvas-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 1.2rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+/* @labs: stp-marketing-model,7ps-marketing-mix,hook-model,aida-model,stepps-framework,theory-of-change,impact-pathway-canvas */
+.canvas-body {
+      display: grid;
+      gap: 1rem;
+      padding: 1.2rem;
+    }
+
+/* @labs: stp-marketing-model,7ps-marketing-mix,hook-model,aida-model,stepps-framework,theory-of-change,impact-pathway-canvas */
+.legend-swatch {
+      width: 0.72rem;
+      height: 0.72rem;
+      border: 1px solid currentColor;
+      border-radius: 50%;
+    }

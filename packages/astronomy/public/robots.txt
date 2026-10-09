@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://astronomy.labs.rjmlaird.co.uk/sitemap.xml

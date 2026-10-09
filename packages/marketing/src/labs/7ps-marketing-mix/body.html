@@ -1,0 +1,277 @@
+<!--SITE_HEADER-->
+
+  <main id="main">
+    <section class="hero wrap">
+      <p class="eyebrow">Interactive marketing-planning prototype</p>
+
+      <h1>Design the complete customer-facing offer.</h1>
+
+      <p class="hero-copy">
+        Use the 7Ps to plan the product or service, price, place, promotion, people, process and
+        physical evidence that shape a customer’s experience. It is a structured way to ensure
+        marketing promises align with how the offer is actually delivered.
+      </p>
+
+      <div class="notice">
+        <span class="notice-icon" aria-hidden="true">!</span>
+        <div>
+          <strong>The seven Ps are interdependent.</strong>
+          A persuasive campaign cannot compensate for an unclear offer, a difficult buying process
+          or weak evidence of credibility. Review the mix together whenever customer needs, market
+          conditions or the service design changes.
+        </div>
+      </div>
+    </section>
+
+    <section class="wrap app-shell" aria-label="7Ps Marketing Mix canvas">
+      <form class="panel planner" id="mix-form">
+        <div class="panel-heading">
+          <h2>Plan one element</h2>
+          <p>
+            Choose one of the seven Ps, describe the decision or tactic, then add its intended
+            customer effect and the evidence you will use to judge whether it works.
+          </p>
+        </div>
+
+        <div class="field-set">
+          <div class="field">
+            <label for="offer-name">Offer, service or campaign</label>
+            <input
+              id="offer-name"
+              name="offer-name"
+              type="text"
+              value="Earth-observation storytelling and engagement services"
+              placeholder="For example: A new software platform, consultancy offer or course"
+            />
+          </div>
+
+          <div class="field">
+            <label for="p-selector">Marketing-mix element</label>
+            <select id="p-selector" name="p-selector">
+              <option value="product">Product</option>
+              <option value="price">Price</option>
+              <option value="place">Place</option>
+              <option value="promotion">Promotion</option>
+              <option value="people">People</option>
+              <option value="process">Process</option>
+              <option value="evidence">Physical Evidence</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="p-decision">Decision, tactic or proposition</label>
+            <textarea
+              id="p-decision"
+              name="p-decision"
+              placeholder="Describe what you will do. Keep it specific and customer-focused."
+            >A modular consultancy and interactive-tool offer that turns complex Earth-observation evidence into useful, accessible and decision-ready communication.</textarea>
+          </div>
+
+          <div class="field">
+            <label for="p-effect">Intended customer effect</label>
+            <textarea
+              id="p-effect"
+              name="p-effect"
+              placeholder="What should become easier, clearer, safer, more valuable or more desirable for the customer?"
+            >Potential clients understand the distinct value of combining satellite-data literacy, strategic communications and participatory engagement design.</textarea>
+          </div>
+
+          <div class="field">
+            <label for="p-evidence">Measure, signal or evidence</label>
+            <textarea
+              id="p-evidence"
+              name="p-evidence"
+              placeholder="How will you know this part of the mix is working?"
+            >Qualified enquiries, proposal conversion rate, client feedback, repeat work, project outcomes and attributable referrals.</textarea>
+          </div>
+
+          <div class="field">
+            <label for="demo-picker">Load a demo mix</label>
+            <select id="demo-picker" name="demo-picker">
+              <option value="">Choose a demo…</option>
+              <option value="eo-service">EO and climate communication service</option>
+              <option value="software-tool">New research software tool</option>
+              <option value="training-course">Professional training course</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="action-row">
+          <button class="button button-primary" type="submit">Save marketing decision</button>
+          <button class="button button-secondary" id="clear-p" type="button">Clear entry</button>
+          <button class="button button-secondary button-wide" id="copy-mix" type="button">
+            Copy 7Ps summary
+          </button>
+        </div>
+      </form>
+
+      <section class="panel canvas" aria-labelledby="canvas-title">
+        <div class="canvas-header">
+          <div>
+            <h2 id="canvas-title">Your 7Ps marketing mix</h2>
+            <p id="canvas-subtitle">
+              Select a circle to inspect the decision, intended effect and evidence for that part of the customer experience.
+            </p>
+          </div>
+
+          <div class="score-badge">
+            <div>
+              <strong id="mix-score">7/7</strong>
+              <span id="mix-score-label">Elements planned</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="canvas-body">
+          <div class="legend" aria-label="7Ps legend">
+            <span class="legend-item"><span class="legend-swatch" style="color: var(--blue)"></span>Offer</span>
+            <span class="legend-item"><span class="legend-swatch" style="color: var(--purple)"></span>Value exchange</span>
+            <span class="legend-item"><span class="legend-swatch" style="color: var(--teal)"></span>Access</span>
+            <span class="legend-item"><span class="legend-swatch" style="color: var(--amber)"></span>Communication</span>
+            <span class="legend-item"><span class="legend-swatch" style="color: var(--orange)"></span>Experience delivery</span>
+            <span class="legend-item"><span class="legend-swatch" style="color: var(--green)"></span>Trust cues</span>
+          </div>
+
+          <div class="mix-map">
+            <div class="mix-diagram" id="mix-diagram">
+              <div class="mix-line" style="transform: rotate(-90deg);"></div>
+              <div class="mix-line" style="transform: rotate(-31deg);"></div>
+              <div class="mix-line" style="transform: rotate(20deg);"></div>
+              <div class="mix-line" style="transform: rotate(90deg);"></div>
+              <div class="mix-line" style="transform: rotate(157deg);"></div>
+              <div class="mix-line" style="transform: rotate(208deg);"></div>
+              <div class="mix-line" style="transform: rotate(180deg);"></div>
+
+              <button class="mix-node" type="button" data-p="product" aria-pressed="false">
+                <span>
+                  <span class="node-kicker">01</span>
+                  <strong>Product</strong>
+                  <small id="product-summary">No decision added.</small>
+                </span>
+              </button>
+
+              <button class="mix-node" type="button" data-p="price" aria-pressed="false">
+                <span>
+                  <span class="node-kicker">02</span>
+                  <strong>Price</strong>
+                  <small id="price-summary">No decision added.</small>
+                </span>
+              </button>
+
+              <button class="mix-node" type="button" data-p="place" aria-pressed="false">
+                <span>
+                  <span class="node-kicker">03</span>
+                  <strong>Place</strong>
+                  <small id="place-summary">No decision added.</small>
+                </span>
+              </button>
+
+              <button class="mix-node" type="button" data-p="promotion" aria-pressed="false">
+                <span>
+                  <span class="node-kicker">04</span>
+                  <strong>Promotion</strong>
+                  <small id="promotion-summary">No decision added.</small>
+                </span>
+              </button>
+
+              <button class="mix-node" type="button" data-p="people" aria-pressed="false">
+                <span>
+                  <span class="node-kicker">05</span>
+                  <strong>People</strong>
+                  <small id="people-summary">No decision added.</small>
+                </span>
+              </button>
+
+              <button class="mix-node" type="button" data-p="process" aria-pressed="false">
+                <span>
+                  <span class="node-kicker">06</span>
+                  <strong>Process</strong>
+                  <small id="process-summary">No decision added.</small>
+                </span>
+              </button>
+
+              <button class="mix-node" type="button" data-p="evidence" aria-pressed="false">
+                <span>
+                  <span class="node-kicker">07</span>
+                  <strong>Physical Evidence</strong>
+                  <small id="evidence-summary">No decision added.</small>
+                </span>
+              </button>
+
+              <div class="mix-centre" id="mix-centre">
+                <div>
+                  <span>Customer value</span>
+                  <strong id="offer-name-display">Your offer</strong>
+                  <small>Every part of the mix should reinforce the value you promise and the experience customers receive.</small>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <section class="detail-card" aria-live="polite">
+            <div>
+              <h3 id="detail-title">Select a marketing-mix element</h3>
+              <p id="detail-decision">
+                Click any circle to review the decision, its customer effect and the evidence you will track.
+              </p>
+            </div>
+
+            <div class="detail-meta">
+              <div class="meta-box">
+                <small>Customer effect</small>
+                <strong id="detail-effect">—</strong>
+              </div>
+
+              <div class="meta-box">
+                <small>Evidence / measure</small>
+                <strong id="detail-evidence">—</strong>
+              </div>
+
+              <div class="meta-box">
+                <small>Planning prompt</small>
+                <strong id="detail-prompt">—</strong>
+              </div>
+
+              <div class="meta-box">
+                <small>Common risk</small>
+                <strong id="detail-risk">—</strong>
+              </div>
+            </div>
+          </section>
+
+          <div class="insights-grid">
+            <article class="insight-card">
+              <small>Mix completeness</small>
+              <p id="completeness-insight">Plan all seven elements to review the whole customer experience.</p>
+            </article>
+
+            <article class="insight-card">
+              <small>Trust and delivery</small>
+              <p id="trust-insight">People, process and physical evidence make service promises credible in practice.</p>
+            </article>
+
+            <article class="insight-card">
+              <small>Review trigger</small>
+              <p id="review-insight">Revisit the mix as customer needs, channels, competitors or delivery conditions change.</p>
+            </article>
+          </div>
+
+          <section class="review-panel">
+            <h3>Marketing-mix review prompts</h3>
+            <ul class="review-list" id="review-list"></ul>
+          </section>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <p>
+        This prototype is a strategy and planning aid. It does not replace customer research,
+        pricing analysis, legal review, accessibility testing, service design or campaign
+        measurement. Validate assumptions with real customer evidence and revisit the mix as the
+        market and offer evolve.
+      </p>
+    </div>
+  </footer>

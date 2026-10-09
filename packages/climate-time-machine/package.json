@@ -1,0 +1,29 @@
+{
+  "name": "climate-time-machine",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Slide through measured UK climate and model projections for a chosen region, with plain-English annotations.",
+  "scripts": {
+    "dev": "vite",
+    "build": "npm run data:validate && vite build",
+    "preview": "vite preview",
+    "data:build": "node scripts/fetch-data.mjs",
+    "data:resume": "node scripts/fetch-data.mjs --if-missing",
+    "data:midlands": "node scripts/fetch-data.mjs --location=midlands",
+    "data:validate": "node scripts/validate-data.mjs",
+    "test": "node --test test/*.test.mjs",
+    "check": "npm run data:validate && npm test && npm run build"
+  },
+  "dependencies": {
+    "@fontsource-variable/newsreader": "^5.1.0",
+    "@fontsource/ibm-plex-sans": "^5.1.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "recharts": "^2.15.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.4",
+    "vite": "^5.4.11"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "name": "marketing-labs",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Interactive marketing, positioning, loyalty, content and impact-planning labs with shared styles and PDF guides.",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "serve": "node scripts/build.mjs && python3 -m http.server 8080 --directory dist",
+    "pdfs": "node scripts/build.mjs && python3 scripts/make_pdfs.py && node scripts/build.mjs",
+    "check": "node scripts/check.mjs",
+    "test": "node scripts/build.mjs && node scripts/check.mjs"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

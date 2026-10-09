@@ -1,0 +1,12 @@
+---
+import type { CollectionEntry } from 'astro:content';
+interface Props { lab: CollectionEntry<'labs'> }
+const { lab } = Astro.props;
+---
+<li>
+  <a class="card" href={`/labs/${lab.id}/`}>
+    <h3>{lab.data.title}</h3>
+    <p>{lab.data.summary}</p>
+    {lab.data.tags.slice(0, 3).map((t) => <span class="tag">{t}</span>)}
+  </a>
+</li>
