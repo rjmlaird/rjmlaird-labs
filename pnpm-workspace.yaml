@@ -1,0 +1,19 @@
+packages:
+  # Deployable experiments directly under packages/
+  - "packages/*"
+
+  # Nested experiments, for example packages/physics/apps/hub
+  - "packages/*/*"
+
+  # Deeper nested experiments, for example packages/leicester/*/*
+  - "packages/*/*/*"
+
+  # Exclude generated and dependency directories
+  - "!**/node_modules/**"
+  - "!**/dist/**"
+
+  # Exclude starter templates from workspace installs/deploy discovery
+  - "!**/templates/**"
+
+  # Exclude legacy projects unless you explicitly intend to maintain them
+  - "!**/legacy/**"
