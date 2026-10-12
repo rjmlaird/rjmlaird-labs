@@ -370,5 +370,31 @@
     "demoUrl": "https://marketing.labs.rjmlaird.co.uk",
     "repoUrl": "https://github.com/rjmlaird/rjmlaird-labs/tree/main/packages/marketing",
     "updated": "2026-10-08"
+  },
+  {
+    "slug": "astrodash",
+    "title": "astrodash",
+    "description": "New experiment — update this description.",
+    "status": "planned",
+    "tech": [
+      "React",
+      "Vite"
+    ],
+    "demoUrl": "https://astrodash.labs.rjmlaird.co.uk",
+    "repoUrl": "https://github.com/greenorbitspace/labs/tree/main/packages/astrodash",
+    "updated": "2026-10-11"
+  },
+  {
+    "slug": "spice-cupboard",
+    "title": "spice-cupboard",
+    "description": "New experiment — update this description.",
+    "status": "planned",
+    "tech": [
+      "React",
+      "Vite"
+    ],
+    "demoUrl": "https://spice-cupboard.labs.rjmlaird.co.uk",
+    "repoUrl": "https://github.com/greenorbitspace/labs/tree/main/packages/spice-cupboard",
+    "updated": "2026-10-11"
   }
 ]

@@ -2,5 +2,15 @@
   "name": "rjmlaird-labs",
   "private": true,
   "version": "0.0.0",
-  "packageManager": "pnpm@10.0.0"
+  "packageManager": "pnpm@10.0.0",
+  "scripts": {
+    "new:experiment": "node scripts/new-experiment.mjs",
+    "dev:index": "pnpm --filter @rjmlaird/labs-index dev",
+    "build:index": "pnpm --filter @rjmlaird/labs-index build",
+    "preview:index": "pnpm --filter @rjmlaird/labs-index preview",
+    "dev:exp-example": "pnpm --filter @rjmlaird/exp-example dev",
+    "build": "pnpm -r --if-present run build",
+    "check": "pnpm -r --if-present run check",
+    "lint": "pnpm -r --if-present run lint"
+  }
 }
