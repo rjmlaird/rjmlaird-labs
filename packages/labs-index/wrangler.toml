@@ -1,0 +1,20 @@
+name = "labs-index"
+main = "src/index.tsx"
+compatibility_date = "2025-09-01"
+
+workers_dev = false
+
+# Index for apps.rjmlaird.co.uk. It lists the apps and does not serve them.
+# Each app is its own Worker on [app-name].apps.rjmlaird.co.uk, with a Custom
+# Domain set in that app's own wrangler.toml. A request must match a hostname
+# exactly, so this Worker never sees *.apps traffic.
+routes = [
+  { pattern = "labs.rjmlaird.co.uk", custom_domain = true }
+]
+
+[observability]
+enabled = true
+
+[dev]
+port = 8789
+inspector_port = 9231

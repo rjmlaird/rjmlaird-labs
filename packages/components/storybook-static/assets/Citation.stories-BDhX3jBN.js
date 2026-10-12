@@ -1,0 +1,11 @@
+import{n as e}from"./rolldown-runtime-DkW27tQK.js";import{t}from"./jsx-runtime-DeHZSEgm.js";function n({source:e,publisher:t,updated:n,href:i,linkText:a=`View source record`}){let o=[t,n&&`updated ${n}`].filter(Boolean).join(`, `);return(0,r.jsxs)(`p`,{className:`cite`,children:[e,(o||i)&&(0,r.jsxs)(`small`,{className:`cite__detail`,children:[o,o&&i?`. `:``,i&&(0,r.jsx)(`a`,{href:i,children:a})]})]})}var r;function i(){return(i=e((()=>{r=t(),n.__docgenInfo={description:`Source, publisher, date and a persistent link.`,methods:[],displayName:`Citation`,props:{source:{required:!0,tsType:{name:`string`},description:``},publisher:{required:!1,tsType:{name:`string`},description:``},updated:{required:!1,tsType:{name:`string`},description:`Human-readable date, e.g. "12 Sep 2026".`},href:{required:!1,tsType:{name:`string`},description:``},linkText:{required:!1,tsType:{name:`string`},description:`Link text must describe the destination.`,defaultValue:{value:`"View source record"`,computed:!1}}}}})))()}var a,o,s,c,l;function u(){return(u=e((()=>{i(),a={title:`Components/Citation`,component:n,tags:[`autodocs`],parameters:{docs:{description:{component:`Maturity: **Candidate**. Source, publisher, date and a persistent link.`}}},args:{source:`Copernicus Atmosphere Monitoring Service, regional reanalysis`,publisher:`ECMWF`,updated:`12 Sep 2026`,href:`#`}},o={},s={args:{source:`A deliberately long headline that checks whether the layout stays readable when real writing gets in the way`}},c={args:{publisher:void 0,updated:void 0,href:void 0}},l=[`Typical`,`LongText`,`SourceOnly`],o.parameters={...o.parameters,docs:{...o.parameters?.docs,source:{originalSource:`{}`,...o.parameters?.docs?.source}}},s.parameters={...s.parameters,docs:{...s.parameters?.docs,source:{originalSource:`{
+  args: {
+    source: "A deliberately long headline that checks whether the layout stays readable when real writing gets in the way"
+  }
+}`,...s.parameters?.docs?.source}}},c.parameters={...c.parameters,docs:{...c.parameters?.docs,source:{originalSource:`{
+  args: {
+    publisher: undefined,
+    updated: undefined,
+    href: undefined
+  }
+}`,...c.parameters?.docs?.source}}}})))()}u();export{s as LongText,c as SourceOnly,o as Typical,l as __namedExportsOrder,a as default};

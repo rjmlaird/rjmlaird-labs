@@ -1,0 +1,1 @@
+.metric{border:1px solid var(--border);border-radius:var(--r);background:var(--surface-raised);color:var(--text);padding:1rem}.metric__value{font:600 2.3rem/1 var(--font-read)}.metric__unit,.metric__label{font:400 .9rem/1.55 var(--font-ui);color:var(--text-muted)}.metric__stale{color:var(--warn);font-size:.82rem}

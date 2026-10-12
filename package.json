@@ -12,5 +12,8 @@
     "build": "pnpm -r --if-present run build",
     "check": "pnpm -r --if-present run check",
     "lint": "pnpm -r --if-present run lint"
+  },
+  "devDependencies": {
+    "wrangler": "^4.149.0"
   }
 }
