@@ -1,0 +1,67 @@
+/* Shared lab chrome. Namespaced rj-* so it can never collide with an app's own classes. */
+
+/* App bar: back link to the labs index, lab title, actions. */
+.rj-appbar {
+  display: flex; align-items: center; gap: var(--rj-space-4); flex-wrap: wrap;
+  min-height: var(--rj-nav-h); padding: var(--rj-space-2) var(--rj-gutter-min);
+  background: var(--rj-surface); border-bottom: 1px solid var(--rj-border);
+}
+.rj-appbar__back { color: var(--rj-text-2); font-size: var(--rj-fs-sm); text-decoration: none; white-space: nowrap; }
+.rj-appbar__back:hover { color: var(--rj-text); text-decoration: underline; }
+.rj-appbar__title { margin: 0; font-size: var(--rj-fs-md); font-weight: 600; letter-spacing: -0.01em; }
+.rj-appbar__actions { margin-left: auto; display: flex; gap: var(--rj-space-2); align-items: center; }
+
+.rj-main { width: 100%; max-width: var(--rj-content-max); margin-inline: auto; padding: var(--rj-space-5) var(--rj-gutter-min); }
+
+/* Panels */
+.rj-panel { background: var(--rj-surface); border: 1px solid var(--rj-border); border-radius: var(--rj-radius-lg); padding: var(--rj-space-4); }
+.rj-panel[data-tone] { border-left: 3px solid var(--rj-tone); }
+.rj-panel__title { margin: 0 0 var(--rj-space-3); font-size: var(--rj-fs-sm); font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: var(--rj-text-2); }
+
+/* Buttons: 44px minimum target. */
+.rj-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: var(--rj-space-2);
+  min-height: 2.75rem; padding: 0 var(--rj-space-4);
+  border: 1px solid var(--rj-border-strong); border-radius: var(--rj-radius-md);
+  background: transparent; color: var(--rj-text); font-weight: 600; cursor: pointer; text-decoration: none;
+  transition: border-color var(--rj-motion-fast) var(--rj-motion-ease), background var(--rj-motion-fast) var(--rj-motion-ease);
+}
+.rj-btn:hover { border-color: var(--rj-teal); background: var(--rj-teal-dim); }
+.rj-btn--primary { background: var(--rj-teal); border-color: var(--rj-teal); color: var(--rj-on-accent); }
+.rj-btn--primary:hover { background: var(--rj-teal); filter: brightness(1.08); }
+.rj-btn[disabled], .rj-btn[aria-disabled="true"] { opacity: 0.5; cursor: not-allowed; }
+
+/* Chips and tags */
+.rj-chip, .rj-tag { display: inline-block; padding: 0.15rem 0.6rem; border: 1px solid var(--rj-border-strong); border-radius: var(--rj-radius-pill); font-size: var(--rj-fs-xs); font-weight: 600; color: var(--rj-text-2); background: transparent; }
+.rj-tag[data-tone] { color: var(--rj-tone); border-color: var(--rj-tone-line); background: var(--rj-tone-dim); }
+.rj-chip[aria-pressed="true"] { background: var(--rj-teal-dim); border-color: var(--rj-teal); color: var(--rj-text); }
+
+/* Form controls */
+.rj-field { display: grid; gap: var(--rj-space-1); font-size: var(--rj-fs-sm); color: var(--rj-text-2); }
+.rj-field :where(input[type="number"], input[type="text"], select) {
+  min-height: 2.5rem; padding: 0 var(--rj-space-3); background: var(--rj-ink-2); color: var(--rj-text);
+  border: 1px solid var(--rj-border-strong); border-radius: var(--rj-radius-md);
+}
+.rj-field :where(input[type="range"]) { accent-color: var(--rj-teal); width: 100%; }
+
+/* Readout: a labelled number. Numerals are tabular so values do not jitter as they change. */
+.rj-stat { display: grid; gap: 0.15rem; }
+.rj-stat__label { font-size: var(--rj-fs-xs); color: var(--rj-text-2); }
+.rj-stat__value { font-family: var(--rj-font-mono); font-size: var(--rj-fs-lg); font-variant-numeric: tabular-nums; color: var(--rj-text); }
+.rj-stat__unit { font-size: var(--rj-fs-xs); color: var(--rj-text-3); margin-left: 0.25em; }
+
+/* Status: always show the label as well as the colour. */
+.rj-status { display: inline-flex; align-items: center; gap: 0.4em; font-size: var(--rj-fs-sm); }
+.rj-status::before { content: ""; width: 0.6em; height: 0.6em; border-radius: 50%; background: currentColor; }
+.rj-status[data-level="ok"] { color: var(--rj-ok); }
+.rj-status[data-level="watch"] { color: var(--rj-watch); }
+.rj-status[data-level="warn"] { color: var(--rj-warn); }
+.rj-status[data-level="alert"] { color: var(--rj-alert); }
+
+/* Data provenance footer: every lab that shows third-party data credits it here. */
+.rj-attrib { margin-top: var(--rj-space-5); padding-top: var(--rj-space-3); border-top: 1px solid var(--rj-border); font-size: var(--rj-fs-xs); line-height: 1.6; color: var(--rj-text-3); }
+.rj-attrib a { color: var(--rj-text-2); }
+
+/* Figure with a source line. Pair every chart with a caption and, ideally, a table fallback. */
+.rj-figure { margin: 0; }
+.rj-figure figcaption { margin-top: var(--rj-space-2); font-size: var(--rj-fs-xs); color: var(--rj-text-3); }

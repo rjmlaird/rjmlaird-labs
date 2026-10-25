@@ -1,5 +1,5 @@
 {
-  "name": "electricity",
+  "name": "@rjmlaird/electricity",
   "private": true,
   "version": "0.1.0",
   "type": "module",
@@ -9,11 +9,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "react": "^18.3.0",
-    "react-dom": "^18.3.0"
+    "@rjmlaird/brand": "workspace:*"
   },
   "devDependencies": {
-    "@vitejs/plugin-react": "^4.3.0",
     "vite": "^5.4.0"
   }
 }

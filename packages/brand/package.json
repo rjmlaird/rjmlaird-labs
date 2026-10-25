@@ -1,0 +1,32 @@
+{
+  "name": "@rjmlaird/brand",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Brand tokens, base styles and lab chrome shared by every app in rjmlaird-labs.",
+  "exports": {
+    "./css": "./css/brand.css",
+    "./css/*": "./css/*",
+    "./tokens.json": "./src/brand.tokens.json",
+    "./favicon.svg": "./favicon.svg",
+    "./fonts/*": "./fonts/*"
+  },
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "check": "node scripts/build.mjs --check",
+    "vendor-fonts": "node scripts/vendor-fonts.mjs",
+    "bundle": "node scripts/bundle-static.mjs"
+  },
+  "devDependencies": {
+    "@fontsource-variable/inter": "^5.2.0",
+    "@fontsource-variable/jetbrains-mono": "^5.2.0",
+    "@fontsource-variable/space-grotesk": "^5.2.0"
+  },
+  "files": [
+    "css",
+    "src",
+    "fonts",
+    "favicon.svg",
+    "scripts"
+  ]
+}

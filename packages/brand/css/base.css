@@ -1,0 +1,52 @@
+/* Reset and accessibility baseline. Everything uses :where() so an app's own rules always win. */
+:where(*, *::before, *::after) { box-sizing: border-box; }
+:where(html) {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  background: var(--rj-bg);
+  color: var(--rj-text);
+  scroll-padding-top: calc(var(--rj-nav-h) + 1rem);
+}
+:where(body) {
+  margin: 0;
+  min-height: 100dvh;
+  background: var(--rj-bg);
+  color: var(--rj-text);
+  font-family: var(--rj-font-body);
+  font-size: var(--rj-fs-base);
+  line-height: var(--rj-fs-leading);
+  -webkit-font-smoothing: antialiased;
+}
+:where(h1, h2, h3, h4, h5, h6) { font-family: var(--rj-font-display); line-height: var(--rj-fs-leading-tight); text-wrap: balance; }
+:where(p) { text-wrap: pretty; }
+:where(code, kbd, pre, samp) { font-family: var(--rj-font-mono); }
+:where(button, input, select, textarea) { font: inherit; color: inherit; }
+:where(img, svg, video, canvas) { max-width: 100%; }
+:where(a) { color: var(--rj-link); text-underline-offset: 3px; }
+:where([hidden]) { display: none !important; }
+:where(::selection) { background: var(--rj-teal-line); color: var(--rj-text); }
+
+/* One focus ring everywhere: 3px, >= 3:1 against every surface (checked in build.mjs). */
+:where(:focus-visible) { outline: 3px solid var(--rj-focus); outline-offset: 3px; border-radius: 2px; }
+
+.rj-sr-only {
+  position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; border: 0;
+  overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap;
+}
+.rj-skip {
+  position: absolute; left: var(--rj-space-4); top: -100%; z-index: 1000;
+  padding: var(--rj-space-2) var(--rj-space-4); border-radius: var(--rj-radius-sm);
+  background: var(--rj-teal); color: var(--rj-on-accent);
+  font-family: var(--rj-font-display); font-weight: 700; text-decoration: none;
+}
+.rj-skip:focus { top: var(--rj-space-3); }
+
+/* Thin scrollbars for panels and tables. Opt in with class rj-scroll. */
+.rj-scroll { scrollbar-width: thin; scrollbar-color: var(--rj-lift) transparent; }
+
+@media (prefers-reduced-motion: reduce) {
+  :where(*, *::before, *::after) { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+}
+@media (forced-colors: active) {
+  :where(:focus-visible) { outline-color: Highlight; }
+}

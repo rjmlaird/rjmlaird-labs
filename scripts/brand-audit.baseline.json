@@ -1,0 +1,1068 @@
+{
+  "totals": {
+    "apps": 23,
+    "brand": 8,
+    "hex": 541,
+    "findings": 107
+  },
+  "results": [
+    {
+      "id": "astronomy",
+      "findings": [
+        "does not import @rjmlaird/brand",
+        "off-brand fonts: Familjen Grotesk, IBM Plex Mono, Instrument Sans, DM Mono",
+        "33 Google Fonts reference(s) (third-party request, render-blocking)",
+        "203 off-brand hex colours (579 uses)",
+        "no skip link",
+        "package name \"astronomy-labs\" does not match folder"
+      ],
+      "metrics": {
+        "usesBrand": false,
+        "offBrandFonts": [
+          "Familjen Grotesk",
+          "IBM Plex Mono",
+          "Instrument Sans",
+          "DM Mono"
+        ],
+        "googleFontRefs": 33,
+        "offBrandHexUnique": 203,
+        "offBrandHexTotal": 579,
+        "topOffBrand": [
+          {
+            "hex": "#e0a844",
+            "uses": 28,
+            "nearest": "amber"
+          },
+          {
+            "hex": "#e6ebf3",
+            "uses": 26,
+            "nearest": "text"
+          },
+          {
+            "hex": "#111826",
+            "uses": 22,
+            "nearest": "card"
+          },
+          {
+            "hex": "#93a0b4",
+            "uses": 22,
+            "nearest": "text-2"
+          },
+          {
+            "hex": "#243046",
+            "uses": 21,
+            "nearest": "lift"
+          }
+        ],
+        "a11y": [
+          "no skip link"
+        ]
+      }
+    },
+    {
+      "id": "biodiversity",
+      "findings": [
+        "16 off-brand hex colours (19 uses)",
+        "no :focus-visible styling",
+        "animates without prefers-reduced-motion",
+        "third-party <script> without SRI"
+      ],
+      "metrics": {
+        "usesBrand": true,
+        "offBrandFonts": [],
+        "googleFontRefs": 0,
+        "offBrandHexUnique": 16,
+        "offBrandHexTotal": 19,
+        "topOffBrand": [
+          {
+            "hex": "#8fd3ea",
+            "uses": 3,
+            "nearest": "sky"
+          },
+          {
+            "hex": "#0a0f0c",
+            "uses": 2,
+            "nearest": "ink"
+          },
+          {
+            "hex": "#72c98c",
+            "uses": 1,
+            "nearest": "teal"
+          },
+          {
+            "hex": "#e08880",
+            "uses": 1,
+            "nearest": "coral"
+          },
+          {
+            "hex": "#8fce9f",
+            "uses": 1,
+            "nearest": "green"
+          }
+        ],
+        "a11y": [
+          "no :focus-visible styling",
+          "animates without prefers-reduced-motion",
+          "third-party <script> without SRI"
+        ]
+      }
+    },
+    {
+      "id": "blueprint",
+      "findings": [
+        "6 off-brand hex colours (11 uses)"
+      ],
+      "metrics": {
+        "usesBrand": true,
+        "offBrandFonts": [],
+        "googleFontRefs": 0,
+        "offBrandHexUnique": 6,
+        "offBrandHexTotal": 11,
+        "topOffBrand": [
+          {
+            "hex": "#9aeaff",
+            "uses": 4,
+            "nearest": "text"
+          },
+          {
+            "hex": "#0a4f87",
+            "uses": 2,
+            "nearest": "lift"
+          },
+          {
+            "hex": "#effbff",
+            "uses": 2,
+            "nearest": "text"
+          },
+          {
+            "hex": "#72e4ff",
+            "uses": 1,
+            "nearest": "sky"
+          },
+          {
+            "hex": "#003399",
+            "uses": 1,
+            "nearest": "lift"
+          }
+        ],
+        "a11y": []
+      }
+    },
+    {
+      "id": "cfd",
+      "findings": [
+        "12 off-brand hex colours (16 uses)",
+        "no :focus-visible styling",
+        "animates without prefers-reduced-motion"
+      ],
+      "metrics": {
+        "usesBrand": true,
+        "offBrandFonts": [],
+        "googleFontRefs": 0,
+        "offBrandHexUnique": 12,
+        "offBrandHexTotal": 16,
+        "topOffBrand": [
+          {
+            "hex": "#102333",
+            "uses": 3,
+            "nearest": "lift"
+          },
+          {
+            "hex": "#3f8fe0",
+            "uses": 2,
+            "nearest": "text-3"
+          },
+          {
+            "hex": "#f06a3c",
+            "uses": 2,
+            "nearest": "coral"
+          },
+          {
+            "hex": "#fbeee8",
+            "uses": 1,
+            "nearest": "text"
+          },
+          {
+            "hex": "#0d2a4a",
+            "uses": 1,
+            "nearest": "lift"
+          }
+        ],
+        "a11y": [
+          "no :focus-visible styling",
+          "animates without prefers-reduced-motion"
+        ]
+      }
+    },
+    {
+      "id": "climate-time-machine",
+      "findings": [
+        "does not import @rjmlaird/brand",
+        "off-brand fonts: Newsreader Variable, Georgia, serif, IBM Plex Sans",
+        "13 off-brand hex colours (14 uses)",
+        "no skip link"
+      ],
+      "metrics": {
+        "usesBrand": false,
+        "offBrandFonts": [
+          "Newsreader Variable",
+          "Georgia",
+          "serif",
+          "IBM Plex Sans"
+        ],
+        "googleFontRefs": 0,
+        "offBrandHexUnique": 13,
+        "offBrandHexTotal": 14,
+        "topOffBrand": [
+          {
+            "hex": "#1d5e7a",
+            "uses": 2,
+            "nearest": "lift"
+          },
+          {
+            "hex": "#d9dfdc",
+            "uses": 1,
+            "nearest": "text"
+          },
+          {
+            "hex": "#eef1ef",
+            "uses": 1,
+            "nearest": "text"
+          },
+          {
+            "hex": "#fbfcfb",
+            "uses": 1,
+            "nearest": "text"
+          },
+          {
+            "hex": "#13202b",
+            "uses": 1,
+            "nearest": "card"
+          }
+        ],
+        "a11y": [
+          "no skip link"
+        ]
+      }
+    },
+    {
+      "id": "climate-visualiser",
+      "findings": [
+        "does not import @rjmlaird/brand",
+        "off-brand fonts: IBM Plex Mono",
+        "1 Google Fonts reference(s) (third-party request, render-blocking)",
+        "9 off-brand hex colours (21 uses)",
+        "no :focus-visible styling",
+        "no skip link"
+      ],
+      "metrics": {
+        "usesBrand": false,
+        "offBrandFonts": [
+          "IBM Plex Mono"
+        ],
+        "googleFontRefs": 1,
+        "offBrandHexUnique": 9,
+        "offBrandHexTotal": 21,
+        "topOffBrand": [
+          {
+            "hex": "#8bb4ff",
+            "uses": 6,
+            "nearest": "sky"
+          },
+          {
+            "hex": "#a0aec0",
+            "uses": 4,
+            "nearest": "text-2"
+          },
+          {
+            "hex": "#cbd5e1",
+            "uses": 4,
+            "nearest": "text"
+          },
+          {
+            "hex": "#e8ecf4",
+            "uses": 2,
+            "nearest": "text"
+          },
+          {
+            "hex": "#f6ad55",
+            "uses": 1,
+            "nearest": "amber"
+          }
+        ],
+        "a11y": [
+          "no :focus-visible styling",
+          "no skip link"
+        ]
+      }
+    },
+    {
+      "id": "components",
+      "findings": [
+        "does not import @rjmlaird/brand",
+        "off-brand fonts: and what that means for local air.')+'</p>'+(content===\"empty\"?'':'<ul class=\"tags\"><li>Copernicus</li><li>AURN</li><li>Leicester</li></ul>')+'</article>, Public Sans, Newsreader, Georgia, serif",
+        "1 Google Fonts reference(s) (third-party request, render-blocking)",
+        "18 off-brand hex colours (52 uses)",
+        "animates without prefers-reduced-motion",
+        "no skip link",
+        "package name \"component-sandbox\" does not match folder",
+        "react is a dependency but nothing renders with it (dead scaffold)"
+      ],
+      "metrics": {
+        "usesBrand": false,
+        "offBrandFonts": [
+          "and what that means for local air.')+'</p>'+(content===\"empty\"?'':'<ul class=\"tags\"><li>Copernicus</li><li>AURN</li><li>Leicester</li></ul>')+'</article>",
+          "Public Sans",
+          "Newsreader",
+          "Georgia",
+          "serif"
+        ],
+        "googleFontRefs": 1,
+        "offBrandHexUnique": 18,
+        "offBrandHexTotal": 52,
+        "topOffBrand": [
+          {
+            "hex": "#0d1120",
+            "uses": 6,
+            "nearest": "ink"
+          },
+          {
+            "hex": "#eef2f6",
+            "uses": 4,
+            "nearest": "text"
+          },
+          {
+            "hex": "#9aa5b1",
+            "uses": 4,
+            "nearest": "text-2"
+          },
+          {
+            "hex": "#161c33",
+            "uses": 3,
+            "nearest": "card"
+          },
+          {
+            "hex": "#e8ebf7",
+            "uses": 3,
+            "nearest": "text"
+          }
+        ],
+        "a11y": [
+          "animates without prefers-reduced-motion",
+          "no skip link"
+        ]
+      }
+    },
+    {
+      "id": "contrast",
+      "findings": [
+        "does not import @rjmlaird/brand",
+        "8 off-brand hex colours (10 uses)",
+        "no :focus-visible styling",
+        "animates without prefers-reduced-motion",
+        "no skip link",
+        "package name \"contrast-lab\" does not match folder"
+      ],
+      "metrics": {
+        "usesBrand": false,
+        "offBrandFonts": [],
+        "googleFontRefs": 0,
+        "offBrandHexUnique": 8,
+        "offBrandHexTotal": 10,
+        "topOffBrand": [
+          {
+            "hex": "#0f172a",
+            "uses": 2,
+            "nearest": "card"
+          },
+          {
+            "hex": "#334155",
+            "uses": 2,
+            "nearest": "lift"
+          },
+          {
+            "hex": "#e5e7eb",
+            "uses": 1,
+            "nearest": "text"
+          },
+          {
+            "hex": "#cbd5e1",
+            "uses": 1,
+            "nearest": "text"
+          },
+          {
+            "hex": "#e8ecf4",
+            "uses": 1,
+            "nearest": "text"
+          }
+        ],
+        "a11y": [
+          "no :focus-visible styling",
+          "animates without prefers-reduced-motion",
+          "no skip link"
+        ]
+      }
+    },
+    {
+      "id": "drought",
+      "findings": [
+        "off-brand fonts: IBM Plex Mono",
+        "11 off-brand hex colours (17 uses)",
+        "no :focus-visible styling",
+        "animates without prefers-reduced-motion",
+        "third-party <script> without SRI"
+      ],
+      "metrics": {
+        "usesBrand": true,
+        "offBrandFonts": [
+          "IBM Plex Mono"
+        ],
+        "googleFontRefs": 0,
+        "offBrandHexUnique": 11,
+        "offBrandHexTotal": 17,
+        "topOffBrand": [
+          {
+            "hex": "#c1443b",
+            "uses": 3,
+            "nearest": "coral"
+          },
+          {
+            "hex": "#5c9c6e",
+            "uses": 3,
+            "nearest": "teal"
+          },
+          {
+            "hex": "#3a4a41",
+            "uses": 2,
+            "nearest": "lift"
+          },
+          {
+            "hex": "#d9a441",
+            "uses": 2,
+            "nearest": "amber"
+          },
+          {
+            "hex": "#1a1204",
+            "uses": 1,
+            "nearest": "ink-2"
+          }
+        ],
+        "a11y": [
+          "no :focus-visible styling",
+          "animates without prefers-reduced-motion",
+          "third-party <script> without SRI"
+        ]
+      }
+    },
+    {
+      "id": "electricity",
+      "findings": [
+        "13 off-brand hex colours (91 uses)"
+      ],
+      "metrics": {
+        "usesBrand": true,
+        "offBrandFonts": [],
+        "googleFontRefs": 0,
+        "offBrandHexUnique": 13,
+        "offBrandHexTotal": 91,
+        "topOffBrand": [
+          {
+            "hex": "#e8b34a",
+            "uses": 17,
+            "nearest": "amber"
+          },
+          {
+            "hex": "#5fd3c4",
+            "uses": 16,
+            "nearest": "teal"
+          },
+          {
+            "hex": "#c87f4b",
+            "uses": 15,
+            "nearest": "coral"
+          },
+          {
+            "hex": "#9fb0aa",
+            "uses": 14,
+            "nearest": "text-2"
+          },
+          {
+            "hex": "#3a5850",
+            "uses": 10,
+            "nearest": "lift"
+          }
+        ],
+        "a11y": []
+      }
+    },
+    {
+      "id": "elements",
+      "findings": [
+        "no :focus-visible styling",
+        "animates without prefers-reduced-motion"
+      ],
+      "metrics": {
+        "usesBrand": true,
+        "offBrandFonts": [],
+        "googleFontRefs": 0,
+        "offBrandHexUnique": 0,
+        "offBrandHexTotal": 0,
+        "topOffBrand": [],
+        "a11y": [
+          "no :focus-visible styling",
+          "animates without prefers-reduced-motion"
+        ]
+      }
+    },
+    {
+      "id": "equations",
+      "findings": [
+        "does not import @rjmlaird/brand",
+        "off-brand fonts: Courier New, Roboto",
+        "17 off-brand hex colours (24 uses)",
+        "animates without prefers-reduced-motion",
+        "no skip link",
+        "package name \"equation-scanner\" does not match folder"
+      ],
+      "metrics": {
+        "usesBrand": false,
+        "offBrandFonts": [
+          "Courier New",
+          "Roboto"
+        ],
+        "googleFontRefs": 0,
+        "offBrandHexUnique": 17,
+        "offBrandHexTotal": 24,
+        "topOffBrand": [
+          {
+            "hex": "#4affb0",
+            "uses": 8,
+            "nearest": "green"
+          },
+          {
+            "hex": "#eef2f6",
+            "uses": 1,
+            "nearest": "text"
+          },
+          {
+            "hex": "#9aa5b1",
+            "uses": 1,
+            "nearest": "text-2"
+          },
+          {
+            "hex": "#0f3d2a",
+            "uses": 1,
+            "nearest": "lift"
+          },
+          {
+            "hex": "#031a10",
+            "uses": 1,
+            "nearest": "ink-2"
+          }
+        ],
+        "a11y": [
+          "animates without prefers-reduced-motion",
+          "no skip link"
+        ]
+      }
+    },
+    {
+      "id": "exp-example",
+      "findings": [
+        "does not import @rjmlaird/brand",
+        "2 off-brand hex colours (3 uses)",
+        "no :focus-visible styling",
+        "no skip link"
+      ],
+      "metrics": {
+        "usesBrand": false,
+        "offBrandFonts": [],
+        "googleFontRefs": 0,
+        "offBrandHexUnique": 2,
+        "offBrandHexTotal": 3,
+        "topOffBrand": [
+          {
+            "hex": "#9aa5b1",
+            "uses": 2,
+            "nearest": "text-2"
+          },
+          {
+            "hex": "#eef2f6",
+            "uses": 1,
+            "nearest": "text"
+          }
+        ],
+        "a11y": [
+          "no :focus-visible styling",
+          "no skip link"
+        ]
+      }
+    },
+    {
+      "id": "graphs",
+      "findings": [
+        "does not import @rjmlaird/brand",
+        "1 Google Fonts reference(s) (third-party request, render-blocking)",
+        "3 off-brand hex colours (8 uses)",
+        "no :focus-visible styling",
+        "no skip link"
+      ],
+      "metrics": {
+        "usesBrand": false,
+        "offBrandFonts": [],
+        "googleFontRefs": 1,
+        "offBrandHexUnique": 3,
+        "offBrandHexTotal": 8,
+        "topOffBrand": [
+          {
+            "hex": "#9aa5b1",
+            "uses": 5,
+            "nearest": "text-2"
+          },
+          {
+            "hex": "#eef2f6",
+            "uses": 2,
+            "nearest": "text"
+          },
+          {
+            "hex": "#121826",
+            "uses": 1,
+            "nearest": "card"
+          }
+        ],
+        "a11y": [
+          "no :focus-visible styling",
+          "no skip link"
+        ]
+      }
+    },
+    {
+      "id": "labs-index",
+      "findings": [
+        "does not import @rjmlaird/brand",
+        "1 Google Fonts reference(s) (third-party request, render-blocking)",
+        "4 off-brand hex colours (4 uses)",
+        "no skip link"
+      ],
+      "metrics": {
+        "usesBrand": false,
+        "offBrandFonts": [],
+        "googleFontRefs": 1,
+        "offBrandHexUnique": 4,
+        "offBrandHexTotal": 4,
+        "topOffBrand": [
+          {
+            "hex": "#121826",
+            "uses": 1,
+            "nearest": "card"
+          },
+          {
+            "hex": "#30d6bf",
+            "uses": 1,
+            "nearest": "teal"
+          },
+          {
+            "hex": "#eef2f6",
+            "uses": 1,
+            "nearest": "text"
+          },
+          {
+            "hex": "#9aa5b1",
+            "uses": 1,
+            "nearest": "text-2"
+          }
+        ],
+        "a11y": [
+          "no skip link"
+        ]
+      }
+    },
+    {
+      "id": "marketing",
+      "findings": [
+        "does not import @rjmlaird/brand",
+        "3 Google Fonts reference(s) (third-party request, render-blocking)",
+        "41 off-brand hex colours (81 uses)",
+        "package name \"marketing-labs\" does not match folder"
+      ],
+      "metrics": {
+        "usesBrand": false,
+        "offBrandFonts": [],
+        "googleFontRefs": 3,
+        "offBrandHexUnique": 41,
+        "offBrandHexTotal": 81,
+        "topOffBrand": [
+          {
+            "hex": "#f4af31",
+            "uses": 9,
+            "nearest": "amber"
+          },
+          {
+            "hex": "#a8b6c4",
+            "uses": 8,
+            "nearest": "text-2"
+          },
+          {
+            "hex": "#7da9ff",
+            "uses": 5,
+            "nearest": "sky"
+          },
+          {
+            "hex": "#b39cff",
+            "uses": 5,
+            "nearest": "violet"
+          },
+          {
+            "hex": "#58d08b",
+            "uses": 5,
+            "nearest": "green"
+          }
+        ],
+        "a11y": []
+      }
+    },
+    {
+      "id": "maths",
+      "findings": [
+        "does not import @rjmlaird/brand",
+        "2 off-brand hex colours (3 uses)",
+        "no :focus-visible styling",
+        "no skip link",
+        "contains leftover \"exp-example\" template text"
+      ],
+      "metrics": {
+        "usesBrand": false,
+        "offBrandFonts": [],
+        "googleFontRefs": 0,
+        "offBrandHexUnique": 2,
+        "offBrandHexTotal": 3,
+        "topOffBrand": [
+          {
+            "hex": "#9aa5b1",
+            "uses": 2,
+            "nearest": "text-2"
+          },
+          {
+            "hex": "#eef2f6",
+            "uses": 1,
+            "nearest": "text"
+          }
+        ],
+        "a11y": [
+          "no :focus-visible styling",
+          "no skip link"
+        ]
+      }
+    },
+    {
+      "id": "mechanics",
+      "findings": [
+        "does not import @rjmlaird/brand",
+        "off-brand fonts: Familjen Grotesk, IBM Plex Mono",
+        "7 Google Fonts reference(s) (third-party request, render-blocking)",
+        "41 off-brand hex colours (129 uses)",
+        "no skip link"
+      ],
+      "metrics": {
+        "usesBrand": false,
+        "offBrandFonts": [
+          "Familjen Grotesk",
+          "IBM Plex Mono"
+        ],
+        "googleFontRefs": 7,
+        "offBrandHexUnique": 41,
+        "offBrandHexTotal": 129,
+        "topOffBrand": [
+          {
+            "hex": "#e0a844",
+            "uses": 11,
+            "nearest": "amber"
+          },
+          {
+            "hex": "#93a0b4",
+            "uses": 10,
+            "nearest": "text-2"
+          },
+          {
+            "hex": "#070b17",
+            "uses": 9,
+            "nearest": "ink"
+          },
+          {
+            "hex": "#5a9be8",
+            "uses": 9,
+            "nearest": "sky"
+          },
+          {
+            "hex": "#60a5fa",
+            "uses": 7,
+            "nearest": "sky"
+          }
+        ],
+        "a11y": [
+          "no skip link"
+        ]
+      }
+    },
+    {
+      "id": "n-body",
+      "findings": [
+        "does not import @rjmlaird/brand",
+        "1 Google Fonts reference(s) (third-party request, render-blocking)",
+        "9 off-brand hex colours (17 uses)",
+        "blocks pinch-zoom (WCAG 1.4.4)",
+        "no :focus-visible styling",
+        "no skip link"
+      ],
+      "metrics": {
+        "usesBrand": false,
+        "offBrandFonts": [],
+        "googleFontRefs": 1,
+        "offBrandHexUnique": 9,
+        "offBrandHexTotal": 17,
+        "topOffBrand": [
+          {
+            "hex": "#e8ecf4",
+            "uses": 4,
+            "nearest": "text"
+          },
+          {
+            "hex": "#e4572e",
+            "uses": 3,
+            "nearest": "coral"
+          },
+          {
+            "hex": "#4c8dff",
+            "uses": 3,
+            "nearest": "violet"
+          },
+          {
+            "hex": "#b388ff",
+            "uses": 2,
+            "nearest": "violet"
+          },
+          {
+            "hex": "#b0b0b0",
+            "uses": 1,
+            "nearest": "text-2"
+          }
+        ],
+        "a11y": [
+          "blocks pinch-zoom (WCAG 1.4.4)",
+          "no :focus-visible styling",
+          "no skip link"
+        ]
+      }
+    },
+    {
+      "id": "rubiks",
+      "findings": [
+        "6 off-brand hex colours (6 uses)",
+        "no :focus-visible styling",
+        "animates without prefers-reduced-motion"
+      ],
+      "metrics": {
+        "usesBrand": true,
+        "offBrandFonts": [],
+        "googleFontRefs": 0,
+        "offBrandHexUnique": 6,
+        "offBrandHexTotal": 6,
+        "topOffBrand": [
+          {
+            "hex": "#d6243a",
+            "uses": 1,
+            "nearest": "coral"
+          },
+          {
+            "hex": "#ff7a1a",
+            "uses": 1,
+            "nearest": "coral"
+          },
+          {
+            "hex": "#f4f4ef",
+            "uses": 1,
+            "nearest": "text"
+          },
+          {
+            "hex": "#ffd400",
+            "uses": 1,
+            "nearest": "watch"
+          },
+          {
+            "hex": "#12a150",
+            "uses": 1,
+            "nearest": "teal"
+          }
+        ],
+        "a11y": [
+          "no :focus-visible styling",
+          "animates without prefers-reduced-motion"
+        ]
+      }
+    },
+    {
+      "id": "satellites",
+      "findings": [
+        "does not import @rjmlaird/brand",
+        "off-brand fonts: SF Mono, Cascadia Mono",
+        "46 off-brand hex colours (67 uses)",
+        "no :focus-visible styling",
+        "animates without prefers-reduced-motion",
+        "no skip link"
+      ],
+      "metrics": {
+        "usesBrand": false,
+        "offBrandFonts": [
+          "SF Mono",
+          "Cascadia Mono"
+        ],
+        "googleFontRefs": 0,
+        "offBrandHexUnique": 46,
+        "offBrandHexTotal": 67,
+        "topOffBrand": [
+          {
+            "hex": "#93a1b0",
+            "uses": 4,
+            "nearest": "text-2"
+          },
+          {
+            "hex": "#3ed598",
+            "uses": 3,
+            "nearest": "green"
+          },
+          {
+            "hex": "#eafff9",
+            "uses": 3,
+            "nearest": "text"
+          },
+          {
+            "hex": "#475569",
+            "uses": 2,
+            "nearest": "lift"
+          },
+          {
+            "hex": "#64748b",
+            "uses": 2,
+            "nearest": "text-3"
+          }
+        ],
+        "a11y": [
+          "no :focus-visible styling",
+          "animates without prefers-reduced-motion",
+          "no skip link"
+        ]
+      }
+    },
+    {
+      "id": "sewage",
+      "findings": [
+        "off-brand fonts: IBM Plex Mono",
+        "14 off-brand hex colours (21 uses)",
+        "no :focus-visible styling",
+        "animates without prefers-reduced-motion",
+        "third-party <script> without SRI"
+      ],
+      "metrics": {
+        "usesBrand": true,
+        "offBrandFonts": [
+          "IBM Plex Mono"
+        ],
+        "googleFontRefs": 0,
+        "offBrandHexUnique": 14,
+        "offBrandHexTotal": 21,
+        "topOffBrand": [
+          {
+            "hex": "#c1443b",
+            "uses": 4,
+            "nearest": "coral"
+          },
+          {
+            "hex": "#d9a441",
+            "uses": 2,
+            "nearest": "amber"
+          },
+          {
+            "hex": "#5c9c6e",
+            "uses": 2,
+            "nearest": "teal"
+          },
+          {
+            "hex": "#5c6a63",
+            "uses": 2,
+            "nearest": "text-3"
+          },
+          {
+            "hex": "#7e9088",
+            "uses": 2,
+            "nearest": "text-3"
+          }
+        ],
+        "a11y": [
+          "no :focus-visible styling",
+          "animates without prefers-reduced-motion",
+          "third-party <script> without SRI"
+        ]
+      }
+    },
+    {
+      "id": "wildfires",
+      "findings": [
+        "does not import @rjmlaird/brand",
+        "off-brand fonts: IBM Plex Sans, IBM Plex Mono, serif, Fraunces, Iowan Old Style, ui-serif, Georgia",
+        "3 Google Fonts reference(s) (third-party request, render-blocking)",
+        "47 off-brand hex colours (66 uses)",
+        "animates without prefers-reduced-motion",
+        "no skip link",
+        "third-party <script> without SRI",
+        "contains leftover \"exp-example\" template text"
+      ],
+      "metrics": {
+        "usesBrand": false,
+        "offBrandFonts": [
+          "IBM Plex Sans",
+          "IBM Plex Mono",
+          "serif",
+          "Fraunces",
+          "Iowan Old Style",
+          "ui-serif",
+          "Georgia"
+        ],
+        "googleFontRefs": 3,
+        "offBrandHexUnique": 47,
+        "offBrandHexTotal": 66,
+        "topOffBrand": [
+          {
+            "hex": "#c6ccd1",
+            "uses": 3,
+            "nearest": "text"
+          },
+          {
+            "hex": "#ff6a3d",
+            "uses": 3,
+            "nearest": "coral"
+          },
+          {
+            "hex": "#3fa7d6",
+            "uses": 3,
+            "nearest": "sky"
+          },
+          {
+            "hex": "#e8c547",
+            "uses": 3,
+            "nearest": "watch"
+          },
+          {
+            "hex": "#0a0d10",
+            "uses": 2,
+            "nearest": "ink"
+          }
+        ],
+        "a11y": [
+          "animates without prefers-reduced-motion",
+          "no skip link",
+          "third-party <script> without SRI"
+        ]
+      }
+    }
+  ]
+}

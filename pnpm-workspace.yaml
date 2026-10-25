@@ -1,4 +1,7 @@
 packages:
+  # Shared libraries (brand, and later sim-core, worker-kit, ...)
+  - "packages/*"
+
   # Deployable experiments directly under apps/
   - "apps/*"
 

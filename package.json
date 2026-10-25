@@ -4,16 +4,24 @@
   "version": "0.0.0",
   "type": "module",
   "packageManager": "pnpm@10.0.0",
+  "volta": {
+    "node": "22.23.4",
+    "pnpm": "10.0.0"
+  },
   "scripts": {
     "export-builds": "tsx scripts/export-builds.ts",
     "new:experiment": "node scripts/new-experiment.mjs",
-    "dev:index": "pnpm --filter @rjmlaird/labs-index dev",
-    "build:index": "pnpm --filter @rjmlaird/labs-index build",
-    "preview:index": "pnpm --filter @rjmlaird/labs-index preview",
-    "dev:exp-example": "pnpm --filter @rjmlaird/exp-example dev",
+    "dev:index": "pnpm --filter labs-index dev",
+    "build:index": "pnpm --filter labs-index build",
+    "preview:index": "pnpm --filter labs-index preview",
+    "dev:exp-example": "pnpm --filter exp-example dev",
     "build": "pnpm -r --if-present run build",
     "check": "pnpm -r --if-present run check",
-    "lint": "pnpm -r --if-present run lint"
+    "lint": "pnpm -r --if-present run lint",
+    "brand:build": "pnpm --filter @rjmlaird/brand build",
+    "brand:check": "pnpm --filter @rjmlaird/brand check",
+    "audit": "node scripts/brand-audit.mjs",
+    "audit:ci": "node scripts/brand-audit.mjs --baseline scripts/brand-audit.baseline.json"
   },
   "devDependencies": {
     "tsx": "^4.23.15",

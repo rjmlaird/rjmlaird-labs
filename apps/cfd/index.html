@@ -1,20 +1,22 @@
 <!doctype html>
-<html lang="en-GB">
+<html lang="en-GB" data-theme="light" data-tone="sky">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>RJML Labs · Fluid flow</title>
 
-  <style>
+  <link rel="stylesheet" href="/src/brand.css">
+<style>
     :root {
-      --bg: #f4f1ea;
-      --ink: #17202a;
-      --muted: #66707a;
-      --panel: #ffffff;
-      --line: #d9d4ca;
-      --accent: #d85c38;
-      --blue: #3f83c5;
-    }
+  /* legacy names kept; values come from @rjmlaird/brand */
+  --bg: var(--rj-ink);
+  --ink: var(--rj-text);
+  --muted: var(--rj-text-2);
+  --panel: var(--rj-card);
+  --line: var(--rj-border-strong);
+  --accent: var(--rj-teal);
+  --blue: var(--rj-sky);
+}
 
     * { box-sizing: border-box; }
 
@@ -22,7 +24,7 @@
       margin: 0;
       background: var(--bg);
       color: var(--ink);
-      font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+      font-family: var(--rj-font-body);
     }
 
     main {
@@ -257,10 +259,13 @@
       .scale { display: none; }
     }
   </style>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<meta name="theme-color" content="#F3F5F9">
 </head>
 
 <body>
-  <main>
+<a class="rj-skip" href="#rj-main">Skip to content</a>
+  <main id="rj-main" tabindex="-1">
     <header>
       <div class="eyebrow">RJML Labs · Experiment</div>
       <h1>Flow around objects</h1>

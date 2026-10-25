@@ -1,12 +1,21 @@
 <!doctype html>
-<html lang="en-GB"><head><meta charset="utf-8">
+<html lang="en-GB" data-theme="auto" data-tone="violet"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Nine circles · Rubik's Cube permutations · RJML Labs</title>
+<link rel="stylesheet" href="/src/brand.css">
 <style>
-:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
---bg:#f7f5ef;--ink:#161b22;--mute:#5b6570;--panel:#fff;--line:#dcd8cb;--acc:#c2410c;--ax:#d9480f;--ay:#0b7285;--az:#6741d9}
-@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0b0f16;--ink:#e9eef5;--mute:#98a4b1;--panel:#131a24;--line:#263243;--acc:#fbbf24;--ax:#ff922b;--ay:#3bc9db;--az:#b197fc}}
-:root[data-theme="dark"]{--bg:#0b0f16;--ink:#e9eef5;--mute:#98a4b1;--panel:#131a24;--line:#263243;--acc:#fbbf24;--ax:#ff922b;--ay:#3bc9db;--az:#b197fc}
+:root{
+  /* legacy names kept; values come from @rjmlaird/brand */
+  --bg: var(--rj-ink);
+  --ink: var(--rj-text);
+  --mute: var(--rj-text-2);
+  --panel: var(--rj-card);
+  --line: var(--rj-border-strong);
+  --acc: var(--rj-teal);
+  --ax: var(--rj-amber);
+  --ay: var(--rj-sky);
+  --az: var(--rj-violet);
+}
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
 body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
 main{max-width:1040px;margin:0 auto;padding:20px 16px 48px}
@@ -26,8 +35,8 @@ button:hover{border-color:var(--acc)}
 #stat{min-height:3em;margin:12px 0 8px;font-size:15px}
 #ctl{display:flex;flex-wrap:wrap;gap:8px}
 #play{background:var(--acc);border-color:var(--acc);color:#fff;font-weight:600}
-:root[data-theme="dark"] #play{color:#111}
-@media(prefers-color-scheme:dark){:root:not([data-theme="light"]) #play{color:#111}}
+:root[data-theme="dark"] #play{color:var(--rj-ink)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]) #play{color:var(--rj-ink)}}
 #turns{display:flex;flex-wrap:wrap;gap:6px;margin:14px 0 6px}
 .chip{min-width:44px;padding:6px 8px;font-variant-numeric:tabular-nums;font-weight:600}
 .chip.done{opacity:.4}
@@ -43,9 +52,12 @@ footer{margin-top:28px;font-size:13px;color:var(--mute)}
 #cube{position:relative;width:0;height:0;transform-style:preserve-3d}
 .st{position:absolute;left:-32px;top:-32px;width:64px;height:64px;transform-style:preserve-3d}
 .st b{position:absolute;inset:0;backface-visibility:hidden;border-radius:7px;box-sizing:border-box}
-.st .f{border:2px solid #0a0a0a}
-.st .k{background:#0a0a0a;transform:rotateY(180deg)}
-</style></head><body><main>
+.st .f{border:2px solid var(--rj-ink)}
+.st .k{background:var(--rj-ink);transform:rotateY(180deg)}
+</style><link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<meta name="theme-color" content="#0B0F1A">
+</head><body>
+<a class="rj-skip" href="#rj-main">Skip to content</a><main id="rj-main" tabindex="-1">
 <p class="eye">RJML Labs · Experiment</p>
 <h1>Nine circles</h1>
 <p class="lede">Every turn of a Rubik’s Cube is a permutation of its 54 stickers, and 9 circles are enough to draw all of them.</p>

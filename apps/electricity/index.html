@@ -1,27 +1,30 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-tone="amber">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Electricity Lab</title>
 <meta name="description" content="Four interactive electricity experiments: Ohm's law, series &amp; parallel resistor networks, RC charging, and Coulomb's law — built on one shared circuit engine.">
+<link rel="stylesheet" href="/src/brand.css">
 <style>
   :root{
-    --bg: #0B1210;
-    --panel: #10201B;
-    --panel-2: #142720;
-    --line: #1F3730;
-    --text: #EDEAE3;
-    --text-dim: #9FB0AA;
-    --copper: #C87F4B;
-    --gold: #E8B34A;
-    --cyan: #5FD3C4;
-    --danger: #E0654F;
-    --font-display: 'Space Grotesk', 'Archivo', sans-serif;
-    --font-body: 'Inter', system-ui, sans-serif;
-    --font-mono: 'JetBrains Mono', 'SFMono-Regular', Consolas, monospace;
-  }
-  @font-face{font-family:'Space Grotesk';src:local('Space Grotesk');}
+  /* legacy names kept; values come from @rjmlaird/brand */
+  --bg: var(--rj-ink);
+  --panel: var(--rj-card);
+  --panel-2: var(--rj-lift);
+  --line: var(--rj-border);
+  --text: var(--rj-text);
+  --text-dim: var(--rj-text-2);
+  --gold: var(--rj-amber);
+  --cyan: var(--rj-teal);
+  --danger: var(--rj-alert);
+  --font-display: var(--rj-font-display);
+  --font-body: var(--rj-font-body);
+  --font-mono: var(--rj-font-mono);
+  /* domain colours: intentional, exempt from brand-audit */
+  --dom-copper: #C87F4B; /* domain */
+}
+  @font-face{font-family: var(--rj-font-display);src:local('Space Grotesk');}
   *{box-sizing:border-box;}
   html{scroll-behavior:smooth;}
   body{
@@ -35,7 +38,7 @@
     -webkit-font-smoothing:antialiased;
   }
   a{color:inherit;}
-  ::selection{background:var(--gold);color:#0B1210;}
+  ::selection{background:var(--gold);color:var(--bg);}
 
   /* ---- nav ---- */
   header{
@@ -98,7 +101,7 @@
   }
   .exp-kicker{
     font-family:var(--font-mono); font-size:11px; letter-spacing:0.1em;
-    text-transform:uppercase; color:var(--copper); margin-bottom:8px;
+    text-transform:uppercase; color:var(--dom-copper); margin-bottom:8px;
     display:flex; align-items:center; gap:8px; flex-wrap:wrap;
   }
   .spec-tag{
@@ -133,12 +136,12 @@
   }
   input[type=range]::-webkit-slider-thumb{
     -webkit-appearance:none; width:24px; height:24px; border-radius:50%;
-    background:var(--gold); cursor:pointer; border:2px solid #0B1210;
+    background:var(--gold); cursor:pointer; border:2px solid var(--bg);
     box-shadow:0 0 0 2px var(--gold);
   }
   input[type=range]::-moz-range-thumb{
     width:24px; height:24px; border-radius:50%; background:var(--gold);
-    cursor:pointer; border:2px solid #0B1210; box-shadow:0 0 0 2px var(--gold);
+    cursor:pointer; border:2px solid var(--bg); box-shadow:0 0 0 2px var(--gold);
   }
   input[type=range]::-moz-range-track{ background:var(--line); height:4px; border-radius:2px; }
 
@@ -172,7 +175,7 @@
     padding:11px 16px; border-radius:20px; cursor:pointer; transition:.15s;
     min-height:40px;
   }
-  .toggle-row button.active{color:#0B1210; background:var(--gold); border-color:var(--gold);}
+  .toggle-row button.active{color:var(--bg); background:var(--gold); border-color:var(--gold);}
   .toggle-row button:focus-visible{outline:2px solid var(--cyan); outline-offset:2px;}
 
   .note{font-size:12px; color:var(--text-dim); line-height:1.5; margin-top:2px;}
@@ -205,8 +208,11 @@
     * { animation-duration: 0.001ms !important; }
   }
 </style>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<meta name="theme-color" content="#0B0F1A">
 </head>
 <body>
+<a class="rj-skip" href="#rj-main">Skip to content</a>
 
 <header>
   <div class="brand"><span class="dot"></span> Electricity Lab</div>
@@ -251,7 +257,7 @@
   </svg>
 </div>
 
-<main>
+<main id="rj-main" tabindex="-1">
 
   <!-- ============ 1. OHM'S LAW ============ -->
   <section class="exp" id="ohms">

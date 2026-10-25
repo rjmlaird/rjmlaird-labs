@@ -1,0 +1,262 @@
+{
+  "$description": "rjmlaird brand tokens (DTCG 2021 draft). Source of truth for labs.rjmlaird.co.uk. Dark values are taken verbatim from rjmlaird.co.uk global.css so labs and the main site cannot drift. Replace this file with the published tokens from brand.rjmlaird.co.uk once that package exists; the build script only needs the same shape.",
+  "theme": {
+    "dark": {
+      "ink": {
+        "$type": "color",
+        "$value": "#0B0F1A",
+        "$description": "page background"
+      },
+      "ink-2": {
+        "$type": "color",
+        "$value": "#0F1520",
+        "$description": "inset / sunken surface"
+      },
+      "card": {
+        "$type": "color",
+        "$value": "#141B29",
+        "$description": "raised panel"
+      },
+      "lift": {
+        "$type": "color",
+        "$value": "#1A2236",
+        "$description": "hover / popover surface"
+      },
+      "text": {
+        "$type": "color",
+        "$value": "#EDEAE3"
+      },
+      "text-2": {
+        "$type": "color",
+        "$value": "#9AA4B8",
+        "$description": "secondary text"
+      },
+      "text-3": {
+        "$type": "color",
+        "$value": "#8A98B2",
+        "$description": "muted text; do not go any dimmer"
+      },
+      "teal": {
+        "$type": "color",
+        "$value": "#00C2A8"
+      },
+      "amber": {
+        "$type": "color",
+        "$value": "#F5A623"
+      },
+      "violet": {
+        "$type": "color",
+        "$value": "#A78BFA"
+      },
+      "coral": {
+        "$type": "color",
+        "$value": "#FF8080"
+      },
+      "green": {
+        "$type": "color",
+        "$value": "#4ADE80"
+      },
+      "sky": {
+        "$type": "color",
+        "$value": "#38BDF8"
+      },
+      "watch": {
+        "$type": "color",
+        "$value": "#E6D84F",
+        "$description": "status scale step between ok and warn"
+      },
+      "on-accent": {
+        "$type": "color",
+        "$value": "#0B0F1A"
+      },
+      "focus": {
+        "$type": "color",
+        "$value": "#7FE6D4"
+      },
+      "border": {
+        "$type": "color",
+        "$value": "rgba(255,255,255,0.11)"
+      },
+      "border-strong": {
+        "$type": "color",
+        "$value": "rgba(255,255,255,0.20)"
+      },
+      "dim-alpha": {
+        "$type": "number",
+        "$value": 0.12
+      },
+      "line-alpha": {
+        "$type": "number",
+        "$value": 0.28
+      }
+    },
+    "light": {
+      "ink": {
+        "$type": "color",
+        "$value": "#F3F5F9"
+      },
+      "ink-2": {
+        "$type": "color",
+        "$value": "#E9EDF4"
+      },
+      "card": {
+        "$type": "color",
+        "$value": "#FFFFFF"
+      },
+      "lift": {
+        "$type": "color",
+        "$value": "#F7F9FC"
+      },
+      "text": {
+        "$type": "color",
+        "$value": "#0B0F1A"
+      },
+      "text-2": {
+        "$type": "color",
+        "$value": "#3A465C"
+      },
+      "text-3": {
+        "$type": "color",
+        "$value": "#4F5C74"
+      },
+      "teal": {
+        "$type": "color",
+        "$value": "#00756A"
+      },
+      "amber": {
+        "$type": "color",
+        "$value": "#8A5400"
+      },
+      "violet": {
+        "$type": "color",
+        "$value": "#5B3FC4"
+      },
+      "coral": {
+        "$type": "color",
+        "$value": "#B3261E"
+      },
+      "green": {
+        "$type": "color",
+        "$value": "#17683F"
+      },
+      "sky": {
+        "$type": "color",
+        "$value": "#0B5F96"
+      },
+      "watch": {
+        "$type": "color",
+        "$value": "#6B6200"
+      },
+      "on-accent": {
+        "$type": "color",
+        "$value": "#FFFFFF"
+      },
+      "focus": {
+        "$type": "color",
+        "$value": "#0B5F96"
+      },
+      "border": {
+        "$type": "color",
+        "$value": "rgba(11,15,26,0.14)"
+      },
+      "border-strong": {
+        "$type": "color",
+        "$value": "rgba(11,15,26,0.28)"
+      },
+      "dim-alpha": {
+        "$type": "number",
+        "$value": 0.1
+      },
+      "line-alpha": {
+        "$type": "number",
+        "$value": 0.3
+      }
+    }
+  },
+  "viz": {
+    "$description": "Categorical chart palette, in order of use. Always pair colour with a second encoding (shape, label, dash).",
+    "order": [
+      "teal",
+      "amber",
+      "violet",
+      "sky",
+      "coral",
+      "green",
+      "text-2",
+      "watch"
+    ]
+  },
+  "font": {
+    "display": {
+      "$type": "fontFamily",
+      "$value": [
+        "Space Grotesk Variable",
+        "Space Grotesk",
+        "system-ui",
+        "-apple-system",
+        "Segoe UI",
+        "sans-serif"
+      ]
+    },
+    "body": {
+      "$type": "fontFamily",
+      "$value": [
+        "Inter Variable",
+        "Inter",
+        "system-ui",
+        "-apple-system",
+        "Segoe UI",
+        "sans-serif"
+      ]
+    },
+    "mono": {
+      "$type": "fontFamily",
+      "$value": [
+        "JetBrains Mono Variable",
+        "JetBrains Mono",
+        "ui-monospace",
+        "SFMono-Regular",
+        "Menlo",
+        "Consolas",
+        "monospace"
+      ]
+    }
+  },
+  "radius": {
+    "sm": "4px",
+    "md": "6px",
+    "lg": "10px",
+    "pill": "999px"
+  },
+  "space": {
+    "1": "0.25rem",
+    "2": "0.5rem",
+    "3": "0.75rem",
+    "4": "1rem",
+    "5": "1.5rem",
+    "6": "2rem",
+    "7": "3rem",
+    "8": "4rem"
+  },
+  "layout": {
+    "content-max": "1320px",
+    "nav-h": "3.25rem",
+    "gutter-min": "clamp(1rem, 4vw, 2rem)"
+  },
+  "motion": {
+    "fast": "120ms",
+    "base": "200ms",
+    "ease": "cubic-bezier(.2,.7,.2,1)"
+  },
+  "type": {
+    "xs": "0.75rem",
+    "sm": "0.875rem",
+    "base": "1rem",
+    "md": "1.125rem",
+    "lg": "1.25rem",
+    "xl": "clamp(1.45rem, 2.4vw, 1.8rem)",
+    "2xl": "clamp(1.9rem, 4vw, 2.7rem)",
+    "leading": "1.6",
+    "leading-tight": "1.15"
+  }
+}

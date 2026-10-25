@@ -6,14 +6,14 @@
   "description": "Slide through measured UK climate and model projections for a chosen region, with plain-English annotations.",
   "scripts": {
     "dev": "vite",
-    "build": "npm run data:validate && vite build",
+    "build": "pnpm run data:resume && pnpm run data:validate && vite build",
     "preview": "vite preview",
     "data:build": "node scripts/fetch-data.mjs",
     "data:resume": "node scripts/fetch-data.mjs --if-missing",
     "data:midlands": "node scripts/fetch-data.mjs --location=midlands",
     "data:validate": "node scripts/validate-data.mjs",
     "test": "node --test test/*.test.mjs",
-    "check": "npm run data:validate && npm test && npm run build"
+    "check": "pnpm run data:resume && pnpm run data:validate && npm test && pnpm run build"
   },
   "dependencies": {
     "@fontsource-variable/newsreader": "^5.1.0",
