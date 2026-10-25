@@ -1,1 +1,0 @@
-.notice{border-left:4px solid var(--accent);background:var(--surface);color:var(--text);border-radius:0 var(--r) var(--r) 0;padding:.7rem 1rem}.notice--warn{border-color:var(--warn)}.notice--danger{border-color:var(--danger)}.notice--success{border-color:var(--success)}.notice__heading{display:block}

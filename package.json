@@ -2,8 +2,10 @@
   "name": "rjmlaird-labs",
   "private": true,
   "version": "0.0.0",
+  "type": "module",
   "packageManager": "pnpm@10.0.0",
   "scripts": {
+    "export-builds": "tsx scripts/export-builds.ts",
     "new:experiment": "node scripts/new-experiment.mjs",
     "dev:index": "pnpm --filter @rjmlaird/labs-index dev",
     "build:index": "pnpm --filter @rjmlaird/labs-index build",
@@ -14,6 +16,7 @@
     "lint": "pnpm -r --if-present run lint"
   },
   "devDependencies": {
+    "tsx": "^4.23.15",
     "wrangler": "^4.149.0"
   }
 }
