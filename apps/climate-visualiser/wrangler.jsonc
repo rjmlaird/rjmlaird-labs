@@ -1,0 +1,15 @@
+{
+  "$schema": "../../node_modules/wrangler/config-schema.json",
+  "name": "climate-visualiser",
+  "compatibility_date": "2026-05-18",
+  "assets": {
+    "directory": "./dist",
+    "not_found_handling": "single-page-application"
+  },
+  "routes": [
+    {
+      "pattern": "climate-visualiser.labs.rjmlaird.co.uk",
+      "custom_domain": true
+    }
+  ]
+}

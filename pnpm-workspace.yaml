@@ -1,12 +1,12 @@
 packages:
-  # Deployable experiments directly under packages/
-  - "packages/*"
+  # Deployable experiments directly under apps/
+  - "apps/*"
 
-  # Nested experiments, for example packages/physics/apps/hub
-  - "packages/*/*"
+  # Nested experiments, for example apps/physics/apps/hub
+  - "apps/*/*"
 
-  # Deeper nested experiments, for example packages/leicester/*/*
-  - "packages/*/*/*"
+  # Deeper nested experiments, for example apps/leicester/*/*
+  - "apps/*/*/*"
 
   # Exclude generated and dependency directories
   - "!**/node_modules/**"
