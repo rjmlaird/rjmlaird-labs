@@ -78,6 +78,7 @@ export const LABS: Lab[] = [
     tech: WEB,
     status: "in-progress",
     updated: "2026-10-15",
+    path: "https://astronomy.labs.rjmlaird.co.uk",
     source: "apps/astronomy",
   },
   {
@@ -88,6 +89,7 @@ export const LABS: Lab[] = [
     tech: WEB,
     status: "in-progress",
     updated: "2026-10-18",
+    path: "https://n-body.labs.rjmlaird.co.uk",
     source: "apps/n-body",
   },
   {
@@ -98,6 +100,7 @@ export const LABS: Lab[] = [
     tech: WEB,
     status: "in-progress",
     updated: "2026-10-20",
+    path: "https://satellites.labs.rjmlaird.co.uk",
     source: "apps/satellites",
   },
   {
@@ -116,8 +119,9 @@ export const LABS: Lab[] = [
     description: "Plot and explore physical and mathematical equations with live parameter adjustments.",
     group: "physics",
     tech: WEB,
-    status: "planned",
+    status: "in-progress",
     updated: "2026-10-09",
+    path: "https://equations.labs.rjmlaird.co.uk",
     source: "apps/equations",
   },
   {
@@ -158,8 +162,9 @@ export const LABS: Lab[] = [
     description: "Simplified computational fluid dynamics browser simulation for airflow and fluid flow around obstacles.",
     group: "climate",
     tech: ["TypeScript", "HTML5 Canvas"],
-    status: "planned",
+    status: "in-progress",
     updated: "2026-09-10",
+    path: "https://cfd.labs.rjmlaird.co.uk",
     source: "apps/cfd",
   },
   {
@@ -168,8 +173,9 @@ export const LABS: Lab[] = [
     description: "Modelling population dynamics and habitat resilience under environmental stress.",
     group: "climate",
     tech: WEB,
-    status: "planned",
+    status: "in-progress",
     updated: "2026-09-12",
+    path: "https://biodiversity.labs.rjmlaird.co.uk",
     source: "apps/biodiversity",
   },
   {
@@ -178,8 +184,9 @@ export const LABS: Lab[] = [
     description: "Tracking meteorological and hydrological drought indicators across regional datasets.",
     group: "climate",
     tech: WEB,
-    status: "planned",
+    status: "in-progress",
     updated: "2026-09-15",
+    path: "https://drought.labs.rjmlaird.co.uk",
     source: "apps/drought",
   },
   {
@@ -188,8 +195,9 @@ export const LABS: Lab[] = [
     description: "Cellular automaton model simulating wildfire propagation based on wind, terrain, and moisture.",
     group: "climate",
     tech: WEB,
-    status: "planned",
+    status: "in-progress",
     updated: "2026-09-18",
+    path: "https://wildfires.labs.rjmlaird.co.uk",
     source: "apps/wildfires",
     },
   {
@@ -198,8 +206,9 @@ export const LABS: Lab[] = [
     description: "Visualising river catchment data, rainfall events, and storm overflow impact models.",
     group: "climate",
     tech: WEB,
-    status: "planned",
+    status: "in-progress",
     updated: "2026-09-20",
+    path: "https://sewage.labs.rjmlaird.co.uk",
     source: "apps/sewage",
   },
 
@@ -240,7 +249,7 @@ export const LABS: Lab[] = [
     description: "Architectural and typographic grid layout prototyping utility.",
     group: "focus",
     tech: WEB,
-    status: "planned",
+    status: "in-progress",
     updated: "2026-10-01",
     source: "apps/blueprint",
   },
