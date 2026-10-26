@@ -1,0 +1,51 @@
+---
+import '../styles/global.css';
+import { site } from '../data/site';
+interface Props { title: string; description: string; path?: string; type?: 'website' | 'article' }
+const { title, description, path = Astro.url.pathname, type = 'website' } = Astro.props;
+const full = title === site.name ? title : `${title} · ${site.name}`;
+const canonical = new URL(path === '/' ? '/' : path.replace(/\/$/, ''), site.url).href;
+const og = new URL('/og.png', site.url).href;
+const here = Astro.url.pathname.replace(/\/$/, '') || '/';
+---
+<!doctype html>
+<html lang="en-GB">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{full}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <meta name="theme-color" content="#fafaf8" />
+    <meta property="og:title" content={full} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content={type} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:site_name" content="Labs by Ryan Laird" />
+    <meta property="og:locale" content="en_GB" />
+    <meta property="og:image" content={og} />
+    <meta name="twitter:card" content="summary_large_image" />
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to main content</a>
+    <header class="site">
+      <div class="wrap">
+        <a class="brand" href="/">rjmlaird <span>labs</span></a>
+        <nav aria-label="Main">
+          <ul>
+            {site.nav.map((n) => (
+              <li><a href={n.href} aria-current={here === n.href || (n.href === '/labs' && here.startsWith('/labs')) ? 'page' : undefined}>{n.label}</a></li>
+            ))}
+          </ul>
+        </nav>
+      </div>
+    </header>
+    <main id="main" tabindex="-1"><div class="wrap"><slot /></div></main>
+    <footer class="site">
+      <div class="wrap">
+        <p>By <a href={site.mainSite}>Ryan Laird</a>. Educational models only. <a href="/privacy">Privacy</a> · <a href="/about">About</a> · <a href="/contact">Feedback</a></p>
+      </div>
+    </footer>
+  </body>
+</html>

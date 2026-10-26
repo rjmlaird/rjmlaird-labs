@@ -1,0 +1,17 @@
+---
+/** Reusable template for every lab: title block, disclaimer, then lab content in the slot. */
+import Base from './Base.astro';
+import type { Lab } from '../data/labs';
+interface Props { lab: Lab; disclaimer?: string }
+const { lab, disclaimer = 'Educational models, not real-world measurements or forecasts. Values are simplified and illustrative.' } = Astro.props;
+---
+<Base title={lab.title} description={lab.summary} path={`/labs/${lab.slug}`} type="article">
+  <nav aria-label="Breadcrumb"><a href="/labs">Labs</a> / {lab.title}</nav>
+  <p class="eyebrow">Lab · updated {lab.updated}</p>
+  <h1>{lab.title}</h1>
+  <p class="lede">{lab.summary}</p>
+  <p class="note warn"><strong>Educational disclaimer.</strong> {disclaimer}</p>
+  <slot />
+  <h2>Further reading</h2>
+  <slot name="further" />
+</Base>

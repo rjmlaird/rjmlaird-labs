@@ -1,0 +1,37 @@
+---
+import Base from '../layouts/Base.astro';
+import { labs } from '../data/labs';
+import { site } from '../data/site';
+const live = labs.filter((l) => l.status === 'live');
+---
+<Base title="Labs" description="Small, careful, interactive science tools by Ryan Laird. Start with the earthquake physics explorer: seismic waves, locating quakes, magnitude and tsunamis.">
+  <p class="eyebrow">Interactive science, checked</p>
+  <h1>A small digital laboratory</h1>
+  <p class="lede">Hands-on explainers where you change a number and watch the physics respond, with the equations, assumptions and limits shown alongside.</p>
+  <p><a class="btn" href="/labs/earthquakes">Open the earthquake lab</a> <a class="btn alt" href="/about">How Labs works</a></p>
+
+  <h2>What is Labs?</h2>
+  <p>Labs is a growing set of compact interactive tools and visual explainers. Each one tackles a single idea well, loads quickly and can be linked from articles on <a href={site.mainSite}>rjmlaird.co.uk</a>.</p>
+
+  <h2>What can I do here?</h2>
+  <ul>
+    <li>Explore a model by changing its inputs and seeing the outputs update.</li>
+    <li>Read the equations with every variable and unit defined.</li>
+    <li>See which assumptions are made, and where the model stops being realistic.</li>
+  </ul>
+
+  <h2>The earthquake lab</h2>
+  {live.map((l) => (
+    <article class="card">
+      <h3><a href={`/labs/${l.slug}`}>{l.title}</a></h3>
+      <p>{l.summary}</p>
+      <p>{l.topics.map((t) => <span class="badge">{t}</span>)}</p>
+    </article>
+  ))}
+
+  <h2>How are the tools built and checked?</h2>
+  <p>The site is static, fast and free of tracking. The physics lives in small pure functions with unit tests (for example, that a magnitude 5 and a magnitude 7 earthquake differ by 100× in amplitude). Pages are checked against WCAG 2.2 AA, with keyboard use and reduced motion supported. See <a href="/about">About</a> for the approach and limitations.</p>
+
+  <h2>Suggest or contribute a lab</h2>
+  <p>Have an idea, a correction or a classroom use case? <a href="/contact">Send feedback</a> or email <a href={`mailto:${site.contactEmail}`}>{site.contactEmail}</a>. Good proposals name one concept, the equation behind it, and who it is for.</p>
+</Base>

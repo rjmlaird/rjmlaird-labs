@@ -1,0 +1,12 @@
+---
+import type { Module } from '../data/earthquakes';
+const { m } = Astro.props as { m: Module };
+---
+<div class="try"><strong>Try this:</strong> {m.tryThis}</div>
+<details><summary>Method</summary><ul>{m.method.map((x) => <li>{x}</li>)}</ul></details>
+<details><summary>Equations</summary>
+  {m.equations.map((e) => (<><h3>{e.name}</h3><code class="eq" set:html={e.expr} />
+    {e.vars.length > 0 && <dl class="vars">{e.vars.map((v) => (<><dt set:html={v.sym} /><dd>{v.def} ({v.unit})</dd></>))}</dl>}</>))}
+</details>
+<details><summary>Assumptions</summary><ul>{m.assumptions.map((x) => <li>{x}</li>)}</ul></details>
+<details><summary>Limitations</summary><ul>{m.limitations.map((x) => <li>{x}</li>)}</ul></details>

@@ -1,0 +1,119 @@
+---
+import LabLayout from '../../layouts/LabLayout.astro';
+import ModuleDocs from '../../components/ModuleDocs.astro';
+import { labs } from '../../data/labs';
+import { config, modules, concepts, scientists, sources } from '../../data/earthquakes';
+const lab = labs.find((l) => l.slug === 'earthquakes')!;
+const [mw, ml, mm, mt] = modules;
+---
+<LabLayout lab={lab}>
+  <h2>Experiment</h2>
+  <p>Work through four linked modules, from how waves travel, to locating a source, to how big it was, to what happens if it is under the sea. Each starts with a prompt to try.</p>
+  <fieldset class="panel checks" style="display:block">
+    <legend>Model wave speeds (simplified, illustrative)</legend>
+    <div class="controls">
+      <div><label for="speed-preset">Preset</label>
+        <select id="speed-preset">{config.speedPresets.map((p) => <option value={p.id}>{p.label}</option>)}<option value="custom">Custom</option></select></div>
+      <div><label for="vp">P-wave speed vP: <output id="o-vp"></output> km/s</label><input id="vp" type="range" min="3" max="14" step="0.1" value="6" /></div>
+      <div><label for="vs">S-wave speed vS: <output id="o-vs"></output> km/s</label><input id="vs" type="range" min="1.5" max="8" step="0.1" value="3.5" /></div>
+      <div><label for="vr">Surface-wave speed: <output id="o-vr"></output> km/s</label><input id="vr" type="range" min="1" max="7" step="0.1" value="3.2" /></div>
+    </div>
+    <p id="speed-warn" role="alert" class="note warn" hidden>vS must stay below vP, so values were adjusted.</p>
+  </fieldset>
+
+  <div class="toolbar">
+    <p class="progress" id="progress" aria-live="polite">Module 1 of 4</p>
+    <button class="btn alt" id="anim-toggle" type="button" aria-pressed="false">Pause animations</button>
+  </div>
+  <div role="tablist" aria-label="Earthquake lab modules" class="lab-tabs">
+    {modules.map((m, i) => <button role="tab" id={`tab-${m.id}`} aria-controls={`panel-${m.id}`} aria-selected={i === 0 ? 'true' : 'false'} tabindex={i === 0 ? 0 : -1} type="button">{i + 1}. {m.title}</button>)}
+  </div>
+
+  <!-- 1 WAVES -->
+  <section class="panel" id="panel-waves" role="tabpanel" aria-labelledby="tab-waves" tabindex="0">
+    <h2>1. {mw.title}</h2><p>{mw.intro}</p>
+    <fieldset class="checks"><legend>Show wave types</legend>
+      <span><input type="checkbox" id="tog-p" checked /> <label for="tog-p">P-wave (primary, compressional, fastest)</label></span>
+      <span><input type="checkbox" id="tog-s" checked /> <label for="tog-s">S-wave (secondary, shear)</label></span>
+      <span><input type="checkbox" id="tog-r" checked /> <label for="tog-r">Surface wave (slower, often most damaging)</label></span>
+    </fieldset>
+    <svg id="wave-svg" class="fig" viewBox="0 0 600 240" role="img" aria-label="Animated schematic. P-wave particles move back and forth along the direction of travel; S-wave particles move up and down across it; surface-wave particles move in rolling ellipses."></svg>
+    <div class="controls"><div><label for="dist">Source-to-station distance: <output id="o-dist"></output> km</label><input id="dist" type="range" min="10" max="1000" step="10" value="300" /></div></div>
+    <div class="readout" aria-live="polite">
+      <div><b id="o-tp"></b><span>P arrival (s)</span></div><div><b id="o-ts"></b><span>S arrival (s)</span></div>
+      <div><b id="o-dt"></b><span>P–S delay (s)</span></div><div><b id="o-tr"></b><span>Surface arrival (s)</span></div>
+    </div>
+    <svg id="seis" class="fig" viewBox="0 0 600 200" role="img" aria-label="Synthetic seismogram with arrival markers for P, S and surface waves."></svg>
+    <p>P-waves arrive first because they travel fastest, and the P–S delay grows with distance. S-waves cannot pass through Earth’s liquid outer core, which is evidence that it is liquid.</p>
+    <ModuleDocs m={mw} />
+  </section>
+
+  <!-- 2 LOCATE -->
+  <section class="panel" id="panel-locate" role="tabpanel" aria-labelledby="tab-locate" tabindex="0">
+    <h2>2. {ml.title}</h2><p>{ml.intro}</p>
+    <div class="controls">
+      <div><label for="nst">Stations used</label><select id="nst"><option>1</option><option>2</option><option selected>3</option></select></div>
+      <div><label for="sigma">Timing uncertainty ±<output id="o-sigma"></output> s</label><input id="sigma" type="range" min="0" max="2" step="0.1" value="0.3" /></div>
+    </div>
+    <p><button class="btn" id="newq" type="button">New earthquake</button> <button class="btn alt" id="reveal" type="button" aria-pressed="false">Reveal epicentre</button></p>
+    <svg id="map" class="fig" viewBox="-14 -6 224 218" role="img" aria-label="Map, 200 by 200 kilometres, with three seismic stations A, B and C and their distance circles. Stations can be dragged, or focused and moved with arrow keys."></svg>
+    <p><small>Drag a station, or focus it and use the arrow keys (hold Shift for fine steps). Circles: A solid, B dashed, C dotted. Shaded area: positions consistent with all circles.</small></p>
+    <div class="tablewrap"><table><caption class="sr">Station arrival times</caption><thead><tr><th>Station</th><th>P (s)</th><th>S (s)</th><th>P–S (s)</th><th>Distance (km)</th></tr></thead><tbody id="st-body"></tbody></table></div>
+    <div class="readout" aria-live="polite"><div><b id="o-est">–</b><span>Estimated epicentre (km)</span></div><div><b id="o-err">–</b><span>Location error (km)</span></div></div>
+    <p id="o-msg" class="note" aria-live="polite"></p>
+    <p>One station gives only a distance, so the source could be anywhere on a circle. Two circles meet at two points; a third circle removes the ambiguity. Real seismology uses many stations, Earth-model corrections, depth estimation and uncertainty analysis.</p>
+    <ModuleDocs m={ml} />
+  </section>
+
+  <!-- 3 MAGNITUDE -->
+  <section class="panel" id="panel-magnitude" role="tabpanel" aria-labelledby="tab-magnitude" tabindex="0">
+    <h2>3. {mm.title}</h2><p>{mm.intro}</p>
+    <div class="controls">
+      <div><label for="m1">Earthquake 1 magnitude: <output id="o-m1"></output></label><input id="m1" type="range" min="2" max="9.5" step="0.1" value="5" /></div>
+      <div><label for="m2">Earthquake 2 magnitude: <output id="o-m2"></output></label><input id="m2" type="range" min="2" max="9.5" step="0.1" value="7" /></div>
+    </div>
+    <div class="readout" aria-live="polite">
+      <div><b id="o-dm"></b><span>M₂ − M₁</span></div><div><b id="o-ar"></b><span>Amplitude ratio A₂/A₁</span></div>
+      <div class="en"><b id="o-er"></b><span>Energy ratio E₂/E₁ (approx.)</span></div>
+    </div>
+    <p><input type="checkbox" id="show-energy" checked /> <label for="show-energy">Show approximate energy comparison</label></p>
+    <p class="en" id="o-en"></p>
+    <svg id="mag-svg" class="fig" viewBox="0 0 600 220" role="img" aria-label="Two seismogram traces drawn to the same scale."></svg>
+    <h3>Four different things</h3>
+    <dl>{concepts.map(([k, v]) => <><dt><strong>{k}</strong></dt><dd>{v}</dd></>)}</dl>
+    <ModuleDocs m={mm} />
+  </section>
+
+  <!-- 4 TSUNAMI -->
+  <section class="panel" id="panel-tsunami" role="tabpanel" aria-labelledby="tab-tsunami" tabindex="0">
+    <h2>4. {mt.title}</h2><p>{mt.intro}</p>
+    <div class="controls">
+      <div><label for="depth">Ocean depth: <output id="o-depth"></output> m</label><input id="depth" type="range" min="10" max="6000" step="10" value="4000" /></div>
+      <div><label for="period">Period T: <output id="o-period"></output> min</label><input id="period" type="range" min="2" max="60" step="1" value="15" /></div>
+      <div><label for="lambda">Wavelength λ: <output id="o-lambda"></output> km</label><input id="lambda" type="range" min="5" max="700" step="5" value="180" /></div>
+    </div>
+    <div class="readout" aria-live="polite">
+      <div><b id="o-v"></b><span>Speed (m/s)</span></div><div><b id="o-kmh"></b><span>Speed (km/h)</span></div><div><b id="o-mph"></b><span>Speed (mph)</span></div>
+    </div>
+    <svg id="tsu-svg" class="fig" viewBox="0 0 600 240" role="img" aria-label="Cross-section of a tsunami moving from deep ocean over the continental shelf to the shore. The wave slows, shortens and grows taller."></svg>
+    <p><small>Vertical scale compressed; wave height exaggerated for visibility.</small></p>
+    <div class="tablewrap"><table><caption class="sr">Wave properties by depth</caption><thead><tr><th>Region</th><th>Depth (m)</th><th>Speed (m/s)</th><th>Wavelength (km)</th><th>Relative height</th></tr></thead><tbody id="shore-body"></tbody></table></div>
+    <p>Entering shallow water, the wave slows, its wavelength shortens, its height grows and its energy is concentrated into less depth.</p>
+    <h3>Travel-time calculator</h3>
+    <div class="tablewrap"><table><thead><tr><th>Segment</th><th>Distance (km)</th><th>Depth (m)</th><th>Speed (m/s)</th><th>Time</th><th></th></tr></thead><tbody id="seg-body"></tbody>
+      <tfoot><tr><th colspan="4" scope="row">Total travel time to coast</th><td id="seg-total" colspan="2"></td></tr></tfoot></table></div>
+    <p><button class="btn alt" id="seg-add" type="button">Add segment</button> <button class="btn alt" id="seg-reset" type="button">Reset example</button></p>
+    <p class="note warn">Simplified educational model. Not a real-time earthquake or tsunami warning system; follow official warnings.</p>
+    <ModuleDocs m={mt} />
+  </section>
+
+  <div class="pager"><button class="btn alt" id="prev" type="button">Previous module</button><button class="btn" id="next" type="button">Next module</button></div>
+
+  <h2>How scientists use this</h2><ul>{scientists.map((s) => <li>{s}</li>)}</ul>
+  <h2>Limitations and assumptions</h2>
+  <ul><li>All speeds, traces and bathymetry are representative or illustrative.</li><li>These are models and simulations, not real-world measurements.</li><li>The maps are flat and uniform; the real Earth is neither.</li><li>Nothing here is a warning or forecasting tool.</li></ul>
+  <script type="application/json" id="lab-config" set:html={JSON.stringify(config)} />
+  <ul slot="further">{sources.map((s) => <li>{s.u ? <a href={s.u}>{s.t}</a> : s.t}</li>)}</ul>
+</LabLayout>
+<script>import '../../scripts/earthquakes';</script>
+<style is:global>.sr{position:absolute;left:-9999px}</style>

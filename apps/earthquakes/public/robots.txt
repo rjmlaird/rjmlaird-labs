@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://labs.rjmlaird.co.uk/sitemap.xml

@@ -1,0 +1,19 @@
+---
+import Base from '../../layouts/Base.astro';
+import { labs } from '../../data/labs';
+---
+<Base title="Labs index" description="All interactive science labs by Ryan Laird, with topics, audiences and status.">
+  <h1>Labs</h1>
+  <p class="lede">Each lab is a small, self-contained investigation.</p>
+  <div class="grid">
+    {labs.map((l) => (
+      <article class="card">
+        <p class="eyebrow">{l.status === 'live' ? 'Live' : 'Planned'}</p>
+        <h2 style="margin-top:0;font-size:1.3rem">{l.status === 'live' ? <a href={`/labs/${l.slug}`}>{l.title}</a> : l.title}</h2>
+        <p>{l.summary}</p>
+        <p><strong>For:</strong> {l.audience}</p>
+        <p>{l.topics.map((t) => <span class="badge">{t}</span>)}</p>
+      </article>
+    ))}
+  </div>
+</Base>

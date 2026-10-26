@@ -1,0 +1,15 @@
+---
+import Base from '../layouts/Base.astro';
+import { site } from '../data/site';
+---
+<Base title="Feedback" description="Send feedback, corrections or ideas for new interactive science labs.">
+  <h1>Feedback and ideas</h1>
+  <p class="lede">Corrections, classroom feedback and lab suggestions are all welcome.</p>
+  <p>Email <a href={`mailto:${site.contactEmail}?subject=Labs%20feedback`}>{site.contactEmail}</a>. Helpful details:</p>
+  <ul>
+    <li>Which lab and module, and what you saw.</li>
+    <li>For a correction, the source you are relying on.</li>
+    <li>For a new lab idea: the concept, key equation and intended audience.</li>
+  </ul>
+  <p>This site has no contact form and stores no personal data. Your email goes only to your mail provider and to me.</p>
+</Base>
