@@ -1,0 +1,12 @@
+// Add to LABS in apps/labs-index/src/labs.ts (not applied, per "do not amend other labs"):
+  {
+    id: "physics",
+    title: "GCSE Physics Lab",
+    description: "Virtual GCSE required practicals: Hooke's law (RP6) and acceleration with light gates (RP7).",
+    group: "physics",
+    tech: ["Astro", "React", "TypeScript"],
+    status: "in-progress",
+    updated: "2026-10-27",
+    path: "https://physics.labs.rjmlaird.co.uk",
+    source: "apps/physics",
+  },
